@@ -147,6 +147,114 @@ footer{
 @media(min-width:768px){
   .grid{grid-template-columns:repeat(3,1fr)}
 }
+
+/* CARTES OFFRES — NYXO */
+.offers-1250{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:1.2rem;
+}
+
+.offer-1250{
+  background:#11142a;
+  border:1px solid #242861;
+  border-radius:14px;
+  padding:1.4rem;
+  display:flex;
+  flex-direction:column;
+  gap:.6rem;
+  position:relative;
+}
+
+.offer-1250 small{
+  font-family:ui-monospace, monospace;
+  color:#9aa0d6;
+  letter-spacing:.06em;
+}
+
+.offer-1250 h3{
+  margin:0;
+  font-size:1.05rem;
+}
+
+.offer-1250 p{
+  margin:0;
+  font-size:.85rem;
+  color:#a6aac8;
+}
+
+.offer-1250 .price{
+  margin-top:.4rem;
+  font-size:1.3rem;
+  font-weight:900;
+  color:#7cffc4;
+}
+
+.offer-1250 .cta{
+  margin-top:auto;
+  padding:.5rem 1.1rem;
+  border-radius:999px;
+  font-weight:800;
+  background:linear-gradient(135deg,#7cffc4,#cbb7ff);
+  color:#000;
+  text-decoration:none;
+  font-size:.8rem;
+}
+
+.offer-1250.tier-high{
+  border-color:#cbb7ff;
+  box-shadow:0 0 0 1px rgba(203,183,255,.2);
+}
+
+@media(min-width:900px){
+  .offers-1250{grid-template-columns:repeat(3,1fr)}
+}
+
+.offers-1250{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:1.1rem;
+}
+.offer{
+  background:#0f1226;
+  border:1px solid #242861;
+  border-radius:14px;
+  padding:1.3rem;
+  display:flex;
+  flex-direction:column;
+  gap:.55rem;
+  font-family:system-ui, sans-serif;
+}
+.offer small{
+  font-family:ui-monospace, monospace;
+  color:#9aa0d6;
+  letter-spacing:.08em;
+}
+.offer h3{margin:0;font-size:1.05rem}
+.offer p{margin:0;color:#a6aac8;font-size:.85rem}
+.offer .price{
+  font-size:1.35rem;
+  font-weight:900;
+  color:#7cffc4;
+}
+.offer .cta{
+  margin-top:auto;
+  align-self:flex-start;
+  padding:.45rem 1.1rem;
+  border-radius:999px;
+  font-weight:800;
+  font-size:.75rem;
+  background:linear-gradient(135deg,#7cffc4,#cbb7ff);
+  color:#000;
+  text-decoration:none;
+}
+.offer.high{
+  border-color:#cbb7ff;
+  box-shadow:0 0 0 1px rgba(203,183,255,.25);
+}
+@media(min-width:900px){
+  .offers-1250{grid-template-columns:repeat(3,1fr)}
+}
 </style>
 </head>
 
@@ -180,6 +288,162 @@ footer{
   <h2 class="section-title">Offres & services</h2>
 
   <div class="grid">
+
+    <section class="offers-1250">
+
+  <article class="offer-1250">
+    <small>NIVEAU 0 · MICRO</small>
+    <h3>Ping NYXO</h3>
+    <p>Accès symbolique. Soutien minimal. Trace laissée dans le système.</p>
+    <div class="price">0,125 € TTC</div>
+    <a class="cta">Init</a>
+  </article>
+
+  <article class="offer-1250">
+    <small>NIVEAU 1</small>
+    <h3>Accès Lecture</h3>
+    <p>Consultation passive de modules publics NYXO.</p>
+    <div class="price">1,25 € TTC</div>
+    <a class="cta">Débloquer</a>
+  </article>
+
+  <article class="offer-1250">
+    <small>NIVEAU 2</small>
+    <h3>Module Découverte</h3>
+    <p>Exploration guidée + notes explicatives.</p>
+    <div class="price">12,50 € TTC</div>
+    <a class="cta">Accéder</a>
+  </article>
+
+  <article class="offer-1250">
+    <small>NIVEAU 3</small>
+    <h3>Audit Express</h3>
+    <p>Analyse rapide d’un usage, outil ou pratique.</p>
+    <div class="price">125 € TTC</div>
+    <a class="cta">Commander</a>
+  </article>
+
+  <article class="offer-1250">
+    <small>NIVEAU 4</small>
+    <h3>Veille Ciblée</h3>
+    <p>Veille thématique + synthèse actionnable.</p>
+    <div class="price">1 250 € TTC</div>
+    <a class="cta">Souscrire</a>
+  </article>
+
+  <article class="offer-1250">
+    <small>NIVEAU 5</small>
+    <h3>Accompagnement NYXO</h3>
+    <p>Suivi stratégique, échanges, scénarios.</p>
+    <div class="price">12 500 € TTC</div>
+    <a class="cta">Engager</a>
+  </article>
+
+  <article class="offer-1250 tier-high">
+    <small>NIVEAU 6 · STRUCTURE</small>
+    <h3>Audit Organisationnel Global</h3>
+    <p>Cartographie complète, risques, dépendances, recommandations.</p>
+    <div class="price">125 000 € TTC</div>
+    <a class="cta">Contact direct</a>
+  </article>
+
+<section class="offers-1250">
+
+<!-- MICRO / SYMBOLIQUE -->
+<article class="offer">
+  <small>0 · TRACE</small>
+  <h3>Ping NYXO</h3>
+  <p>Signal minimal. Trace volontaire dans le système.</p>
+  <div class="price">0,125 €</div>
+  <a class="cta">Init</a>
+</article>
+
+<article class="offer">
+  <small>0+</small>
+  <h3>Clé Lecteur</h3>
+  <p>Lecture passive de modules publics.</p>
+  <div class="price">1,25 €</div>
+  <a class="cta">Débloquer</a>
+</article>
+
+<article class="offer">
+  <small>1</small>
+  <h3>Module Découverte</h3>
+  <p>Exploration guidée + glossaire.</p>
+  <div class="price">12,50 €</div>
+  <a class="cta">Accéder</a>
+</article>
+
+<!-- INDIVIDU / AUTONOMIE -->
+<article class="offer">
+  <small>2</small>
+  <h3>Audit Express</h3>
+  <p>Analyse rapide d’un outil, d’un usage ou d’une pratique.</p>
+  <div class="price">125 €</div>
+  <a class="cta">Commander</a>
+</article>
+
+<article class="offer">
+  <small>2+</small>
+  <h3>Diagnostic Personnel</h3>
+  <p>Cartographie individuelle numérique commentée.</p>
+  <div class="price">1 250 €</div>
+  <a class="cta">Lancer</a>
+</article>
+
+<article class="offer">
+  <small>3</small>
+  <h3>Accompagnement Individuel</h3>
+  <p>Suivi critique, recommandations, scénarios.</p>
+  <div class="price">12 500 €</div>
+  <a class="cta">Engager</a>
+</article>
+
+<!-- COLLECTIF / STRUCTURE -->
+<article class="offer">
+  <small>4</small>
+  <h3>Veille Organisationnelle</h3>
+  <p>Veille ciblée + synthèses décisionnelles.</p>
+  <div class="price">125 € / mois</div>
+  <a class="cta">Souscrire</a>
+</article>
+
+<article class="offer">
+  <small>4+</small>
+  <h3>Audit Collectif</h3>
+  <p>Analyse croisée des pratiques et dépendances.</p>
+  <div class="price">1 250 €</div>
+  <a class="cta">Commander</a>
+</article>
+
+<article class="offer">
+  <small>5</small>
+  <h3>Programme NYXO</h3>
+  <p>Accès complet aux modules, simulations et outils.</p>
+  <div class="price">12 500 €</div>
+  <a class="cta">Activer</a>
+</article>
+
+<!-- INSTITUTION / STRATÉGIQUE -->
+<article class="offer high">
+  <small>6</small>
+  <h3>Audit Organisationnel Global</h3>
+  <p>Cartographie complète, risques systémiques, priorisation.</p>
+  <div class="price">125 000 €</div>
+  <a class="cta">Contact direct</a>
+</article>
+
+<article class="offer high">
+  <small>6+</small>
+  <h3>Programme de Transition Numérique</h3>
+  <p>Accompagnement long, scénarios, gouvernance.</p>
+  <div class="price">125 000 €+</div>
+  <a class="cta">Sur dossier</a>
+</article>
+
+</section>  
+
+</section>
 
     <div class="card">
       <h3>Audit numérique critique</h3>
