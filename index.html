@@ -3,69 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CCPLC — Boutique & Services</title>
+<title>CCPLC — Solutions numériques indépendantes</title>
 
 <style>
-/* =========================
-   RESET / BASE
-   ========================= */
-*,*::before,*::after{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
-  background:#0a0b10;
-  color:#eef0f6;
-  line-height:1.55;
-}
-
-/* =========================
-   DESIGN TOKENS
-   ========================= */
 :root{
   --bg:#0a0b10;
   --panel:#131522;
   --border:#1f2238;
-
   --text:#eef0f6;
   --muted:#a6aac8;
-
   --green:#7cffc4;
   --lilas:#cbb7ff;
-
   --radius:14px;
-  --radius-sm:10px;
-
-  --shadow:0 12px 30px rgba(0,0,0,.55);
 }
 
-/* =========================
-   LAYOUT
-   ========================= */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+
 .container{
   max-width:1100px;
   margin:auto;
   padding:0 1rem;
 }
 
-section{
-  padding:4rem 0;
-}
-
-/* =========================
-   HEADER
-   ========================= */
 header{
   position:sticky;
   top:0;
-  z-index:10;
   background:rgba(10,11,16,.9);
   backdrop-filter:blur(8px);
   border-bottom:1px solid var(--border);
+  z-index:10;
 }
 .header-inner{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   min-height:64px;
 }
 .brand{
@@ -75,175 +53,99 @@ header{
 }
 nav a{
   margin-left:1.2rem;
-  font-size:.9rem;
   color:var(--muted);
   text-decoration:none;
+  font-size:.9rem;
 }
-nav a:hover{color:var(--text)}
 
-/* =========================
-   HERO
-   ========================= */
 .hero{
-  text-align:center;
   padding:5rem 0 4rem;
+  text-align:center;
 }
 .hero h1{
-  font-size:clamp(1.8rem,4vw,2.6rem);
-  margin:0 0 1rem;
+  font-size:clamp(2rem,4vw,2.8rem);
 }
 .hero h1 span{
   background:linear-gradient(135deg,var(--green),var(--lilas));
   -webkit-background-clip:text;
-  background-clip:text;
   color:transparent;
 }
 .hero p{
-  max-width:640px;
-  margin:0 auto 2.5rem;
+  max-width:760px;
+  margin:1.5rem auto 2.5rem;
   color:var(--muted);
 }
-.hero .cta{
+.cta{
   display:inline-block;
-  padding:.8rem 1.8rem;
+  padding:.9rem 2rem;
   border-radius:999px;
   font-weight:700;
-  text-decoration:none;
   background:linear-gradient(135deg,var(--green),var(--lilas));
   color:#000;
+  text-decoration:none;
 }
 
-/* =========================
-   OFFRES
-   ========================= */
+section{padding:4rem 0}
+
 .section-title{
   text-align:center;
-  margin-bottom:3rem;
-  font-size:1.4rem;
+  font-size:1.6rem;
   color:var(--lilas);
+  margin-bottom:3rem;
 }
 
-.offers-grid{
+.grid{
   display:grid;
   grid-template-columns:1fr;
-  gap:1.8rem;
+  gap:2rem;
 }
 
-.offer{
+.card{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:var(--radius);
   padding:2rem;
-  box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
 }
-.offer h3{
-  margin:0 0 .6rem;
-  font-size:1.1rem;
-}
-.offer p{
-  margin:0 0 1.6rem;
-  color:var(--muted);
-  font-size:.95rem;
-}
-.offer .price{
-  font-size:1.6rem;
+
+.card h3{margin-top:0}
+.price{
+  font-size:1.8rem;
   font-weight:800;
   color:var(--green);
-  margin-bottom:1.8rem;
+  margin:1.5rem 0;
 }
-.offer .price.small{
-  font-size:1rem;
-  color:var(--muted);
-}
-.offer button{
-  margin-top:auto;
-  padding:.7rem 1.2rem;
+.button{
+  display:inline-block;
+  margin-top:1rem;
+  padding:.7rem 1.5rem;
   border-radius:999px;
   font-weight:700;
-  cursor:pointer;
-  border:none;
-}
-.offer .buy{
   background:linear-gradient(135deg,var(--green),var(--lilas));
   color:#000;
+  text-decoration:none;
 }
-.offer .alt{
+.button.alt{
   background:none;
   border:1px solid var(--lilas);
   color:var(--lilas);
 }
 
-/* =========================
-   APPROCHE
-   ========================= */
-.approach{
-  max-width:720px;
+.text-block{
+  max-width:820px;
   margin:auto;
-  text-align:center;
   color:var(--muted);
 }
 
-/* =========================
-   CONTACT
-   ========================= */
-.contact{
-  text-align:center;
-}
-.contact a{
-  display:inline-block;
-  margin-top:1.2rem;
-  padding:.7rem 1.4rem;
-  border-radius:999px;
-  border:1px solid var(--lilas);
-  color:var(--lilas);
-  text-decoration:none;
-}
-
-/* =========================
-   FOOTER
-   ========================= */
 footer{
   border-top:1px solid var(--border);
-  padding:2rem 0;
+  padding:3rem 0;
   text-align:center;
-  font-size:.8rem;
+  font-size:.85rem;
   color:var(--muted);
 }
-footer a{
-  margin:0 .6rem;
-  color:var(--muted);
-  text-decoration:none;
-}
 
-/* =========================
-   GLITCH (DISCRET)
-   ========================= */
-.glitch{
-  position:relative;
-}
-.glitch::before,
-.glitch::after{
-  content:attr(data-text);
-  position:absolute;
-  inset:0;
-  opacity:.15;
-}
-.glitch::before{
-  color:var(--lilas);
-  transform:translate(1px,-1px);
-}
-.glitch::after{
-  color:var(--green);
-  transform:translate(-1px,1px);
-}
-
-/* =========================
-   RESPONSIVE
-   ========================= */
 @media(min-width:768px){
-  .offers-grid{grid-template-columns:repeat(3,1fr)}
+  .grid{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -252,10 +154,11 @@ footer a{
 
 <header>
   <div class="container header-inner">
-    <div class="brand glitch" data-text="CCPLC">CCPLC</div>
+    <div class="brand">CCPLC</div>
     <nav>
       <a href="#offres">Offres</a>
-      <a href="#approche">Approche</a>
+      <a href="#methode">Méthode</a>
+      <a href="#nyxo">NYXO</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -263,64 +166,147 @@ footer a{
 
 <main class="container">
 
-  <section class="hero">
-    <h1><span class="glitch" data-text="Solutions numériques indépendantes">Solutions numériques indépendantes</span></h1>
-    <p>Audit, accompagnement et outils rétro-geek pour structures indépendantes et projets citoyens.</p>
-    <a href="#offres" class="cta">Voir les offres</a>
-  </section>
+<section class="hero">
+  <h1><span>Solutions numériques indépendantes</span></h1>
+  <p>
+    CCPLC accompagne les personnes, collectifs et organisations
+    qui veulent comprendre, reprendre le contrôle et agir de manière
+    autonome dans un environnement numérique de plus en plus opaque.
+  </p>
+  <a href="#offres" class="cta">Découvrir les offres</a>
+</section>
 
-  <section id="offres">
-    <h2 class="section-title">Offres</h2>
+<section id="offres">
+  <h2 class="section-title">Offres & services</h2>
 
-    <div class="offers-grid">
+  <div class="grid">
 
-      <article class="offer">
-        <h3>Audit numérique</h3>
-        <p>Analyse critique de vos outils, pratiques, dépendances et risques numériques.</p>
-        <div class="price">120 €</div>
-        <button class="buy">Commander</button>
-      </article>
-
-      <article class="offer">
-        <h3>Abonnement veille</h3>
-        <p>Veille stratégique, alertes et recommandations adaptées à votre contexte.</p>
-        <div class="price">25 € <span class="price small">/ mois</span></div>
-        <button class="buy">S’abonner</button>
-      </article>
-
-      <article class="offer">
-        <h3>Accès NYXO</h3>
-        <p>Environnement expérimental rétro-geek : outils, pédagogie, simulations.</p>
-        <div class="price small">Sur invitation</div>
-        <button class="alt">Demander l’accès</button>
-      </article>
-
+    <div class="card">
+      <h3>Audit numérique critique</h3>
+      <p>
+        Analyse approfondie de vos outils, usages, dépendances,
+        flux d’informations et risques numériques.
+      </p>
+      <p>
+        L’audit ne se limite pas à la technique : il inclut
+        les dimensions organisationnelles, culturelles,
+        politiques et économiques.
+      </p>
+      <ul>
+        <li>Cartographie des outils et services</li>
+        <li>Identification des dépendances critiques</li>
+        <li>Analyse des risques (données, souveraineté, verrouillage)</li>
+        <li>Recommandations concrètes et priorisées</li>
+      </ul>
+      <div class="price">120 €</div>
+      <a class="button">Commander</a>
     </div>
-  </section>
 
-  <section id="approche">
-    <h2 class="section-title">Notre approche</h2>
-    <p class="approach">
-      CCPLC développe des solutions sobres, compréhensibles et émancipatrices.
-      Pas de dépendance opaque. Pas de marketing creux.
+    <div class="card">
+      <h3>Abonnement veille & accompagnement</h3>
+      <p>
+        Un suivi continu pour ne pas subir l’actualité technologique,
+        réglementaire et sociétale.
+      </p>
+      <p>
+        La veille CCPLC est orientée action : elle sert à décider,
+        anticiper et ajuster vos pratiques.
+      </p>
+      <ul>
+        <li>Veille thématique personnalisée</li>
+        <li>Alertes ciblées</li>
+        <li>Notes d’analyse compréhensibles</li>
+        <li>Échanges asynchrones</li>
+      </ul>
+      <div class="price">25 € / mois</div>
+      <a class="button">S’abonner</a>
+    </div>
+
+    <div class="card">
+      <h3>Accès NYXO</h3>
+      <p>
+        NYXO est un environnement expérimental rétro-geek,
+        mêlant pédagogie, simulation et exploration critique.
+      </p>
+      <p>
+        Il permet de comprendre les systèmes numériques
+        par l’expérimentation, le jeu sérieux et la mise en situation.
+      </p>
+      <ul>
+        <li>Modules pédagogiques interactifs</li>
+        <li>Simulations de systèmes</li>
+        <li>Outils d’analyse et de test</li>
+        <li>Accès progressif par invitation</li>
+      </ul>
+      <div class="price">Sur invitation</div>
+      <a class="button alt">Demander l’accès</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="methode">
+  <h2 class="section-title">Méthode & positionnement</h2>
+  <div class="text-block">
+    <p>
+      CCPLC ne vend pas des solutions magiques ni des outils miracles.
+      Nous travaillons sur la compréhension, l’autonomie
+      et la capacité d’agir.
     </p>
-  </section>
+    <p>
+      Notre approche est volontairement sobre, documentée
+      et reproductible. Elle s’inscrit dans une logique
+      d’éducation permanente, de transmission
+      et d’émancipation numérique.
+    </p>
+    <p>
+      Pas de dépendance opaque. Pas de jargon inutile.
+      Pas de marketing creux.
+    </p>
+  </div>
+</section>
 
-  <section id="contact" class="contact">
-    <h2 class="section-title">Contact</h2>
-    <p>Une question, un besoin spécifique, un projet collectif ?</p>
-    <a href="mailto:contact@ccplc.eu">contact@ccplc.eu</a>
-  </section>
+<section id="nyxo">
+  <h2 class="section-title">Pourquoi NYXO ?</h2>
+  <div class="text-block">
+    <p>
+      NYXO est né d’un constat simple :
+      on ne comprend pas les systèmes complexes
+      en lisant des notices ou des slides.
+    </p>
+    <p>
+      Il faut les manipuler, les détourner,
+      les explorer et parfois les casser
+      pour en saisir les logiques profondes.
+    </p>
+    <p>
+      NYXO est un laboratoire rétro-futuriste
+      au service de la compréhension critique
+      du numérique contemporain.
+    </p>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Contact</h2>
+  <div class="text-block" style="text-align:center">
+    <p>
+      Une question, un besoin spécifique,
+      un projet collectif ou institutionnel ?
+    </p>
+    <a href="mailto:contact@ccplc.eu" class="button alt">
+      contact@ccplc.eu
+    </a>
+  </div>
+</section>
 
 </main>
 
 <footer>
-  <p>© CCPLC — Collectif Citoyen pour la Participation Libre</p>
-  <div>
-    <a href="#">Mentions légales</a>
-    <a href="#">Confidentialité</a>
-    <a href="#">CGV</a>
-  </div>
+  <p>© CCPLC — Collectif Citoyen pour la Participation Libre (et Consciente)</p>
+  <p>
+    Mentions légales · Confidentialité · Conditions générales
+  </p>
 </footer>
 
 </body>
