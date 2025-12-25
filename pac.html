@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FAKE NEWS × PAC — Plateforme opérationnelle</title>
+<style>
+:root{
+--bg:#0a0e1a;--panel:#141a2b;--border:#2a3f5f;
+--g:#7bed9f;--p:#c77dff;--r:#ff6b6b;--y:#ffd43b;--b:#4ecdc4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Courier New,monospace;background:var(--bg);color:#e0e0e0}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.app{grid-template-columns:1fr}}
+.sidebar{background:var(--panel);border-right:2px solid var(--border);padding:16px;position:sticky;top:0;height:100vh;overflow:auto}
+@media(max-width:900px){.sidebar{height:auto;position:relative}}
+.logo{font-size:22px;color:var(--g);font-weight:bold;text-shadow:0 0 20px var(--g)}
+.sub{font-size:11px;opacity:.8;margin:6px 0 16px;border-bottom:1px solid var(--border);padding-bottom:10px}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{background:transparent;border:0;color:#ddd;text-align:left;padding:10px;border-left:3px solid transparent;cursor:pointer}
+.nav button.active,.nav button:hover{color:var(--g);background:rgba(123,237,159,.08);border-left-color:var(--g)}
+.user{margin-top:14px;border:1px solid var(--border);padding:12px}
+.user .n{color:var(--p);font-weight:bold}
+.main{padding:20px}
+.page{display:none}
+.page.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.h{display:flex;justify-content:space-between;align-items:end;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:14px}
+.h h1{color:var(--g);text-shadow:0 0 20px var(--g)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.card{background:var(--panel);border:2px solid var(--border);padding:14px;cursor:pointer;transition:.2s}
+.card:hover{border-color:var(--p);box-shadow:0 10px 30px rgba(199,125,255,.25);transform:translateY(-4px)}
+.badge{display:inline-block;font-size:10px;padding:4px 8px;border:1px solid var(--g);color:var(--g);margin-right:6px}
+.diff.f{background:var(--g);color:#081}
+.diff.m{background:var(--y);color:#431}
+.diff.d{background:var(--r);color:#fff}
+.diff.e{background:var(--p);color:#fff}
+.meta{display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;font-size:11px;opacity:.9}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.filters button{border:2px solid var(--border);background:var(--panel);color:#ddd;padding:8px 12px;cursor:pointer}
+.filters button.active{border-color:var(--g);color:var(--g)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.stat{background:var(--panel);border:2px solid var(--border);padding:16px;text-align:center}
+.stat .v{font-size:36px;color:var(--g)}
+.progress{height:24px;background:var(--border);margin-top:8px}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--g),var(--b));text-align:center;font-size:11px}
+.modal{position:fixed;inset:0;background:rgba(10,14,26,.96);display:none;align-items:flex-start;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.box{max-width:900px;width:100%;background:var(--panel);border:3px solid var(--p);padding:20px}
+.box h2{color:var(--p)}
+textarea{width:100%;min-height:160px;background:rgba(42,63,95,.4);border:2px solid var(--border);color:#eee;padding:12px}
+.btn{margin-top:10px;width:100%;padding:12px;border:2px solid var(--g);background:var(--panel);color:var(--g);cursor:pointer}
+.btn:hover{background:var(--g);color:#081}
+.alert{position:fixed;top:16px;right:16px;background:var(--panel);border:3px solid var(--g);padding:12px}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">FAKE NEWS × PAC</div>
+    <div class="sub">Éducation permanente · IRL & en ligne · Sans MJ</div>
+    <div class="nav">
+      <button class="active" data-p="missions">Missions</button>
+      <button data-p="pac">Programme PAC</button>
+      <button data-p="stats">Profil</button>
+      <button data-p="board">Classement</button>
+    </div>
+    <div class="user">
+      <div class="n" id="uname"></div>
+      <div id="uxp">0 XP</div>
+      <div id="urank">Recrue</div>
+    </div>
+  </aside>
+  <main class="main">
+    <section id="missions" class="page active">
+      <div class="h"><h1>Missions</h1></div>
+      <div class="filters">
+        <button class="active" data-f="all">Toutes</button>
+        <button data-f="f">Facile</button><button data-f="m">Moyen</button>
+        <button data-f="d">Difficile</button><button data-f="e">Expert</button>
+      </div>
+      <div class="grid" id="mg"></div>
+    </section>
+
+    <section id="pac" class="page">
+      <div class="h"><h1>Programme PAC — Intégré</h1></div>
+      <div class="grid" id="pg"></div>
+    </section>
+
+    <section id="stats" class="page">
+      <div class="h"><h1>Profil</h1></div>
+      <div class="stats">
+        <div class="stat"><div class="v" id="sx">0</div><div>XP</div></div>
+        <div class="stat"><div class="v" id="sm">0</div><div>Missions</div></div>
+        <div class="stat"><div class="v" id="sr">Recrue</div><div>Grade</div></div>
+        <div class="stat"><div class="v" id="sp">0</div><div>Réputation</div></div>
+      </div>
+      <div class="progress"><div id="pb" style="width:0%">0%</div></div>
+    </section>
+
+    <section id="board" class="page">
+      <div class="h"><h1>Classement</h1></div>
+      <div class="grid" id="lb"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <h2 id="mt"></h2>
+    <p id="md"></p>
+    <textarea id="ms" placeholder="Soumission détaillée…"></textarea>
+    <button class="btn" onclick="submit()">Soumettre</button>
+    <button class="btn" onclick="closeM()">Fermer</button>
+  </div>
+</div>
+
+<script>
+const MISSIONS=[
+{id:1,t:'Détecter 3 fake news',d:'f',x:50,c:'FACT-CHECK',p:89},
+{id:2,t:'Audit données personnelles',d:'f',x:60,c:'VIE PRIVÉE',p:134},
+{id:3,t:'Biais cognitif',d:'f',x:75,c:'PSYCHO',p:67},
+{id:4,t:'Analyse critique d’article',d:'m',x:100,c:'ESPRIT CRITIQUE',p:52},
+{id:5,t:'Tracer une supply chain',d:'m',x:120,c:'ÉCONOMIE',p:43},
+{id:6,t:'Décrypter algorithmes sociaux',d:'m',x:130,c:'TECH',p:78},
+{id:7,t:'Budget projet citoyen',d:'m',x:110,c:'CITOYEN',p:38},
+{id:8,t:'Comprendre une loi',d:'m',x:140,c:'JURIDIQUE',p:29},
+{id:9,t:'Empreinte carbone',d:'f',x:80,c:'ÉCOLOGIE',p:156},
+{id:10,t:'Enquête de terrain',d:'d',x:200,c:'ENQUÊTE',p:18},
+{id:11,t:'Statistiques dans les médias',d:'m',x:100,c:'DATA',p:41},
+{id:12,t:'Décoder une publicité',d:'f',x:70,c:'MARKETING',p:93},
+{id:13,t:'Consultation publique',d:'m',x:150,c:'DÉMOCRATIE',p:22},
+{id:14,t:'Conflit géopolitique',d:'d',x:180,c:'GÉOPOLITIQUE',p:31},
+{id:15,t:'Désobéissance civile',d:'m',x:120,c:'HISTOIRE',p:27},
+{id:16,t:'Sécuriser ses communications',d:'f',x:90,c:'CYBERSEC',p:187},
+{id:17,t:'Finance personnelle',d:'m',x:110,c:'FINANCE',p:102},
+{id:18,t:'Déconstruire un préjugé',d:'d',x:160,c:'SOCIOLOGIE',p:35},
+{id:19,t:'Créer un média alternatif',d:'e',x:250,c:'JOURNALISME',p:14},
+{id:20,t:'Analyser son alimentation',d:'f',x:65,c:'SANTÉ',p:143},
+{id:21,t:'Système électoral',d:'m',x:100,c:'POLITIQUE',p:48},
+{id:22,t:'Traquer les lobbies',d:'d',x:190,c:'LOBBYING',p:19},
+{id:23,t:'Réparer au lieu d’acheter',d:'f',x:75,c:'CONSOMMATION',p:121},
+{id:24,t:'Comprendre l’IA',d:'m',x:130,c:'IA',p:86},
+{id:25,t:'Organiser une action collective',d:'e',x:300,c:'ACTIVISME',p:11},
+{id:26,t:'Lire un contrat',d:'m',x:90,c:'DROIT',p:37},
+{id:27,t:'Comprendre la monnaie',d:'d',x:170,c:'ÉCONOMIE',p:28},
+{id:28,t:'Identifier une manipulation',d:'m',x:110,c:'RHÉTORIQUE',p:59},
+{id:29,t:'Alternative open-source (1 mois)',d:'d',x:200,c:'TECH',p:24},
+{id:30,t:'Questionner une “évidence”',d:'e',x:220,c:'ANTHROPOLOGIE',p:33}
+];
+
+const PAC=[
+{t:'PEPS — Premiers pas en éducation permanente',tag:'FORMATION',x:80},
+{t:'Agir face aux paroles excluantes',tag:'FORMATION',x:120},
+{t:'Dire pour agir — expression collective',tag:'ATELIER',x:100},
+{t:'Ateliers d’écriture',tag:'EXPRESSION',x:90},
+{t:'Balade sonore — création collective',tag:'CRÉATION',x:140},
+{t:'Écologie depuis les marges',tag:'ÉCOLOGIE',x:130},
+{t:'Le conflit comme dynamique transformatrice',tag:'FORMATION',x:150},
+{t:'Écrivain·e public·que — permanences',tag:'SOLIDARITÉ',x:110},
+{t:'Arpentage — lecture critique collective',tag:'LECTURE',x:95},
+{t:'Débats publics & tables de conversation',tag:'DÉBAT',x:85}
+];
+
+let S={name:'Agent_'+Math.random().toString(36).slice(2,7).toUpperCase(),xp:0,m:0,r:'Recrue',rep:0,done:[]};
+let cur=null,filter='all';
+
+const mg=document.getElementById('mg'),pg=document.getElementById('pg');
+
+function card(m){
+  const d=document.createElement('div');d.className='card';
+  d.innerHTML=`<h3>${m.t}</h3>
+  <div><span class="badge">${m.c}</span><span class="badge diff ${m.d}">${m.d.toUpperCase()}</span></div>
+  <div class="meta"><div>💎 ${m.x} XP</div><div>👥 ${m.p}</div></div>`;
+  d.onclick=()=>open(m);
+  return d;
+}
+function render(){
+  mg.innerHTML='';
+  MISSIONS.filter(m=>filter==='all'||m.d===filter).forEach(m=>mg.appendChild(card(m)));
+}
+function renderPAC(){
+  pg.innerHTML='';
+  PAC.forEach(a=>{
+    const d=document.createElement('div');d.className='card';
+    d.innerHTML=`<h3>${a.t}</h3><div><span class="badge">${a.tag}</span></div><div class="meta"><div>💎 ${a.x} XP</div><div>Intégré PAC</div></div>`;
+    d.onclick=()=>{cur={x:a.x,t:a.t,desc:'Action PAC intégrée'};open(cur)};
+    pg.appendChild(d);
+  });
+}
+function open(m){
+  cur=m;document.getElementById('mt').textContent=m.t;
+  document.getElementById('md').textContent=m.desc||'Mission éducative';
+  document.getElementById('modal').classList.add('active');
+}
+function closeM(){document.getElementById('modal').classList.remove('active');document.getElementById('ms').value=''}
+function submit(){
+  if(!cur)return;
+  S.xp+=cur.x;S.m++;S.rep+=Math.floor(cur.x/10);
+  S.r=S.xp>=1000?'Opérateur':S.xp>=500?'Agent Senior':S.xp>=200?'Agent':'Recrue';
+  update();closeM();
+}
+function update(){
+  uname.textContent=S.name;uxp.textContent=S.xp+' XP';urank.textContent=S.r;
+  sx.textContent=S.xp;sm.textContent=S.m;sr.textContent=S.r;sp.textContent=S.rep;
+  const next=S.xp<200?200:S.xp<500?500:1000;
+  const pct=Math.min(100,Math.floor((S.xp/next)*100));
+  pb.style.width=pct+'%';pb.textContent=pct+'%';
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  b.classList.add('active');document.getElementById(b.dataset.p).classList.add('active');
+});
+document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');filter=b.dataset.f;render();
+});
+render();renderPAC();update();
+</script>
+</body>
+</html>
