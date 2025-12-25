@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MOC — Plateforme Institutionnelle de Documentation et d'Évaluation</title>
+<style>
+:root{
+--primary:#003d82;--secondary:#e63946;--accent:#2a9d8f;--bg:#f8f9fa;--panel:#ffffff;--border:#dee2e6;--text:#212529;--muted:#6c757d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.header{background:var(--primary);color:#fff;padding:24px 0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.header-content{max-width:1400px;margin:0 auto;padding:0 30px}
+.header h1{font-size:28px;font-weight:600;margin-bottom:8px}
+.header p{font-size:14px;opacity:.92}
+.nav-bar{background:var(--panel);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+.nav-content{max-width:1400px;margin:0 auto;padding:0 30px;display:flex;gap:0}
+.nav-content button{background:transparent;border:none;padding:16px 24px;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;border-bottom:3px solid transparent;transition:.2s}
+.nav-content button:hover{background:rgba(0,61,130,.05);border-bottom-color:var(--secondary)}
+.nav-content button.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.container{max-width:1400px;margin:30px auto;padding:0 30px}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:28px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.section h2{font-size:22px;color:var(--primary);margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--border);font-weight:600}
+.section h3{font-size:18px;color:var(--secondary);margin:20px 0 12px;font-weight:600}
+.section h4{font-size:16px;margin:16px 0 10px;font-weight:600}
+.section p{margin:12px 0;text-align:justify}
+.section ul{margin:12px 0 12px 24px}
+.section li{margin:8px 0}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin:20px 0}
+.info-card{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:18px}
+.info-card h4{color:var(--primary);margin-bottom:10px;font-size:15px;font-weight:600}
+.info-card p{font-size:14px;margin:6px 0}
+.info-card .label{font-weight:600;color:var(--muted);font-size:13px;margin-top:10px}
+.info-card .value{color:var(--text);font-size:14px}
+.org-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin:20px 0}
+.org-item{background:var(--bg);border-left:4px solid var(--accent);padding:16px;border-radius:3px}
+.org-item h4{color:var(--primary);margin-bottom:8px;font-size:16px}
+.org-item p{font-size:14px;color:var(--muted);margin:4px 0}
+.timeline{margin:24px 0;padding-left:20px;border-left:3px solid var(--border)}
+.timeline-item{margin-bottom:24px;padding-left:24px;position:relative}
+.timeline-item::before{content:'';position:absolute;left:-13px;top:5px;width:20px;height:20px;border-radius:50%;background:var(--accent);border:3px solid var(--panel)}
+.timeline-item .year{font-weight:700;color:var(--primary);font-size:15px;margin-bottom:6px}
+.timeline-item .event{font-size:14px;line-height:1.6}
+.table-container{overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+table th{background:var(--primary);color:#fff;padding:12px;text-align:left;font-weight:600;border:1px solid var(--border)}
+table td{padding:12px;border:1px solid var(--border);vertical-align:top}
+table tr:nth-child(even){background:var(--bg)}
+.embed-container{margin:24px 0;border:2px solid var(--border);border-radius:4px;overflow:hidden}
+.embed-container iframe{width:100%;min-height:700px;border:0;display:block}
+.resources-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:20px 0}
+.resource-card{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:20px;cursor:pointer;transition:.2s}
+.resource-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.12);transform:translateY(-2px)}
+.resource-card h4{color:var(--primary);margin-bottom:10px;font-size:16px}
+.resource-card p{font-size:14px;color:var(--muted)}
+.resource-card .type{display:inline-block;background:var(--secondary);color:#fff;font-size:11px;padding:4px 10px;border-radius:3px;margin-top:10px;font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:30px;z-index:1000}
+.modal.active{display:flex;animation:modalFade .3s}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.modal-content{background:var(--panel);border-radius:6px;max-width:1600px;width:100%;max-height:95vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.3);padding:30px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.modal-header h2{color:var(--primary);font-size:24px}
+.modal-close{background:var(--secondary);color:#fff;border:none;padding:8px 18px;border-radius:4px;cursor:pointer;font-weight:600}
+.modal-close:hover{background:#d62839}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin:24px 0}
+.stat-box{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;padding:24px;border-radius:6px;text-align:center;box-shadow:0 4px 12px rgba(0,61,130,.25)}
+.stat-box .number{font-size:36px;font-weight:700;margin-bottom:8px}
+.stat-box .label{font-size:14px;opacity:.95;font-weight:500}
+.alert-box{background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:16px;margin:20px 0}
+.alert-box strong{color:#856404}
+.structure-diagram{margin:24px 0;padding:20px;background:var(--bg);border:1px solid var(--border);border-radius:4px;font-family:monospace;font-size:13px;line-height:1.8;overflow-x:auto}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-content">
+    <h1>MOUVEMENT OUVRIER CHRÉTIEN (MOC)</h1>
+    <p>Plateforme Institutionnelle de Documentation, d'Évaluation et de Coordination — Fédération Wallonie-Bruxelles</p>
+  </div>
+</header>
+
+<nav class="nav-bar">
+  <div class="nav-content">
+    <button class="active" data-page="overview">Vue d'ensemble</button>
+    <button data-page="structure">Structure & Organisations</button>
+    <button data-page="history">Historique détaillé</button>
+    <button data-page="regions">Fédérations régionales</button>
+    <button data-page="documents">Documentation</button>
+    <button data-page="evaluation">Évaluation & Indicateurs</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="overview" class="page active">
+    <div class="section">
+      <h2>Identité institutionnelle</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Dénomination officielle</h4>
+          <p>Mouvement Ouvrier Chrétien (MOC)</p>
+        </div>
+        <div class="info-card">
+          <h4>Sigle</h4>
+          <p>MOC</p>
+        </div>
+        <div class="info-card">
+          <h4>Forme juridique</h4>
+          <p>Association sans but lucratif (ASBL)</p>
+        </div>
+        <div class="info-card">
+          <h4>Date de fondation</h4>
+          <p>1945-1946 (reconstitution post-Seconde Guerre mondiale)</p>
+        </div>
+        <div class="info-card">
+          <h4>Siège social</h4>
+          <p>Chaussée de Haecht 579<br>1030 Bruxelles (Schaerbeek)</p>
+        </div>
+        <div class="info-card">
+          <h4>Contact institutionnel</h4>
+          <p>Tél. : +32 2 246 38 11<br>Site web : www.moc.be</p>
+        </div>
+        <div class="info-card">
+          <h4>Territoire d'action</h4>
+          <p>Wallonie, Région de Bruxelles-Capitale, Communauté germanophone</p>
+        </div>
+        <div class="info-card">
+          <h4>Reconnaissance officielle</h4>
+          <p>Mouvement d'Éducation permanente (Décret 17 juillet 2003 — Catégorie Mouvement national)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Mission et positionnement stratégique</h2>
+      <p><strong>Le Mouvement Ouvrier Chrétien</strong> constitue la structure fédérative francophone et germanophone du mouvement ouvrier chrétien en Belgique. En tant qu'organe de coordination politique et stratégique, le MOC fédère et représente cinq organisations sociales majeures issues de l'histoire ouvrière et du monde chrétien.</p>
+      
+      <h3>Caractérisation institutionnelle</h3>
+      <ul>
+        <li><strong>Mouvement progressiste</strong> : Adhésion aux valeurs de gauche fondées sur l'égalité, la solidarité et la transformation sociale</li>
+        <li><strong>Mouvement pluraliste</strong> : Intégration de dimensions social-démocrates, écologistes, personnalistes et humanistes</li>
+        <li><strong>Mouvement indépendant</strong> : Autonomie politique vis-à-vis des formations partisanes, redevabilité exclusive envers les organisations constitutives et leurs membres</li>
+      </ul>
+
+      <h3>Axes stratégiques d'intervention</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Axe 1 : Égalité</h4>
+          <p>Défense et renforcement des droits humains fondamentaux pour toutes et tous</p>
+        </div>
+        <div class="info-card">
+          <h4>Axe 2 : Solidarité</h4>
+          <p>Sécurité sociale forte et durable, fiscalité juste finançant les fonctions collectives</p>
+        </div>
+        <div class="info-card">
+          <h4>Axe 3 : Démocratie</h4>
+          <p>Renforcement du rôle régulateur de l'État, reconnaissance des associations volontaires</p>
+        </div>
+        <div class="info-card">
+          <h4>Axe 4 : Développement durable</h4>
+          <p>Nouvel équilibre mondial basé sur la paix, la justice et la transition écologique</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Statistiques clés</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="number">5</div>
+          <div class="label">Organisations constitutives</div>
+        </div>
+        <div class="stat-box">
+          <div class="number">9</div>
+          <div class="label">Fédérations régionales</div>
+        </div>
+        <div class="stat-box">
+          <div class="number">~1M</div>
+          <div class="label">Affiliés directs et indirects</div>
+        </div>
+        <div class="stat-box">
+          <div class="number">79</div>
+          <div class="label">Années d'action continue</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Ancrage dans l'enseignement social chrétien</h2>
+      <p>Le MOC puise son inspiration dans la <strong>doctrine sociale de l'Église catholique</strong>, notamment l'encyclique <em>Rerum Novarum</em> (Léon XIII, 1891) qui a jeté les fondements du mouvement ouvrier chrétien en Europe. Cette encyclique, promulguée en réponse à la "question sociale" du XIXe siècle, prônait la dignité du travail, la justice sociale et le droit des travailleurs à s'organiser.</p>
+      
+      <h4>Principes fondamentaux hérités de la doctrine sociale</h4>
+      <ul>
+        <li><strong>Dignité humaine</strong> : Reconnaissance de la valeur intrinsèque de chaque personne</li>
+        <li><strong>Solidarité</strong> : Interdépendance et responsabilité mutuelle au sein de la communauté</li>
+        <li><strong>Subsidiarité</strong> : Résolution des problèmes au niveau le plus proche des citoyens</li>
+        <li><strong>Bien commun</strong> : Priorité accordée à l'intérêt général sur les intérêts particuliers</li>
+        <li><strong>Option préférentielle pour les pauvres</strong> : Attention particulière aux plus vulnérables</li>
+      </ul>
+
+      <div class="alert-box">
+        <strong>Évolution contemporaine :</strong> Tout en maintenant son ancrage dans les valeurs chrétiennes, le MOC s'affirme depuis les années 1970 comme un mouvement ouvert et pluraliste, accueillant des membres de toutes convictions philosophiques partageant son projet de société solidaire et égalitaire.
+      </div>
+    </div>
+  </div>
+
+  <div id="structure" class="page">
+    <div class="section">
+      <h2>Architecture organisationnelle</h2>
+      
+      <h3>Modèle pyramidal de coordination</h3>
+      <div class="structure-diagram">
+MOC NATIONAL (Bruxelles)
+│
+├── ORGANISATIONS CONSTITUTIVES NATIONALES
+│   ├── Confédération des Syndicats Chrétiens (CSC)
+│   ├── Alliance Nationale des Mutualités Chrétiennes (ANMC) / Mutualité chrétienne
+│   ├── Vie Féminine (VF)
+│   ├── Équipes Populaires (EP)
+│   └── Jeunesse Ouvrière Chrétienne (JOC) / Jeunes Organisés et Combatifs
+│
+├── FÉDÉRATIONS RÉGIONALES (9)
+│   ├── MOC Bruxelles
+│   ├── MOC Brabant wallon
+│   ├── MOC Charleroi-Thuin
+│   ├── MOC Hainaut Centre
+│   ├── MOC Wallonie picarde
+│   ├── MOC Liège-Huy-Waremme
+│   ├── MOC Verviers & Ostbelgien
+│   ├── MOC Namur-Dinant-Philippeville
+│   └── MOC Luxembourg
+│
+└── SERVICES TRANSVERSAUX
+    ├── CIEP (Centre d'Information et d'Éducation Populaire)
+    ├── ISCO (Institut Supérieur de Culture Ouvrière)
+    ├── FTU (Fondation Travail-Université)
+    ├── Solidarité Mondiale (WSM) — ONG
+    └── AID (Actions Intégrées de Développement)
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Organisations constitutives — Fiches détaillées</h2>
+      
+      <div class="org-list">
+        <div class="org-item">
+          <h4>1. Confédération des Syndicats Chrétiens (CSC)</h4>
+          <p><strong>Nature :</strong> Confédération syndicale interprofessionnelle</p>
+          <p><strong>Fondation :</strong> 1912 (sous le nom ACV-CSC, structure binationale)</p>
+          <p><strong>Membres :</strong> ~1,7 million d'affiliés (Belgique entière, dont ~45% francophones)</p>
+          <p><strong>Domaine d'activité :</strong> Défense des droits des travailleurs, négociations collectives, représentation dans les organes de concertation sociale</p>
+          <p><strong>Reconnaissance :</strong> Organisation syndicale représentative reconnue au niveau fédéral et régional</p>
+          <p><strong>Structure :</strong> Organisation à l'échelle nationale (CSC/ACV), mais étroitement intégrée au MOC pour le volet francophone</p>
+        </div>
+
+        <div class="org-item">
+          <h4>2. Alliance Nationale des Mutualités Chrétiennes (ANMC) / Mutualité chrétienne</h4>
+          <p><strong>Nature :</strong> Mutuelle de santé (Organisme assureur)</p>
+          <p><strong>Fondation :</strong> Début XXe siècle (fédération progressive des mutuelles locales chrétiennes)</p>
+          <p><strong>Membres :</strong> ~4,6 millions d'affiliés (Belgique entière, structure bilingue MC/CM)</p>
+          <p><strong>Domaine d'activité :</strong> Gestion de l'assurance maladie-invalidité obligatoire, services complémentaires, prévention santé</p>
+          <p><strong>Reconnaissance :</strong> Mutuelle agréée par l'INAMI (Institut National d'Assurance Maladie-Invalidité)</p>
+          <p><strong>Mouvements associés :</strong> Énéo (aînés), Altéo (personnes malades et handicapées), Ocarina (jeunesse et santé)</p>
+        </div>
+
+        <div class="org-item">
+          <h4>3. Vie Féminine (VF)</h4>
+          <p><strong>Nature :</strong> Mouvement féministe d'action interculturelle et sociale</p>
+          <p><strong>Fondation :</strong> 1920 (Ligue des Femmes Ouvrières Chrétiennes), renommée Vie Féminine en 1969</p>
+          <p><strong>Membres :</strong> ~30 000 femmes organisées en 500 groupes locaux</p>
+          <p><strong>Domaine d'activité :</strong> Émancipation des femmes, égalité de genre, participation citoyenne, lutte contre les discriminations</p>
+          <p><strong>Reconnaissance :</strong> Mouvement d'Éducation permanente (Axe 1 à 4) et d'Insertion socio-professionnelle</p>
+        </div>
+
+        <div class="org-item">
+          <h4>4. Équipes Populaires (EP)</h4>
+          <p><strong>Nature :</strong> Mouvement d'éducation permanente et d'action locale</p>
+          <p><strong>Fondation :</strong> 1947 (dans la continuité des Ligues ouvrières catholiques d'avant-guerre)</p>
+          <p><strong>Membres :</strong> ~15 000 membres actifs organisés en groupes de base</p>
+          <p><strong>Domaine d'activité :</strong> Actions citoyennes locales, alphabétisation, projets communautaires, débats démocratiques</p>
+          <p><strong>Reconnaissance :</strong> Mouvement d'Éducation permanente (Axes 1, 3, 4)</p>
+        </div>
+
+        <div class="org-item">
+          <h4>5. Jeunesse Ouvrière Chrétienne (JOC) / Jeunes Organisés et Combatifs</h4>
+          <p><strong>Nature :</strong> Mouvement de jeunesse d'action sociale</p>
+          <p><strong>Fondation :</strong> 1924-1925 par l'abbé Joseph Cardijn</p>
+          <p><strong>Membres :</strong> ~5 000 jeunes actifs (12-30 ans)</p>
+          <p><strong>Domaine d'activité :</strong> Formation socio-politique des jeunes issus de milieux populaires, actions collectives, méthode "voir-juger-agir"</p>
+          <p><strong>Reconnaissance :</strong> Organisation de Jeunesse reconnue par la Fédération Wallonie-Bruxelles</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Partenaire flamand : Beweging.net</h2>
+      <p><strong>Dénomination :</strong> Beweging.net (anciennement Algemeen Christelijk Werkersverbond — ACW jusqu'en 2014)</p>
+      <p><strong>Nature de la relation :</strong> Organisations sœurs issues de la scission communautaire des années 1970. Pas de structure faîtière commune depuis cette période, mais coordination informelle sur les grandes questions nationales.</p>
+      
+      <h4>Principales différences</h4>
+      <ul>
+        <li><strong>Positionnement politique :</strong> Beweging.net maintient des liens plus étroits avec le parti CD&V (chrétien-démocrate flamand), tandis que le MOC revendique son indépendance pluraliste</li>
+        <li><strong>Dénomination :</strong> Beweging.net a abandonné la référence explicite "chrétien" et "ouvrier" en 2014 (rebranding post-crise Arco)</li>
+        <li><strong>Structure :</strong> Beweging.net fonctionne davantage par projets thématiques et plateformes régionales que par modèle pyramidal classique</li>
+      </ul>
+
+      <h4>Coordination persistante</h4>
+      <p>Malgré l'autonomie institutionnelle, MOC et Beweging.net coordonnent régulièrement leurs positions sur :</p>
+      <ul>
+        <li>Réformes fédérales (pensions, sécurité sociale, fiscalité)</li>
+        <li>Campagnes de mobilisation sociale</li>
+        <li>Solidarité internationale via l'ONG unique Solidarité Mondiale / Wereldsolidariteit (WSM)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="history" class="page">
+    <div class="section">
+      <h2>Chronologie institutionnelle détaillée</h2>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="year">1891</div>
+          <div class="event"><strong>Promulgation de l'encyclique <em>Rerum Novarum</em></strong> par le Pape Léon XIII. Ce texte fondateur de la doctrine sociale de l'Église catholique légitime l'organisation des travailleurs chrétiens et inspire la création des premiers syndicats et mutuelles catholiques en Belgique.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1891</div>
+          <div class="event"><strong>Fondation de la Ligue Démocratique Belge (LDB)</strong> / <em>Belgische Volksbond</em>. Première structure de coordination des associations catholiques d'ouvriers en Belgique, sous l'impulsion de Joris Helleputte et Arthur Verhaegen.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1912</div>
+          <div class="event"><strong>Création de la Confédération des Syndicats Chrétiens (CSC)</strong> comme organisation syndicale nationale structurée du pilier catholique, pendant chrétien de la FGTB socialiste.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1921</div>
+          <div class="event"><strong>Transformation de la LDB en Ligue Nationale des Travailleurs Chrétiens (LNTC)</strong> / <em>Algemeen Christelijk Werkersverbond</em> (ACW). Organisation de masse du pilier catholique intégrant syndicat, mutuelles, JOC, ligues féminines.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1924-1925</div>
+          <div class="event"><strong>Fondation de la Jeunesse Ouvrière Chrétienne (JOC)</strong> par l'abbé Joseph Cardijn à Bruxelles. Innovation méthodologique majeure avec la méthode "voir-juger-agir" qui s'étendra au mouvement international.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1940-1945</div>
+          <div class="event"><strong>Dissolution forcée durant l'Occupation allemande.</strong> Les activités de la LNTC/ACW sont suspendues. Restructuration clandestine et réflexion sur le modèle d'après-guerre.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1945-1946</div>
+          <div class="event"><strong>Fondation du Mouvement Ouvrier Chrétien (MOC)</strong> en remplacement de la LNTC dissoute. Structure bicéphale MOC (francophone/germanophone) et ACW (néerlandophone) avec organes nationaux communs mais autonomie communautaire croissante.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1961</div>
+          <div class="event"><strong>Création du Centre d'Information et d'Éducation Populaire (CIEP)</strong> comme service de formation du MOC, institutionnalisant la dimension d'éducation permanente.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1967</div>
+          <div class="event"><strong>Création de la Fondation Travail-Université (FTU)</strong> comme centre de recherche et de formation du MOC, établissant un pont avec le monde académique.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">Début années 1970</div>
+          <div class="event"><strong>Scission communautaire définitive.</strong> Suppression des dernières structures nationales communes MOC-ACW. Le MOC devient autonome pour la Wallonie-Bruxelles, l'ACW pour la Flandre. Fédéralisation du mouvement ouvrier chrétien belge.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">1970-1980</div>
+          <div class="event"><strong>Ouverture politique et pluralisation.</strong> Le MOC affirme son indépendance vis-à-vis du Parti Social-Chrétien (PSC). Engagement de cadres MOC dans diverses formations (RW, FDF, PS, Écolo). Adoption d'un profil progressiste et de gauche.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2003</div>
+          <div class="event"><strong>Reconnaissance formelle en Éducation permanente.</strong> Le Décret du 17 juillet 2003 de la Fédération Wallonie-Bruxelles reconnaît officiellement le MOC comme Mouvement d'Éducation permanente de catégorie nationale.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2008-2014</div>
+          <div class="event"><strong>Crise financière Arco-Dexia.</strong> La coopérative financière ARCO, liée au pilier chrétien (ACW/MOC), s'effondre lors de la crise bancaire. Impact majeur sur l'image du mouvement, particulièrement en Flandre. Fin de l'implication directe dans le secteur bancaire.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2014</div>
+          <div class="event"><strong>Transformation de l'ACW en Beweging.net.</strong> Rebranding complet du mouvement flamand qui abandonne la dénomination "Chrétien" et "Ouvrier" pour se moderniser. Le MOC maintient sa dénomination historique.</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="year">2020-2025</div>
+          <div class="event"><strong>Période contemporaine.</strong> Engagement du MOC sur les enjeux de transition écologique, justice sociale post-COVID, défense de la sécurité sociale. Maintien de la coordination informelle avec Beweging.net sur les dossiers fédéraux.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="regions" class="page">
+    <div class="section">
+      <h2>Maillage territorial — 9 fédérations régionales</h2>
+      <p>Le MOC assure sa présence sur l'ensemble du territoire de la Fédération Wallonie-Bruxelles par un réseau de <strong>neuf fédérations régionales</strong> constituées en ASBL autonomes mais affiliées au MOC national. Chaque régionale coordonne sur son territoire les activités des organisations constitutives et développe des initiatives propres d'éducation permanente.</p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Fédération régionale</th>
+              <th>Territoire couvert</th>
+              <th>Siège</th>
+              <th>Particularités</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MOC Bruxelles</strong></td>
+              <td>Région de Bruxelles-Capitale (19 communes)</td>
+              <td>Bruxelles</td>
+              <td>Contexte urbain multiculturel, coordination avec structures bilingues</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Brabant wallon</strong></td>
+              <td>Province du Brabant wallon</td>
+              <td>Wavre</td>
+              <td>Territoire périurbain et rural, démographie croissante</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Charleroi-Thuin</strong></td>
+              <td>Arrondissements de Charleroi et Thuin</td>
+              <td>Charleroi</td>
+              <td>Bassin industriel en reconversion, enjeux socio-économiques majeurs</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Hainaut Centre</strong></td>
+              <td>Centre du Hainaut (La Louvière, Mons, etc.)</td>
+              <td>La Louvière</td>
+              <td>Ancien bassin minier, mémoire ouvrière forte</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Wallonie picarde</strong></td>
+              <td>Hainaut occidental (Tournai, Mouscron, etc.)</td>
+              <td>Tournai</td>
+              <td>Zone frontalière avec la France, tissu industriel textile</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Liège-Huy-Waremme</strong></td>
+              <td>Province de Liège (zones francophone et mixte)</td>
+              <td>Liège</td>
+              <td>Grande agglomération industrielle, tradition syndicale forte, 150 000 affiliés historiques</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Verviers & Ostbelgien</strong></td>
+              <td>Est de la province de Liège + Communauté germanophone</td>
+              <td>Verviers / Eupen</td>
+              <td>Bilinguisme français-allemand, coordination avec CAB (Christliche Arbeiter-Bewegung)</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Namur-Dinant-Philippeville</strong></td>
+              <td>Province de Namur</td>
+              <td>Namur</td>
+              <td>Chef-lieu de Wallonie, mix urbain-rural</td>
+            </tr>
+            <tr>
+              <td><strong>MOC Luxembourg</strong></td>
+              <td>Province du Luxembourg</td>
+              <td>Arlon ou Libramont</td>
+              <td>Vaste territoire rural, densité de population faible</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Rôle des fédérations régionales</h3>
+      <ul>
+        <li>Coordination locale des organisations constitutives (CSC, MC, Vie Féminine, EP, JOC)</li>
+        <li>Animation du réseau CIEP régional (Centre d'Information et d'Éducation Populaire)</li>
+        <li>Organisation de formations pour militants et permanents</li>
+        <li>Débats publics et interpellation des autorités locales</li>
+        <li>Développement de projets spécifiques adaptés au contexte territorial</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="documents" class="page">
+    <div class="section">
+      <h2>Centre de documentation institutionnelle</h2>
+      
+      <h3>Document source intégral</h3>
+      <div class="embed-container">
+        <iframe src="/mnt/user-data/uploads/moc__1_.pdf" type="application/pdf"></iframe>
+      </div>
+
+      <h3>Ressources externes officielles</h3>
+      <div class="resources-grid">
+        <div class="resource-card" onclick="openExternal('https://www.moc.be')">
+          <h4>Site officiel du MOC</h4>
+          <p>Portail institutionnel national, actualités, prises de position, documentation</p>
+          <span class="type">SITE WEB</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://www.vocabulairepolitique.be/mouvement-ouvrier-chretien-moc/')">
+          <h4>Fiche CRISP — Vocabulaire politique</h4>
+          <p>Analyse institutionnelle détaillée par le Centre de Recherche et d'Information Socio-Politiques</p>
+          <span class="type">ANALYSE</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://mocliege.be')">
+          <h4>MOC Liège-Huy-Waremme</h4>
+          <p>Exemple de fédération régionale majeure, documentation historique disponible</p>
+          <span class="type">RÉGIONALE</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://mocbxl.be')">
+          <h4>CIEP MOC Bruxelles</h4>
+          <p>Centre d'Information et d'Éducation Populaire de la région bruxelloise</p>
+          <span class="type">RÉGIONALE</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://www.wsm.be')">
+          <h4>Solidarité Mondiale / WSM</h4>
+          <p>ONG du mouvement ouvrier chrétien, coopération internationale</p>
+          <span class="type">ONG</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://www.beweging.net')">
+          <h4>Beweging.net (ACW)</h4>
+          <p>Organisation sœur flamande, anciennement Algemeen Christelijk Werkersverbond</p>
+          <span class="type">PARTENAIRE</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://fr.wikipedia.org/wiki/Mouvement_ouvrier_chr%C3%A9tien')">
+          <h4>Wikipédia — Mouvement ouvrier chrétien</h4>
+          <p>Synthèse encyclopédique, contexte historique et contemporain</p>
+          <span class="type">ENCYCLOPÉDIE</span>
+        </div>
+
+        <div class="resource-card" onclick="openExternal('https://www.csc-en-ligne.be')">
+          <h4>CSC en ligne</h4>
+          <p>Portail de la Confédération des Syndicats Chrétiens, organisation constitutive du MOC</p>
+          <span class="type">ORGANISATION</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="evaluation" class="page">
+    <div class="section">
+      <h2>Cadre d'évaluation institutionnelle</h2>
+      
+      <h3>Reconnaissance et financement</h3>
+      <p>En tant que <strong>Mouvement d'Éducation permanente reconnu</strong> par la Fédération Wallonie-Bruxelles (Décret du 17 juillet 2003), le MOC bénéficie d'un financement public structurel calculé selon les critères suivants :</p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Critère d'évaluation</th>
+              <th>Indicateurs</th>
+              <th>Observations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Couverture territoriale</strong></td>
+              <td>Présence dans les 5 provinces wallonnes + Bruxelles + Communauté germanophone</td>
+              <td>Maillage complet via 9 fédérations régionales</td>
+            </tr>
+            <tr>
+              <td><strong>Nombre d'affiliés</strong></td>
+              <td>~1 million d'affiliés directs et indirects (via organisations constitutives)</td>
+              <td>Base sociale massive, légitimité représentative</td>
+            </tr>
+            <tr>
+              <td><strong>Axes d'Éducation permanente</strong></td>
+              <td>Couverture des 4 axes du décret (participation, formation, analyse, sensibilisation)</td>
+              <td>Reconnaissance en catégorie "Mouvement national"</td>
+            </tr>
+            <tr>
+              <td><strong>Production analytique</strong></td>
+              <td>Publications régulières, analyses socio-politiques, recherches (via FTU, CIEP)</td>
+              <td>Contribution substantielle au débat public</td>
+            </tr>
+            <tr>
+              <td><strong>Formation de cadres</strong></td>
+              <td>Milliers de militants et permanents formés annuellement (CIEP, ISCO)</td>
+              <td>Essentiels à la vitalité du mouvement social</td>
+            </tr>
+            <tr>
+              <td><strong>Actions collectives</strong></td>
+              <td>Campagnes de mobilisation, interpellations politiques, manifestations</td>
+              <td>Capacité de mobilisation élevée</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Enjeux d'évaluation qualitative</h3>
+      <ul>
+        <li><strong>Renouvellement générationnel :</strong> Capacité à attirer et former de jeunes militants face au vieillissement de la base militante traditionnelle</li>
+        <li><strong>Pertinence programmatique :</strong> Adaptation des revendications aux mutations du monde du travail (précarisation, plateformes numériques, télétravail)</li>
+        <li><strong>Diversité sociale :</strong> Ouverture aux populations immigrées et à la diversité culturelle au-delà du socle historique "ouvrier blanc"</li>
+        <li><strong>Impact politique :</strong> Capacité d'influence effective sur les politiques publiques malgré l'indépendance partisane revendiquée</li>
+        <li><strong>Cohésion interne :</strong> Équilibre entre autonomie des organisations constitutives et cohérence stratégique du MOC comme coupole</li>
+      </ul>
+
+      <h3>Indicateurs de vitalité démocratique</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Taux de participation</h4>
+          <p>Niveau d'implication active des affiliés dans les instances délibératives et les actions collectives</p>
+          <div class="label">Évaluation</div>
+          <div class="value">Modéré à élevé selon les organisations et territoires</div>
+        </div>
+        <div class="info-card">
+          <h4>Représentativité genre</h4>
+          <p>Équilibre femmes-hommes dans les instances dirigeantes et les formations</p>
+          <div class="label">Évaluation</div>
+          <div class="value">En progression, objectifs paritaires fixés</div>
+        </div>
+        <div class="info-card">
+          <h4>Ancrage local</h4>
+          <p>Présence effective et reconnaissance dans les communautés de base</p>
+          <div class="label">Évaluation</div>
+          <div class="value">Fort dans les bassins industriels historiques, variable ailleurs</div>
+        </div>
+        <div class="info-card">
+          <h4>Capacité d'innovation</h4>
+          <p>Développement de nouvelles formes d'action et d'organisation adaptées aux enjeux contemporains</p>
+          <div class="label">Évaluation</div>
+          <div class="value">Défis identifiés (numérique, écologie), initiatives en cours</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="externalModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="externalTitle">Ressource externe</h2>
+      <button class="modal-close" onclick="closeExternal()">Fermer</button>
+    </div>
+    <iframe id="externalFrame" style="width:100%;min-height:800px;border:0"></iframe>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.nav-content button').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.nav-content button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.page).classList.add('active');
+    window.scrollTo(0,0);
+  }
+});
+
+function openExternal(url){
+  document.getElementById('externalTitle').textContent='Chargement : '+url;
+  document.getElementById('externalFrame').src=url;
+  document.getElementById('externalModal').classList.add('active');
+}
+
+function closeExternal(){
+  document.getElementById('externalModal').classList.remove('active');
+  document.getElementById('externalFrame').src='';
+}
+</script>
+</body>
+</html>
