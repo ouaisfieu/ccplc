@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS × KORBEN - Système Ultime</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e1a;
+            --green: #7bed9f;
+            --purple: #c77dff;
+            --red: #ff6b6b;
+            --blue: #4ecdc4;
+            --yellow: #ffd43b;
+            --panel: #151b2e;
+            --border: #2a3f5f;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--bg);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Matrix Background */
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+        }
+
+        /* Scan Lines */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--green), transparent);
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.4;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        /* Container */
+        .app {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 968px) {
+            .app {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--panel);
+            border-right: 2px solid var(--border);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 968px) {
+            .sidebar {
+                position: relative;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid var(--border);
+            }
+        }
+
+        .logo {
+            font-size: 24px;
+            color: var(--green);
+            text-shadow: 0 0 30px var(--green);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-item {
+            padding: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(123,237,159,0.1);
+            border-left-color: var(--green);
+            color: var(--green);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+        }
+
+        .user-badge {
+            background: rgba(199,125,255,0.1);
+            border: 1px solid var(--purple);
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: var(--purple);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .user-xp {
+            font-size: 24px;
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .user-rank {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .page-title {
+            font-size: 36px;
+            color: var(--green);
+            text-shadow: 0 0 30px var(--green);
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--panel);
+            border: 2px solid var(--border);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--green), var(--purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--green);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(123,237,159,0.3);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 42px;
+            color: var(--green);
+            font-weight: bold;
+            text-shadow: 0 0 20px var(--green);
+        }
+
+        .stat-sublabel {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+
+        /* Mission Cards */
+        .missions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .missions-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mission-card {
+            background: var(--panel);
+            border: 2px solid var(--border);
+            padding: 25px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .mission-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .mission-card:hover {
+            border-color: var(--purple);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(199,125,255,0.4);
+        }
+
+        .mission-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .mission-card.completed {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .mission-card.completed:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .mission-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .mission-title {
+            font-size: 18px;
+            color: var(--purple);
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .mission-difficulty {
+            padding: 6px 14px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .diff-facile { background: var(--green); color: var(--bg); }
+        .diff-moyen { background: var(--yellow); color: var(--bg); }
+        .diff-difficile { background: #ff922b; color: white; }
+        .diff-expert { background: var(--red); color: white; }
+
+        .mission-desc {
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+
+        .mission-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: rgba(123,237,159,0.1);
+            border: 1px solid var(--green);
+            padding: 5px 12px;
+            font-size: 10px;
+            color: var(--green);
+        }
+
+        .mission-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .mission-xp {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .mission-players {
+            opacity: 0.7;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--panel);
+            border: 2px solid var(--border);
+            color: #e0e0e0;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--green);
+            color: var(--green);
+            background: rgba(123,237,159,0.1);
+            box-shadow: 0 0 15px rgba(123,237,159,0.3);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            background: var(--panel);
+            border: 2px solid var(--border);
+            padding: 25px;
+        }
+
+        .leaderboard-item {
+            display: grid;
+            grid-template-columns: 60px 1fr auto auto;
+            gap: 20px;
+            padding: 18px;
+            margin-bottom: 12px;
+            background: rgba(42,63,95,0.3);
+            border-left: 4px solid var(--green);
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(42,63,95,0.5);
+            transform: translateX(8px);
+        }
+
+        .leaderboard-item:nth-child(1) { border-left-color: #ffd700; }
+        .leaderboard-item:nth-child(2) { border-left-color: #c0c0c0; }
+        .leaderboard-item:nth-child(3) { border-left-color: #cd7f32; }
+
+        .rank-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--green);
+            text-align: center;
+        }
+
+        .player-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .player-rank {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-item {
+                grid-template-columns: 50px 1fr;
+                gap: 15px;
+            }
+
+            .leaderboard-item > div:nth-child(3),
+            .leaderboard-item > div:nth-child(4) {
+                grid-column: 2;
+                font-size: 11px;
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,14,26,0.98);
+            z-index: 10000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 20px;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-box {
+            background: var(--panel);
+            border: 3px solid var(--purple);
+            padding: 35px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 0 60px var(--purple);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            color: var(--purple);
+            text-shadow: 0 0 20px var(--purple);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--red);
+            font-size: 36px;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg) scale(1.2);
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-label {
+            display: block;
+            color: var(--green);
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            min-height: 180px;
+            background: rgba(42,63,95,0.5);
+            border: 2px solid var(--border);
+            color: #e0e0e0;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            resize: vertical;
+            transition: all 0.3s;
+        }
+
+        .modal-textarea:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 20px rgba(123,237,159,0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--panel);
+            border: 2px solid var(--green);
+            color: var(--green);
+            padding: 16px 32px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--green);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+            opacity: 0.2;
+        }
+
+        .btn:hover::before {
+            width: 400%;
+            height: 400%;
+        }
+
+        .btn:hover {
+            background: var(--green);
+            color: var(--bg);
+            box-shadow: 0 0 30px var(--green);
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            border-color: var(--purple);
+            color: var(--purple);
+        }
+
+        .btn-secondary:hover {
+            background: var(--purple);
+            color: white;
+            box-shadow: 0 0 30px var(--purple);
+        }
+
+        .btn-danger {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .btn-danger:hover {
+            background: var(--red);
+            color: white;
+            box-shadow: 0 0 30px var(--red);
+        }
+
+        /* Alert */
+        .alert {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--panel);
+            border: 3px solid var(--green);
+            padding: 25px 30px;
+            z-index: 11000;
+            min-width: 350px;
+            max-width: 500px;
+            animation: alertSlide 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 50px rgba(123,237,159,0.5);
+        }
+
+        @keyframes alertSlide {
+            from {
+                transform: translateX(600px) rotate(10deg);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .alert.error {
+            border-color: var(--red);
+            box-shadow: 0 10px 50px rgba(255,107,107,0.5);
+        }
+
+        .alert-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .alert-msg {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Korben Badge */
+        .korben-badge {
+            background: linear-gradient(135deg, var(--green), var(--purple));
+            padding: 15px 25px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(123,237,159,0.5); }
+            50% { box-shadow: 0 0 40px rgba(199,125,255,0.8); }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background: var(--border);
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            transition: width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix" id="matrix"></canvas>
+    <div class="scan-line"></div>
+
+    <div class="app">
+        <div class="sidebar">
+            <div class="logo">AEGIS × KORBEN</div>
+            <div class="logo-subtitle">Système Opérationnel Ultime<br>Propulsé par Korben</div>
+
+            <div class="nav-item active" data-page="dashboard">
+                <span class="nav-icon">🎯</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="missions">
+                <span class="nav-icon">⚡</span>
+                <span>Missions</span>
+            </div>
+            <div class="nav-item" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span>Classement</span>
+            </div>
+            <div class="nav-item" data-page="intel">
+                <span class="nav-icon">🔍</span>
+                <span>Intel</span>
+            </div>
+            <div class="nav-item" data-page="teams">
+                <span class="nav-icon">👥</span>
+                <span>Équipes</span>
+            </div>
+
+            <div class="user-badge">
+                <div class="user-name" id="userName">Agent_X</div>
+                <div class="user-xp" id="userXP">0 XP</div>
+                <div class="user-rank" id="userRank">Recrue</div>
+            </div>
+
+            <div class="korben-badge">
+                ⚡ PROPULSÉ PAR KORBEN ⚡<br>
+                <span style="font-size:11px;opacity:0.9">La concurrence? Atomisée.</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- DASHBOARD -->
+            <div class="page active" id="pageDashboard">
+                <div class="page-header">
+                    <h1 class="page-title">Dashboard Opérationnel</h1>
+                    <p class="page-subtitle">Vue d'ensemble de votre progression · Powered by Korben</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">POINTS D'EXPÉRIENCE</div>
+                        <div class="stat-value" id="dashXP">0</div>
+                        <div class="stat-sublabel">Total accumulé</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">MISSIONS COMPLÉTÉES</div>
+                        <div class="stat-value" id="dashMissions">0</div>
+                        <div class="stat-sublabel">Sur 40 disponibles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">GRADE ACTUEL</div>
+                        <div class="stat-value" id="dashRank">Recrue</div>
+                        <div class="stat-sublabel">Prochain: Agent</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">RÉPUTATION</div>
+                        <div class="stat-value" id="dashRep">0</div>
+                        <div class="stat-sublabel">Points de réputation</div>
+                    </div>
+                </div>
+
+                <div class="leaderboard">
+                    <h3 style="color:var(--purple);margin-bottom:20px;font-size:22px">PROGRESSION VERS PROCHAIN GRADE</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar" style="width:0%">0%</div>
+                    </div>
+                    <p style="margin-top:15px;font-size:13px;opacity:0.8">Prochain grade à <span id="nextThreshold">200</span> XP</p>
+                </div>
+            </div>
+
+            <!-- MISSIONS -->
+            <div class="page" id="pageMissions">
+                <div class="page-header">
+                    <h1 class="page-title">Centre de Missions</h1>
+                    <p class="page-subtitle">40 missions d'éducation permanente · Système Korben</p>
+                </div>
+
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">TOUTES (40)</button>
+                    <button class="filter-btn" data-filter="facile">FACILE</button>
+                    <button class="filter-btn" data-filter="moyen">MOYEN</button>
+                    <button class="filter-btn" data-filter="difficile">DIFFICILE</button>
+                    <button class="filter-btn" data-filter="expert">EXPERT</button>
+                </div>
+
+                <div class="missions-container" id="missionsGrid"></div>
+            </div>
+
+            <!-- LEADERBOARD -->
+            <div class="page" id="pageLeaderboard">
+                <div class="page-header">
+                    <h1 class="page-title">Classement Mondial</h1>
+                    <p class="page-subtitle">Top joueurs · Mis à jour en temps réel</p>
+                </div>
+
+                <div class="leaderboard" id="leaderboardContainer"></div>
+            </div>
+
+            <!-- INTEL -->
+            <div class="page" id="pageIntel">
+                <div class="page-header">
+                    <h1 class="page-title">Intel & Ressources</h1>
+                    <p class="page-subtitle">Outils et guides pour vos missions</p>
+                </div>
+
+                <div class="leaderboard">
+                    <h3 style="color:var(--green);margin-bottom:20px;font-size:20px">ARSENAL D'OUTILS</h3>
+                    <div style="font-size:14px;line-height:2">
+                        <p style="margin-bottom:15px"><strong style="color:var(--purple)">Fact-checking:</strong> AFP Factuel, Décodex Le Monde, Snopes, FullFact</p>
+                        <p style="margin-bottom:15px"><strong style="color:var(--purple)">Vie privée:</strong> Signal, Bitwarden, DuckDuckGo, Tor Browser, Tails</p>
+                        <p style="margin-bottom:15px"><strong style="color:var(--purple)">Data & Stats:</strong> Our World in Data, Eurostat, INSEE, Gapminder</p>
+                        <p style="margin-bottom:15px"><strong style="color:var(--purple)">OSINT:</strong> Maltego, Shodan, Google Dorking, WHOIS, Archive.org</p>
+                        <p style="margin-bottom:15px"><strong style="color:var(--purple)">Éducation:</strong> Khan Academy, Coursera, edX, MIT OpenCourseWare</p>
+                        <p style="margin-bottom:15px"><strong style="color:var(--purple)">Crypto:</strong> CyberChef, dCode, Cryptii</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEAMS -->
+            <div class="page" id="pageTeams">
+                <div class="page-header">
+                    <h1 class="page-title">Équipes & Collaboration</h1>
+                    <p class="page-subtitle">Missions collaboratives · Team building</p>
+                </div>
+
+                <div class="leaderboard">
+                    <button class="btn btn-secondary">CRÉER UNE ÉQUIPE</button>
+                    <h3 style="color:var(--purple);margin:30px 0 20px;font-size:20px">ÉQUIPES ACTIVES</h3>
+                    <div class="leaderboard-item">
+                        <div class="rank-number">1</div>
+                        <div class="player-details">
+                            <span class="player-name">Team Korben Elite</span>
+                            <span class="player-rank">15 membres actifs</span>
+                        </div>
+                        <div style="color:var(--green);font-weight:bold">4,250 XP</div>
+                        <div style="opacity:0.7">28 missions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="missionModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody"></div>
+            <div class="modal-section">
+                <label class="modal-label">VOTRE SOUMISSION</label>
+                <textarea class="modal-textarea" id="submission" placeholder="Décrivez votre approche, solution, preuves (liens, photos, documents)...
+
+Soyez précis et détaillé. Cette soumission sera évaluée pour le recrutement."></textarea>
+            </div>
+            <button class="btn" onclick="submitMission()">⚡ SOUMETTRE MISSION</button>
+            <button class="btn btn-danger" onclick="closeModal()">ANNULER</button>
+        </div>
+    </div>
+
+    <script>
+        const M=[{id:1,t:'Fake news',d:'facile',x:50,c:'FACT-CHECK',desc:'3 fake news. AFP/Décodex. Méthode.',p:89},{id:2,t:'Données perso',d:'facile',x:60,c:'PRIVÉ',desc:'Audit comptes. 3 supprimés.',p:134},{id:3,t:'Biais cognitif',d:'facile',x:75,c:'PSYCHO',desc:'1 biais. 2 exemples. Solutions.',p:67},{id:4,t:'Article critique',d:'moyen',x:100,c:'CRITIQUE',desc:'Analyse article. 300 mots.',p:52},{id:5,t:'Supply chain',d:'moyen',x:120,c:'ÉCO',desc:'Tracer objet. 5 étapes.',p:43},{id:6,t:'Algo social',d:'moyen',x:130,c:'TECH',desc:'3j observation. Patterns.',p:78},{id:7,t:'Budget projet',d:'moyen',x:110,c:'CITOYEN',desc:'Projet local budgété.',p:38},{id:8,t:'Lire loi',d:'moyen',x:140,c:'DROIT',desc:'Loi récente. Impact.',p:29},{id:9,t:'Empreinte CO2',d:'facile',x:80,c:'ÉCO',desc:'Calcul. 3 actions -20%.',p:156},{id:10,t:'Enquête terrain',d:'difficile',x:200,c:'ENQUÊTE',desc:'10 interviews. Photos. 500 mots.',p:18},{id:11,t:'Stats médias',d:'moyen',x:100,c:'DATA',desc:'3 stats vérifiées.',p:41},{id:12,t:'3 pubs',d:'facile',x:70,c:'PUB',desc:'Analyse techniques.',p:93},{id:13,t:'Consultation',d:'moyen',x:150,c:'DÉMO',desc:'Avis officiel soumis.',p:22},{id:14,t:'Conflit géopol',d:'difficile',x:180,c:'GÉO',desc:'Carte mentale complète.',p:31},{id:15,t:'Désobéissance',d:'moyen',x:120,c:'HISTOIRE',desc:'5 exemples historiques.',p:27},{id:16,t:'Sécuriser',d:'facile',x:90,c:'CYBER',desc:'Signal+2FA+Password.',p:187},{id:17,t:'Finance perso',d:'moyen',x:110,c:'FIN',desc:'3 budgets. 5 leviers.',p:102},{id:18,t:'Préjugé',d:'difficile',x:160,c:'SOCIO',desc:'Déconstruction. 3 témoignages.',p:35},{id:19,t:'Média alternatif',d:'expert',x:250,c:'MÉDIA',desc:'3 publis. 50 lecteurs.',p:14},{id:20,t:'Alimentation',d:'facile',x:65,c:'SANTÉ',desc:'1 semaine photos. Analyse.',p:143},{id:21,t:'Système électoral',d:'moyen',x:100,c:'POL',desc:'Mécanisme expliqué.',p:48},{id:22,t:'Lobbies',d:'difficile',x:190,c:'LOBBY',desc:'Traquer influence. Preuves.',p:19},{id:23,t:'Réparer',d:'facile',x:75,c:'CONSO',desc:'1 objet réparé. Économie.',p:121},{id:24,t:'IA',d:'moyen',x:130,c:'IA',desc:'5 biais. 400 mots.',p:86},{id:25,t:'Action collective',d:'expert',x:300,c:'ACTIVISME',desc:'20 participants. Docs.',p:11},{id:26,t:'Contrat',d:'moyen',x:90,c:'DROIT',desc:'Lu entier. 10 clauses.',p:37},{id:27,t:'Monnaie',d:'difficile',x:170,c:'ÉCO',desc:'Création vs crypto.',p:28},{id:28,t:'Manipulation',d:'moyen',x:110,c:'RHÉTO',desc:'3 exemples décortiqués.',p:59},{id:29,t:'Open-source',d:'difficile',x:200,c:'TECH',desc:'1 mois alternative. Guide.',p:24},{id:30,t:'Évidence',d:'expert',x:220,c:'ANTHRO',desc:'Vérité questionnée.',p:33},{id:31,t:'OSINT',d:'moyen',x:120,c:'OSINT',desc:'Identifier cible. Méthode.',p:45},{id:32,t:'Social eng.',d:'difficile',x:180,c:'HUMINT',desc:'Info extraite. Éthique.',p:23},{id:33,t:'Crypto',d:'expert',x:250,c:'CRYPTO',desc:'Message déchiffré.',p:12},{id:34,t:'Profil psy',d:'difficile',x:160,c:'PSY',desc:'Réseaux sociaux analysés.',p:28},{id:35,t:'Dead drop',d:'expert',x:300,c:'TERRAIN',desc:'IRL. Photos géo.',p:8},{id:36,t:'Phishing éduc',d:'moyen',x:150,c:'CYBER',desc:'Campagne. Rapport taux.',p:34},{id:37,t:'Infiltration',d:'expert',x:350,c:'INFIL',desc:'5 infos. Vidéo preuve.',p:6},{id:38,t:'Couverture',d:'difficile',x:180,c:'COVER',desc:'Identité + en ligne. Test.',p:41},{id:39,t:'Propagande',d:'moyen',x:130,c:'PROPA',desc:'3 exemples. Techniques.',p:52},{id:40,t:'Cartographie pouvoir',d:'difficile',x:200,c:'POUVOIR',desc:'Qui décide. Influences.',p:19}];
+
+let G={player:{name:'Agent_'+Math.random().toString(36).substr(2,6).toUpperCase(),xp:0,missions:0,rank:'Recrue',rep:0,done:[]},lb:[{name:'Korben_Master',xp:3500,missions:25,rank:'Légende'},{name:'Shadow_X7',xp:2450,missions:18,rank:'Opérateur'},{name:'Cipher_K3',xp:2100,missions:15,rank:'Opérateur'}]};
+
+let curM=null,filt='all';
+
+function render(){
+const g=document.getElementById('missionsGrid');
+g.innerHTML='';
+const f=filt==='all'?M:M.filter(m=>m.d===filt);
+f.forEach(m=>{
+const done=G.player.done.includes(m.id);
+const c=document.createElement('div');
+c.className='mission-card'+(done?' completed':'');
+if(!done)c.onclick=()=>open(m);
+c.innerHTML=`<div class="mission-top"><div class="mission-title">${done?'✓ ':''}${m.t}</div><div class="mission-difficulty diff-${m.d}">${m.d.toUpperCase()}</div></div><div class="mission-desc">${m.desc}</div><div class="mission-tags"><span class="tag">${m.c}</span></div><div class="mission-meta"><div class="mission-xp">💎 ${m.x} XP</div><div class="mission-players">👥 ${m.p}</div></div>`;
+g.appendChild(c);
+});
+}
+
+function open(m){
+curM=m;
+document.getElementById('modalTitle').textContent=m.t;
+document.getElementById('modalBody').innerHTML=`<div style="line-height:1.8;margin-bottom:25px"><p style="margin-bottom:10px"><strong style="color:var(--green)">CATÉGORIE:</strong> ${m.c}</p><p style="margin-bottom:10px"><strong style="color:var(--green)">DIFFICULTÉ:</strong> ${m.d.toUpperCase()}</p><p style="margin-bottom:10px"><strong style="color:var(--green)">RÉCOMPENSE:</strong> ${m.x} XP</p><p style="margin-bottom:15px"><strong style="color:var(--green)">DESCRIPTION:</strong></p><p style="padding:20px;background:rgba(42,63,95,0.3);line-height:1.8">${m.desc}</p></div>`;
+document.getElementById('missionModal').classList.add('active');
+}
+
+function closeModal(){
+document.getElementById('missionModal').classList.remove('active');
+document.getElementById('submission').value='';
+}
+
+function submitMission(){
+const s=document.getElementById('submission').value.trim();
+if(!s)return alert2('Soumission requise','error');
+G.player.xp+=curM.x;
+G.player.missions++;
+G.player.rep+=Math.floor(curM.x/10);
+G.player.done.push(curM.id);
+if(G.player.xp>=1000)G.player.rank='Opérateur';
+else if(G.player.xp>=500)G.player.rank='Agent Senior';
+else if(G.player.xp>=200)G.player.rank='Agent';
+upStats();
+render();
+closeModal();
+alert2(`Mission complétée! +${curM.x} XP`);
+save();
+}
+
+function upStats(){
+document.getElementById('dashXP').textContent=G.player.xp;
+document.getElementById('userXP').textContent=G.player.xp+' XP';
+document.getElementById('dashMissions').textContent=G.player.missions;
+document.getElementById('dashRank').textContent=G.player.rank;
+document.getElementById('userRank').textContent=G.player.rank;
+document.getElementById('dashRep').textContent=G.player.rep;
+document.getElementById('userName').textContent=G.player.name;
+const next=G.player.xp<200?200:G.player.xp<500?500:1000;
+document.getElementById('nextThreshold').textContent=next;
+const prog=Math.min(100,(G.player.xp/next)*100);
+document.getElementById('progressBar').style.width=prog+'%';
+document.getElementById('progressBar').textContent=Math.floor(prog)+'%';
+}
+
+function renderLB(){
+const c=document.getElementById('leaderboardContainer');
+c.innerHTML='';
+const all=[...G.lb];
+if(G.player.xp>0)all.push({name:G.player.name,xp:G.player.xp,missions:G.player.missions,rank:G.player.rank});
+all.sort((a,b)=>b.xp-a.xp);
+all.forEach((p,i)=>{
+const r=document.createElement('div');
+r.className='leaderboard-item';
+r.innerHTML=`<div class="rank-number">${i+1}</div><div class="player-details"><span class="player-name">${p.name}</span><span class="player-rank">${p.rank}</span></div><div style="color:var(--green);font-weight:bold">${p.xp} XP</div><div style="opacity:0.7">${p.missions} missions</div>`;
+c.appendChild(r);
+});
+}
+
+function alert2(msg,type='success'){
+const a=document.createElement('div');
+a.className=`alert ${type}`;
+a.innerHTML=`<div class="alert-title">${type==='error'?'⚠ ERREUR':'✓ SUCCÈS'}</div><div class="alert-msg">${msg}</div>`;
+document.body.appendChild(a);
+setTimeout(()=>a.remove(),3000);
+}
+
+async function save(){
+try{await window.storage.set('aegis_korben',JSON.stringify(G));}catch(e){}}
+
+async function load(){
+try{const r=await window.storage.get('aegis_korben');if(r?.value)Object.assign(G,JSON.parse(r.value));}catch(e){}}
+
+document.querySelectorAll('.nav-item').forEach(n=>{
+n.onclick=function(){
+document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+this.classList.add('active');
+const pg=this.dataset.page;
+document.getElementById('page'+pg.charAt(0).toUpperCase()+pg.slice(1)).classList.add('active');
+if(pg==='leaderboard')renderLB();
+};
+});
+
+document.querySelectorAll('.filter-btn').forEach(b=>{
+b.onclick=function(){
+document.querySelectorAll('.filter-btn').forEach(f=>f.classList.remove('active'));
+this.classList.add('active');
+filt=this.dataset.filter;
+render();
+};
+});
+
+const canvas=document.getElementById('matrix');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+const chars='AEGISKORBEN01█▓▒░';
+const cols=canvas.width/14;
+const drops=Array(Math.floor(cols)).fill(1);
+function drawMatrix(){
+ctx.fillStyle='rgba(10,14,26,0.05)';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle='#7bed9f';
+ctx.font='14px monospace';
+for(let i=0;i<drops.length;i++){
+const txt=chars[Math.floor(Math.random()*chars.length)];
+ctx.fillText(txt,i*14,drops[i]*14);
+if(drops[i]*14>canvas.height&&Math.random()>0.975)drops[i]=0;
+drops[i]++;
+}
+}
+setInterval(drawMatrix,50);
+
+load().then(()=>{
+render();
+upStats();
+renderLB();
+});
+
+setInterval(save,30000);
+</script>
+</body>
+</html>
