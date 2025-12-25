@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AEGIS × PAC-G — Programme Intégré (Complet)</title>
+<style>
+:root{
+--bg:#0a0e1a;--panel:#151b2e;--border:#25335a;
+--green:#7bed9f;--purple:#c77dff;--red:#ff6b6b;--yellow:#ffd43b;--blue:#4ecdc4
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Courier New,monospace;background:var(--bg);color:#e6e6e6}
+header{padding:28px 18px;text-align:center;border-bottom:3px solid var(--green)}
+h1{color:var(--green);text-shadow:0 0 18px var(--green)}
+.sub{opacity:.85;margin-top:8px;font-size:13px}
+.container{max-width:1600px;margin:auto;padding:18px}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:2px solid var(--border);padding:10px 14px;cursor:pointer;font-size:12px}
+.tab.active{border-color:var(--green);color:var(--green);box-shadow:0 0 18px rgba(123,237,159,.3)}
+.section{display:none}
+.section.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{background:var(--panel);border:2px solid var(--border);padding:14px;cursor:pointer;transition:.25s}
+.card:hover{border-color:var(--purple);box-shadow:0 0 22px rgba(199,125,255,.25);transform:translateY(-3px)}
+.title{color:var(--purple);font-weight:bold;margin-bottom:6px;font-size:14px}
+.diff{font-size:10px;padding:4px 8px;display:inline-block;margin-bottom:6px}
+.easy{background:var(--green);color:#000}
+.medium{background:var(--yellow);color:#000}
+.hard{background:var(--red);color:#fff}
+.expert{background:var(--purple);color:#000}
+.meta{font-size:11px;opacity:.75;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:var(--panel);border:2px solid var(--border);padding:12px;text-align:center}
+.stat b{display:block;color:var(--green);font-size:26px}
+textarea{width:100%;min-height:130px;background:#0a0e1a;border:2px solid var(--border);padding:12px;color:#e6e6e6}
+button{background:none;border:2px solid var(--green);color:var(--green);padding:10px;width:100%;cursor:pointer;font-size:12px}
+button:hover{background:var(--green);color:#000}
+button.alt{border-color:var(--purple);color:var(--purple)}
+button.alt:hover{background:var(--purple);color:#000}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-box{background:var(--panel);border:3px solid var(--purple);padding:20px;max-width:900px;width:100%}
+.feed{max-height:520px;overflow:auto}
+.event{border-left:3px solid var(--blue);background:#0c1224;margin-bottom:10px;padding:10px}
+.event time{font-size:10px;opacity:.6}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.filter{border:2px solid var(--border);padding:6px 10px;font-size:11px;cursor:pointer}
+.filter.active{border-color:var(--purple);color:var(--purple)}
+footer{opacity:.6;font-size:12px;text-align:center;padding:18px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AEGIS × PAC-G — PROGRAMME INTÉGRÉ COMPLET</h1>
+  <div class="sub">Actions réelles PAC asbl intégrées comme missions · Traçabilité locale · Asynchrone</div>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="pacg">PAC-G (TOUT)</div>
+    <div class="tab" data-tab="missions">MISSIONS AEGIS</div>
+    <div class="tab" data-tab="journal">JOURNAL</div>
+    <div class="tab" data-tab="profil">PROFIL</div>
+  </div>
+
+  <div class="section active" id="pacg">
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="pacgGrid"></div>
+  </div>
+
+  <div class="section" id="missions">
+    <div class="grid" id="missionsGrid"></div>
+  </div>
+
+  <div class="section" id="journal">
+    <div class="feed" id="journalFeed"></div>
+  </div>
+
+  <div class="section" id="profil">
+    <div class="stats">
+      <div class="stat"><b id="xp">0</b>XP</div>
+      <div class="stat"><b id="done">0</b>MISSIONS</div>
+      <div class="stat"><b id="pacDone">0</b>ACTIONS PAC</div>
+      <div class="stat"><b id="rank">RECRUE</b>STATUT</div>
+    </div>
+    <button class="alt" onclick="resetAll()">RÉINITIALISER</button>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h2 id="mTitle"></h2>
+    <p id="mDesc" class="sub"></p>
+    <textarea id="mText" placeholder="Description / preuve / lien / compte rendu"></textarea>
+    <button onclick="submit()">VALIDER</button>
+    <button class="alt" onclick="closeM()">ANNULER</button>
+  </div>
+</div>
+
+<footer>Éducation permanente · PAC asbl · Intégration complète · 2025–2030</footer>
+
+<script>
+/* =======================
+   ÉTAT
+======================= */
+const state=JSON.parse(localStorage.getItem("aegis_pacg_full"))||{
+  xp:0,done:0,pacDone:0,events:[]
+};
+
+/* =======================
+   MISSIONS AEGIS (JEU)
+======================= */
+const missions=[
+{cat:"OSINT",t:"Détecter une fake news",d:"easy",xp:50,txt:"Identifier 3 fake news via fact-checkers et expliquer la méthode."},
+{cat:"VIE PRIVÉE",t:"Audit données personnelles",d:"easy",xp:60,txt:"Cartographier comptes, régler la confidentialité, supprimer 3 comptes."},
+{cat:"PSYCHO",t:"Biais cognitifs",d:"easy",xp:75,txt:"Choisir un biais, 2 exemples, contre-mesures."},
+{cat:"ESPRIT CRITIQUE",t:"Analyse critique d’article",d:"medium",xp:100,txt:"Sources, biais, faits/opinions, manques (300 mots)."},
+{cat:"ÉCONOMIE",t:"Supply chain",d:"medium",xp:120,txt:"Tracer 5 étapes d’un objet."},
+{cat:"TECH",t:"Algorithmes sociaux",d:"medium",xp:130,txt:"Observer patterns de recommandation 3 jours."},
+{cat:"CITOYEN",t:"Budget projet citoyen",d:"medium",xp:110,txt:"Budget, financements, crowdfunding."},
+{cat:"JURIDIQUE",t:"Comprendre une loi",d:"medium",xp:140,txt:"Résumé clair et impacts concrets."},
+{cat:"ÉCOLOGIE",t:"Empreinte carbone",d:"easy",xp:80,txt:"Calculer et proposer 3 actions (-20%)."},
+{cat:"ENQUÊTE",t:"Enquête de terrain",d:"hard",xp:200,txt:"10 entretiens, photos, rapport sourcé."},
+{cat:"DATA",t:"Statistiques dans les médias",d:"medium",xp:100,txt:"Vérifier sources, biais, reformuler."},
+{cat:"MARKETING",t:"Décoder une pub",d:"easy",xp:70,txt:"Techniques de persuasion et émotions."},
+{cat:"DÉMOCRATIE",t:"Consultation publique",d:"medium",xp:150,txt:"Lire dossier, avis argumenté, soumission."},
+{cat:"GÉOPOLITIQUE",t:"Conflit actuel",d:"hard",xp:180,txt:"Historique, acteurs, enjeux, carte mentale."},
+{cat:"HISTOIRE",t:"Désobéissance civile",d:"medium",xp:120,txt:"5 cas, analyse et principes."},
+{cat:"CYBERSEC",t:"Sécuriser communications",d:"easy",xp:90,txt:"Signal, 2FA, gestionnaire MDP, recherche sans tracking."},
+{cat:"FINANCE",t:"Finance personnelle",d:"medium",xp:110,txt:"Budgets, leviers d’économie."},
+{cat:"SOCIOLOGIE",t:"Déconstruire un préjugé",d:"hard",xp:160,txt:"Études, témoignages, changement de perspective."},
+{cat:"JOURNALISME",t:"Créer un média alternatif",d:"hard",xp:220,txt:"3 publications, 50 lecteurs/auditeurs."},
+{cat:"SANTÉ",t:"Analyser alimentation",d:"easy",xp:65,txt:"Origine, transformation, emballage, plan."},
+{cat:"POLITIQUE",t:"Système électoral",d:"medium",xp:100,txt:"Fonctionnement, transformation des voix, améliorations."},
+{cat:"LOBBYING",t:"Traquer les lobbies",d:"hard",xp:190,txt:"Preuves d’influence sur une loi."},
+{cat:"CONSOMMATION",t:"Réparer au lieu d’acheter",d:"easy",xp:75,txt:"Réparation documentée et économie."},
+{cat:"IA",t:"Comprendre l’IA",d:"medium",xp:130,txt:"Biais, entraînement, implications (400 mots)."},
+{cat:"ACTIVISME",t:"Action collective",d:"hard",xp:250,txt:"Événement citoyen (20 participants)."},
+{cat:"DROIT",t:"Lire un contrat",d:"medium",xp:90,txt:"10 clauses problématiques, version idéale."},
+{cat:"RHÉTORIQUE",t:"Identifier une manipulation",d:"medium",xp:110,txt:"Techniques (émotion, homme de paille…)."},
+{cat:"TECH",t:"Alternative open-source",d:"hard",xp:200,txt:"Remplacer un service privé 1 mois."},
+{cat:"ANTHROPOLOGIE",t:"Questionner une évidence",d:"hard",xp:180,txt:"Origines et comparaisons culturelles."}
+];
+
+/* =======================
+   PAC ASBL — PROGRAMME RÉEL (COMPLET)
+======================= */
+const pacg=[
+/* FORMATIONS */
+{cat:"FORMATION",t:"Agir face aux paroles excluantes",d:"medium",xp:90,txt:"Identifier, analyser et agir face aux discours excluants."},
+{cat:"FORMATION",t:"Dire pour Agir",d:"medium",xp:90,txt:"Prendre la parole, structurer un message et agir collectivement."},
+{cat:"FORMATION",t:"PEPS — Premiers pas en éducation permanente",d:"easy",xp:60,txt:"Fondamentaux de l’éducation permanente."},
+{cat:"FORMATION",t:"Écologie depuis les marges",d:"medium",xp:100,txt:"Approches écologiques et sociales critiques."},
+{cat:"FORMATION",t:"Conflit comme dynamique transformatrice",d:"medium",xp:100,txt:"Gérer et transformer les conflits."},
+{cat:"FORMATION",t:"Animation d’ateliers d’expression",d:"medium",xp:100,txt:"Méthodes d’animation participative."},
+{cat:"FORMATION",t:"Création d’une balade sonore",d:"medium",xp:110,txt:"Création culturelle et narration sonore."},
+/* ATELIERS & DÉBATS */
+{cat:"ATELIER",t:"Ateliers d’écriture",d:"easy",xp:50,txt:"Écriture collective et expression citoyenne."},
+{cat:"ATELIER",t:"Tables de conversation",d:"easy",xp:50,txt:"Débats thématiques et échanges citoyens."},
+{cat:"ATELIER",t:"Arpentage — livres critiques",d:"medium",xp:80,txt:"Lecture collective et analyse critique."},
+/* ÉVÉNEMENTS CULTURELS */
+{cat:"CULTURE",t:"Vernissages & expositions",d:"easy",xp:40,txt:"Participation à des expositions publiques."},
+{cat:"CULTURE",t:"Rencontres thématiques",d:"easy",xp:40,txt:"Rencontres autour d’enjeux sociaux."},
+/* ÉCRIVAINS PUBLICS */
+{cat:"ÉCRIVAIN PUBLIC",t:"Permanence écrivain·e public·que",d:"easy",xp:60,txt:"Aide à l’écrit administratif."},
+{cat:"ÉCRIVAIN PUBLIC",t:"Formation écrivain·e public·que",d:"medium",xp:120,txt:"Formation à l’accompagnement à l’écrit."},
+/* CAMPAGNES & SENSIBILISATION */
+{cat:"CAMPAGNE",t:"Analyse critique de société",d:"medium",xp:100,txt:"Campagnes d’analyse et conscientisation."},
+{cat:"CAMPAGNE",t:"Lutte contre discriminations",d:"medium",xp:100,txt:"Actions et sensibilisation."},
+/* PROJETS COLLECTIFS */
+{cat:"PROJET",t:"Création culturelle collective",d:"hard",xp:160,txt:"Co-création avec partenaires locaux."},
+{cat:"PROJET",t:"Projet citoyen local",d:"hard",xp:160,txt:"Conception et mise en œuvre d’un projet EP."}
+];
+
+/* =======================
+   RENDU
+======================= */
+const pacgGrid=document.getElementById("pacgGrid");
+const missionsGrid=document.getElementById("missionsGrid");
+const journalFeed=document.getElementById("journalFeed");
+const filters=document.getElementById("filters");
+
+const cats=[...new Set(pacg.map(x=>x.cat))];
+["TOUT",...cats].forEach(c=>{
+  const b=document.createElement("div");
+  b.className="filter"+(c==="TOUT"?" active":"");
+  b.textContent=c;
+  b.onclick=()=>{document.querySelectorAll(".filter").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderPAC(c)};
+  filters.appendChild(b);
+});
+
+function card(m,isPac){
+  const c=document.createElement("div");
+  c.className="card";
+  c.innerHTML=`<div class="title">${m.t}</div>
+               <div class="diff ${m.d}">${m.d.toUpperCase()}</div>
+               <div>${m.txt}</div>
+               <div class="meta">${m.cat} · +${m.xp} XP</div>`;
+  c.onclick=()=>openM(m,isPac);
+  return c;
+}
+
+function renderPAC(cat="TOUT"){
+  pacgGrid.innerHTML="";
+  pacg.filter(m=>cat==="TOUT"||m.cat===cat).forEach(m=>pacgGrid.appendChild(card(m,true)));
+}
+renderPAC();
+
+missions.forEach(m=>missionsGrid.appendChild(card(m,false)));
+
+function refreshJournal(){
+  journalFeed.innerHTML="";
+  state.events.slice().reverse().forEach(e=>{
+    const d=document.createElement("div");
+    d.className="event";
+    d.innerHTML=`<time>${new Date(e.t).toLocaleString()}</time><div>${e.m}</div>`;
+    journalFeed.appendChild(d);
+  });
+}
+refreshJournal();
+
+/* =======================
+   MODAL
+======================= */
+let cur=null,curPac=false;
+function openM(m,isPac){cur=m;curPac=isPac;mTitle.textContent=m.t;mDesc.textContent=m.txt;mText.value="";modal.classList.add("active")}
+function closeM(){modal.classList.remove("active")}
+function submit(){
+  if(!cur||!mText.value.trim())return;
+  state.xp+=cur.xp;
+  if(curPac)state.pacDone++; else state.done++;
+  state.events.push({t:Date.now(),m:`${curPac?"PAC":"AEGIS"} — ${cur.t}`});
+  localStorage.setItem("aegis_pacg_full",JSON.stringify(state));
+  updateStats();refreshJournal();closeM();
+}
+
+/* =======================
+   STATS / NAV
+======================= */
+function updateStats(){
+  xp.textContent=state.xp;
+  done.textContent=state.done;
+  pacDone.textContent=state.pacDone;
+  rank.textContent=state.xp>800?"AGENT":state.xp>300?"OBSERVATEUR":"RECRUE";
+}
+updateStats();
+
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  t.classList.add("active");document.getElementById(t.dataset.tab).classList.add("active");
+  if(t.dataset.tab==="journal")refreshJournal();
+});
+
+function resetAll(){localStorage.removeItem("aegis_pacg_full");location.reload()}
+</script>
+
+</body>
+</html>
