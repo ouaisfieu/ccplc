@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>@flexyflow × OPÉRATION RECRUTEMENT — Ta plateforme gamifiée</title>
+<style>
+:root{
+--bg:#0a0e1a;--panel:#141a2b;--border:#2a3f5f;
+--g:#7bed9f;--p:#c77dff;--r:#ff6b6b;--y:#ffd43b;--b:#4ecdc4;--o:#ff9f43;--ps:#e63946;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:#e0e0e0;overflow-x:hidden}
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+@media(max-width:1000px){.app{grid-template-columns:1fr}}
+.sidebar{background:var(--panel);border-right:2px solid var(--border);padding:20px;position:sticky;top:0;height:100vh;overflow:auto}
+@media(max-width:1000px){.sidebar{height:auto;position:relative}}
+.logo{font-size:26px;color:var(--ps);font-weight:bold;text-shadow:0 0 30px var(--ps);animation:psglow 3s ease-in-out infinite;margin-bottom:8px}
+@keyframes psglow{0%,100%{text-shadow:0 0 25px var(--ps)}50%{text-shadow:0 0 40px var(--ps),0 0 60px var(--ps)}}
+.tagline{font-size:13px;color:var(--g);opacity:.9;margin-bottom:15px;line-height:1.5}
+.sub{font-size:11px;opacity:.8;margin:8px 0 18px;border-bottom:1px solid var(--border);padding-bottom:12px;line-height:1.6}
+.nav{display:flex;flex-direction:column;gap:8px}
+.nav button{background:transparent;border:0;color:#ddd;text-align:left;padding:12px 14px;border-left:3px solid transparent;cursor:pointer;transition:.2s;font-size:13px;display:flex;align-items:center;gap:8px}
+.nav button.active,.nav button:hover{color:var(--ps);background:rgba(230,57,70,.1);border-left-color:var(--ps);transform:translateX(5px)}
+.user{margin-top:18px;border:2px solid var(--ps);padding:16px;background:rgba(230,57,70,.05)}
+.user .n{color:var(--ps);font-weight:bold;font-size:16px;margin-bottom:8px}
+.user div{font-size:12px;margin:4px 0}
+.main{padding:26px;max-width:1600px}
+.page{display:none}
+.page.active{display:block;animation:fade .4s}
+@keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+.h{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ps);padding-bottom:14px;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.h h1{color:var(--ps);text-shadow:0 0 25px var(--ps);font-size:30px}
+.h .info{font-size:13px;opacity:.85;text-align:right}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px}
+.card{background:var(--panel);border:2px solid var(--border);padding:18px;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(230,57,70,.15),transparent);opacity:0;transition:.3s}
+.card:hover{border-color:var(--ps);box-shadow:0 15px 40px rgba(230,57,70,.35);transform:translateY(-6px)}
+.card:hover::before{opacity:1}
+.card h3{font-size:17px;margin-bottom:12px;line-height:1.5;color:#fff;min-height:50px}
+.badge{display:inline-block;font-size:10px;padding:5px 10px;border:1px solid;margin:3px 6px 3px 0;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.badge.type{border-color:var(--ps);color:var(--ps);background:rgba(230,57,70,.1)}
+.badge.diff{border:none;font-weight:bold;padding:6px 11px}
+.diff.f{background:var(--g);color:#081}
+.diff.m{background:var(--y);color:#431}
+.diff.d{background:var(--r);color:#fff}
+.diff.e{background:var(--p);color:#fff}
+.diff.cm{background:var(--o);color:#fff}
+.meta{display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:11px;margin-top:12px;font-size:11px;opacity:.9}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.filters button{border:2px solid var(--border);background:var(--panel);color:#ddd;padding:10px 16px;cursor:pointer;transition:.2s;font-size:13px;font-weight:500}
+.filters button.active,.filters button:hover{border-color:var(--ps);color:var(--ps);background:rgba(230,57,70,.08)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.stat{background:var(--panel);border:2px solid var(--ps);padding:20px;text-align:center}
+.stat .v{font-size:42px;color:var(--ps);text-shadow:0 0 18px var(--ps);font-weight:bold}
+.stat .l{margin-top:10px;font-size:14px;opacity:.85;font-weight:500}
+.progress{height:30px;background:var(--border);margin-top:12px;position:relative;overflow:hidden;border-radius:3px}
+.progress::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--ps),var(--o));text-align:center;font-size:13px;line-height:30px;font-weight:bold;transition:width .6s ease-out}
+.modal{position:fixed;inset:0;background:rgba(10,14,26,.98);display:none;align-items:center;justify-content:center;padding:30px;z-index:1000;overflow-y:auto}
+.modal.active{display:flex;animation:modalFade .3s}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.box{max-width:1200px;width:100%;background:var(--panel);border:3px solid var(--ps);padding:30px;box-shadow:0 20px 60px rgba(230,57,70,.6);animation:boxSlide .3s;max-height:90vh;overflow-y:auto}
+@keyframes boxSlide{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.box h2{color:var(--ps);margin-bottom:15px;text-shadow:0 0 18px var(--ps)}
+.box p{margin:12px 0;line-height:1.7;opacity:.92}
+.box .details{background:rgba(42,63,95,.5);padding:15px;margin:18px 0;border-left:4px solid var(--ps)}
+.box iframe{width:100%;min-height:600px;border:2px solid var(--border);margin:15px 0}
+textarea{width:100%;min-height:200px;background:rgba(42,63,95,.6);border:2px solid var(--border);color:#eee;padding:16px;font-family:inherit;resize:vertical;margin:18px 0;font-size:14px}
+.btn{margin:10px 7px 0 0;padding:14px 24px;border:2px solid var(--ps);background:var(--panel);color:var(--ps);cursor:pointer;transition:.2s;font-weight:bold;display:inline-block;font-size:14px}
+.btn:hover{background:var(--ps);color:#fff;transform:scale(1.06)}
+.btn.secondary{border-color:var(--border);color:#ddd}
+.btn.secondary:hover{background:var(--border);color:#fff}
+.alert{position:fixed;top:25px;right:25px;background:var(--panel);border:3px solid var(--ps);padding:18px 24px;box-shadow:0 15px 40px rgba(230,57,70,.6);animation:slideIn .4s;z-index:2000;min-width:300px;max-width:450px}
+@keyframes slideIn{from{transform:translateX(500px)}to{transform:none}}
+.alert.hide{animation:slideOut .4s forwards}
+@keyframes slideOut{to{transform:translateX(500px);opacity:0}}
+.board-item{background:var(--panel);border:2px solid var(--border);padding:18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;transition:.2s}
+.board-item:hover{border-color:var(--ps);transform:translateX(3px)}
+.board-item .rank{font-size:26px;font-weight:bold;color:var(--ps);min-width:60px}
+.board-item .name{flex:1;font-size:16px}
+.board-item .score{font-size:20px;color:var(--ps);font-weight:bold}
+.florence-info{background:linear-gradient(135deg,rgba(230,57,70,.12),rgba(255,159,67,.08));border:2px solid var(--ps);padding:20px;margin-bottom:25px;border-radius:6px}
+.florence-info h3{color:var(--ps);margin-bottom:12px;font-size:18px}
+.florence-info p{font-size:14px;line-height:1.7;opacity:.93;margin:8px 0}
+.florence-info strong{color:var(--o)}
+.resources{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:20px}
+.resource-card{background:var(--panel);border:2px solid var(--ps);padding:18px;cursor:pointer;transition:.2s}
+.resource-card:hover{transform:scale(1.03);box-shadow:0 10px 30px rgba(230,57,70,.4)}
+.resource-card h4{color:var(--ps);margin-bottom:10px;font-size:16px}
+.resource-card p{font-size:13px;opacity:.85;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">@FLEXYFLOW</div>
+    <div class="tagline">🌹 Community Builder · Formatrice · PS Bruxelles</div>
+    <div class="sub">"Ta gauchiste préférée" — Opération recrutement gamifiée</div>
+    <div class="nav">
+      <button data-p="welcome">👋 Bienvenue Florence</button>
+      <button data-p="missions">🎯 Missions terrain</button>
+      <button data-p="cm" class="active">💬 Défis CM</button>
+      <button data-p="resources">📚 Ressources</button>
+      <button data-p="stats">📊 Profil</button>
+      <button data-p="board">🏆 Classement</button>
+    </div>
+    <div class="user">
+      <div class="n" id="uname">Florence Manente</div>
+      <div id="uxp">💎 0 XP</div>
+      <div id="urank">📍 Candidate</div>
+      <div id="urep">⚡ 0 points influence</div>
+    </div>
+  </aside>
+  
+  <main class="main">
+    <section id="welcome" class="page">
+      <div class="h">
+        <h1>👋 Bienvenue Florence !</h1>
+        <div class="info">Opération recrutement personnalisée</div>
+      </div>
+      <div class="florence-info">
+        <h3>🎯 Pourquoi cette plateforme pour toi ?</h3>
+        <p><strong>On sait qui tu es.</strong> Community Builder du PS depuis 2021, IAB Mixx Award 2015 à la STIB, formatrice à l'ISFSC & Bruxelles Formation, co-autrice de l'autobiographie de Bea Diallo, architecte de la victoire de Charles Spapens à Forest en 2024. Tu as orchestré la migration vers Bluesky, géré 113K abonnés STIB, et tu incarnes l'avant-garde de la communication politique 2.0 en Belgique.</p>
+        <p><strong>Cette plateforme est différente.</strong> Elle combine gamification, missions ultra-personnalisées basées sur ton expertise, et des défis community management qui reflètent tes compétences réelles. On a intégré tes ressources (PDF bio, pages web), et chaque mission est pensée pour montrer qu'on comprend ton univers : Forest, le PS, l'éducation permanente, la "belgitude", ton ton décalé.</p>
+        <p><strong>L'objectif ?</strong> T'impressionner avec ce qu'on sait faire, te proposer des challenges stimulants, et te montrer qu'on a fait nos devoirs. Parce qu'on ne recrute pas n'importe qui, et toi non plus tu ne rejoins pas n'importe quel projet.</p>
+      </div>
+      <div class="resources">
+        <div class="resource-card" onclick="openPDF()">
+          <h4>📄 Ta biographie complète</h4>
+          <p>Parcours, expertise, présence en ligne, belgitude. Le PDF intégral qui retrace ton identité numérique.</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://ouaisfieu.github.io/bxl2030/lead-dexing/florence-manente/')">
+          <h4>🌐 Ton profil BXL2030</h4>
+          <p>Portrait détaillé : architecte digitale du renouveau politique bruxellois. Lead-dexing bienveillant.</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://www.flexyflow.be/about/')">
+          <h4>💼 Ton site flexyflow.be</h4>
+          <p>Ta présentation pro, ton parcours, tes prix, ton engagement. La marque @flexyflow en détail.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="missions" class="page">
+      <div class="h">
+        <h1>🎯 Missions terrain personnalisées</h1>
+        <div class="info">Inspirées de ton univers professionnel</div>
+      </div>
+      <div class="florence-info">
+        <h3>🔥 Missions adaptées à ton expertise</h3>
+        <p>Ces missions sont calibrées sur ton expérience : communication politique, engagement citoyen, éducation permanente, vie bruxelloise. Elles reflètent les valeurs du PS, ton ancrage à Forest, et ton approche décalée des réseaux sociaux.</p>
+      </div>
+      <div class="filters">
+        <button class="active" data-f="all">Toutes</button>
+        <button data-f="f">Facile</button><button data-f="m">Moyen</button>
+        <button data-f="d">Difficile</button><button data-f="e">Expert</button>
+      </div>
+      <div class="grid" id="mg"></div>
+    </section>
+
+    <section id="cm" class="page active">
+      <div class="h">
+        <h1>💬 Défis Community Management</h1>
+        <div class="info">Challenges pro pour Community Builder</div>
+      </div>
+      <div class="florence-info">
+        <h3>🚀 Scénarios réalistes pour tester ton expertise</h3>
+        <p><strong>Tu gères 113K abonnés ?</strong> Ces défis sont à ta hauteur. Gestion de crise, stratégie virale, modération politique sensible, copywriting engageant, migration de plateforme. Chaque mission simule des situations réelles que tu connais bien.</p>
+        <p><strong>Ton terrain de jeu :</strong> STIB, PS Bruxelles, campagnes électorales, engagement progressiste, belgitude assumée.</p>
+      </div>
+      <div class="grid" id="cmg"></div>
+    </section>
+
+    <section id="resources" class="page">
+      <div class="h">
+        <h1>📚 Tes ressources intégrées</h1>
+        <div class="info">Documents & pages web accessibles</div>
+      </div>
+      <div class="florence-info">
+        <h3>📎 Tout ce qu'on sait sur toi, accessible en un clic</h3>
+        <p>On a fait nos recherches. Tes traces numériques, ton parcours, tes prix, tes collaborations. Tout est là, organisé, consultable. Parce que te recruter, c'est d'abord te comprendre.</p>
+      </div>
+      <div class="resources">
+        <div class="resource-card" onclick="openPDF()">
+          <h4>📄 Biographie complète (PDF)</h4>
+          <p>Identité @flexyflow, présence multicanale (Twitter 10K, Instagram 2.2K, TikTok, Threads, YouTube), style belgitude, connexions locales, expertise STIB/PS. Le dossier complet.</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://ouaisfieu.github.io/bxl2030/lead-dexing/florence-manente/')">
+          <h4>🌐 Portrait BXL2030</h4>
+          <p>Analyse détaillée : l'architecte digitale du renouveau politique bruxellois. Ton rôle dans la victoire de Forest 2024, ta migration Bluesky, ton approche éthique des plateformes.</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://www.flexyflow.be/about/')">
+          <h4>💼 Site flexyflow.be — About</h4>
+          <p>Ton CV vivant : freelance → Ciné-Télé-Revue → STIB (IAB Mixx 2015, Best of Content 2019) → PS (Community Builder). Formatrice ISFSC, EFP, Bruxelles Formation, IHECS. Co-autrice Bea Diallo.</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://www.linkedin.com/in/florencemanente/')">
+          <h4>🔗 LinkedIn Florence Manente</h4>
+          <p>Réseau pro, recommandations, parcours détaillé. Tes 500+ connexions, tes projets (40 ans métro STIB, Coupe du Monde 2018, Journée du Pull de Noël).</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://www.instagram.com/flexyflow/')">
+          <h4>📸 Instagram @flexyflow</h4>
+          <p>Ta gauchiste préférée 🥰 — 2.2K abonnés. Photos perso, stories, Reels. Ton univers Forest, famille, engagement PS, lifestyle bruxellois.</p>
+        </div>
+        <div class="resource-card" onclick="openWeb('https://www.ps.be/florence_manente')">
+          <h4>🌹 Profil PS officiel</h4>
+          <p>Ta fiche au Parti Socialiste. Valeurs, combats, rôle dans l'équipe. L'engagement politique formalisé.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="stats" class="page">
+      <div class="h">
+        <h1>📊 Ton profil recrutement</h1>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="v" id="sx">0</div><div class="l">XP Total</div></div>
+        <div class="stat"><div class="v" id="sm">0</div><div class="l">Missions terminées</div></div>
+        <div class="stat"><div class="v" id="sr">Candidate</div><div class="l">Statut</div></div>
+        <div class="stat"><div class="v" id="sp">0</div><div class="l">Points influence</div></div>
+      </div>
+      <h2 style="margin:30px 0 18px;color:var(--ps)">🎯 Progression recrutement</h2>
+      <div class="progress"><div id="pb" style="width:0%">0%</div></div>
+    </section>
+
+    <section id="board" class="page">
+      <div class="h">
+        <h1>🏆 Classement candidats</h1>
+        <div class="info">Opération recrutement gamifiée</div>
+      </div>
+      <div id="lb"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <h2 id="mt">Titre mission</h2>
+    <p id="md">Description mission</p>
+    <div class="details" id="mdet"></div>
+    <div id="mext"></div>
+    <textarea id="ms" placeholder="Décris ta stratégie, ta réflexion, ou ta réalisation..."></textarea>
+    <button class="btn" onclick="submit()">✓ Valider la mission</button>
+    <button class="btn secondary" onclick="closeM()">✗ Fermer</button>
+  </div>
+</div>
+
+<div class="modal" id="pdfModal">
+  <div class="box">
+    <h2>📄 Biographie @flexyflow — Florence Manente</h2>
+    <iframe src="/mnt/user-data/uploads/flexyflow.pdf" type="application/pdf"></iframe>
+    <button class="btn secondary" onclick="closePDF()">✗ Fermer</button>
+  </div>
+</div>
+
+<div class="modal" id="webModal">
+  <div class="box">
+    <h2 id="webTitle">Page web</h2>
+    <iframe id="webFrame" src=""></iframe>
+    <button class="btn secondary" onclick="closeWeb()">✗ Fermer</button>
+  </div>
+</div>
+
+<script>
+const MISSIONS=[
+{id:1,t:'Campagne locale progressiste',d:'m',x:150,c:'POLITIQUE',p:42,desc:'Concevoir une stratégie social media pour une campagne communale PS. Ciblage, messages, formats, calendrier.',details:'Inspiration : ta campagne Forest 2024 pour Charles Spapens'},
+{id:2,t:'Gestion de crise sur Twitter/X',d:'d',x:200,c:'MODÉRATION',p:28,desc:'Un tweet polémique enflamme les réseaux. Stratégie de réponse, gestion des commentaires, communication de crise.',details:'Ton expérience STIB : 44.000 messages/an, réactivité légendaire'},
+{id:3,t:'Migration éthique de plateforme',d:'e',x:250,c:'STRATÉGIE',p:15,desc:'Planifier et exécuter la migration d\'une communauté politique de X vers Bluesky. Argumentaire, timing, engagement.',details:'Inspiration : ta migration PS vers Bluesky 2024-2025'},
+{id:4,t:'Copywriting viral socialiste',d:'m',x:140,c:'CONTENU',p:56,desc:'Créer 5 posts engageants pour le PS qui allient humour, valeurs progressistes et impact viral. Ton décalé assumé.',details:'Ton style STIB : "Chokran bezef frérot!" — belgitude + street cred'},
+{id:5,t:'Formation CM pour militants',d:'m',x:130,c:'FORMATION',p:38,desc:'Concevoir un module de 3h pour former des militants PS aux réseaux sociaux. Pédagogie, exercices, cas pratiques.',details:'Ton expérience : formatrice ISFSC, EFP, Bruxelles Formation, IHECS'},
+{id:6,t:'Campagne solidaire participative',d:'f',x:100,c:'ENGAGEMENT',p:89,desc:'Créer une campagne type "Journée du Pull de Noël" pour générer de l\'engagement et des dons. Concept, mécanique, viralité.',details:'Ton hit STIB : 3 × 5711€ récoltés, earned media, participation massive'},
+{id:7,t:'Modération politique sensible',d:'d',x:180,c:'MODÉRATION',p:31,desc:'Modérer une discussion enflammée sur un sujet politique clivant. Équilibre liberté d\'expression / respect, désamorçage.',details:'Enjeu PS : tensions internes, coalition, débats sur l\'immigration, l\'écologie'},
+{id:8,t:'Storytelling personnel politique',d:'m',x:120,c:'NARRATION',p:47,desc:'Raconter le parcours d\'une figure politique (type Bea Diallo) en format thread Twitter. Récit, émotion, engagement citoyen.',details:'Ton expérience : co-autrice "Du ring de boxe à l\'engagement citoyen"'},
+{id:9,t:'Audit présence digitale PS',d:'d',x:170,c:'AUDIT',p:22,desc:'Analyser la présence en ligne du PS et de ses figures. Forces, faiblesses, opportunités. Recommandations actionnables.',details:'Ton rôle : Community Builder PS, tu connais l\'écosystème par cœur'},
+{id:10,t:'Veille concurrentielle partis',d:'m',x:110,c:'VEILLE',p:53,desc:'Établir un système de veille sur les stratégies digitales des autres partis belges (MR, Ecolo, DéFI, PTB). Benchmarking.',details:'Ton expérience : LIVE LinkedIn avec DéFI, MR, Ecolo — tu connais leurs équipes'},
+{id:11,t:'Réactivité événement imprévu',d:'m',x:140,c:'RÉACTIVITÉ',p:61,desc:'Un événement majeur (attentat, crise sanitaire) : comment le PS communique ? Ton, timing, empathie, positionnement.',details:'Ton agilité STIB : info trafic temps réel 7j/7, gestion perturbations'},
+{id:12,t:'Campagne jeunes électeurs',d:'m',x:130,c:'JEUNESSE',p:44,desc:'Stratégie pour toucher les 18-25 ans : TikTok, Instagram, formats courts. Messages progressistes sans être "has been".',details:'Tes multiples plateformes : TikTok @flexyflorence, Instagram, Threads'},
+{id:13,t:'Gestion bad buzz interne PS',d:'d',x:190,c:'CRISE',p:19,desc:'Un cadre PS fait une bourde publique. Gestion de crise : communication interne, externe, limitation dégâts.',details:'Ton expérience : "tes vrais ennemis sont en interne" (Bea Diallo dixit)'},
+{id:14,t:'Content planning 3 mois',d:'m',x:120,c:'PLANNING',p:49,desc:'Établir un calendrier éditorial PS sur 3 mois : thèmes, formats, événements, coordination multi-plateformes.',details:'Ton métier : coordination stratégie numérique, veille, création, modération'},
+{id:15,t:'Analyse engagement communauté',d:'f',x:90,c:'DATA',p:72,desc:'Analyser les metrics d\'une page Facebook PS : portée, engagement, démographie. Insights et recommandations.',details:'Ton expérience : gestion de 113K abonnés STIB, maîtrise des KPIs'},
+{id:16,t:'Collaboration influenceurs progressistes',d:'m',x:150,c:'INFLUENCE',p:35,desc:'Identifier et mobiliser des micro-influenceurs bruxellois progressistes pour amplifier un message PS.',details:'Ton réseau : aux premières loges de la naissance de l\'influencer marketing'},
+{id:17,t:'Publicité sociale ciblée',d:'m',x:140,c:'ADS',p:41,desc:'Créer une campagne Facebook/Instagram Ads pour le PS : ciblage, visuels, textes, budget, mesure ROI.',details:'Tes compétences : Social Ads, développement publicités en ligne PS'},
+{id:18,t:'Arpentage numérique citoyen',d:'f',x:100,c:'ÉDUCATION',p:68,desc:'Adapter la méthode de l\'arpentage (lecture collective critique) au format numérique. Outils, animation, engagement.',details:'Passerelle : éducation permanente × digital, ton double univers'},
+{id:19,t:'Community building Forest',d:'m',x:130,c:'LOCAL',p:45,desc:'Stratégie pour animer une communauté en ligne de citoyens forestois autour des enjeux locaux. Participation, débats.',details:'Ton ancrage : Forest, campagne 2024, connaissance terrain Charles Spapens'},
+{id:20,t:'Récit campagne victorieuse',d:'f',x:110,c:'STORYTELLING',p:58,desc:'Raconter en format long (blog/LinkedIn) la victoire de Forest 2024 : coulisses, stratégie digitale, leçons apprises.',details:'Ta réussite : direction campagne PS Forest, victoire Charles Spapens'}
+];
+
+const CM_MISSIONS=[
+{id:100,t:'Clash trolls avec humour STIB-style',d:'cm',x:160,c:'MODÉRATION',p:83,desc:'Des trolls attaquent une campagne PS. Répondre avec ton style décalé/belgitude sans perdre en crédibilité. Désamorcer par l\'humour.',details:'Ton style STIB : "Chokran bezef frérot!", réponses en darija, Awards IAB Mixx 2015'},
+{id:101,t:'Thread viral valeurs PS',d:'cm',x:180,c:'THREAD',p:67,desc:'Créer un thread Twitter de 10 tweets sur les valeurs socialistes qui génère engagement et partages. Tone of voice : accessible, moderne, pas militant lourd.',details:'Challenge : faire du politique sexy sans édulcorer le message'},
+{id:102,t:'Campagne vidéo TikTok/Reels PS',d:'cm',x:200,c:'VIDÉO',p:52,desc:'Concevoir 5 Reels/TikToks pour le PS sur des enjeux jeunes (logement, climat, travail). Courts, percutants, authentiques.',details:'Tes compétences : TikTok @flexyflorence, maîtrise formats courts'},
+{id:103,t:'Modération débat tendu Facebook',d:'cm',x:150,c:'MODÉRATION',p:74,desc:'Modérer en temps réel un débat Facebook sur un sujet clivant (immigration, taxation). Équilibre, respect, animation constructive.',details:'Ton rôle PS : modération réseaux sociaux, gestion tensions quotidiennes'},
+{id:104,t:'Copywriting post-victoire électorale',d:'cm',x:140,c:'COPYWRITING',p:61,desc:'Rédiger LE post Facebook/Instagram qui annonce une victoire électorale. Émotion, remerciements, mobilisation pour la suite.',details:'Ton expérience : victoire Forest 2024, tu sais comment ça vibre'},
+{id:105,t:'Crisis management fake news PS',d:'cm',x:220,c:'CRISE',p:38,desc:'Une fake news sur le PS circule et devient virale. Stratégie de démenti : timing, canal, ton, preuves, contre-narratif.',details:'Enjeu 2025 : désinformation massive, deepfakes, algorithmes amplificateurs'},
+{id:106,t:'Live Instagram avec élu·e PS',d:'cm',x:170,c:'LIVE',p:55,desc:'Préparer et animer un Live Instagram avec un·e élu·e PS. Questions, interaction, spontanéité contrôlée, valorisation.',details:'Ton expérience : LIVE LinkedIn Xavier Degraux, tu connais le format'},
+{id:107,t:'Stratégie Threads pour le PS',d:'cm',x:130,c:'STRATÉGIE',p:46,desc:'Le PS se lance sur Threads. Ligne éditoriale, différenciation vs Twitter, premiers posts, engagement. Ton approche éthique des plateformes.',details:'Ton profil : @flexyflow sur Threads, 585 abonnés, espace à investir'},
+{id:108,t:'Campagne chaussettes dépareillées 2.0',d:'cm',x:120,c:'VIRALITÉ',p:92,desc:'Réinventer une campagne participative/solidaire type "chaussettes dépareillées" pour 2025. Concept, mécanique, amplification.',details:'Tes hits STIB : Journée Pull de Noël, Journée Chaussettes Dépareillées'},
+{id:109,t:'Content planning campagne électorale',d:'cm',x:190,c:'PLANNING',p:41,desc:'Calendrier éditorial complet pour une campagne électorale de 3 mois. Rythme, escalade, jour J, post-élection.',details:'Ton expérience : campagne Forest 2024 complète de A à Z'},
+{id:110,t:'Réponse élégante attaque politique',d:'cm',x:160,c:'COMMUNICATION',p:59,desc:'Un parti adverse attaque le PS sur un dossier. Rédiger une réponse qui défend sans attaquer, factuellement solide, élégamment formulée.',details:'Ton style : jamais dans l\'invective, toujours dans l\'intelligence'},
+{id:111,t:'Storytelling 40 ans d\'engagement',d:'cm',x:140,c:'MÉMOIRE',p:48,desc:'Raconter les 40 ans du PS en Belgique via un format numérique innovant (timeline interactive, stories, capsules vidéo).',details:'Ton expérience STIB : webdoc 40 ans du métro, timeline interactive'},
+{id:112,t:'Activation communauté dormante',d:'cm',x:150,c:'ENGAGEMENT',p:53,desc:'Une page PS locale a 5000 abonnés mais zéro engagement. Stratégie pour réveiller la communauté en 1 mois.',details:'Ton expertise : community building, tu sais créer du lien'},
+{id:113,t:'Formation express modération CM',d:'cm',x:110,c:'FORMATION',p:66,desc:'Former en 2h des bénévoles PS à la modération de réseaux sociaux. Règles, déontologie, gestion cas difficiles.',details:'Ton rôle : formatrice aguerrie, pédagogie éprouvée'},
+{id:114,t:'Benchmark stratégies digitales Europe',d:'cm',x:180,c:'VEILLE',p:37,desc:'Analyser les stratégies digitales de 3 partis sociaux-démocrates européens (SPD, PS français, Labour). Enseignements pour PS.be.',details:'Ta vision : communication politique 2.0, benchmarking international'},
+{id:115,t:'Campagne advocacy sécurité sociale',d:'cm',x:170,c:'ADVOCACY',p:44,desc:'Créer une campagne digitale de défense de la sécurité sociale. Messages, visuels, mobilisation, hashtag, amplification.',details:'Valeurs PS : justice sociale, solidarité, combat pour acquis sociaux'}
+];
+
+let S={name:'Florence Manente',xp:0,m:0,r:'Candidate',rep:0,done:[]};
+let cur=null,filter='all';
+
+const mg=document.getElementById('mg'),cmg=document.getElementById('cmg'),lb=document.getElementById('lb');
+
+function card(m,isCM=false){
+  const d=document.createElement('div');
+  d.className='card';
+  const diffClass=isCM?'cm':m.d;
+  const diffText=isCM?'CM':m.d.toUpperCase();
+  d.innerHTML=`<h3>${m.t}</h3>
+  <div><span class="badge type">${m.c}</span><span class="badge diff ${diffClass}">${diffText}</span></div>
+  <div class="meta"><div>💎 ${m.x} XP</div><div>👥 ${m.p} candidats</div></div>`;
+  d.onclick=()=>open(m);
+  return d;
+}
+
+function render(){
+  mg.innerHTML='';
+  MISSIONS.filter(m=>filter==='all'||m.d===filter).forEach(m=>mg.appendChild(card(m)));
+}
+
+function renderCM(){
+  cmg.innerHTML='';
+  CM_MISSIONS.forEach(m=>cmg.appendChild(card(m,true)));
+}
+
+function open(m){
+  cur=m;
+  document.getElementById('mt').textContent=m.t;
+  document.getElementById('md').textContent=m.desc;
+  const det=document.getElementById('mdet');
+  det.innerHTML=m.details?`<strong>💡 Contexte :</strong> ${m.details}`:'';
+  det.style.display=m.details?'block':'none';
+  document.getElementById('mext').innerHTML='';
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeM(){
+  document.getElementById('modal').classList.remove('active');
+  document.getElementById('ms').value='';
+}
+
+function submit(){
+  if(!cur)return;
+  const txt=document.getElementById('ms').value.trim();
+  if(txt.length<30){
+    showAlert('⚠️ Développe ta réponse (min. 30 caractères)');
+    return;
+  }
+  S.xp+=cur.x;
+  S.m++;
+  S.rep+=Math.floor(cur.x/10);
+  S.done.push(cur.id);
+  S.r=S.xp>=1500?'Recrutée 🎉':S.xp>=1000?'Finaliste':S.xp>=500?'Qualifiée':'Candidate';
+  update();
+  closeM();
+  showAlert(`✓ +${cur.x} XP — Mission validée Florence !`);
+  saveLeaderboard();
+}
+
+function update(){
+  document.getElementById('uname').textContent=S.name;
+  document.getElementById('uxp').textContent=`💎 ${S.xp} XP`;
+  document.getElementById('urank').textContent=`📍 ${S.r}`;
+  document.getElementById('urep').textContent=`⚡ ${S.rep} points influence`;
+  document.getElementById('sx').textContent=S.xp;
+  document.getElementById('sm').textContent=S.m;
+  document.getElementById('sr').textContent=S.r;
+  document.getElementById('sp').textContent=S.rep;
+  const next=S.xp<500?500:S.xp<1000?1000:S.xp<1500?1500:2500;
+  const pct=Math.min(100,Math.floor((S.xp/next)*100));
+  const pb=document.getElementById('pb');
+  pb.style.width=pct+'%';
+  pb.textContent=pct+'%';
+}
+
+function showAlert(msg){
+  const a=document.createElement('div');
+  a.className='alert';
+  a.textContent=msg;
+  document.body.appendChild(a);
+  setTimeout(()=>{
+    a.classList.add('hide');
+    setTimeout(()=>a.remove(),400);
+  },3500);
+}
+
+function saveLeaderboard(){
+  try{
+    const stored=JSON.parse(localStorage.getItem('leaderboard_flexy')||'[]');
+    const idx=stored.findIndex(u=>u.name===S.name);
+    if(idx>=0)stored[idx]=S;
+    else stored.push({...S});
+    stored.sort((a,b)=>b.xp-a.xp);
+    localStorage.setItem('leaderboard_flexy',JSON.stringify(stored.slice(0,50)));
+    renderLeaderboard();
+  }catch(e){}
+}
+
+function renderLeaderboard(){
+  try{
+    const stored=JSON.parse(localStorage.getItem('leaderboard_flexy')||'[]');
+    lb.innerHTML='';
+    if(stored.length===0){
+      lb.innerHTML='<p style="text-align:center;opacity:.6;padding:40px">Sois la première Florence ! Complète des missions pour apparaître ici.</p>';
+      return;
+    }
+    stored.slice(0,20).forEach((u,i)=>{
+      const d=document.createElement('div');
+      d.className='board-item';
+      const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+      d.innerHTML=`<div class="rank">${medal||'#'+(i+1)}</div><div class="name">${u.name} <span style="opacity:.6;font-size:13px">${u.r}</span></div><div class="score">${u.xp} XP</div>`;
+      lb.appendChild(d);
+    });
+  }catch(e){}
+}
+
+function openPDF(){
+  document.getElementById('pdfModal').classList.add('active');
+}
+
+function closePDF(){
+  document.getElementById('pdfModal').classList.remove('active');
+}
+
+function openWeb(url){
+  document.getElementById('webTitle').textContent='🌐 '+url.split('/').slice(2,4).join('/');
+  document.getElementById('webFrame').src=url;
+  document.getElementById('webModal').classList.add('active');
+}
+
+function closeWeb(){
+  document.getElementById('webModal').classList.remove('active');
+  document.getElementById('webFrame').src='';
+}
+
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById(b.dataset.p).classList.add('active');
+  if(b.dataset.p==='board')renderLeaderboard();
+});
+
+document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  filter=b.dataset.f;
+  render();
+});
+
+render();
+renderCM();
+update();
+renderLeaderboard();
+</script>
+</body>
+</html>
