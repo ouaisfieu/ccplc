@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🐱 Mé Kel KLET — Plateforme d'apprentissage pour branques only</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+:root{
+--scratch-orange:#ff8c1a;--scratch-purple:#855cd6;--scratch-blue:#4d97ff;--scratch-green:#0fbd8c;--scratch-pink:#ff6680;--scratch-yellow:#ffbf00;--bg:#f5f5f5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Comic Neue',cursive,sans-serif;background:var(--bg);color:#575e75;overflow-x:hidden}
+.cat{position:fixed;bottom:20px;right:20px;font-size:80px;cursor:pointer;animation:float 3s ease-in-out infinite;z-index:9999;filter:drop-shadow(0 5px 10px rgba(0,0,0,.2))}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-20px) rotate(5deg)}}
+.cat:hover{animation:spin .5s ease;font-size:100px}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.header{background:linear-gradient(135deg,var(--scratch-blue),var(--scratch-purple));color:#fff;padding:30px 20px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.15);position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:url('data:image/svg+xml,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="3" fill="white" opacity=".1"/></svg>');animation:pattern-move 20s linear infinite}
+@keyframes pattern-move{from{transform:translateX(0)}to{transform:translateX(40px)}}
+.logo{font-size:56px;font-weight:700;margin-bottom:10px;text-shadow:3px 3px 0 rgba(0,0,0,.2)}
+.tagline{font-size:18px;opacity:.95;font-weight:700}
+.nav{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);position:sticky;top:0;z-index:100}
+.nav-content{display:flex;gap:0;overflow-x:auto;padding:0 10px}
+.nav-content button{background:transparent;border:none;color:#575e75;padding:15px 20px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;border-bottom:4px solid transparent;transition:.2s}
+.nav-content button:hover{background:rgba(77,151,255,.1);border-bottom-color:var(--scratch-blue)}
+.nav-content button.active{color:var(--scratch-blue);border-bottom-color:var(--scratch-blue)}
+.container{max-width:1200px;margin:25px auto;padding:0 20px}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .4s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.section{background:#fff;border-radius:15px;padding:25px;margin-bottom:20px;box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.section h2{font-size:32px;color:var(--scratch-purple);margin-bottom:18px;font-weight:700}
+.section h3{font-size:24px;color:var(--scratch-orange);margin:20px 0 12px;font-weight:700}
+.section p{font-size:16px;line-height:1.7;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin:20px 0}
+.card{background:linear-gradient(135deg,#fff,#f8f8ff);border:4px solid;border-radius:12px;padding:18px;cursor:pointer;transition:.3s;box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.card:hover{transform:translateY(-5px) scale(1.03);box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.card.blue{border-color:var(--scratch-blue)}
+.card.purple{border-color:var(--scratch-purple)}
+.card.orange{border-color:var(--scratch-orange)}
+.card.green{border-color:var(--scratch-green)}
+.card.pink{border-color:var(--scratch-pink)}
+.card h4{font-size:20px;margin-bottom:10px;font-weight:700}
+.card p{font-size:15px;color:#575e75}
+.badge{display:inline-block;background:var(--scratch-yellow);color:#fff;font-size:12px;padding:5px 12px;border-radius:20px;margin:6px 5px 0 0;font-weight:700;box-shadow:0 2px 5px rgba(255,191,0,.4)}
+.badge.stars{background:var(--scratch-orange)}
+.badge.easy{background:var(--scratch-green)}
+.badge.medium{background:var(--scratch-blue)}
+.badge.hard{background:var(--scratch-pink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin:20px 0}
+.stat{background:linear-gradient(135deg,var(--scratch-purple),var(--scratch-blue));color:#fff;padding:25px;border-radius:15px;text-align:center;box-shadow:0 4px 12px rgba(133,92,214,.3)}
+.stat .num{font-size:42px;font-weight:700;margin-bottom:8px}
+.stat .label{font-size:14px;font-weight:700;opacity:.9}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:20px;z-index:1000}
+.modal.active{display:flex;animation:modalFade .3s}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.modal-box{background:#fff;border-radius:20px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:modalSlide .3s}
+@keyframes modalSlide{from{transform:scale(.9)}to{transform:scale(1)}}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:15px;border-bottom:4px solid var(--scratch-purple)}
+.modal-header h2{color:var(--scratch-purple);font-size:28px;font-weight:700}
+.modal-close{background:var(--scratch-pink);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 3px 8px rgba(255,102,128,.4)}
+.modal-close:hover{background:#ff4466;transform:scale(1.1)}
+.progress-bar{height:30px;background:#e0e0e0;border-radius:15px;overflow:hidden;margin:15px 0;position:relative}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--scratch-green),var(--scratch-blue));transition:width .5s ease;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px}
+.emoji-big{font-size:80px;text-align:center;margin:20px 0;animation:bounce 1s ease infinite}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.btn{background:linear-gradient(135deg,var(--scratch-orange),var(--scratch-yellow));color:#fff;border:none;padding:14px 28px;border-radius:10px;font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 4px 10px rgba(255,140,26,.4);margin:10px 5px 0 0;transition:.2s}
+.btn:hover{transform:scale(1.08);box-shadow:0 6px 15px rgba(255,140,26,.6)}
+.btn.secondary{background:linear-gradient(135deg,#ccc,#999);box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.alert{position:fixed;top:20px;right:20px;background:linear-gradient(135deg,var(--scratch-green),var(--scratch-blue));color:#fff;border-radius:15px;padding:18px 25px;box-shadow:0 5px 20px rgba(15,189,140,.5);z-index:2000;font-weight:700;font-size:16px;animation:slideIn .4s;max-width:350px}
+@keyframes slideIn{from{transform:translateX(400px)}to{transform:none}}
+.alert.hide{animation:slideOut .4s forwards}
+@keyframes slideOut{to{transform:translateX(400px);opacity:0}}
+.confetti{position:fixed;font-size:30px;pointer-events:none;z-index:9998;animation:confettiFall 3s ease-out forwards}
+@keyframes confettiFall{0%{transform:translateY(-100px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.help-box{background:linear-gradient(135deg,#fff9e6,#fffacd);border:3px dashed var(--scratch-yellow);border-radius:12px;padding:18px;margin:15px 0}
+.help-box strong{color:var(--scratch-orange);font-size:18px}
+.mission-list{list-style:none;padding:0;margin:15px 0}
+.mission-list li{background:#f0f8ff;border-left:5px solid var(--scratch-blue);padding:12px 15px;margin:8px 0;border-radius:8px;font-size:15px}
+.achievement{background:linear-gradient(135deg,var(--scratch-yellow),var(--scratch-orange));color:#fff;padding:15px 20px;border-radius:12px;margin:10px 0;text-align:center;font-weight:700;font-size:16px;box-shadow:0 4px 12px rgba(255,191,0,.4);animation:shake .5s}
+@keyframes shake{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
+</style>
+</head>
+<body>
+<div class="cat" onclick="catClick()">🐱</div>
+
+<header class="header">
+  <div class="logo">🎮 Mé Kel Klet</div>
+  <div class="tagline">Apprends en t'amusant avec des missions trop cool !</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-content">
+    <button class="active" data-page="home">🏠 Accueil</button>
+    <button data-page="missions">🎯 Mes Missions</button>
+    <button data-page="stats">🏆 Mes Points</button>
+    <button data-page="help">❓ Aide</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div id="home" class="page active">
+    <div class="section">
+      <h2>👋 Salut champion !</h2>
+      <p style="font-size:18px">Bienvenue sur <strong>Mé Kel Klet</strong>, ta plateforme pour apprendre plein de trucs utiles de la vie de tous les jours ! Ici, tout est <strong>ULTRA FACILE</strong> et fait pour toi, que tu sois débutant ou super débutant. Pas de panique, on va y aller doucement ! 😊</p>
+      
+      <div class="stats">
+        <div class="stat">
+          <div class="num" id="totalStars">0</div>
+          <div class="label">⭐ Étoiles gagnées</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="totalDone">0</div>
+          <div class="label">✅ Missions réussies</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="level">Niveau 1</div>
+          <div class="label">🎓 Ton niveau</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>🎨 Comment ça marche ?</h3>
+      <ul class="mission-list">
+        <li>👉 <strong>Choisis une mission</strong> dans l'onglet "Mes Missions"</li>
+        <li>👉 <strong>Fais l'activité demandée</strong> (c'est toujours simple !)</li>
+        <li>👉 <strong>Raconte-nous</strong> ce que tu as fait</li>
+        <li>👉 <strong>Gagne des étoiles</strong> ⭐ et monte de niveau !</li>
+      </ul>
+
+      <div class="help-box">
+        <strong>💡 Astuce :</strong> Clique sur le chat 🐱 en bas à droite pour des surprises !
+      </div>
+    </div>
+  </div>
+
+  <div id="missions" class="page">
+    <div class="section">
+      <h2>🎯 Choisis ta mission !</h2>
+      <p>Voici plein de missions <strong>ULTRA FACILES</strong> pour toi. Clique sur celle qui te plaît !</p>
+      
+      <h3>🟢 Niveau Débutant (super facile !)</h3>
+      <div class="grid" id="easyMissions"></div>
+
+      <h3>🔵 Niveau Intermédiaire (un peu plus dur)</h3>
+      <div class="grid" id="mediumMissions"></div>
+
+      <h3>🔴 Niveau Avancé (pour les pros !)</h3>
+      <div class="grid" id="hardMissions"></div>
+    </div>
+  </div>
+
+  <div id="stats" class="page">
+    <div class="section">
+      <h2>🏆 Tes super stats !</h2>
+      
+      <div class="stats">
+        <div class="stat">
+          <div class="num" id="statsStars">0</div>
+          <div class="label">⭐ Étoiles totales</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="statsDone">0</div>
+          <div class="label">✅ Missions terminées</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="statsLevel">Niveau 1</div>
+          <div class="label">🎓 Ton niveau actuel</div>
+        </div>
+        <div class="stat">
+          <div class="num" id="statsNext">10</div>
+          <div class="label">⭐ Pour niveau suivant</div>
+        </div>
+      </div>
+
+      <h3>📊 Ta progression</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar" style="width:0%">0%</div>
+      </div>
+
+      <div id="achievementsList"></div>
+    </div>
+  </div>
+
+  <div id="help" class="page">
+    <div class="section">
+      <h2>❓ Besoin d'aide ?</h2>
+      
+      <h3>🤔 C'est quoi une mission ?</h3>
+      <p>Une mission, c'est une petite activité de la vie de tous les jours qu'on te demande de faire. Par exemple : ranger ta chambre, dire bonjour à quelqu'un, dessiner quelque chose... C'est toujours <strong>simple et amusant</strong> !</p>
+
+      <h3>⭐ Comment gagner des étoiles ?</h3>
+      <p>Quand tu complètes une mission, tu gagnes des <strong>étoiles</strong> ! Plus la mission est difficile, plus tu gagnes d'étoiles. Les étoiles te permettent de <strong>monter de niveau</strong> et de devenir un super champion !</p>
+
+      <h3>🎓 C'est quoi les niveaux ?</h3>
+      <ul class="mission-list">
+        <li><strong>Niveau 1 - Débutant</strong> : Tu débutes, c'est parfait !</li>
+        <li><strong>Niveau 2 - Explorateur</strong> : Tu commences à t'améliorer (10 étoiles)</li>
+        <li><strong>Niveau 3 - Aventurier</strong> : Tu te débrouilles bien ! (25 étoiles)</li>
+        <li><strong>Niveau 4 - Expert</strong> : Tu es vraiment bon ! (50 étoiles)</li>
+        <li><strong>Niveau 5 - Champion</strong> : Tu es un vrai champion ! (100 étoiles)</li>
+        <li><strong>Niveau 6 - Super Star</strong> : Tu es une super star ! (200 étoiles)</li>
+      </ul>
+
+      <h3>🐱 Le chat, c'est quoi ?</h3>
+      <p>Le chat en bas à droite, c'est ton copain ! Clique dessus pour des <strong>surprises</strong> et des <strong>animations rigolotes</strong>. Plus tu cliques, plus il se passe des trucs cools ! 😺</p>
+
+      <div class="help-box">
+        <strong>💬 Tu as encore des questions ?</strong> Demande à un adulte de t'aider, c'est fait pour ça !
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">Titre</h2>
+      <button class="modal-close" onclick="closeModal()">Fermer ❌</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const EASY_MISSIONS=[
+{id:1,title:'Dire bonjour 👋',desc:'Dis bonjour à 3 personnes différentes aujourd\'hui',stars:3,color:'green'},
+{id:2,title:'Ranger ma chambre 🧹',desc:'Range au moins 5 choses dans ta chambre',stars:5,color:'blue'},
+{id:3,title:'Boire de l\'eau 💧',desc:'Bois 3 verres d\'eau dans la journée',stars:3,color:'green'},
+{id:4,title:'Me brosser les dents 🦷',desc:'Brosse-toi les dents matin et soir',stars:4,color:'green'},
+{id:5,title:'Faire mon lit 🛏️',desc:'Fais ton lit tout seul ce matin',stars:4,color:'blue'},
+{id:6,title:'Dire merci 🙏',desc:'Dis merci à quelqu\'un qui t\'aide',stars:3,color:'green'},
+{id:7,title:'Dessiner quelque chose 🎨',desc:'Fais un dessin de ce que tu veux',stars:5,color:'blue'},
+{id:8,title:'Lire 5 minutes 📚',desc:'Lis un livre pendant 5 minutes',stars:5,color:'blue'},
+{id:9,title:'Aider à la maison 🏠',desc:'Aide un adulte avec une petite tâche',stars:6,color:'blue'},
+{id:10,title:'Compter jusqu\'à 20 🔢',desc:'Compte à voix haute de 1 à 20',stars:3,color:'green'},
+{id:11,title:'Chanter une chanson 🎵',desc:'Chante ta chanson préférée',stars:4,color:'green'},
+{id:12,title:'Mettre mes chaussures 👟',desc:'Mets tes chaussures tout seul',stars:3,color:'green'},
+];
+
+const MEDIUM_MISSIONS=[
+{id:20,title:'Préparer mon cartable 🎒',desc:'Prépare ton cartable pour demain avec toutes tes affaires',stars:7,color:'purple'},
+{id:21,title:'Écrire mon prénom ✍️',desc:'Écris ton prénom en entier sur une feuille',stars:6,color:'orange'},
+{id:22,title:'Faire 10 pompes 💪',desc:'Fais 10 pompes (ou à genoux si c\'est trop dur)',stars:8,color:'purple'},
+{id:23,title:'Raconter ma journée 💬',desc:'Raconte ta journée à quelqu\'un (3 choses que tu as faites)',stars:7,color:'orange'},
+{id:24,title:'Plier mes vêtements 👕',desc:'Plie 5 vêtements propres et range-les',stars:8,color:'purple'},
+{id:25,title:'Faire une photo 📸',desc:'Prends une belle photo de quelque chose que tu aimes',stars:6,color:'orange'},
+{id:26,title:'Apprendre un mot nouveau 📖',desc:'Apprends un nouveau mot et explique ce qu\'il veut dire',stars:7,color:'orange'},
+{id:27,title:'Préparer un snack 🍎',desc:'Prépare-toi un petit snack sain (fruit, yaourt...)',stars:8,color:'purple'},
+];
+
+const HARD_MISSIONS=[
+{id:40,title:'Écrire une lettre ✉️',desc:'Écris une petite lettre à quelqu\'un que tu aimes (5 phrases)',stars:12,color:'pink'},
+{id:41,title:'Cuisiner avec un adulte 👨‍🍳',desc:'Aide à préparer un repas avec un adulte',stars:15,color:'pink'},
+{id:42,title:'Faire mes devoirs 📝',desc:'Fais tous tes devoirs tout seul',stars:12,color:'pink'},
+{id:43,title:'Résoudre un problème 🧠',desc:'Résous un petit problème de maths (addition, soustraction)',stars:10,color:'pink'},
+{id:44,title:'Organiser mon bureau 🗂️',desc:'Range et organise ton bureau ou coin de travail',stars:12,color:'pink'},
+{id:45,title:'Apprendre à faire mes lacets 👟',desc:'Apprends à faire tes lacets tout seul (ou entraîne-toi)',stars:15,color:'pink'},
+];
+
+let STATE={stars:0,done:0,level:1,achievements:[]};
+let catClicks=0;
+
+function renderMissions(){
+  const easy=document.getElementById('easyMissions');
+  const medium=document.getElementById('mediumMissions');
+  const hard=document.getElementById('hardMissions');
+  
+  easy.innerHTML='';
+  EASY_MISSIONS.forEach(m=>{
+    const card=document.createElement('div');
+    card.className='card '+m.color;
+    card.innerHTML=`<h4>${m.title}</h4><p>${m.desc}</p><span class="badge stars">⭐ ${m.stars}</span><span class="badge easy">Facile</span>`;
+    card.onclick=()=>openMission(m);
+    easy.appendChild(card);
+  });
+
+  medium.innerHTML='';
+  MEDIUM_MISSIONS.forEach(m=>{
+    const card=document.createElement('div');
+    card.className='card '+m.color;
+    card.innerHTML=`<h4>${m.title}</h4><p>${m.desc}</p><span class="badge stars">⭐ ${m.stars}</span><span class="badge medium">Moyen</span>`;
+    card.onclick=()=>openMission(m);
+    medium.appendChild(card);
+  });
+
+  hard.innerHTML='';
+  HARD_MISSIONS.forEach(m=>{
+    const card=document.createElement('div');
+    card.className='card '+m.color;
+    card.innerHTML=`<h4>${m.title}</h4><p>${m.desc}</p><span class="badge stars">⭐ ${m.stars}</span><span class="badge hard">Difficile</span>`;
+    card.onclick=()=>openMission(m);
+    hard.appendChild(card);
+  });
+}
+
+function openMission(m){
+  document.getElementById('modalTitle').textContent=m.title;
+  document.getElementById('modalContent').innerHTML=`
+    <div class="emoji-big">${m.title.split(' ')[1]||'🎯'}</div>
+    <p style="font-size:18px;text-align:center;margin:15px 0"><strong>Ta mission :</strong> ${m.desc}</p>
+    <p style="text-align:center;font-size:16px;color:#ff8c1a;font-weight:700">⭐ Tu gagneras ${m.stars} étoiles !</p>
+    <div style="margin:25px 0">
+      <label style="font-weight:700;font-size:16px;display:block;margin-bottom:8px">Raconte-nous comment tu as fait :</label>
+      <textarea id="missionText" style="width:100%;min-height:120px;padding:12px;border:3px solid #4d97ff;border-radius:10px;font-family:inherit;font-size:15px" placeholder="Exemple : J'ai rangé mes jouets, mes livres et mes vêtements !"></textarea>
+    </div>
+    <button class="btn" onclick="completeMission(${m.stars})">J'ai réussi ! 🎉</button>
+    <button class="btn secondary" onclick="closeModal()">Pas maintenant</button>
+  `;
+  document.getElementById('modal').classList.add('active');
+}
+
+function completeMission(stars){
+  const text=document.getElementById('missionText').value.trim();
+  if(text.length<10){
+    showAlert('📝 Raconte-nous un peu plus ce que tu as fait ! (au moins quelques mots)');
+    return;
+  }
+  
+  STATE.stars+=stars;
+  STATE.done++;
+  updateLevel();
+  updateStats();
+  closeModal();
+  throwConfetti();
+  showAlert(`🎉 Bravo ! Tu as gagné ${stars} étoiles ! ⭐`);
+  checkAchievements();
+}
+
+function updateLevel(){
+  if(STATE.stars>=200)STATE.level=6;
+  else if(STATE.stars>=100)STATE.level=5;
+  else if(STATE.stars>=50)STATE.level=4;
+  else if(STATE.stars>=25)STATE.level=3;
+  else if(STATE.stars>=10)STATE.level=2;
+  else STATE.level=1;
+}
+
+function updateStats(){
+  const levels=['Débutant','Explorateur','Aventurier','Expert','Champion','Super Star'];
+  const levelName='Niveau '+STATE.level+' - '+levels[STATE.level-1];
+  
+  document.getElementById('totalStars').textContent=STATE.stars;
+  document.getElementById('totalDone').textContent=STATE.done;
+  document.getElementById('level').textContent=levelName;
+  
+  document.getElementById('statsStars').textContent=STATE.stars;
+  document.getElementById('statsDone').textContent=STATE.done;
+  document.getElementById('statsLevel').textContent=levelName;
+  
+  const nextLevel=[10,25,50,100,200,999][STATE.level-1];
+  const remaining=nextLevel-STATE.stars;
+  document.getElementById('statsNext').textContent=remaining>0?remaining:'MAX';
+  
+  const progress=nextLevel===999?100:Math.min(100,(STATE.stars/nextLevel)*100);
+  const bar=document.getElementById('progressBar');
+  bar.style.width=progress+'%';
+  bar.textContent=Math.floor(progress)+'%';
+}
+
+function checkAchievements(){
+  const list=document.getElementById('achievementsList');
+  const newAchievements=[];
+  
+  if(STATE.done===1&&!STATE.achievements.includes('first')){
+    newAchievements.push({id:'first',text:'🏅 Première mission terminée !'});
+  }
+  if(STATE.done===5&&!STATE.achievements.includes('five')){
+    newAchievements.push({id:'five',text:'🏅 5 missions terminées !'});
+  }
+  if(STATE.done===10&&!STATE.achievements.includes('ten')){
+    newAchievements.push({id:'ten',text:'🏅 10 missions terminées ! Tu es un champion !'});
+  }
+  if(STATE.level===2&&!STATE.achievements.includes('level2')){
+    newAchievements.push({id:'level2',text:'🎓 Niveau 2 atteint ! Bravo !'});
+  }
+  if(STATE.level===3&&!STATE.achievements.includes('level3')){
+    newAchievements.push({id:'level3',text:'🎓 Niveau 3 atteint ! Super !'});
+  }
+  
+  newAchievements.forEach(a=>{
+    STATE.achievements.push(a.id);
+    const div=document.createElement('div');
+    div.className='achievement';
+    div.textContent=a.text;
+    list.appendChild(div);
+  });
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('active');
+}
+
+function showAlert(msg){
+  const alert=document.createElement('div');
+  alert.className='alert';
+  alert.textContent=msg;
+  document.body.appendChild(alert);
+  setTimeout(()=>{
+    alert.classList.add('hide');
+    setTimeout(()=>alert.remove(),400);
+  },3000);
+}
+
+function throwConfetti(){
+  const emojis=['🎉','🎊','⭐','🌟','✨','🏆','👏'];
+  for(let i=0;i<15;i++){
+    setTimeout(()=>{
+      const confetti=document.createElement('div');
+      confetti.className='confetti';
+      confetti.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      confetti.style.left=Math.random()*window.innerWidth+'px';
+      confetti.style.top='0px';
+      document.body.appendChild(confetti);
+      setTimeout(()=>confetti.remove(),3000);
+    },i*100);
+  }
+}
+
+function catClick(){
+  catClicks++;
+  const emojis=['😺','😸','😹','😻','😽','🐱','🐈','🦁'];
+  const sounds=['Miaou !','Ronron...','Miaaaaou !','Prrrr...','😺'];
+  
+  showAlert(sounds[Math.floor(Math.random()*sounds.length)]);
+  
+  if(catClicks===10){
+    showAlert('🎉 Tu as cliqué 10 fois sur le chat ! Tu es persévérant !');
+    throwConfetti();
+    catClicks=0;
+  }
+}
+
+document.querySelectorAll('.nav-content button').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.nav-content button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.page).classList.add('active');
+    window.scrollTo(0,0);
+  }
+});
+
+renderMissions();
+updateStats();
+</script>
+</body>
+</html>
