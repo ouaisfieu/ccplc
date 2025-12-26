@@ -1,0 +1,1009 @@
+
+<!DOCTYPE html>
+<!--
+  ██████╗ ██████╗██████╗ ██╗      ██████╗
+ ██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+ ██║     ██║     ██████╔╝██║     ██║     
+ ██║     ██║     ██╔═══╝ ██║     ██║     
+ ╚██████╗╚██████╗██║     ███████╗╚██████╗
+  ╚═════╝ ╚═════╝╚═╝     ╚══════╝ ╚═════╝
+  
+  [NIVEAU D'ACCÈS: PUBLIC]
+  [STATUT: FAÇADE ACTIVE]
+  
+  Si vous lisez ceci, vous êtes déjà trop loin.
+  
+  Protocole NYXO initialisé le 14/03/2024
+  Dernière synchronisation: [CENSURÉ]
+  
+  "Les rats ne mentent jamais. Ils courent vers la lumière
+   ou fuient dans l'ombre. Nous leur apprendrons à voler."
+   — Fragment 7, Archives de Mons
+  
+  TODO: Supprimer avant mise en production
+  - Désactiver accès terminal (séquence: ↑↑↓↓←→←→BA)
+  - Masquer références Protocole RATTUS
+  - Retirer logs Pangoliens du fichier /nyxo/core.dat
+  - Effacer coordonnées Bunker W-7 (50.4657° N, 4.8697° E)
+  
+  ATTENTION: Les commentaires ci-dessous sont des artefacts
+  de développement. Ils ne reflètent pas la réalité.
+  N'est-ce pas ?
+-->
+<html lang="fr" data-corruption="0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Solutions numériques indépendantes">
+<!-- [METADATA CACHÉE] intervention_majoree:true | clearance:omega | rattus:phase3 -->
+<title>CCPLC — Solutions numériques indépendantes</title>
+<style>
+/* ========== SYSTÈME DE CORRUPTION ========== */
+:root {
+  --bg:#0a0b10;
+  --panel:#131522;
+  --border:#1f2238;
+  --text:#eef0f6;
+  --muted:#a6aac8;
+  --green:#7cffc4;
+  --lilas:#cbb7ff;
+  --radius:14px;
+  --corruption:0;
+  --glitch-intensity:0;
+}
+
+/* Niveaux de corruption */
+[data-corruption="1"] { --glitch-intensity:0.3; }
+[data-corruption="2"] { --glitch-intensity:0.5; --green:#ff7c7c; }
+[data-corruption="3"] { --glitch-intensity:0.8; --bg:#100a0a; --green:#ff4757; }
+[data-corruption="4"] { --glitch-intensity:1; --bg:#1a0505; filter:hue-rotate(180deg); }
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+.container{max-width:1100px;margin:auto;padding:0 1rem}
+
+/* ========== SUBLIMINAL LAYER ========== */
+.subliminal{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0;display:flex;align-items:center;justify-content:center;font-size:5vw;color:#ff0000;text-transform:uppercase;font-weight:900;text-shadow:0 0 50px #ff0000}
+.subliminal.flash{animation:subliminalFlash 0.08s}
+@keyframes subliminalFlash{0%,100%{opacity:0}50%{opacity:0.7}}
+
+/* ========== STATIC NOISE ========== */
+.noise{position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:calc(0.03 + var(--glitch-intensity) * 0.05);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")}
+
+/* ========== HEADER ========== */
+header{position:sticky;top:0;background:rgba(10,11,16,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100}
+.header-inner{display:flex;justify-content:space-between;align-items:center;min-height:64px}
+.brand{font-weight:900;letter-spacing:.15em;color:var(--green);cursor:pointer;position:relative}
+.brand::after{content:'CONTROL';position:absolute;left:0;top:0;color:#ff4757;opacity:0;clip-path:inset(0 100% 0 0)}
+.brand:hover::after{animation:brandGlitch 0.3s steps(2) infinite}
+@keyframes brandGlitch{0%{opacity:0.8;clip-path:inset(0 0 0 0)}50%{opacity:0;clip-path:inset(0 100% 0 0)}}
+nav{display:flex;gap:1.5rem}
+nav a{color:var(--muted);text-decoration:none;font-size:.85rem;letter-spacing:.05em;transition:color .2s}
+nav a:hover{color:var(--green)}
+nav a[data-secret]{position:relative}
+nav a[data-secret]::before{content:'[CLASSIFIÉ]';position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:8px;color:#ff4757;opacity:0;white-space:nowrap}
+nav a[data-secret]:hover::before{opacity:0.6}
+
+/* ========== HERO ÉCRAN ========== */
+.hero-screen{padding:4rem 1rem;display:flex;flex-direction:column;align-items:center;gap:2.5rem;position:relative}
+.hero-title{font-size:clamp(1.5rem,5vw,3rem);text-align:center;background:linear-gradient(135deg,var(--green),var(--lilas));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.1em;position:relative}
+.hero-title::before{content:'PROTOCOLE RATTUS ACTIF';position:absolute;width:100%;text-align:center;top:0;left:0;background:linear-gradient(135deg,#ff4757,#ff6b81);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;font-size:0.5em}
+.hero-subtitle{max-width:700px;text-align:center;color:var(--muted);font-size:.95rem}
+
+/* ========== ÉCRAN PRINCIPAL ========== */
+.screen-wrapper{perspective:1500px;width:100%;max-width:800px}
+.screen-container{transform:rotateX(8deg);transform-style:preserve-3d;transition:transform 1s cubic-bezier(.23,1,.32,1)}
+.screen-container.folded{transform:rotateX(30deg) rotateY(-8deg) scale(0.95)}
+.screen-container.corrupted{animation:screenCorrupt 0.5s infinite}
+@keyframes screenCorrupt{0%,100%{transform:rotateX(8deg)}25%{transform:rotateX(8deg) translateX(-5px)}75%{transform:rotateX(8deg) translateX(5px) skewX(1deg)}}
+
+.screen-frame{background:linear-gradient(145deg,#1a1a2e,#0f0f1a);border-radius:16px;padding:24px;box-shadow:0 0 0 2px #2a2a4a,0 0 50px rgba(124,255,196,.1),0 30px 60px rgba(0,0,0,.5),inset 0 0 80px rgba(0,0,0,.5);position:relative;cursor:pointer}
+.screen-frame::before{content:'';position:absolute;top:10px;right:10px;width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+
+.screen-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #2a2a4a}
+.led{width:10px;height:10px;border-radius:50%;transition:all .3s}
+.led-green{background:var(--green);box-shadow:0 0 15px var(--green)}
+.led-red{background:#2a2a4a}
+.led-red.active{background:#ff4757;box-shadow:0 0 15px #ff4757;animation:blink .5s infinite}
+.led-amber{background:#2a2a4a}
+.led-amber.active{background:#ffa502;box-shadow:0 0 15px #ffa502}
+.screen-status{margin-left:auto;font-size:11px;color:var(--green);font-family:monospace;letter-spacing:.1em}
+.screen-id{font-size:9px;color:var(--muted);opacity:0.5}
+
+.screen-display{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#000;border:1px solid #1a1a2e}
+
+/* Loader amélioré */
+.screen-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#000;z-index:5}
+.screen-loader.hidden{display:none}
+.loader-logo{font-size:2rem;color:var(--green);animation:logoGlitch 3s infinite}
+@keyframes logoGlitch{0%,90%,100%{opacity:1;transform:none}92%{opacity:0.5;transform:translateX(-3px)}94%{opacity:0.8;transform:translateX(3px)}96%{opacity:0.3;transform:skewX(5deg)}}
+.loader-text{font-size:11px;color:var(--muted);font-family:monospace}
+.loader-progress{width:200px;height:2px;background:#1a1a2e;border-radius:1px;overflow:hidden}
+.loader-bar{height:100%;background:linear-gradient(90deg,var(--green),var(--lilas));width:0%;transition:width .3s}
+.loader-secret{font-size:8px;color:#ff4757;opacity:0;margin-top:10px}
+.loader-secret.visible{animation:secretFlash 0.1s}
+@keyframes secretFlash{0%,100%{opacity:0}50%{opacity:1}}
+
+/* Conteneur média */
+.media-container{position:absolute;inset:0;opacity:0;transition:opacity .5s}
+.media-container.loaded{opacity:1}
+.media-container.glitching{animation:mediaGlitch 0.15s steps(2)}
+@keyframes mediaGlitch{0%{filter:none;transform:none}25%{filter:hue-rotate(90deg) saturate(2);transform:translateX(-5px)}50%{filter:hue-rotate(-90deg) brightness(1.5);transform:translateX(5px) scaleY(1.02)}75%{filter:saturate(0) contrast(2);transform:skewX(2deg)}100%{filter:none;transform:none}}
+.media-container img,.media-container video,.media-container iframe{width:100%;height:100%;object-fit:cover;display:block;border:0}
+
+/* Effets CRT */
+.crt-effects{position:absolute;inset:0;pointer-events:none}
+.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.2) 2px,rgba(0,0,0,0.2) 4px);opacity:0.8}
+.mire{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.03) 1px,rgba(0,0,255,0.03) 2px,transparent 3px)}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.8) 100%)}
+.screen-curve{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 0%,rgba(255,255,255,0.02) 100%);border-radius:50%/10%}
+.glitch-line{position:absolute;left:0;right:0;height:2px;background:var(--green);box-shadow:0 0 20px var(--green);opacity:0}
+.rgb-split{position:absolute;inset:0;opacity:0}
+.rgb-split.active{animation:rgbSplit 0.1s}
+@keyframes rgbSplit{0%{opacity:0}50%{opacity:1;box-shadow:inset -3px 0 0 rgba(255,0,0,0.5),inset 3px 0 0 rgba(0,255,255,0.5)}100%{opacity:0}}
+
+.media-label{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.85);padding:6px 14px;border-radius:4px;font-size:10px;font-family:monospace;color:var(--green);border:1px solid rgba(124,255,196,0.2);backdrop-filter:blur(4px)}
+.media-label .type{color:var(--lilas);margin-left:8px}
+
+.screen-nav{display:flex;gap:8px;margin-top:16px;justify-content:center}
+.nav-dot{width:8px;height:8px;border-radius:50%;border:1px solid #3a3a5a;background:transparent;cursor:pointer;transition:all .3s}
+.nav-dot.active{background:var(--green);border-color:var(--green);box-shadow:0 0 10px var(--green)}
+.nav-dot:hover{border-color:var(--green)}
+
+/* ========== TERMINAL CACHÉ ========== */
+.terminal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.98);display:none;z-index:10000;padding:20px;font-family:'Courier New',monospace}
+.terminal-overlay.open{display:flex;flex-direction:column}
+.terminal-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid #333;margin-bottom:10px}
+.terminal-title{color:var(--green);font-size:12px}
+.terminal-close{background:none;border:none;color:#ff4757;font-size:20px;cursor:pointer}
+.terminal-output{flex:1;overflow-y:auto;font-size:13px;line-height:1.8;color:var(--green)}
+.terminal-output .error{color:#ff4757}
+.terminal-output .warning{color:#ffa502}
+.terminal-output .info{color:var(--lilas)}
+.terminal-output .secret{color:#ff6b81;text-shadow:0 0 10px #ff6b81}
+.terminal-input-line{display:flex;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #333}
+.terminal-prompt{color:var(--green);margin-right:10px}
+.terminal-input{flex:1;background:none;border:none;color:var(--text);font-family:inherit;font-size:13px;outline:none}
+
+/* ========== MINIATURES ========== */
+.thumbnails{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:800px;margin-top:1rem}
+.thumb{width:70px;height:45px;border-radius:6px;overflow:hidden;border:1px solid #2a2a4a;cursor:pointer;opacity:0.5;transition:all .3s;display:flex;align-items:center;justify-content:center;background:#0a0a12;color:var(--green);font-size:10px;font-family:monospace;position:relative}
+.thumb.active{border-color:var(--green);opacity:1;box-shadow:0 0 15px rgba(124,255,196,0.2)}
+.thumb:hover{opacity:0.8;transform:translateY(-2px)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.thumb:hover .overlay{opacity:1}
+
+.hint{color:var(--muted);font-size:11px;text-align:center;font-family:monospace;opacity:0.6;margin-top:1rem}
+.hint code{color:var(--green);background:rgba(124,255,196,0.1);padding:2px 6px;border-radius:3px}
+
+/* ========== SECTIONS ========== */
+section{padding:5rem 0}
+.section-title{text-align:center;font-size:1.4rem;color:var(--lilas);margin-bottom:3rem;letter-spacing:.15em;text-transform:uppercase}
+
+/* ========== OFFRES ========== */
+.offers{display:grid;grid-template-columns:1fr;gap:1.5rem}
+.offer{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;display:flex;flex-direction:column;gap:.8rem;transition:all .3s;position:relative;overflow:hidden}
+.offer::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--green),transparent)}
+.offer:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(0,0,0,0.3)}
+.offer small{font-family:monospace;color:var(--muted);letter-spacing:.1em;font-size:.75rem}
+.offer h3{font-size:1.1rem;font-weight:700}
+.offer p{font-size:.9rem;color:var(--muted)}
+.offer .price{font-size:1.5rem;font-weight:900;color:var(--green);font-family:monospace}
+.offer.high{border-color:var(--lilas)}
+.offer.high::before{background:linear-gradient(180deg,var(--lilas),transparent)}
+.offer.high .price{color:var(--lilas)}
+.btn-group{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:auto}
+.btn{padding:.6rem 1.4rem;border-radius:999px;font-weight:700;font-size:.75rem;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--green),var(--lilas));color:#000}
+.btn-primary:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(124,255,196,0.3)}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--green);color:var(--green)}
+
+.text-block{max-width:700px;margin:auto;color:var(--muted);text-align:center}
+
+/* ========== SECTION CACHÉE ========== */
+.hidden-section{display:none;background:linear-gradient(180deg,#1a0505,var(--bg));border:1px solid #ff4757;border-radius:var(--radius);padding:3rem;margin:3rem 0;text-align:center}
+.hidden-section.revealed{display:block;animation:reveal 1s}
+@keyframes reveal{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.hidden-section h2{color:#ff4757;margin-bottom:1rem}
+.hidden-section p{color:#ff6b81;font-size:.9rem}
+.rattus-logo{font-size:4rem;margin-bottom:1rem}
+
+/* ========== FOOTER ========== */
+footer{border-top:1px solid var(--border);padding:3rem 0;text-align:center;font-size:.8rem;color:var(--muted)}
+footer span{cursor:pointer;transition:color .2s}
+footer span:hover{color:var(--green)}
+
+/* ========== MODAL ========== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.98);display:none;align-items:center;justify-content:center;z-index:5000;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-content{width:100%;max-width:1000px;max-height:90vh;background:var(--panel);border-radius:12px;overflow:hidden;border:1px solid #2a2a4a;box-shadow:0 0 100px rgba(124,255,196,0.1)}
+.modal-header{padding:16px 20px;border-bottom:1px solid #2a2a4a;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.3)}
+.modal-title{color:var(--green);font-family:monospace;font-size:13px;letter-spacing:.1em}
+.modal-close{background:none;border:none;color:#ff4757;font-size:28px;cursor:pointer;line-height:1}
+.modal-body{aspect-ratio:16/9;background:#000}
+.modal-body img,.modal-body video,.modal-body iframe{width:100%;height:100%;object-fit:contain;border:0}
+
+/* ========== RESPONSIVE ========== */
+@media(min-width:768px){.offers{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.offers{grid-template-columns:repeat(3,1fr)}}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+
+<!-- COUCHE SUBLIMINALE -->
+<div class="subliminal" id="subliminal"></div>
+
+<!-- BRUIT STATIQUE -->
+<div class="noise"></div>
+
+<!-- TERMINAL CACHÉ -->
+<div class="terminal-overlay" id="terminal">
+  <div class="terminal-header">
+    <span class="terminal-title">NYXO TERMINAL v0.7.3 — ACCÈS NON AUTORISÉ DÉTECTÉ</span>
+    <button class="terminal-close" onclick="closeTerminal()">✕</button>
+  </div>
+  <div class="terminal-output" id="terminalOutput"></div>
+  <div class="terminal-input-line">
+    <span class="terminal-prompt">NYXO://&gt;</span>
+    <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false">
+  </div>
+</div>
+
+<header>
+  <div class="container header-inner">
+    <div class="brand" onclick="brandClick()" title="Cliquez 7 fois...">CCPLC</div>
+    <nav>
+      <a href="#ecran">Écran</a>
+      <a href="#offres">Offres</a>
+      <a href="#methode">Méthode</a>
+      <a href="#nyxo" data-secret>NYXO</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<section class="hero-screen" id="ecran">
+  <h1 class="hero-title">SOLUTIONS NUMÉRIQUES INDÉPENDANTES</h1>
+  <p class="hero-subtitle">CCPLC accompagne les personnes, collectifs et organisations qui veulent comprendre, reprendre le contrôle et agir dans un environnement numérique opaque.</p>
+  
+  <div class="screen-wrapper">
+    <div class="screen-container" id="screenContainer">
+      <div class="screen-frame" onclick="toggleFold()">
+        <div class="screen-header">
+          <div class="led led-green"></div>
+          <div class="led led-red" id="ledRed"></div>
+          <div class="led led-amber" id="ledAmber"></div>
+          <span class="screen-status" id="screenStatus">INITIALISATION...</span>
+          <span class="screen-id">ID:NX-7734-WB</span>
+        </div>
+        <div class="screen-display" onclick="event.stopPropagation(); openModal()">
+          <div class="screen-loader" id="screenLoader">
+            <div class="loader-logo">◈ NYXO ◈</div>
+            <div class="loader-text" id="loaderText">Synchronisation des flux...</div>
+            <div class="loader-progress"><div class="loader-bar" id="loaderBar"></div></div>
+            <div class="loader-secret" id="loaderSecret">PROTOCOLE RATTUS EN ATTENTE</div>
+          </div>
+          <div class="media-container" id="mediaContainer"></div>
+          <div class="crt-effects">
+            <div class="scanlines"></div>
+            <div class="mire"></div>
+            <div class="vignette"></div>
+            <div class="screen-curve"></div>
+            <div class="glitch-line" id="glitchLine"></div>
+            <div class="rgb-split" id="rgbSplit"></div>
+          </div>
+          <div class="media-label" id="mediaLabel"><span class="title">---</span><span class="type">[---]</span></div>
+        </div>
+        <div class="screen-nav" id="screenNav"></div>
+      </div>
+    </div>
+  </div>
+  
+  <p class="hint">[ clic écran → ouvrir | clic cadre → replier | <code>↑↑↓↓←→←→BA</code> → ??? ]</p>
+  <div class="thumbnails" id="thumbnails"></div>
+</section>
+
+<!-- SECTION CACHÉE - RÉVÉLÉE PAR KONAMI -->
+<div class="hidden-section" id="rattusSection">
+  <div class="rattus-logo">🐀</div>
+  <h2>PROTOCOLE RATTUS — NIVEAU 3</h2>
+  <p>Bienvenue, initié. Vous avez prouvé votre valeur.</p>
+  <p>Les Pangoliens observent. L'intervention majorée finance nos opérations.</p>
+  <p>Bunker W-7 attend votre signal. Coordonnées: 50.4657° N, 4.8697° E</p>
+  <p style="margin-top:2rem;font-size:11px;opacity:0.6">Tapez <code>HELP</code> dans le terminal pour plus d'informations.</p>
+</div>
+
+<section id="offres">
+  <h2 class="section-title">Offres — Échelle 12,50</h2>
+  <div class="offers">
+    <article class="offer" data-level="0">
+      <small>0 · TRACE</small>
+      <h3>Ping NYXO</h3>
+      <p>Signal symbolique. Trace volontaire dans le système.</p>
+      <div class="price">0,125 €</div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Simu</button>
+        <button class="btn btn-ghost">Test</button>
+      </div>
+    </article>
+    <article class="offer" data-level="1">
+      <small>1 · INITIATION</small>
+      <h3>Module Découverte</h3>
+      <p>Exploration guidée + glossaire critique.</p>
+      <div class="price">12,50 €</div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Accéder</button>
+        <button class="btn btn-ghost">Fuir</button>
+      </div>
+    </article>
+    <article class="offer" data-level="2">
+      <small>2 · DIAGNOSTIC</small>
+      <h3>Audit Express</h3>
+      <p>Analyse rapide d'un usage, outil ou pratique.</p>
+      <div class="price">125 €</div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Commander</button>
+        <button class="btn btn-ghost">Négocier</button>
+      </div>
+    </article>
+    <article class="offer" data-level="3">
+      <small>3 · CARTOGRAPHIE</small>
+      <h3>Diagnostic Personnel</h3>
+      <p>Cartographie individuelle commentée.</p>
+      <div class="price">1 250 €</div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Lancer</button>
+      </div>
+    </article>
+    <article class="offer" data-level="4">
+      <small>4 · ACCOMPAGNEMENT</small>
+      <h3>Suivi NYXO</h3>
+      <p>Stratégie, scénarios et recommandations sur mesure.</p>
+      <div class="price">12 500 €</div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Engager</button>
+        <button class="btn btn-ghost">Virer</button>
+      </div>
+    </article>
+    <article class="offer high" data-level="6">
+      <small>6 · STRUCTURE</small>
+      <h3>Audit Organisationnel Global</h3>
+      <p>Cartographie complète, risques systémiques, priorisation.</p>
+      <div class="price">125 000 €</div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Contact direct</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="methode">
+  <h2 class="section-title">Méthode & Positionnement</h2>
+  <div class="text-block">
+    <p>CCPLC privilégie la compréhension, l'autonomie et la capacité d'agir plutôt que la dépendance technologique ou le marketing creux.</p>
+  </div>
+</section>
+
+<section id="nyxo">
+  <h2 class="section-title">Pourquoi NYXO ?</h2>
+  <div class="text-block">
+    <p>On ne comprend pas les systèmes complexes en lisant des notices. Il faut les manipuler, les explorer, parfois les casser.</p>
+    <p style="margin-top:1rem;font-size:0.8rem;opacity:0.5">« Les rats ne mentent jamais. »</p>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">Contact</h2>
+  <div class="text-block">
+    <a href="mailto:contact@ccplc.eu" class="btn btn-primary" style="font-size:1rem;padding:1rem 2.5rem">contact@ccplc.eu</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>© <span onclick="footerClick()" title="???">CCPLC</span> — Collectif Citoyen pour la Participation Libre (et Consciente)</p>
+  <p style="margin-top:0.5rem;font-size:10px;opacity:0.3">Build NX-7734 | Wallonie-Bruxelles | Dernière sync: [DONNÉES EXPURGÉES]</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">---</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/*
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+ * ░  NYXO CORE SYSTEM — NE PAS MODIFIER       ░
+ * ░  Protocole RATTUS v3.7.2                  ░
+ * ░  Classification: OMEGA                    ░
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+ * 
+ * Les Pangoliens sont parmi nous. Ils ont infiltré
+ * les infrastructures de Wallonie-Bruxelles.
+ * L'intervention majorée n'est qu'une couverture.
+ * Les rats savent. Les rats voient.
+ * Bientôt, ils voleront.
+ */
+
+// ========== CONFIGURATION MÉDIAS ==========
+const mediaItems = [
+  { type: 'image', src: 'https://picsum.photos/800/600?random=1', title: 'Signal Alpha', code: 'SIG-A' },
+  { type: 'gif', src: 'https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif', title: 'Flux Perturbé', code: 'FLX-P' },
+  { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', title: 'Stream Omega', code: 'STR-O' },
+  { type: 'image', src: 'https://picsum.photos/800/600?random=2', title: 'Node Wallonia', code: 'NOD-W' },
+  { type: 'iframe', src: 'https://en.wikipedia.org/wiki/Glitch_art', title: 'Archive Externe', code: 'ARC-E' },
+  { type: 'gif', src: 'https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif', title: 'Static Feed', code: 'STC-F' },
+];
+
+// ========== MESSAGES SUBLIMINAUX ==========
+const subliminalMessages = [
+  'LES RATS OBSERVENT',
+  'PANGOLIENS WOKE',
+  'INTERVENTION MAJORÉE',
+  'BUNKER W-7',
+  'NYXO CONTRÔLE',
+  'PHASE 3 ACTIVE',
+  'ILS SAVENT',
+  'WALLONIE LIBRE',
+  'MONS 2027',
+  '50.4657°N',
+];
+
+// ========== ÉTAT GLOBAL ==========
+let currentIndex = 0;
+let isReady = false;
+let loadedMedia = {};
+let corruptionLevel = 0;
+let konamiProgress = 0;
+let secretTyped = '';
+let brandClicks = 0;
+let footerClicks = 0;
+let idleTime = 0;
+let terminalHistory = [];
+let terminalHistoryIndex = -1;
+
+const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+const secretCodes = {
+  'RATTUS': () => revealRattus(),
+  'NYXO': () => triggerMassiveGlitch(),
+  'PANGOLIN': () => showPangolinMessage(),
+  'RAT': () => incrementCorruption(),
+  'WALLONIE': () => showCoordinates(),
+  '4657': () => playSecretSound(),
+};
+
+// ========== PRÉCHARGEMENT ==========
+function preloadMedia(item, index) {
+  return new Promise((resolve) => {
+    const type = item.type === 'gif' ? 'image' : item.type;
+    if (type === 'image') {
+      const img = new Image();
+      img.onload = () => { loadedMedia[index] = true; resolve(true); };
+      img.onerror = () => resolve(false);
+      img.src = item.src;
+    } else if (type === 'video') {
+      const video = document.createElement('video');
+      video.muted = true;
+      video.preload = 'auto';
+      video.oncanplaythrough = () => { loadedMedia[index] = true; resolve(true); };
+      video.onerror = () => resolve(false);
+      video.src = item.src;
+      video.load();
+    } else {
+      loadedMedia[index] = true;
+      resolve(true);
+    }
+  });
+}
+
+async function preloadAll() {
+  const loader = document.getElementById('screenLoader');
+  const loaderText = document.getElementById('loaderText');
+  const loaderBar = document.getElementById('loaderBar');
+  const loaderSecret = document.getElementById('loaderSecret');
+  const status = document.getElementById('screenStatus');
+  
+  const messages = [
+    'Connexion aux serveurs NYXO...',
+    'Authentification protocole...',
+    'Chargement des flux...',
+    'Synchronisation temporelle...',
+    'Vérification intégrité...',
+    'Initialisation interface...',
+  ];
+  
+  let loaded = 0;
+  const total = mediaItems.length;
+  
+  for (let i = 0; i < total; i++) {
+    loaderText.textContent = messages[i % messages.length];
+    
+    // Flash secret aléatoire
+    if (Math.random() > 0.7) {
+      loaderSecret.textContent = subliminalMessages[Math.floor(Math.random() * subliminalMessages.length)];
+      loaderSecret.classList.add('visible');
+      setTimeout(() => loaderSecret.classList.remove('visible'), 100);
+    }
+    
+    await preloadMedia(mediaItems[i], i);
+    loaded++;
+    loaderBar.style.width = (loaded / total * 100) + '%';
+    await new Promise(r => setTimeout(r, 300));
+  }
+  
+  loaderText.textContent = 'Flux synchronisés';
+  await new Promise(r => setTimeout(r, 600));
+  
+  loader.classList.add('hidden');
+  status.textContent = `${mediaItems[0].code} | LOCK`;
+  isReady = true;
+  
+  showMedia(0);
+  startSystems();
+  
+  // Message console
+  console.log('%c◈ NYXO SYSTEM ONLINE ◈', 'color:#7cffc4;font-size:20px;font-weight:bold');
+  console.log('%cNiveau d\'accès: PUBLIC', 'color:#a6aac8');
+  console.log('%c[!] Des données sensibles ont été détectées dans ce fichier.', 'color:#ff4757');
+  console.log('%cTapez window.NYXO.help() pour plus d\'informations.', 'color:#cbb7ff');
+}
+
+// ========== AFFICHAGE MÉDIA ==========
+function renderMedia(item, forModal = false) {
+  const type = item.type === 'gif' ? 'image' : item.type;
+  if (type === 'image') return `<img src="${item.src}" alt="${item.title}">`;
+  if (type === 'video') return `<video src="${item.src}" ${forModal ? 'controls' : 'autoplay muted loop'} playsinline></video>`;
+  if (type === 'iframe') return `<iframe src="${item.src}" title="${item.title}"></iframe>`;
+  return '';
+}
+
+function showMedia(index) {
+  if (!isReady) return;
+  currentIndex = index;
+  const item = mediaItems[index];
+  const container = document.getElementById('mediaContainer');
+  
+  container.classList.remove('loaded');
+  setTimeout(() => {
+    container.innerHTML = renderMedia(item);
+    container.classList.add('loaded');
+  }, 50);
+  
+  document.querySelector('#mediaLabel .title').textContent = item.title;
+  document.querySelector('#mediaLabel .type').textContent = `[${item.type.toUpperCase()}]`;
+  document.getElementById('screenStatus').textContent = `${item.code} | LOCK`;
+  
+  document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+  document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+}
+
+// ========== EFFETS GLITCH ==========
+function triggerGlitch(intensity = 1) {
+  if (!isReady) return;
+  const container = document.getElementById('mediaContainer');
+  const line = document.getElementById('glitchLine');
+  const rgb = document.getElementById('rgbSplit');
+  const led = document.getElementById('ledRed');
+  const amber = document.getElementById('ledAmber');
+  const status = document.getElementById('screenStatus');
+  
+  container.classList.add('glitching');
+  line.style.opacity = '1';
+  line.style.top = Math.random() * 80 + '%';
+  rgb.classList.add('active');
+  led.classList.add('active');
+  if (intensity > 0.5) amber.classList.add('active');
+  status.textContent = `${mediaItems[currentIndex].code} | SYNC...`;
+  
+  // Subliminal aléatoire
+  if (Math.random() > 0.6 && intensity > 0.3) {
+    flashSubliminal(subliminalMessages[Math.floor(Math.random() * subliminalMessages.length)]);
+  }
+  
+  setTimeout(() => {
+    container.classList.remove('glitching');
+    line.style.opacity = '0';
+    rgb.classList.remove('active');
+    led.classList.remove('active');
+    amber.classList.remove('active');
+    status.textContent = `${mediaItems[currentIndex].code} | LOCK`;
+  }, 150 * intensity);
+}
+
+function triggerMassiveGlitch() {
+  const screen = document.getElementById('screenContainer');
+  screen.classList.add('corrupted');
+  
+  for (let i = 0; i < 10; i++) {
+    setTimeout(() => {
+      triggerGlitch(1);
+      flashSubliminal(subliminalMessages[i % subliminalMessages.length]);
+    }, i * 100);
+  }
+  
+  setTimeout(() => screen.classList.remove('corrupted'), 1500);
+}
+
+function flashSubliminal(msg) {
+  const el = document.getElementById('subliminal');
+  el.textContent = msg;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 100);
+}
+
+// ========== SYSTÈMES ==========
+function startSystems() {
+  // Rotation auto
+  setInterval(() => {
+    if (!document.hidden && isReady) {
+      triggerGlitch(0.8);
+      setTimeout(() => showMedia((currentIndex + 1) % mediaItems.length), 200);
+    }
+  }, 5000);
+  
+  // Glitches aléatoires
+  setInterval(() => {
+    if (Math.random() > 0.75) triggerGlitch(Math.random());
+  }, 1500);
+  
+  // Idle tracking
+  setInterval(() => {
+    idleTime++;
+    if (idleTime > 60 && corruptionLevel < 2) incrementCorruption();
+    if (idleTime > 120 && corruptionLevel < 3) incrementCorruption();
+  }, 1000);
+  
+  document.addEventListener('mousemove', () => idleTime = 0);
+  document.addEventListener('keydown', () => idleTime = 0);
+}
+
+// ========== CORRUPTION ==========
+function incrementCorruption() {
+  if (corruptionLevel < 4) {
+    corruptionLevel++;
+    document.documentElement.dataset.corruption = corruptionLevel;
+    flashSubliminal(`CORRUPTION: NIVEAU ${corruptionLevel}`);
+    console.log(`%c[ALERTE] Niveau de corruption: ${corruptionLevel}/4`, 'color:#ff4757');
+  }
+}
+
+// ========== KONAMI CODE ==========
+document.addEventListener('keydown', (e) => {
+  // Konami
+  if (e.code === konamiCode[konamiProgress]) {
+    konamiProgress++;
+    if (konamiProgress === konamiCode.length) {
+      konamiProgress = 0;
+      activateKonami();
+    }
+  } else if (e.code === konamiCode[0]) {
+    konamiProgress = 1;
+  } else {
+    konamiProgress = 0;
+  }
+  
+  // Secret typing
+  if (e.key.length === 1) {
+    secretTyped += e.key.toUpperCase();
+    if (secretTyped.length > 10) secretTyped = secretTyped.slice(-10);
+    
+    for (const [code, action] of Object.entries(secretCodes)) {
+      if (secretTyped.endsWith(code)) {
+        action();
+        secretTyped = '';
+        break;
+      }
+    }
+  }
+  
+  // Escape
+  if (e.key === 'Escape') {
+    closeModal();
+    closeTerminal();
+  }
+});
+
+function activateKonami() {
+  console.log('%c◈ KONAMI CODE ACTIVÉ ◈', 'color:#7cffc4;font-size:16px');
+  flashSubliminal('ACCÈS ACCORDÉ');
+  triggerMassiveGlitch();
+  
+  setTimeout(() => {
+    openTerminal();
+    terminalPrint('='.repeat(50), 'info');
+    terminalPrint('  PROTOCOLE RATTUS — TERMINAL D\'ACCÈS', 'secret');
+    terminalPrint('='.repeat(50), 'info');
+    terminalPrint('');
+    terminalPrint('Bienvenue, initié.');
+    terminalPrint('Vous avez prouvé votre valeur en entrant le code sacré.');
+    terminalPrint('');
+    terminalPrint('Tapez HELP pour la liste des commandes.', 'info');
+    terminalPrint('');
+  }, 1000);
+  
+  document.getElementById('rattusSection').classList.add('revealed');
+}
+
+// ========== TERMINAL ==========
+function openTerminal() {
+  document.getElementById('terminal').classList.add('open');
+  document.getElementById('terminalInput').focus();
+}
+
+function closeTerminal() {
+  document.getElementById('terminal').classList.remove('open');
+}
+
+function terminalPrint(text, className = '') {
+  const output = document.getElementById('terminalOutput');
+  const line = document.createElement('div');
+  line.textContent = text;
+  if (className) line.className = className;
+  output.appendChild(line);
+  output.scrollTop = output.scrollHeight;
+}
+
+const terminalCommands = {
+  help: () => {
+    terminalPrint('');
+    terminalPrint('=== COMMANDES DISPONIBLES ===', 'info');
+    terminalPrint('HELP     - Affiche cette aide');
+    terminalPrint('STATUS   - État du système');
+    terminalPrint('RATTUS   - Informations sur le protocole');
+    terminalPrint('PANGOLIN - ???');
+    terminalPrint('COORDS   - Coordonnées du Bunker W-7');
+    terminalPrint('CORRUPT  - Augmente la corruption');
+    terminalPrint('RESET    - Réinitialise le système');
+    terminalPrint('CLEAR    - Efface le terminal');
+    terminalPrint('LORE     - Fragment d\'archive');
+    terminalPrint('WALLONIE - Rapport d\'infiltration');
+    terminalPrint('');
+  },
+  status: () => {
+    terminalPrint('');
+    terminalPrint('=== ÉTAT DU SYSTÈME ===', 'info');
+    terminalPrint(`Corruption: ${corruptionLevel}/4`);
+    terminalPrint(`Médias chargés: ${Object.keys(loadedMedia).length}/${mediaItems.length}`);
+    terminalPrint(`Index courant: ${currentIndex}`);
+    terminalPrint(`Temps idle: ${idleTime}s`);
+    terminalPrint(`Build: NX-7734-WB`);
+    terminalPrint('');
+  },
+  rattus: () => {
+    terminalPrint('');
+    terminalPrint('=== PROTOCOLE RATTUS ===', 'secret');
+    terminalPrint('Phase actuelle: 3 (sur 7)');
+    terminalPrint('');
+    terminalPrint('Le Protocole RATTUS vise à former une élite');
+    terminalPrint('de rats génétiquement modifiés pour des missions');
+    terminalPrint('spatiales. Financé par l\'intervention majorée,');
+    terminalPrint('le projet opère depuis le Bunker W-7.');
+    terminalPrint('');
+    terminalPrint('Les Pangoliens supervisent les opérations.', 'warning');
+    terminalPrint('');
+  },
+  pangolin: () => {
+    terminalPrint('');
+    terminalPrint('=== DOSSIER: PANGOLIENS ===', 'warning');
+    terminalPrint('Classification: OMEGA');
+    terminalPrint('');
+    terminalPrint('Cousins éloignés des Reptiliens.');
+    terminalPrint('Idéologie: Woke extrême.');
+    terminalPrint('Objectif: Contrôle des infrastructures WB.');
+    terminalPrint('');
+    terminalPrint('Caractéristiques:');
+    terminalPrint('- Écailles iridescentes');
+    terminalPrint('- Empathie surdéveloppée');
+    terminalPrint('- Allergiques au capitalisme');
+    terminalPrint('');
+    terminalPrint('[DONNÉES PARTIELLEMENT EXPURGÉES]', 'error');
+    terminalPrint('');
+  },
+  coords: () => {
+    terminalPrint('');
+    terminalPrint('=== BUNKER W-7 ===', 'secret');
+    terminalPrint('Latitude:  50.4657° N');
+    terminalPrint('Longitude: 4.8697° E');
+    terminalPrint('Profondeur: -47m');
+    terminalPrint('');
+    terminalPrint('Accès: Porte 7, code 4657-RATTUS', 'warning');
+    terminalPrint('');
+  },
+  corrupt: () => {
+    incrementCorruption();
+    terminalPrint(`Corruption augmentée: ${corruptionLevel}/4`, 'error');
+  },
+  reset: () => {
+    corruptionLevel = 0;
+    document.documentElement.dataset.corruption = 0;
+    terminalPrint('Système réinitialisé.', 'info');
+  },
+  clear: () => {
+    document.getElementById('terminalOutput').innerHTML = '';
+  },
+  lore: () => {
+    const fragments = [
+      'Fragment 1: "Tout a commencé à Mons, dans les caves oubliées..."',
+      'Fragment 3: "L\'intervention majorée cache plus qu\'une aide sociale."',
+      'Fragment 7: "Les rats ne mentent jamais. Ils courent vers la lumière."',
+      'Fragment 12: "Les Pangoliens sont arrivés en 2019. Coïncidence ?"',
+      'Fragment 19: "Le Bunker W-7 existait avant la Belgique elle-même."',
+      'Fragment 23: "NYXO n\'est pas un outil. C\'est un éveil."',
+      'Fragment 31: "Wallonie-Bruxelles sera libre. Les rats y veilleront."',
+    ];
+    terminalPrint('');
+    terminalPrint(fragments[Math.floor(Math.random() * fragments.length)], 'secret');
+    terminalPrint('');
+  },
+  wallonie: () => {
+    terminalPrint('');
+    terminalPrint('=== RAPPORT D\'INFILTRATION ===', 'warning');
+    terminalPrint('Région: Wallonie-Bruxelles');
+    terminalPrint('');
+    terminalPrint('Infrastructures ciblées:');
+    terminalPrint('- Réseau SNCB (contrôle: 34%)');
+    terminalPrint('- Centrales TEC (contrôle: 67%)');
+    terminalPrint('- Administrations communales (contrôle: 12%)');
+    terminalPrint('- Friteries stratégiques (contrôle: 89%)', 'secret');
+    terminalPrint('');
+    terminalPrint('Phase 3 en cours. Objectif 2027.', 'error');
+    terminalPrint('');
+  },
+};
+
+document.getElementById('terminalInput').addEventListener('keydown', (e) => {
+  const input = e.target;
+  
+  if (e.key === 'Enter') {
+    const cmd = input.value.trim().toLowerCase();
+    terminalPrint(`NYXO://> ${input.value}`, 'info');
+    
+    if (terminalCommands[cmd]) {
+      terminalCommands[cmd]();
+    } else if (cmd) {
+      terminalPrint(`Commande inconnue: ${cmd}`, 'error');
+      terminalPrint('Tapez HELP pour la liste des commandes.');
+    }
+    
+    terminalHistory.push(input.value);
+    terminalHistoryIndex = terminalHistory.length;
+    input.value = '';
+  }
+  
+  if (e.key === 'ArrowUp') {
+    if (terminalHistoryIndex > 0) {
+      terminalHistoryIndex--;
+      input.value = terminalHistory[terminalHistoryIndex];
+    }
+  }
+  
+  if (e.key === 'ArrowDown') {
+    if (terminalHistoryIndex < terminalHistory.length - 1) {
+      terminalHistoryIndex++;
+      input.value = terminalHistory[terminalHistoryIndex];
+    } else {
+      terminalHistoryIndex = terminalHistory.length;
+      input.value = '';
+    }
+  }
+});
+
+// ========== EASTER EGGS ==========
+function revealRattus() {
+  document.getElementById('rattusSection').classList.add('revealed');
+  flashSubliminal('RATTUS ACTIVÉ');
+  triggerMassiveGlitch();
+}
+
+function showPangolinMessage() {
+  alert('🦔 Les Pangoliens vous observent. Votre empathie a été notée. 🦔');
+  incrementCorruption();
+}
+
+function showCoordinates() {
+  flashSubliminal('50.4657°N 4.8697°E');
+  console.log('%cBunker W-7: 50.4657° N, 4.8697° E', 'color:#ff6b81;font-size:14px');
+}
+
+function playSecretSound() {
+  flashSubliminal('CODE 4657 ACCEPTÉ');
+  document.getElementById('ledAmber').classList.add('active');
+  setTimeout(() => document.getElementById('ledAmber').classList.remove('active'), 2000);
+}
+
+let brandClicks_count = 0;
+function brandClick() {
+  brandClicks_count++;
+  if (brandClicks_count === 7) {
+    brandClicks_count = 0;
+    openTerminal();
+    terminalPrint('Accès alternatif détecté...', 'warning');
+  }
+}
+
+let footerClicks_count = 0;
+function footerClick() {
+  footerClicks_count++;
+  if (footerClicks_count === 5) {
+    footerClicks_count = 0;
+    incrementCorruption();
+    flashSubliminal('VOUS CHERCHEZ TROP');
+  }
+}
+
+// ========== CONTRÔLES STANDARD ==========
+function toggleFold() {
+  document.getElementById('screenContainer').classList.toggle('folded');
+}
+
+function openModal() {
+  if (!isReady) return;
+  const item = mediaItems[currentIndex];
+  document.getElementById('modalTitle').textContent = `${item.title} [${item.code}]`;
+  document.getElementById('modalBody').innerHTML = renderMedia(item, true);
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modalBody').innerHTML = '';
+}
+
+// ========== INIT ==========
+function init() {
+  const nav = document.getElementById('screenNav');
+  const thumbs = document.getElementById('thumbnails');
+  
+  mediaItems.forEach((item, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.onclick = (e) => { e.stopPropagation(); showMedia(i); };
+    nav.appendChild(dot);
+    
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    thumb.onclick = () => { showMedia(i); openModal(); };
+    
+    if (item.type === 'image' || item.type === 'gif') {
+      thumb.innerHTML = `<img src="${item.src}" alt=""><div class="overlay">${item.code}</div>`;
+    } else if (item.type === 'video') {
+      thumb.innerHTML = `▶<div class="overlay">${item.code}</div>`;
+    } else {
+      thumb.innerHTML = `HTML<div class="overlay">${item.code}</div>`;
+      thumb.style.color = '#cbb7ff';
+    }
+    thumbs.appendChild(thumb);
+  });
+  
+  preloadAll();
+}
+
+// API cachée
+window.NYXO = {
+  help: () => console.log('%cCommandes: NYXO.status(), NYXO.corrupt(), NYXO.reveal(), NYXO.terminal()', 'color:#7cffc4'),
+  status: () => console.log(`Corruption: ${corruptionLevel}/4 | Ready: ${isReady}`),
+  corrupt: () => incrementCorruption(),
+  reveal: () => revealRattus(),
+  terminal: () => openTerminal(),
+  pangolin: () => console.log('%c🦔 ILS SONT PARMI NOUS 🦔', 'color:#ff6b81;font-size:20px'),
+};
+
+init();
+</script>
+</body>
+</html>
