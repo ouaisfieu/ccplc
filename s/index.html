@@ -485,7 +485,7 @@
         id: 'echo',
         name: 'Générateur',
         description: `
-          <p><span class="highlight">Générateur de Fiches</span></p>
+          <p><span class="highlight">Générateur de Notes</span></p>
           <div class="custom-panel">
             <div class="custom-section">
               <label>🎯 Public cible</label>
@@ -645,7 +645,7 @@
         ${cfg.audience === 'enfant' ? `Tu veux tout savoir sur <strong>${subject}</strong> ? Tu es au bon endroit ! On va t'expliquer tout ça de façon simple et amusante. 🚀` :
           cfg.audience === 'ado' ? `<strong>${subject}</strong>, c'est un sujet qui fait beaucoup parler. Mais c'est quoi exactement ? On t'explique tout, sans blabla inutile.` :
           cfg.audience === 'expert' ? `Ce dossier propose une analyse approfondie de <strong>${subject}</strong>, avec des données sourcées et une bibliographie complète.` :
-          `<strong>${subject}</strong> est un sujet essentiel à comprendre. Cette fiche vous propose une synthèse claire, basée sur des sources officielles et vérifiées.`}
+          `<strong>${subject}</strong> est un sujet essentiel à comprendre. Cette note vous propose une synthèse claire, basée sur des sources officielles et vérifiées.`}
       </p>
       ${cfg.context ? `<div class="context-box"><strong>📌 Contexte :</strong> ${cfg.context}</div>` : ''}
       <div class="meta-info">
@@ -704,7 +704,7 @@
         <div class="stat-card"><div class="stat-number">—</div><div class="stat-label">Projection future</div><div class="stat-source">Source à compléter</div></div>
         ${cfg.detail === 'complet' || cfg.detail === 'expert' ? `<div class="stat-card"><div class="stat-number">—</div><div class="stat-label">Comparaison internationale</div><div class="stat-source">Source à compléter</div></div>` : ''}
       </div>
-      <p class="edit-hint">💡 Éditez cette fiche pour ajouter les vrais chiffres !</p>
+      <p class="edit-hint">💡 Éditez cette note pour ajouter les vrais chiffres !</p>
     </section>`;
       }
       
@@ -944,7 +944,7 @@
       document.getElementById('quizOptions').style.display = 'none';
       document.getElementById('quizResult').style.display = 'block';
       document.getElementById('quizScore').textContent = score + '/' + quizData.length;
-      document.getElementById('quizMessage').textContent = score === quizData.length ? '🎉 Parfait !' : score >= 2 ? '👍 Bien joué !' : '📚 Relisez la fiche';
+      document.getElementById('quizMessage').textContent = score === quizData.length ? '🎉 Parfait !' : score >= 2 ? '👍 Bien joué !' : '📚 Relisez la note';
     }
     function resetQuiz() {
       currentQuestion = 0; score = 0;
