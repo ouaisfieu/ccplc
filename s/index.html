@@ -440,7 +440,7 @@
         id: 'accueil',
         name: 'Accueil',
         description: `
-          <p><span class="highlight">PéTAL OS</span> — Plateforme Éducative.</p>
+          <p><span class="highlight">PéTAL OS</span> . — /?\ UHNB /?\ — .</p>
           <p>Version 329.2 — Sources officielles.</p>
         `,
         render: () => `
@@ -550,7 +550,7 @@
         <div class="mod-echo">
           <div class="echo-input-area">
             <input type="text" id="echoInput" placeholder="Entrez un sujet à explorer..." onkeypress="handleEchoInput(event)" autocomplete="off">
-            <div class="hint">Appuyez sur Entrée pour générer une fiche éducative</div>
+            <div class="hint">Appuyez sur Entrée pour générer une note</div>
           </div>
           <div class="echo-cards" id="echoCards">${cardsHtml}</div>
         </div>
@@ -806,8 +806,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${subject} — Fiche Éducative</title>
-  <meta name="description" content="Fiche éducative complète sur ${subject} avec sources officielles">
+  <title>${subject} — Note</title>
+  <meta name="description" content="Note sur ${subject} avec sources officielles">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -893,7 +893,7 @@
 </head>
 <body>
   <header>
-    <div class="badge">📚 Fiche Éducative — PéTAL OS v329.2</div>
+    <div class="badge">📚 PéTAL OS v329.2</div>
     <h1>${subject}</h1>
     <p class="subtitle">${aud.intro} ce sujet avec un contenu ${tone.style}</p>
   </header>
