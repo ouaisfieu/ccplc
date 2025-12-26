@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[CLASSIFIÉ] SCP-329.02 Database</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 0, 0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 3px
+                );
+            pointer-events: none;
+            z-index: 1;
+            animation: scanlines 8s linear infinite;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .glitch-text {
+            animation: glitch 0.3s infinite;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            background: rgba(0, 20, 0, 0.9);
+            border: 3px solid #00ff00;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+            position: relative;
+        }
+
+        .classified-stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: white;
+            padding: 0.5rem 1rem;
+            transform: rotate(15deg);
+            font-weight: bold;
+            border: 3px solid #ffffff;
+            font-size: 1.2rem;
+            font-family: 'Special Elite', cursive;
+        }
+
+        .header h1 {
+            font-family: 'Special Elite', cursive;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            color: #00cc00;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-top: 1rem;
+        }
+
+        .warning-banner {
+            background: #330000;
+            border: 2px solid #ff0000;
+            color: #ff4444;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(0, 50, 0, 0.8);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        .filter-btn.active {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 20, 0, 0.9);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 0.75rem;
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+        }
+
+        .search-input::placeholder {
+            color: #006600;
+        }
+
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .job-card {
+            background: rgba(0, 20, 0, 0.95);
+            border: 2px solid #00ff00;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .job-id {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+            font-family: 'Special Elite', cursive;
+        }
+
+        .job-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #00ffff;
+            font-family: 'Special Elite', cursive;
+        }
+
+        .job-entity {
+            color: #ffff00;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .job-entity:hover {
+            text-decoration: underline;
+        }
+
+        .job-description {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #00cc00;
+        }
+
+        .job-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(0, 100, 0, 0.5);
+            border: 1px solid #00ff00;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .tag-danger {
+            border-color: #ff0000;
+            color: #ff4444;
+        }
+
+        .tag-warning {
+            border-color: #ffaa00;
+            color: #ffaa00;
+        }
+
+        .job-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 100, 0, 0.8);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .job-link:hover {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: #006600;
+            font-size: 0.85rem;
+            padding: 2rem;
+            border-top: 2px solid #00ff00;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 30, 0, 0.9);
+            border: 2px solid #00ff00;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .stat-label {
+            color: #00ff00;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .job-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="classified-stamp">TOP SECRET</div>
+            <h1 class="glitch-text">SCP-329.02</h1>
+            <p>SYSTÈME DE CONTRÔLE DE LA PRÉCARITÉ</p>
+            <p class="subtitle">BASE DE DONNÉES D'EMPLOIS FICTIFS MENANT À DES ENTITÉS RÉELLES</p>
+            <p class="subtitle">NIVEAU D'ACCRÉDITATION : ██████ | DERNIÈRE MAJ : <?php echo date('d/m/Y H:i'); ?></p>
+        </div>
+
+        <div class="warning-banner">
+            ⚠️ ATTENTION : CES OFFRES N'EXISTENT PAS MAIS LES INSTITUTIONS SONT BIEN RÉELLES ⚠️
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-jobs">0</div>
+                <div class="stat-label">Offres Actives</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="entities-count">0</div>
+                <div class="stat-label">Entités Répertoriées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Candidats Potentiels</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="filter-btn active" data-filter="all">TOUTES</button>
+            <button class="filter-btn" data-filter="onem">ONEM</button>
+            <button class="filter-btn" data-filter="cpas">CPAS</button>
+            <button class="filter-btn" data-filter="inami">INAMI</button>
+            <button class="filter-btn" data-filter="actiris">ACTIRIS</button>
+            <button class="filter-btn" data-filter="absurde">ABSURDE</button>
+            <div class="search-box">
+                <input type="text" class="search-input" id="search" placeholder="[RECHERCHER DANS LA BASE...]">
+            </div>
+        </div>
+
+        <div class="job-grid" id="job-grid"></div>
+
+        <div class="footer">
+            <p>SCP-329.02 © 2025 | DOCUMENT NON OFFICIEL | PROJET ARTISTIQUE CRITIQUE</p>
+            <p>Les institutions mentionnées sont réelles. Les offres sont fictives et satiriques.</p>
+        </div>
+    </div>
+
+    <script>
+        const jobs = [
+            {
+                id: "SCP-329.02-001",
+                title: "Contrôleur de Motivation Précarisée",
+                entity: "ONEM - Office National de l'Emploi",
+                entityUrl: "https://www.onem.be",
+                category: "onem",
+                description: "Nous recherchons un professionnel capable de mesurer le désespoir des demandeurs d'emploi et de le convertir en statistiques optimistes. Compétences requises : cynisme institutionnel, maîtrise d'Excel, insensibilité émotionnelle.",
+                tags: ["CDI Précaire", "Salaire Variable", "Absurdité Garantie"],
+                danger: true
+            },
+            {
+                id: "SCP-329.02-002",
+                title: "Architecte de Files d'Attente",
+                entity: "CPAS de Bruxelles",
+                entityUrl: "https://cpas-molenbeek.be/",
+                category: "cpas",
+                description: "Votre mission : concevoir des systèmes de files d'attente qui maximisent l'humiliation administrative. Exigences : diplôme en psychologie sociale inversée, absence totale d'empathie.",
+                tags: ["Temps Partiel", "Kafkaïen", "Bonus Cruauté"],
+                danger: true
+            },
+            {
+                id: "SCP-329.02-003",
+                title: "Gestionnaire de Dossiers Incomplets",
+                entity: "INAMI - Institut National d'Assurance Maladie-Invalidité",
+                entityUrl: "https://www.inami.fgov.be",
+                category: "inami",
+                description: "Talent recherché : capacité à perdre des documents essentiels au moment critique. Vous serez responsable de créer des boucles bureaucratiques infinies. Formation fournie en art du refus créatif.",
+                tags: ["Statut Fantôme", "Télétravail Improbable", "Formation Continue"],
+                danger: false
+            },
+            {
+                id: "SCP-329.02-004",
+                title: "Spécialiste en Convocations Contradictoires",
+                entity: "Actiris - Service Public Bruxellois de l'Emploi",
+                entityUrl: "https://www.actiris.be",
+                category: "actiris",
+                description: "Vous adorerez envoyer des convocations à 8h du matin pour des rendez-vous qui n'auront jamais lieu. Compétences : manipulation temporelle, indifférence aux conséquences humaines.",
+                tags: ["Horaires Impossibles", "Mission Déstabilisante", "Impact Psychologique"],
+                danger: true
+            },
+            {
+                id: "SCP-329.02-005",
+                title: "Analyste en Découragement Systémique",
+                entity: "FOREM - Service Public de l'Emploi et de la Formation",
+                entityUrl: "https://www.forem.be",
+                category: "onem",
+                description: "Nous cherchons quelqu'un pour calculer le point de rupture exact où un chercheur d'emploi abandonne définitivement. Maîtrise des statistiques de désespoir requise.",
+                tags: ["CDI", "Avantages Moraux Négatifs", "Prime d'Absurdité"],
+                danger: false
+            },
+            {
+                id: "SCP-329.02-006",
+                title: "Coordinateur de Formations Inutiles",
+                entity: "Bruxelles Formation",
+                entityUrl: "https://www.bruxellesformation.brussels",
+                category: "actiris",
+                description: "Créez des formations sans débouchés, organisez des sessions de PowerPoint interminables. Votre objectif : maintenir l'illusion de l'employabilité tout en garantissant l'échec.",
+                tags: ["Mission Existentielle", "Sisyphe Approuvé", "Éternel Recommencement"],
+                danger: false
+            },
+            {
+                id: "SCP-329.02-007",
+                title: "Expert en Sanctions Administrative Creative",
+                entity: "ONEM - Département Contrôle",
+                entityUrl: "https://www.onem.be",
+                category: "onem",
+                description: "Inventez de nouvelles raisons de sanctionner les allocataires. Bonus pour chaque règle contradictoire créée. Exigence : doctorat en absurdité réglementaire.",
+                tags: ["Pouvoir Discrétionnaire", "Créativité Punitive", "Impact Direct"],
+                danger: true
+            },
+            {
+                id: "SCP-329.02-008",
+                title: "Conservateur du Musée des Promesses Non Tenues",
+                entity: "SPF Emploi, Travail et Concertation sociale",
+                entityUrl: "https://emploi.belgique.be",
+                category: "absurde",
+                description: "Archivez toutes les promesses politiques concernant l'emploi depuis 1945. Cataloguez leur non-réalisation. Présentez-les comme des œuvres d'art conceptuel.",
+                tags: ["Poste Ironique", "Mémoire Institutionnelle", "Salaire Symbolique"],
+                danger: false
+            },
+            {
+                id: "SCP-329.02-009",
+                title: "Technicien en Obstacles Bureaucratiques",
+                entity: "CPAS - Service Insertion Socioprofessionnelle",
+                entityUrl: "https://www.mi-is.be",
+                category: "cpas",
+                description: "Concevez des parcours d'insertion impossibles. Chaque étape doit annuler la précédente. Vous êtes un artiste du labyrinthe administratif.",
+                tags: ["Projet Kafkaïen", "Temps Plein", "Gratification Sadique"],
+                danger: true
+            },
+            {
+                id: "SCP-329.02-010",
+                title: "Philosophe de la Précarité Perpétuelle",
+                entity: "Observatoire Bruxellois de l'Emploi",
+                entityUrl: "https://www.actiris.be",
+                category: "actiris",
+                description: "Rédigez des rapports démontrant que la précarité est un choix personnel. Transformez les échecs systémiques en responsabilités individuelles. PhD en rhétorique néolibérale exigé.",
+                tags: ["Poste Théorique", "Publication Mensongère", "Impact Idéologique"],
+                danger: false
+            },
+            {
+                id: "SCP-329.02-011",
+                title: "Développeur d'Applications Hostiles",
+                entity: "ONEM Digital",
+                entityUrl: "https://www.onem.be",
+                category: "onem",
+                description: "Créez des interfaces utilisateur volontairement contre-intuitives. Chaque clic doit être une punition. Les bugs sont des features. UX cauchemardesque obligatoire.",
+                tags: ["IT Malveillant", "Design Hostile", "Télétravail OK"],
+                danger: false
+            },
+            {
+                id: "SCP-329.02-012",
+                title: "Gestionnaire de Pénuries Organisées",
+                entity: "SPF Sécurité Sociale",
+                entityUrl: "https://socialsecurity.belgium.be",
+                category: "absurde",
+                description: "Assurez-vous qu'il manque toujours un formulaire, un tampon, une signature. Maintenez l'illusion de l'accessibilité tout en garantissant l'inaccessibilité.",
+                tags: ["Stratégie Perverse", "Résultats Garantis", "Éthique Discutable"],
+                danger: true
+            }
+        ];
+
+        const jobGrid = document.getElementById('job-grid');
+        const searchInput = document.getElementById('search');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function renderJobs() {
+            const filtered = jobs.filter(job => {
+                const matchesFilter = currentFilter === 'all' || job.category === currentFilter;
+                const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     job.entity.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     job.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            jobGrid.innerHTML = filtered.map(job => `
+                <div class="job-card" data-category="${job.category}">
+                    <div class="job-id">${job.id}</div>
+                    <div class="job-title">${job.title}</div>
+                    <a href="${job.entityUrl}" class="job-entity" target="_blank">
+                        🔗 ${job.entity}
+                    </a>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        ${job.tags.map(tag => `
+                            <span class="tag ${job.danger ? 'tag-danger' : ''}">${tag}</span>
+                        `).join('')}
+                    </div>
+                    <a href="${job.entityUrl}" class="job-link" target="_blank">
+                        [ACCÉDER À L'ENTITÉ RÉELLE] →
+                    </a>
+                </div>
+            `).join('');
+
+            document.getElementById('total-jobs').textContent = filtered.length;
+            document.getElementById('entities-count').textContent = new Set(jobs.map(j => j.entity)).size;
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderJobs();
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderJobs();
+        });
+
+        renderJobs();
+    </script>
+</body>
+</html>
