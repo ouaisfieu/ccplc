@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEXUS-Ω // CLASSIFIED</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-void: #0a0a0f;
+      --bg-panel: #0d0d14;
+      --bg-card: #12121a;
+      --border-dim: #1a1a2e;
+      --border-glow: #00ff88;
+      --text-primary: #e0e0e0;
+      --text-dim: #666680;
+      --text-glow: #00ff88;
+      --accent-green: #00ff88;
+      --accent-cyan: #00d4ff;
+      --accent-magenta: #ff00aa;
+      --accent-orange: #ff6600;
+      --accent-red: #ff3344;
+      --warning: #ffaa00;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); filter: hue-rotate(0deg); }
+      92% { transform: translate(-2px, 1px); filter: hue-rotate(90deg); }
+      94% { transform: translate(2px, -1px); filter: hue-rotate(-90deg); }
+      96% { transform: translate(-1px, 2px); filter: hue-rotate(180deg); }
+      98% { transform: translate(1px, -2px); filter: hue-rotate(-180deg); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--accent-green), 0 0 20px var(--accent-green); }
+      50% { opacity: 0.8; text-shadow: 0 0 5px var(--accent-green), 0 0 10px var(--accent-green); }
+    }
+
+    @keyframes data-stream {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 1000px; }
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+
+    @keyframes rotate-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-void);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(transparent, rgba(0, 255, 136, 0.1), transparent);
+      z-index: 9999;
+      pointer-events: none;
+      animation: scanline 3s linear infinite;
+    }
+
+    /* Grid overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER - CLASSIFIED
+    ═══════════════════════════════════════════════════════════ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-void) 100%);
+      border-bottom: 1px solid var(--border-dim);
+      position: relative;
+      z-index: 100;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: conic-gradient(from 0deg, var(--accent-green), var(--accent-cyan), var(--accent-magenta), var(--accent-green));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: rotate-slow 10s linear infinite;
+      position: relative;
+    }
+
+    .logo-icon::before {
+      content: 'Ω';
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--bg-void);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent-green);
+      letter-spacing: 3px;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .logo-sub {
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+
+    .clearance {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid var(--accent-red);
+      border-radius: 4px;
+    }
+
+    .clearance-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    .clearance-text {
+      font-size: 10px;
+      color: var(--accent-red);
+      letter-spacing: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════════════════════ */
+    .main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SIDEBAR - DIMENSIONAL INDEX
+    ═══════════════════════════════════════════════════════════ */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-dim);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .sidebar-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+
+    .dimension-selector {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dim-btn {
+      flex: 1;
+      padding: 8px 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      color: var(--text-dim);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dim-btn:hover, .dim-btn.active {
+      background: rgba(0, 255, 136, 0.1);
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .entity-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .entity-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-cyan);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .entity-card:hover::before,
+    .entity-card.active::before {
+      opacity: 1;
+    }
+
+    .entity-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateX(3px);
+    }
+
+    .entity-id {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+
+    .entity-name {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .entity-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .entity-tag {
+      font-size: 9px;
+      padding: 2px 6px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 3px;
+      color: var(--accent-cyan);
+    }
+
+    .entity-tag.danger {
+      background: rgba(255, 51, 68, 0.1);
+      border-color: rgba(255, 51, 68, 0.3);
+      color: var(--accent-red);
+    }
+
+    .entity-tag.warning {
+      background: rgba(255, 170, 0, 0.1);
+      border-color: rgba(255, 170, 0, 0.3);
+      color: var(--warning);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CONTENT AREA
+    ═══════════════════════════════════════════════════════════ */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: 
+        radial-gradient(ellipse at 50% 0%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+        var(--bg-void);
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .content-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      color: var(--accent-green);
+      animation: glitch 5s infinite;
+    }
+
+    .content-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      color: var(--text-primary);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      border: none;
+      color: var(--bg-void);
+      font-weight: 600;
+    }
+
+    /* Generator Input */
+    .generator-input {
+      background: var(--bg-card);
+      border: 2px solid var(--border-dim);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .generator-input::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+      animation: data-stream 3s linear infinite;
+    }
+
+    .input-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      color: var(--accent-green);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-field::placeholder {
+      color: var(--text-dim);
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.05);
+    }
+
+    .input-hint {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-hint::before {
+      content: '⚠';
+      color: var(--warning);
+    }
+
+    /* Generated Dossiers */
+    .dossiers {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .dossier {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .dossier:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .dossier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: linear-gradient(90deg, var(--bg-panel), var(--bg-card));
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .dossier-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .dossier-id {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      color: var(--accent-magenta);
+      letter-spacing: 2px;
+    }
+
+    .dossier-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+
+    .dossier-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .status-badge.classified {
+      background: rgba(255, 51, 68, 0.2);
+      color: var(--accent-red);
+      border: 1px solid var(--accent-red);
+    }
+
+    .status-badge.verified {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+    }
+
+    .dossier-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dossier-btn {
+      padding: 8px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-dim);
+      color: var(--text-dim);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dossier-btn:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .dossier-preview {
+      background: var(--bg-void);
+      min-height: 200px;
+    }
+
+    .dossier-preview iframe {
+      width: 100%;
+      height: 220px;
+      border: none;
+    }
+
+    .dossier-meta {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border-dim);
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .meta-item {
+      padding: 12px;
+      background: var(--bg-card);
+      text-align: center;
+    }
+
+    .meta-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      color: var(--accent-cyan);
+    }
+
+    .dossier-footer {
+      padding: 12px 20px;
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border-dim);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .source-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .source-tag {
+      font-size: 10px;
+      padding: 4px 8px;
+      background: rgba(255, 0, 170, 0.1);
+      border: 1px solid rgba(255, 0, 170, 0.3);
+      border-radius: 4px;
+      color: var(--accent-magenta);
+    }
+
+    .timestamp {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       INTEL PANEL (RIGHT)
+    ═══════════════════════════════════════════════════════════ */
+    .intel-panel {
+      width: 300px;
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border-dim);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+
+    .intel-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .intel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+
+    .threat-level {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(255, 51, 68, 0.1);
+      border: 1px solid rgba(255, 51, 68, 0.3);
+      border-radius: 6px;
+    }
+
+    .threat-icon {
+      font-size: 20px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .threat-info {
+      flex: 1;
+    }
+
+    .threat-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .threat-value {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      color: var(--accent-red);
+      font-weight: 700;
+    }
+
+    .intel-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .config-section {
+      margin-bottom: 16px;
+    }
+
+    .config-label {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .config-select {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      color: var(--text-primary);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .config-select:focus {
+      outline: none;
+      border-color: var(--accent-green);
+    }
+
+    .config-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .config-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .config-check:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    .config-check input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent-green);
+    }
+
+    .config-check span {
+      font-size: 11px;
+      color: var(--text-primary);
+    }
+
+    .config-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      border-radius: 6px;
+      color: var(--text-primary);
+      resize: none;
+    }
+
+    .config-textarea:focus {
+      outline: none;
+      border-color: var(--accent-green);
+    }
+
+    /* Terminal Log */
+    .terminal {
+      margin-top: 16px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-dim);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27ca40; }
+
+    .terminal-body {
+      padding: 10px;
+      font-size: 10px;
+      line-height: 1.6;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .log-line {
+      display: flex;
+      gap: 8px;
+    }
+
+    .log-time {
+      color: var(--text-dim);
+    }
+
+    .log-msg { color: var(--accent-green); }
+    .log-msg.warn { color: var(--warning); }
+    .log-msg.error { color: var(--accent-red); }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODAL
+    ═══════════════════════════════════════════════════════════ */
+    .modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-bg.show {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 5%;
+    }
+
+    .modal {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      color: var(--accent-green);
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-dim);
+      color: var(--text-dim);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .modal-section {
+      margin-bottom: 20px;
+    }
+
+    .modal-section h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .modal-code {
+      width: 100%;
+      min-height: 200px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: var(--bg-void);
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      color: var(--accent-green);
+      resize: vertical;
+    }
+
+    .modal-preview {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .modal-preview iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-dim);
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+      color: var(--bg-void);
+    }
+
+    .modal-btn.secondary {
+      background: var(--bg-void);
+      border: 1px solid var(--border-dim);
+      color: var(--text-dim);
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 1200px) {
+      .intel-panel { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .dossier-meta { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .header { padding: 10px 12px; }
+      .logo-title { font-size: 12px; }
+      .content { padding: 12px; }
+      .dossier-meta { grid-template-columns: repeat(2, 1fr); }
+      .dossier-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .dossier-status { width: 100%; justify-content: space-between; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon"></div>
+      <div class="logo-text">
+        <span class="logo-title">NEXUS-Ω</span>
+        <span class="logo-sub">INTERSECTORIAL CONTACT DIVISION</span>
+      </div>
+    </div>
+    <div class="clearance">
+      <div class="clearance-dot"></div>
+      <span class="clearance-text">LEVEL Ω CLEARANCE</span>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">DIMENSIONAL INDEX</div>
+        <div class="dimension-selector">
+          <button class="dim-btn active">3D</button>
+          <button class="dim-btn">4D</button>
+          <button class="dim-btn">5D+</button>
+          <button class="dim-btn">∞</button>
+        </div>
+      </div>
+      <div class="sidebar-scroll">
+        <div class="entity-card active">
+          <div class="entity-id">ENTITY-001</div>
+          <div class="entity-name">Les Architectes du Vide</div>
+          <div class="entity-meta">
+            <span class="entity-tag">Dimension 7</span>
+            <span class="entity-tag danger">Hostile</span>
+          </div>
+        </div>
+        <div class="entity-card">
+          <div class="entity-id">ENTITY-002</div>
+          <div class="entity-name">Consortium Pléiadien</div>
+          <div class="entity-meta">
+            <span class="entity-tag">Dimension 5</span>
+            <span class="entity-tag">Neutre</span>
+          </div>
+        </div>
+        <div class="entity-card">
+          <div class="entity-id">ENTITY-003</div>
+          <div class="entity-name">Collectif Zeta-Réticulien</div>
+          <div class="entity-meta">
+            <span class="entity-tag">Dimension 4</span>
+            <span class="entity-tag warning">Ambigu</span>
+          </div>
+        </div>
+        <div class="entity-card">
+          <div class="entity-id">ENTITY-004</div>
+          <div class="entity-name">Les Gardiens d'Orion</div>
+          <div class="entity-meta">
+            <span class="entity-tag">Dimension 6</span>
+            <span class="entity-tag">Allié</span>
+          </div>
+        </div>
+        <div class="entity-card">
+          <div class="entity-id">ENTITY-005</div>
+          <div class="entity-name">Ordre du Serpent Cosmique</div>
+          <div class="entity-meta">
+            <span class="entity-tag">Dimension ∞</span>
+            <span class="entity-tag danger">Critique</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <section class="content" id="content">
+      <div class="content-header">
+        <h1 class="content-title">// CANULAR GENERATOR v7.77</h1>
+        <div class="content-actions">
+          <button class="action-btn">📡 SYNC</button>
+          <button class="action-btn primary">⚡ DEPLOY</button>
+        </div>
+      </div>
+
+      <div class="generator-input">
+        <label class="input-label">TARGET SUBJECT // ŒUVRE À PLAGIER</label>
+        <input type="text" class="input-field" id="subjectInput" placeholder="Ex: La Joconde, Symphonie n°9, Théorie de la Relativité...">
+        <div class="input-hint">Appuyez sur ENTRÉE pour générer un dossier de désinformation dimensionnelle</div>
+      </div>
+
+      <div class="dossiers" id="dossiers"></div>
+    </section>
+
+    <!-- INTEL PANEL -->
+    <aside class="intel-panel">
+      <div class="intel-header">
+        <div class="intel-title">INTELLIGENCE BRIEFING</div>
+        <div class="threat-level">
+          <span class="threat-icon">👽</span>
+          <div class="threat-info">
+            <div class="threat-label">Threat Level</div>
+            <div class="threat-value">OMEGA-7</div>
+          </div>
+        </div>
+      </div>
+      <div class="intel-scroll">
+        <div class="config-section">
+          <label class="config-label">Dimension Source</label>
+          <select class="config-select" id="cfgDim">
+            <option value="3">3ème Dimension (Standard)</option>
+            <option value="4">4ème Dimension (Temporelle)</option>
+            <option value="5" selected>5ème Dimension (Éthérique)</option>
+            <option value="7">7ème Dimension (Archontique)</option>
+            <option value="inf">∞ Dimension (Absolue)</option>
+          </select>
+        </div>
+
+        <div class="config-section">
+          <label class="config-label">Type de Canular</label>
+          <select class="config-select" id="cfgType">
+            <option value="art">Plagiat Artistique</option>
+            <option value="science">Détournement Scientifique</option>
+            <option value="philo">Inversion Philosophique</option>
+            <option value="music">Corruption Musicale</option>
+            <option value="all" selected>Attaque Multivectorielle</option>
+          </select>
+        </div>
+
+        <div class="config-section">
+          <label class="config-label">Modules Actifs</label>
+          <div class="config-checks">
+            <label class="config-check"><input type="checkbox" id="modManifest" checked><span>Manifeste Sectaire</span></label>
+            <label class="config-check"><input type="checkbox" id="modTimeline" checked><span>Fausse Chronologie</span></label>
+            <label class="config-check"><input type="checkbox" id="modSymbols" checked><span>Symboles Occultes</span></label>
+            <label class="config-check"><input type="checkbox" id="modProphecy"><span>Prophéties Inventées</span></label>
+            <label class="config-check"><input type="checkbox" id="modRitual"><span>Rituels Bidons</span></label>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <label class="config-label">Message Subliminal</label>
+          <textarea class="config-textarea" id="cfgSublim" placeholder="Ex: OBÉISSEZ À LA LUMIÈRE COSMIQUE..."></textarea>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+          </div>
+          <div class="terminal-body" id="terminalLog">
+            <div class="log-line"><span class="log-time">[00:00:01]</span><span class="log-msg">System initialized...</span></div>
+            <div class="log-line"><span class="log-time">[00:00:02]</span><span class="log-msg">Dimensional bridge: STABLE</span></div>
+            <div class="log-line"><span class="log-time">[00:00:03]</span><span class="log-msg warn">WARNING: Reality fabric thin</span></div>
+            <div class="log-line"><span class="log-time">[00:00:04]</span><span class="log-msg">Awaiting target input...</span></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">// DOSSIER EDITOR</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h3>SOURCE CODE // CLASSIFIED</h3>
+          <textarea class="modal-code" id="modalCode"></textarea>
+        </div>
+        <div class="modal-section">
+          <h3>PREVIEW // SIMULATION</h3>
+          <div class="modal-preview">
+            <iframe id="modalPreview"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn secondary" onclick="refreshPreview()">🔄 REFRESH</button>
+        <button class="modal-btn primary" onclick="downloadDossier()">💾 EXTRACT</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════════════════════
+    // STATE
+    // ════════════════════════════════════════════════════════════
+    var dossiers = [];
+    var editIdx = -1;
+    var logCounter = 5;
+
+    // ════════════════════════════════════════════════════════════
+    // TERMINAL LOG
+    // ════════════════════════════════════════════════════════════
+    function addLog(msg, type) {
+      var terminal = document.getElementById('terminalLog');
+      var time = '[00:00:' + String(logCounter++).padStart(2, '0') + ']';
+      var cls = type === 'warn' ? 'warn' : type === 'error' ? 'error' : '';
+      terminal.innerHTML += '<div class="log-line"><span class="log-time">' + time + '</span><span class="log-msg ' + cls + '">' + msg + '</span></div>';
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // GENERATOR
+    // ════════════════════════════════════════════════════════════
+    function generateDossier(subject) {
+      var now = new Date();
+      var dim = document.getElementById('cfgDim').value;
+      var type = document.getElementById('cfgType').value;
+      var sublim = document.getElementById('cfgSublim').value || 'LA VÉRITÉ EST AILLEURS';
+      
+      var modManifest = document.getElementById('modManifest').checked;
+      var modTimeline = document.getElementById('modTimeline').checked;
+      var modSymbols = document.getElementById('modSymbols').checked;
+      var modProphecy = document.getElementById('modProphecy').checked;
+      var modRitual = document.getElementById('modRitual').checked;
+
+      var dimNames = { '3': 'Terrestre', '4': 'Temporelle', '5': 'Éthérique', '7': 'Archontique', 'inf': 'Absolue' };
+      var typeNames = { art: 'Artistique', science: 'Scientifique', philo: 'Philosophique', music: 'Musical', all: 'Multivectoriel' };
+
+      var dossierNum = 'NXS-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+      // Build sections
+      var sections = '';
+
+      if (modManifest) {
+        sections += '<section class="sect"><h2>📜 MANIFESTE DE LA SECTE COSMIQUE</h2>' +
+          '<div class="manifesto">' +
+          '<p class="quote">"' + subject + ' n\'a jamais existé tel que vous le croyez. C\'est une création des Architectes de la Dimension ' + dim + ', implantée dans la conscience collective terrestre pour préparer l\'humanité à l\'Éveil Final."</p>' +
+          '<p>— Grand Maître Zyx-7, Concile Intersectoriel, An 0 du Nouveau Calendrier Cosmique</p>' +
+          '</div></section>';
+      }
+
+      if (modTimeline) {
+        sections += '<section class="sect"><h2>⏰ VRAIE CHRONOLOGIE (DÉCLASSIFIÉE)</h2>' +
+          '<div class="timeline">' +
+          '<div class="tl-item"><span class="tl-date">-∞</span><span class="tl-event">Les Architectes créent le concept de "' + subject + '" dans la matrice dimensionnelle</span></div>' +
+          '<div class="tl-item"><span class="tl-date">-10000</span><span class="tl-event">Première implantation mémorielle sur les humains primitifs</span></div>' +
+          '<div class="tl-item"><span class="tl-date">1947</span><span class="tl-event">Roswell : récupération des plans originaux</span></div>' +
+          '<div class="tl-item"><span class="tl-date">Maintenant</span><span class="tl-event">Phase finale d\'activation en cours</span></div>' +
+          '</div></section>';
+      }
+
+      if (modSymbols) {
+        sections += '<section class="sect"><h2>🔮 SYMBOLES CACHÉS RÉVÉLÉS</h2>' +
+          '<div class="symbols">' +
+          '<div class="symbol">Ω<span>Nexus Dimensionnel</span></div>' +
+          '<div class="symbol">⍟<span>Œil Cosmique</span></div>' +
+          '<div class="symbol">⎔<span>Portail Éthérique</span></div>' +
+          '<div class="symbol">⏣<span>Matrice Temporelle</span></div>' +
+          '</div>' +
+          '<p class="note">Ces symboles sont encodés subliminalement dans "' + subject + '". Seuls les éveillés peuvent les percevoir.</p></section>';
+      }
+
+      if (modProphecy) {
+        sections += '<section class="sect"><h2>📿 PROPHÉTIE DU ' + subject.toUpperCase() + '</h2>' +
+          '<div class="prophecy">' +
+          '<p>"Quand les masses auront contemplé ' + subject + ' 777 millions de fois, le portail s\'ouvrira. Les dormeurs s\'éveilleront, les éveillés ascensionneront, et la Terre rejoindra le Consortium Galactique."</p>' +
+          '<p class="countdown">Compteur actuel : 776,999,847 / 777,000,000</p>' +
+          '</div></section>';
+      }
+
+      if (modRitual) {
+        sections += '<section class="sect"><h2>🕯️ RITUEL D\'ACTIVATION</h2>' +
+          '<div class="ritual">' +
+          '<ol>' +
+          '<li>Contemplez ' + subject + ' pendant 33 minutes à 3h33 du matin</li>' +
+          '<li>Répétez le mantra : "' + sublim + '"</li>' +
+          '<li>Tracez le symbole Ω avec votre main gauche</li>' +
+          '<li>Attendez le signal (picotements, lumières, voix)</li>' +
+          '</ol>' +
+          '<p class="warning">⚠️ AVERTISSEMENT : Effets secondaires possibles incluant éveil spirituel, contact extraterrestre, et légère paranoïa cosmique.</p>' +
+          '</div></section>';
+      }
+
+      var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+        '<title>' + subject + ' // DOSSIER CLASSIFIÉ</title>' +
+        '<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">' +
+        '<style>' +
+        '*{margin:0;padding:0;box-sizing:border-box}' +
+        'body{font-family:"JetBrains Mono",monospace;background:#0a0a0f;color:#e0e0e0;line-height:1.7}' +
+        'header{background:linear-gradient(135deg,#1a0a2e,#0a1a2e);padding:3rem 1.5rem;text-align:center;border-bottom:2px solid #00ff88}' +
+        '.badge{display:inline-block;padding:.3rem 1rem;background:rgba(255,0,0,0.2);border:1px solid #ff3344;border-radius:4px;font-size:.7rem;color:#ff3344;letter-spacing:2px;margin-bottom:1rem;animation:blink 1s infinite}' +
+        '@keyframes blink{0%,50%,100%{opacity:1}25%,75%{opacity:0.5}}' +
+        'h1{font-family:Orbitron,sans-serif;font-size:2rem;color:#00ff88;text-shadow:0 0 20px rgba(0,255,136,0.5);margin-bottom:.5rem}' +
+        '.subtitle{color:#666;font-size:.9rem}' +
+        'main{max-width:800px;margin:0 auto;padding:2rem 1rem}' +
+        '.sect{background:#12121a;border:1px solid #1a1a2e;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}' +
+        '.sect h2{font-family:Orbitron,sans-serif;font-size:1rem;color:#00d4ff;margin-bottom:1rem;letter-spacing:1px}' +
+        '.manifesto{background:#1a0a2e;border-left:3px solid #ff00aa;padding:1rem;border-radius:0 8px 8px 0}' +
+        '.quote{font-size:1.1rem;font-style:italic;color:#ff00aa;margin-bottom:.5rem}' +
+        '.timeline{border-left:2px solid #00ff88;padding-left:1.5rem}' +
+        '.tl-item{padding:1rem 0;position:relative}' +
+        '.tl-item::before{content:"";position:absolute;left:-1.65rem;top:1.2rem;width:10px;height:10px;background:#00ff88;border-radius:50%;box-shadow:0 0 10px #00ff88}' +
+        '.tl-date{display:block;font-family:Orbitron,sans-serif;font-size:.8rem;color:#00ff88}' +
+        '.tl-event{color:#aaa}' +
+        '.symbols{display:flex;justify-content:space-around;flex-wrap:wrap;gap:1rem;margin:1rem 0}' +
+        '.symbol{text-align:center;font-size:2.5rem;color:#00d4ff;text-shadow:0 0 15px rgba(0,212,255,0.5)}' +
+        '.symbol span{display:block;font-size:.7rem;color:#666;margin-top:.3rem}' +
+        '.note{font-size:.85rem;color:#888;font-style:italic;margin-top:1rem}' +
+        '.prophecy{background:linear-gradient(135deg,#1a1a0a,#0a1a1a);border:1px solid #ffaa00;border-radius:8px;padding:1.5rem;text-align:center}' +
+        '.prophecy p:first-child{font-size:1.1rem;color:#ffaa00;font-style:italic}' +
+        '.countdown{margin-top:1rem;font-family:Orbitron,sans-serif;font-size:1.2rem;color:#00ff88}' +
+        '.ritual{background:#0a0a14;padding:1rem;border-radius:8px}' +
+        '.ritual ol{padding-left:1.5rem;color:#aaa}' +
+        '.ritual li{padding:.5rem 0}' +
+        '.warning{margin-top:1rem;padding:.8rem;background:rgba(255,0,0,0.1);border:1px solid #ff3344;border-radius:6px;font-size:.85rem;color:#ff3344}' +
+        'footer{text-align:center;padding:2rem;color:#444;font-size:.8rem;border-top:1px solid #1a1a2e}' +
+        '.sublim{position:fixed;bottom:0;left:0;right:0;padding:.5rem;background:#ff00aa;color:#000;font-size:.8rem;text-align:center;font-weight:700;animation:pulse 2s infinite}' +
+        '@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}' +
+        '</style></head><body>' +
+        '<header><div class="badge">⚠️ CLASSIFIÉ NIVEAU Ω ⚠️</div>' +
+        '<h1>' + subject.toUpperCase() + '</h1>' +
+        '<p class="subtitle">Dossier ' + dossierNum + ' // Dimension ' + dimNames[dim] + ' // Type ' + typeNames[type] + '</p></header>' +
+        '<main>' + sections + '</main>' +
+        '<footer><p>Document généré par NEXUS-Ω // Division Contact Intersectoriel</p><p>Toute divulgation non autorisée sera punie par recalibration mémorielle.</p></footer>' +
+        '<div class="sublim">' + sublim + '</div>' +
+        '</body></html>';
+
+      var sectionCount = 0;
+      if (modManifest) sectionCount++;
+      if (modTimeline) sectionCount++;
+      if (modSymbols) sectionCount++;
+      if (modProphecy) sectionCount++;
+      if (modRitual) sectionCount++;
+
+      return {
+        id: dossierNum,
+        subject: subject,
+        date: now.toISOString().replace('T', ' ').substr(0, 19),
+        dimension: dimNames[dim],
+        type: typeNames[type],
+        sections: sectionCount,
+        threat: ['OMEGA-7', 'ALPHA-3', 'DELTA-9', 'SIGMA-5'][Math.floor(Math.random() * 4)],
+        sources: ['Archontes', 'Pléiadiens', 'Gris', 'Reptiliens'],
+        html: html
+      };
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // RENDER
+    // ════════════════════════════════════════════════════════════
+    function renderDossiers() {
+      var container = document.getElementById('dossiers');
+      var html = '';
+
+      for (var i = 0; i < dossiers.length; i++) {
+        var d = dossiers[i];
+        var sources = '';
+        for (var j = 0; j < d.sources.length; j++) {
+          sources += '<span class="source-tag">' + d.sources[j] + '</span>';
+        }
+
+        html += '<div class="dossier">' +
+          '<div class="dossier-header">' +
+          '<div class="dossier-title-area">' +
+          '<span class="dossier-id">' + d.id + '</span>' +
+          '<span class="dossier-title">' + d.subject + '</span>' +
+          '</div>' +
+          '<div class="dossier-status">' +
+          '<span class="status-badge classified">CLASSIFIÉ</span>' +
+          '<div class="dossier-actions">' +
+          '<button class="dossier-btn" onclick="openModal(' + i + ')">✏️ EDIT</button>' +
+          '<button class="dossier-btn" onclick="downloadDirect(' + i + ')">💾 EXTRACT</button>' +
+          '</div>' +
+          '</div>' +
+          '</div>' +
+          '<div class="dossier-preview"><iframe id="pv' + i + '"></iframe></div>' +
+          '<div class="dossier-meta">' +
+          '<div class="meta-item"><div class="meta-label">Dimension</div><div class="meta-value">' + d.dimension + '</div></div>' +
+          '<div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">' + d.type + '</div></div>' +
+          '<div class="meta-item"><div class="meta-label">Sections</div><div class="meta-value">' + d.sections + '</div></div>' +
+          '<div class="meta-item"><div class="meta-label">Menace</div><div class="meta-value">' + d.threat + '</div></div>' +
+          '<div class="meta-item"><div class="meta-label">Status</div><div class="meta-value">ACTIF</div></div>' +
+          '</div>' +
+          '<div class="dossier-footer">' +
+          '<div class="source-list">' + sources + '</div>' +
+          '<span class="timestamp">' + d.date + '</span>' +
+          '</div>' +
+          '</div>';
+      }
+
+      container.innerHTML = html;
+
+      // Load iframes
+      setTimeout(function() {
+        for (var i = 0; i < dossiers.length; i++) {
+          var iframe = document.getElementById('pv' + i);
+          if (iframe) iframe.srcdoc = dossiers[i].html;
+        }
+      }, 100);
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // MODAL
+    // ════════════════════════════════════════════════════════════
+    function openModal(idx) {
+      editIdx = idx;
+      var d = dossiers[idx];
+      document.getElementById('modalTitle').textContent = '// ' + d.id + ' // ' + d.subject;
+      document.getElementById('modalCode').value = d.html;
+      document.getElementById('modalPreview').srcdoc = d.html;
+      document.getElementById('modalBg').classList.add('show');
+      addLog('Dossier ' + d.id + ' opened for editing', 'warn');
+    }
+
+    function closeModal() {
+      document.getElementById('modalBg').classList.remove('show');
+      if (editIdx >= 0) {
+        dossiers[editIdx].html = document.getElementById('modalCode').value;
+        addLog('Dossier modifications saved');
+      }
+      editIdx = -1;
+    }
+
+    function refreshPreview() {
+      document.getElementById('modalPreview').srcdoc = document.getElementById('modalCode').value;
+      addLog('Preview refreshed');
+    }
+
+    function downloadDossier() {
+      var code = document.getElementById('modalCode').value;
+      var name = editIdx >= 0 ? dossiers[editIdx].id : 'DOSSIER';
+      download(code, name);
+    }
+
+    function downloadDirect(idx) {
+      download(dossiers[idx].html, dossiers[idx].id);
+    }
+
+    function download(html, name) {
+      var blob = new Blob([html], { type: 'text/html' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = name + '-CLASSIFIED.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      addLog('Dossier ' + name + ' extracted');
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // INIT
+    // ════════════════════════════════════════════════════════════
+    function init() {
+      var input = document.getElementById('subjectInput');
+      
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+          var subject = this.value.trim();
+          addLog('Generating dossier for: ' + subject);
+          addLog('Accessing dimensional archives...', 'warn');
+          
+          var dossier = generateDossier(subject);
+          dossiers.unshift(dossier);
+          renderDossiers();
+          
+          addLog('Dossier ' + dossier.id + ' generated');
+          addLog('Threat level: ' + dossier.threat, 'error');
+          
+          this.value = '';
+        }
+      });
+
+      document.getElementById('modalBg').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+
+      // Dimension buttons
+      var dimBtns = document.querySelectorAll('.dim-btn');
+      for (var i = 0; i < dimBtns.length; i++) {
+        dimBtns[i].addEventListener('click', function() {
+          for (var j = 0; j < dimBtns.length; j++) dimBtns[j].classList.remove('active');
+          this.classList.add('active');
+          addLog('Dimension filter: ' + this.textContent);
+        });
+      }
+
+      // Entity cards
+      var entityCards = document.querySelectorAll('.entity-card');
+      for (var i = 0; i < entityCards.length; i++) {
+        entityCards[i].addEventListener('click', function() {
+          for (var j = 0; j < entityCards.length; j++) entityCards[j].classList.remove('active');
+          this.classList.add('active');
+          var name = this.querySelector('.entity-name').textContent;
+          addLog('Entity selected: ' + name);
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
