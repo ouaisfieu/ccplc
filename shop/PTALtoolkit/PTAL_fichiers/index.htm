@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="fr"><head><script type="text/javascript" src="WU8mql39SYVwNUyNrlhwX3QzCY7gn_LejMa2rdZ7FU9IXyumTzJUkPtJMapO8mqN"></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript" src="rVYeIASnu99NhdagVPeliH1kN7SgFevy9PTTjyT3SOSZX57qBnrj6hDLMMD_.htm"></script>
+  
+  <title>BROL 2.0 – Dashbo·o·ard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #020617;
+      --card: #020617;
+      --accent: #22c55e;
+      --accent2: #38bdf8;
+      --accent3: #f97316;
+      --accent4: #a855f7;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: rgba(148, 163, 184, 0.6);
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --radius-xl: 18px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.95);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-main);
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,0.26), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(34,197,94,0.26), transparent 55%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(
+        rgba(15,23,42,0.25) 1px,
+        transparent 1px
+      );
+      background-size: 100% 2px;
+      mix-blend-mode: soft-light;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,0.3), transparent 60%),
+        rgba(3,7,18,0.96);
+      border-bottom: 1px solid rgba(30,64,175,0.8);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.95);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-frame {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      padding: 2px;
+      background: conic-gradient(from 180deg, #22c55e, #38bdf8, #f97316, #a855f7, #22c55e);
+      box-shadow:
+        0 0 0 1px #020617,
+        0 0 26px rgba(56,189,248,0.9);
+    }
+
+    .logo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 20%, #0f172a, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #bbf7d0;
+    }
+
+    .header-titles {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .title-main {
+      font-size: 1.05rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .title-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      max-width: 360px;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--muted);
+      max-width: 280px;
+    }
+
+    .header-right strong { color: #e5e7eb; }
+
+    main {
+      flex: 1;
+      padding: 12px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 2fr) minmax(0, 1.2fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 1100px) {
+      main {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+        grid-template-rows: auto auto;
+      }
+    }
+
+    @media (max-width: 840px) {
+      main {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+    }
+
+    .panel {
+      background: rgba(3,7,18,0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 11px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.82rem;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,0.3), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(168,85,247,0.22), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: 0.7;
+    }
+
+    .panel-inner {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .panel h2 {
+      font-size: 0.96rem;
+      margin-bottom: 2px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .search-row {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    input[type="search"] {
+      border-radius: 999px;
+      border: 1px solid rgba(51,65,85,0.98);
+      background: rgba(15,23,42,0.98);
+      color: var(--text);
+      font-size: 0.8rem;
+      padding: 5px 9px;
+      font-family: var(--font-main);
+      outline: none;
+      min-width: 0;
+      flex: 1;
+    }
+
+    input[type="search"]::placeholder {
+      color: #6b7280;
+    }
+
+    select {
+      border-radius: 999px;
+      border: 1px solid rgba(51,65,85,0.98);
+      background: rgba(15,23,42,0.98);
+      color: var(--text);
+      font-size: 0.8rem;
+      padding: 4px 7px;
+      font-family: var(--font-main);
+      outline: none;
+    }
+
+    .badge-small {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 2px 7px;
+      font-size: 0.74rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    /* LISTE MODULES */
+    .modules-list {
+      margin-top: 6px;
+      border-radius: 13px;
+      border: 1px solid rgba(55,65,81,0.98);
+      background: #020617;
+      padding: 5px 5px 6px;
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .modules-scroll {
+      overflow-y: auto;
+      max-height: 380px;
+      padding-right: 3px;
+    }
+
+    .group-title {
+      font-size: 0.74rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin: 4px 4px 3px;
+      font-family: var(--font-mono);
+    }
+
+    .module-item {
+      border-radius: 11px;
+      border: 1px solid rgba(55,65,81,0.95);
+      background: rgba(15,23,42,0.98);
+      padding: 5px 7px;
+      font-size: 0.8rem;
+      margin-bottom: 3px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: center;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+
+    .module-item:hover {
+      background: rgba(15,23,42,1);
+      border-color: rgba(148,163,184,0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.9);
+    }
+
+    .module-item.active {
+      background: rgba(22,163,74,0.18);
+      border-color: rgba(34,197,94,0.9);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.95);
+    }
+
+    .module-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .module-title {
+      font-size: 0.84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .module-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .module-file {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #9ca3af;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 130px;
+    }
+
+    .module-kind {
+      font-size: 0.72rem;
+      padding: 1px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(75,85,99,0.9);
+      text-transform: lowercase;
+      white-space: nowrap;
+    }
+
+    .kind-base   { border-color: rgba(34,197,94,0.9); color: #bbf7d0; }
+    .kind-brol   { border-color: rgba(56,189,248,0.9); color: #bae6fd; }
+    .kind-univ   { border-color: rgba(168,85,247,0.9); color: #e9d5ff; }
+    .kind-intra  { border-color: rgba(249,115,22,0.9); color: #fed7aa; }
+    .kind-ia     { border-color: rgba(248,113,113,0.9); color: #fecaca; }
+    .kind-meta   { border-color: rgba(148,163,184,0.9); color: #e5e7eb; }
+
+    /* VIEWER CENTRAL */
+    .viewer-panel {
+      background: rgba(3,7,18,0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 11px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .viewer-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0, rgba(56,189,248,0.3), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(34,197,94,0.2), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: 0.7;
+    }
+
+    .viewer-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      height: 100%;
+    }
+
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .viewer-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .viewer-title {
+      font-size: 0.96rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .viewer-subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .viewer-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: flex-end;
+    }
+
+    .viewer-badge {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      padding: 2px 7px;
+      font-size: 0.74rem;
+      font-family: var(--font-mono);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .viewer-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.95);
+    }
+
+    .viewer-body {
+      border-radius: 13px;
+      border: 1px solid rgba(55,65,81,0.98);
+      background: #020617;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 200px;
+    }
+
+    .viewer-iframe-wrapper {
+      flex: 1;
+      min-height: 180px;
+      border-bottom: 1px solid rgba(31,41,55,0.98);
+      background: #020617;
+      overflow: hidden;
+    }
+
+    #viewerFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 11px 11px 0 0;
+      background: #020617;
+    }
+
+    .viewer-info {
+      padding: 5px 7px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .viewer-file {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: #9ca3af;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 260px;
+    }
+
+    .viewer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .btn-open {
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,0.9);
+      background: rgba(15,23,42,0.98);
+      color: #e0f2fe;
+      font-size: 0.76rem;
+      padding: 3px 8px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      text-decoration: none;
+    }
+
+    .btn-open:hover {
+      background: rgba(15,23,42,1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.95);
+    }
+
+    /* PANEL DROIT – EMBEDS & HOWTO */
+    .side-panel {
+      background: rgba(3,7,18,0.98);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 11px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 0.8rem;
+    }
+
+    .side-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 100% 0, rgba(56,189,248,0.3), transparent 60%),
+        radial-gradient(circle at 0 100%, rgba(234,179,8,0.2), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: 0.7;
+    }
+
+    .side-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      height: 100%;
+    }
+
+    .side-section h2 {
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+
+    .embed-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .embed-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.98);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.76rem;
+      padding: 3px 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    }
+
+    .embed-btn span.icon {
+      font-size: 0.9rem;
+    }
+
+    .embed-btn:hover {
+      background: rgba(15,23,42,1);
+      border-color: rgba(148,163,184,0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.9);
+    }
+
+    .tiny {
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    .howto-box {
+      border-radius: 12px;
+      border: 1px solid rgba(55,65,81,0.98);
+      background: #020617;
+      padding: 6px 7px;
+      font-size: 0.78rem;
+    }
+
+    .howto-box ol {
+      margin-left: 16px;
+      margin-top: 2px;
+    }
+
+    .howto-box li {
+      margin-bottom: 2px;
+    }
+
+    .howto-box code {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      background: rgba(15,23,42,0.95);
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: #020617;
+      border-radius: 8px;
+      border: 1px solid rgba(55,65,81,0.98);
+      padding: 5px 7px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 3px;
+    }
+
+    footer {
+      padding: 6px 12px 8px;
+      font-size: 0.74rem;
+      color: var(--muted);
+      border-top: 1px solid rgba(30,64,175,0.7);
+      background: rgba(3,7,18,0.98);
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 720px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .header-right { text-align: left; max-width: none; }
+      footer { flex-direction: column; }
+    }
+
+    #markdownContent pre,
+    #markdownContent code {
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+}
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <a href="https://dl.ouaisfi.eu/usba/1/2/3/9/9/9/"><div class="logo-frame">
+      <div class="logo-inner">flxy</div>
+    </div></a>
+    <div class="header-titles">
+      <div class="title-main">BROL 2.0 – Dashboard</div>
+      
+    </div>
+  </div>
+
+</header>
+
+<main>
+  <!-- COLONNE GAUCHE : LISTE DE TOUTES LES PAGES -->
+  <section class="panel">
+    <div class="panel-inner">
+      <div>
+        <h2>Pages &amp; modules</h2>
+        
+        <div class="search-row">
+          <input type="search" id="moduleSearch" placeholder="Rechercher (nom ou fichier)…">
+          <select id="moduleCategory">
+            <option value="all" selected="selected">Toutes catégories</option>
+            <option value="base">La Base</option>
+            <option value="brol">BROL &amp; fichiers</option>
+            <option value="univ">Univers &amp; jeu</option>
+            <option value="intra">Lien en vrac</option>
+            <option value="ia">IA fictive</option>
+            <option value="meta">Tests</option>
+          </select>
+        </div>
+        <div style="margin-top:4px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;">
+          <span class="badge-small" id="modulesCount">14 modules</span>
+          <span class="muted">
+            .
+          </span>
+        </div>
+      </div>
+
+      <div class="modules-list">
+        <div class="modules-scroll" id="modulesContainer"><div><div class="group-title">La Base</div><div class="module-item active" data-id="site-ultime">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (index)">LE SITE ULTIME (index)</div>
+            <div class="module-sub">Le fichier qui permet de partir de zéro et monter progressivement.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="index.html">index.html</div>
+            <div class="module-kind kind-base">niveaux -1 → 3</div>
+          </div>
+        </div><div class="module-item" data-id="scratchy">
+          <div class="module-main">
+            <div class="module-title" title="ZÉRO Support technique">ZÉRO Support technique</div>
+            <div class="module-sub">Il faut éteindre et rallumer.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="404.html">404.html</div>
+            <div class="module-kind kind-base">au cas où</div>
+          </div>
+        </div><div class="module-item" data-id="capsule-4">
+          <div class="module-main">
+            <div class="module-title" title="En capsule">En capsule</div>
+            <div class="module-sub">C'est ça ou rien.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="capsule-4.html">capsule-4.html</div>
+            <div class="module-kind kind-base">bisous</div>
+          </div>
+        </div><div class="module-item" data-id="base">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (bidex)">LE SITE ULTIME (bidex)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de 1 et monter progressivement.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="base.html">base.html</div>
+            <div class="module-kind kind-base">niveaux -4 → 5</div>
+          </div>
+        </div></div><div><div class="group-title">BAC À SPAM</div><div class="module-item" data-id="brol">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (deudex)">LE SITE ULTIME (deudex)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de A à Z, et monter progressivement.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="brol.html">brol.html</div>
+            <div class="module-kind kind-brol">niveaux -5 → 5</div>
+          </div>
+        </div></div><div><div class="group-title">IA fictive</div><div class="module-item" data-id="capricorne">
+          <div class="module-main">
+            <div class="module-title" title="ZÉRO Support technique">ZÉRO Support technique</div>
+            <div class="module-sub">Il faut éteindre et rallumer.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="clov.html">clov.html</div>
+            <div class="module-kind kind-ia">au cas où</div>
+          </div>
+        </div></div><div><div class="group-title">Lien en vrac</div><div class="module-item" data-id="intra">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (intra)">LE SITE ULTIME (intra)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de 7 et de finir en beauté.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="intra.html">intra.html</div>
+            <div class="module-kind kind-intra">niveaux -7 → 9</div>
+          </div>
+        </div><div class="module-item" data-id="ultra">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (ULTRA)">LE SITE ULTIME (ULTRA)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de 77, et de finir en beauté.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="meta-navigator.html">meta-navigator.html</div>
+            <div class="module-kind kind-intra">niveaux -77 → 999</div>
+          </div>
+        </div><div class="module-item" data-id="pultra">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (pULTRA)">LE SITE ULTIME (pULTRA)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de 77, et de finir en beauté.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="nyxo.html">nyxo.html</div>
+            <div class="module-kind kind-intra">niveaux -77 → 999</div>
+          </div>
+        </div><div class="module-item" data-id="pultra_2">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (pULTRA_v2)">LE SITE ULTIME (pULTRA_v2)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de 77, et de finir en beauté.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="nyxo-V2.html">nyxo-V2.html</div>
+            <div class="module-kind kind-intra">niveaux -77 → 999</div>
+          </div>
+        </div><div class="module-item" data-id="zultra">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (zULTRA)">LE SITE ULTIME (zULTRA)</div>
+            <div class="module-sub">Le fichier qui te permet de partir de 77, et de finir en beauté.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="amazing.html">amazing.html</div>
+            <div class="module-kind kind-intra">niveaux -77 → 999</div>
+          </div>
+        </div><div class="module-item" data-id="nultra">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (nULTRA)">LE SITE ULTIME (nULTRA)</div>
+            <div class="module-sub">La smartwatch qui te permet de partir de 77, et de finir en beauté.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="nultra.html">nultra.html</div>
+            <div class="module-kind kind-intra">niveaux -77 → 999</div>
+          </div>
+        </div></div><div><div class="group-title">Tests</div><div class="module-item" data-id="test-1">
+          <div class="module-main">
+            <div class="module-title" title="En test">En test</div>
+            <div class="module-sub">C'est ça ou rien.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="test-1.html">test-1.html</div>
+            <div class="module-kind kind-meta">bisous</div>
+          </div>
+        </div></div><div><div class="group-title">Univers &amp; jeu</div><div class="module-item" data-id="univ">
+          <div class="module-main">
+            <div class="module-title" title="LE SITE ULTIME (école)">LE SITE ULTIME (école)</div>
+            <div class="module-sub">Le fichier qui permet de partir de zéro et descendre progressivement.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="univ.html">univ.html</div>
+            <div class="module-kind kind-univ">niveaux -0 → -1</div>
+          </div>
+        </div></div></div>
+      </div><iframe width="90%" height="315" src="https://www.youtube.com/embed/9WJHAu0IE-g?si=Pi-FDBx5Ah__0woE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe> 
+    </div>
+  </section>
+
+  <!-- COLONNE CENTRALE : VIEWER -->
+  <section class="viewer-panel">
+    <div class="viewer-inner">
+      <div class="viewer-header">
+        <div class="viewer-title-block">
+          <div class="viewer-title" id="viewerTitle">LE SITE ULTIME (index)</div>
+          <div class="viewer-subtitle" id="viewerSubtitle">Le fichier qui permet de partir de zéro et monter progressivement.</div>
+        </div>
+        <div class="viewer-badges">
+          <span class="viewer-badge">
+            <span class="viewer-dot"></span>
+            <span id="viewerCategoryBadge">La Base</span>
+          </span>
+          <span class="viewer-badge" id="viewerKindBadge">niveaux -1 → 3</span>
+        </div>
+      </div>
+
+      <div class="viewer-body">
+        <div class="viewer-iframe-wrapper">
+          <iframe id="viewerFrame" src="index_data/index.htm"></iframe>
+        </div>
+        <div class="viewer-info">
+          <div class="viewer-file" id="viewerFile">Fichier / URL : index.html</div>
+          <div class="viewer-actions">
+            <a href="https://ouaisfieu.github.io/lapin/index.html" id="viewerOpenNew" class="btn-open" target="_blank" rel="noopener noreferrer">
+              Ouvrir dans un nouvel onglet
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLONNE DROITE : EMBEDS & EXPLICATIONS -->
+  <section class="side-panel">
+    <div class="side-inner">
+      <section class="side-section">
+        <h2>Distractions &amp; annexes</h2>
+        <p class="tiny">
+          .
+        </p>
+
+        <div class="embed-row">
+          <button type="button" class="embed-btn" data-embed="belier">
+            <span class="icon">🐧</span> belier
+          </button>
+          <button type="button" class="embed-btn" data-embed="taureau">
+            <span class="icon">▶️</span> taureau
+          </button>
+          <button type="button" class="embed-btn" data-embed="gemeaux">
+            <span class="icon">🐧</span> gemeaux
+          </button>
+          <button type="button" class="embed-btn" data-embed="cancer">
+            <span class="icon">🎵</span> cancer
+          </button>
+
+          <button type="button" class="embed-btn" data-embed="lion">
+            <span class="icon">🐧</span> lion
+          </button>
+          <button type="button" class="embed-btn" data-embed="king">
+            <span class="icon">🐧</span> king
+          </button>
+          <button type="button" class="embed-btn" data-embed="vierge">
+            <span class="icon">🐧</span> vierge
+          </button>
+          <button type="button" class="embed-btn" data-embed="balance">
+            <span class="icon">▶️</span> balance
+          </button>
+          <button type="button" class="embed-btn" data-embed="scorpion">
+            <span class="icon">🐧</span> scorpion
+          </button>
+          
+          <button type="button" class="embed-btn" data-embed="sagittaire">
+            <span class="icon">▶️</span> sagittaire
+          </button>
+          <button type="button" class="embed-btn" data-embed="capricorne">
+            <span class="icon">▶️</span> capricorne
+          </button>
+          <button type="button" class="embed-btn" data-embed="verseau">
+            <span class="icon">▶️</span> verseau
+          </button>
+          <button type="button" class="embed-btn" data-embed="poissons">
+            <span class="icon">▶️</span> poissons
+          </button>
+          
+          <button type="button" class="embed-btn" data-embed="rat">
+            <span class="icon">▶️</span> rat
+          </button>
+          
+          
+          <button type="button" class="embed-btn" data-embed="boeuf">
+            <span class="icon">🐧</span> boeuf
+          </button>
+          <button type="button" class="embed-btn" data-embed="tigre">
+            <span class="icon">🎵</span> tigre
+          </button>
+          <button type="button" class="embed-btn" data-embed="lapin">
+            <span class="icon">🎵</span> lapin
+          </button>
+          <button type="button" class="embed-btn" data-embed="dragon">
+            <span class="icon">📄</span> dragon
+          </button>
+          <button type="button" class="embed-btn" data-embed="serpent">
+            <span class="icon">📄</span> serpent
+          </button>
+          <button type="button" class="embed-btn" data-embed="cheval">
+            <span class="icon">📄</span> cheval
+          </button>
+          <button type="button" class="embed-btn" data-embed="chevre">
+            <span class="icon">📄</span> chevre
+          </button>
+          <button type="button" class="embed-btn" data-embed="coq">
+            <span class="icon">🐧</span> coq
+          </button>
+          <button type="button" class="embed-btn" data-embed="chien">
+            <span class="icon">🐧</span> chien
+          </button>
+          <button type="button" class="embed-btn" data-embed="cochon">
+            <span class="icon">🐧</span> cochon
+          </button>
+          <button type="button" class="embed-btn" data-embed="shop">
+            <span class="icon">🐧</span> shop
+          </button>
+          <button type="button" class="embed-btn" data-embed="extronet">
+            <span class="icon">🐧</span> extronet
+          </button>
+          <button type="button" class="embed-btn" data-embed="grok">
+            <span class="icon">🐧</span> grok
+          </button>
+          <button type="button" class="embed-btn" data-embed="goodies">
+            <span class="icon">🐧</span> goodies
+          </button>
+          <button type="button" class="embed-btn" data-embed="goooodies">
+            <span class="icon">🐧</span> GOOOODIES !!!
+          </button>
+          <button type="button" class="embed-btn" data-embed="logo">
+            <span class="icon">🐧</span> Logo
+          </button>
+          <button type="button" class="embed-btn" data-embed="chom">
+            <span class="icon">📄</span> Chom
+          </button>
+          <button type="button" class="embed-btn" data-embed="speaker">
+            <span class="icon">🐧</span> Speaker
+          </button>
+          <button type="button" class="embed-btn" data-embed="lion">
+            <span class="icon">🐧</span> Sky
+          </button>
+          <button type="button" class="embed-btn" data-embed="dices">
+            <span class="icon">🐧</span> dices
+          </button>
+          <button type="button" class="embed-btn" data-embed="logo">
+            <span class="icon">🐧</span> logo
+          </button>
+          <button type="button" class="embed-btn" data-embed="glitchy">
+            <span class="icon">🐧</span> recrutement
+          </button>
+          <button type="button" class="embed-btn" data-embed="glitch">
+            <span class="icon">🐧</span> nultra
+          </button>
+          <button type="button" class="embed-btn" data-embed="youtube">
+            <span class="icon">🐧</span> annonce
+          </button>
+          <button type="button" class="embed-btn" data-embed="penguin">
+            <span class="icon">🐧</span> ABBA !!!
+          </button>
+          <button type="button" class="embed-btn" data-embed="intranet">
+            <span class="icon">🐧</span> Bisous
+          </button>
+        </div>
+                </section>
+<iframe width="90%" height="315" src="https://www.youtube.com/embed/NF_wWmvJXbA?si=XAT1JHQoIV6Uws82" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+  </div></section>
+
+</main>
+
+<footer>
+  <span>
+
+    
+      
+      . - Aller au <a href="https://dl.ouaisfi.eu/usba/1/2/3/9/9/9/index.html" target="_blank">niveau suivant</a>
+  </span>
+</footer>
+
+<script>
+  // --- Modules : toutes les grandes pages de ton écosystème ---
+  // Tu peux modifier / compléter ce tableau selon ce que tu as réellement comme fichiers.
+  const modules = [
+    // BASES & TUTOS
+    {
+      id: "site-ultime",
+      title: "LE SITE ULTIME (index)",
+      file: "index.html",
+      category: "base",
+      kind: "niveaux -1 → 3",
+      description: "Le fichier qui permet de partir de zéro et monter progressivement."
+    },
+    {
+      id: "scratchy",
+      title: "ZÉRO Support technique",
+      file: "404.html",
+      category: "base",
+      kind: "au cas où",
+      description: "Il faut éteindre et rallumer."
+    },
+    {
+      id: "capricorne",
+      title: "ZÉRO Support technique",
+      file: "clov.html",
+      category: "ia",
+      kind: "au cas où",
+      description: "Il faut éteindre et rallumer."
+    },
+
+    
+
+    // TESTS
+
+    {
+      id: "test-1",
+      title: "En test",
+      file: "test-1.html",
+      category: "meta",
+      kind: "bisous",
+      description: "C'est ça ou rien."
+    },
+    {
+      id: "capsule-4",
+      title: "En capsule",
+      file: "capsule-4.html",
+      category: "base",
+      kind: "bisous",
+      description: "C'est ça ou rien."
+    },
+    {
+      id: "base",
+      title: "LE SITE ULTIME (bidex)",
+      file: "base.html",
+      category: "base",
+      kind: "niveaux -4 → 5",
+      description: "Le fichier qui te permet de partir de 1 et monter progressivement."
+    },
+
+{
+      id: "brol",
+      title: "LE SITE ULTIME (deudex)",
+      file: "brol.html",
+      category: "brol",
+      kind: "niveaux -5 → 5",
+      description: "Le fichier qui te permet de partir de A à Z, et monter progressivement."
+    },
+
+{
+      id: "univ",
+      title: "LE SITE ULTIME (école)",
+      file: "univ.html",
+      category: "univ",
+      kind: "niveaux -0 → -1",
+      description: "Le fichier qui permet de partir de zéro et descendre progressivement."
+    },
+    {
+      id: "intra",
+      title: "LE SITE ULTIME (intra)",
+      file: "intra.html",
+      category: "intra",
+      kind: "niveaux -7 → 9",
+      description: "Le fichier qui te permet de partir de 7 et de finir en beauté."
+    },
+    {
+      id: "ultra",
+      title: "LE SITE ULTIME (ULTRA)",
+      file: "meta-navigator.html",
+      category: "intra",
+      kind: "niveaux -77 → 999",
+      description: "Le fichier qui te permet de partir de 77, et de finir en beauté."
+    },
+    {
+      id: "pultra",
+      title: "LE SITE ULTIME (pULTRA)",
+      file: "nyxo.html",
+      category: "intra",
+      kind: "niveaux -77 → 999",
+      description: "Le fichier qui te permet de partir de 77, et de finir en beauté."
+    },
+    {
+      id: "pultra_2",
+      title: "LE SITE ULTIME (pULTRA_v2)",
+      file: "nyxo-V2.html",
+      category: "intra",
+      kind: "niveaux -77 → 999",
+      description: "Le fichier qui te permet de partir de 77, et de finir en beauté."
+    },
+
+    
+    {
+      id: "zultra",
+      title: "LE SITE ULTIME (zULTRA)",
+      file: "amazing.html",
+      category: "intra",
+      kind: "niveaux -77 → 999",
+      description: "Le fichier qui te permet de partir de 77, et de finir en beauté."
+    },
+    {
+      id: "nultra",
+      title: "LE SITE ULTIME (nULTRA)",
+      file: "nultra.html",
+      category: "intra",
+      kind: "niveaux -77 → 999",
+      description: "La smartwatch qui te permet de partir de 77, et de finir en beauté."
+    }
+
+
+
+
+
+  ];
+
+  // --- Embeds : distractions & annexes ---
+       // --- Embeds : distractions & annexes ---
+  // Tu peux adapter ces URLs selon tes goûts.
+  const embeds = {
+    cancer: {
+      label: "Tarot pas illustré",
+      url: "https://ouaisfieu.github.io/tech/notions/violence/",
+      description: "Tarot de Boulot et de Marseille sans illustration."
+    },
+    lion: {
+      label: "Tarot pas illustré",
+      url: "https://ouaisfieu.github.io/bxl2030/pnj/gisele-icroit/",
+      description: "Tarot de Boulot et de Marseille sans illustration."
+    },
+    penguin: {
+      label: "Tarot pas illustré",
+      url: "https://ouaisfieu.appsmith.com/app/tarotboulotproto-v3-1/tarotsimpletirage-68555a12a22d7c48aa0d27ad",
+      description: "Tarot de Boulot et de Marseille sans illustration."
+    },
+    intranet: {
+      label: "Intranet",
+      url: "https://boot-a-rat.vercel.app/",
+      description: "C'est par là que ça se passe."
+    },
+    youtube: {
+      label: "YouTube – exemple",
+      url: "https://www.youtube-nocookie.com/embed/9l-ViOOFH-s?si=KQWhfQK4_hP1XB-4",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    glitch: {
+      label: "YouTube – exemple",
+      url: "vids/Génération_Vidéo_Terminal_Glitché_Animé.mp4",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    glitchy: {
+      label: "YouTube – exemple",
+      url: "https://www.youtube.com/embed/zYGS4T50VJc?si=2_xPg2xpiXHVERr9",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    youtubeu: {
+      label: "YouTube – exemple",
+      url: "https://www.youtube.com/embed/18fDvEYhZtI?si=dyPqvuOiHaKqtODl",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    nom: {
+      label: "YouTube – exemple",
+      url: "vids/Taupe_récite_Chomsky_avec_sous_titres.mp4",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    youtubeuz: {
+      label: "YouTube – exemple",
+      url: "https://www.youtube-nocookie.com/embed/9l-ViOOFH-s?si=KQWhfQK4_hP1XB-4",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    spotify: {
+      label: "Spotify – playlist exemple",
+      url: "https://open.spotify.com/embed/playlist/1bmRdNMfrwZJsvCLbJRuzn?pi=oHZYAhUMT4SHW",
+      description: "Exemple de playlist Spotify (embed). Remplace l’URL par la tienne."
+    },
+    stopify: {
+      label: "Spotify – playlist exemple",
+      url: "https://open.spotify.com/embed/playlist/6mReaJvW4o1ER9bAngiUYG?utm_source=generator",
+      description: "Exemple de playlist Spotify (embed). Remplace l’URL par la tienne."
+    },
+    chom: {
+      label: "chom",
+      url: "https://ouaisfieu.github.io/lapin/vids/sky.mp4",
+      description: "PDF externe"
+    },
+    "pdf-plaidoyer-1": {
+      label: "plaidoyer-jp.pdf",
+      url: "https://www.justicepaix.be/wp-content/uploads/2021/10/20200110_Guide_plaidoyer_citoyen_VD.pdf",
+      description: "PDF externe"
+    },
+    gemeaux: {
+      label: "Veille (1)",
+      url: "https://ouaisfieu.github.io/lapin/vids/Vid%C3%A9o_de_la_taupe_chantant_l_Internationale.mp4",
+      description: "PDF local : idem."
+    },
+    belier: {
+      label: "YouTube – exemple",
+      url: "https://dl.ouaisfi.eu/Vid%C3%A9os/videoplayback.mp4",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    },
+    taureau: {
+      label: "Veille (2)",
+      url: "Football_The_Extreme_Wealth_Laboratory.pdf",
+      description: "PDF local : idem."
+    },
+    speaker: {
+      label: "Chargé de com'",
+      url: "https://ouaisfieu.github.io/vitrine/",
+      description: "Chargé de communication en boucle sur la communication"
+    },
+    king: {
+      label: "Tux",
+      url: "https://fr.wikipedia.org/wiki/Tux#/media/Fichier:Tux.svg",
+      description: "Pingouins."
+    },
+    dices: {
+      label: "Tirage de dés",
+      url: "https://tirage-one.vercel.app/",
+      description: "Application."
+    },
+    shop: {
+      label: "GOODIES",
+      url: "https://dl.ouaisfi.eu/",
+      description: "En construction."
+    },
+    youtubeu: {
+      label: "ExtrOonet",
+      url: "bacterus.html",
+      description: "C'est par là que ça se passe."
+    },
+    nom: {
+      label: "GOODIE",
+      url: "https://rg-ashy.vercel.app/grok-V0o.html",
+      description: "En construction."
+    },
+    youtoubeuz: {
+      label: "goodies",
+      url: "recrutement.html",
+      description: "En construction."
+    },
+    goooodies: {
+      label: "goooodies",
+      url: "https://educationpermanente.cfwb.be/kaleidoscope",
+      description: "En perfectionnement permanent."
+    },
+    logo: {
+      label: "logo",
+      url: "logo.html",
+      description: "En perfectionnement permanent."
+    },
+    youtube2: {
+      label: "YouTube – en vrai",
+      url: "https://www.youtube.com/embed/zYGS4T50VJc?si=2_xPg2xpiXHVERr9",
+      description: "Exemple d’embed YouTube. Remplace l’ID de vidéo par ce que tu veux."
+    }
+    
+  };
+
+  const moduleSearch   = document.getElementById("moduleSearch");
+  const moduleCategory = document.getElementById("moduleCategory");
+  const modulesContainer = document.getElementById("modulesContainer");
+  const modulesCount   = document.getElementById("modulesCount");
+
+  const viewerTitle    = document.getElementById("viewerTitle");
+  const viewerSubtitle = document.getElementById("viewerSubtitle");
+  const viewerCategoryBadge = document.getElementById("viewerCategoryBadge");
+  const viewerKindBadge = document.getElementById("viewerKindBadge");
+  const viewerFile     = document.getElementById("viewerFile");
+  const viewerFrame    = document.getElementById("viewerFrame");
+  const viewerOpenNew  = document.getElementById("viewerOpenNew");
+
+  let filteredModules = [];
+  let activeModuleId = null;
+
+  function categoryLabel(cat) {
+    switch (cat) {
+      case "base": return "La Base";
+      case "brol": return "BAC À SPAM";
+      case "univ": return "Univers & jeu";
+      case "intra": return "Lien en vrac";
+      case "ia": return "IA fictive";
+      case "meta": return "Tests";
+      default: return "Autre";
+    }
+  }
+
+  function kindClass(cat) {
+    switch (cat) {
+      case "base": return "kind-base";
+      case "brol": return "kind-brol";
+      case "univ": return "kind-univ";
+      case "intra": return "kind-intra";
+      case "ia": return "kind-ia";
+      case "meta": return "kind-meta";
+      default: return "";
+    }
+  }
+
+  function applyModuleFilter() {
+    const q = moduleSearch.value.trim().toLowerCase();
+    const cat = moduleCategory.value;
+
+    filteredModules = modules.filter(m => {
+      if (cat !== "all" && m.category !== cat) return false;
+      if (!q) return true;
+      const h = (m.title + " " + m.file + " " + (m.description || "")).toLowerCase();
+      return h.includes(q);
+    });
+
+    renderModules();
+  }
+
+  function renderModules() {
+    modulesContainer.innerHTML = "";
+    if (!filteredModules.length) {
+      modulesContainer.innerHTML = '<div class="muted" style="padding:4px 6px;">Aucun module ne correspond à la recherche.</div>';
+      modulesCount.textContent = "0 module";
+      return;
+    }
+
+    modulesCount.textContent = filteredModules.length + " module" + (filteredModules.length > 1 ? "s" : "");
+
+    // Regrouper par catégorie
+    const groups = {};
+    filteredModules.forEach(m => {
+      if (!groups[m.category]) groups[m.category] = [];
+      groups[m.category].push(m);
+    });
+
+    Object.keys(groups).sort().forEach(cat => {
+      const groupEl = document.createElement("div");
+      const title = document.createElement("div");
+      title.className = "group-title";
+      title.textContent = categoryLabel(cat);
+      groupEl.appendChild(title);
+
+      groups[cat].forEach(m => {
+        const item = document.createElement("div");
+        item.className = "module-item";
+        if (m.id === activeModuleId) item.classList.add("active");
+        item.dataset.id = m.id;
+
+        item.innerHTML = `
+          <div class="module-main">
+            <div class="module-title" title="${m.title}">${m.title}</div>
+            <div class="module-sub">${m.description || ""}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;">
+            <div class="module-file" title="${m.file}">${m.file}</div>
+            <div class="module-kind ${kindClass(m.category)}">${m.kind || ""}</div>
+          </div>
+        `;
+
+        item.addEventListener("click", () => selectModule(m.id));
+
+        groupEl.appendChild(item);
+      });
+
+      modulesContainer.appendChild(groupEl);
+    });
+  }
+
+  function selectModule(id) {
+    const m = modules.find(x => x.id === id);
+    if (!m) return;
+    activeModuleId = id;
+
+    const items = modulesContainer.querySelectorAll(".module-item");
+    items.forEach(el => {
+      el.classList.toggle("active", el.dataset.id === id);
+    });
+
+    // Mise à jour viewer
+    viewerTitle.textContent = m.title;
+    viewerSubtitle.textContent = m.description || "";
+    viewerCategoryBadge.textContent = categoryLabel(m.category);
+    viewerKindBadge.textContent = m.kind || "";
+    viewerFile.textContent = "Fichier / URL : " + m.file;
+    viewerFrame.src = m.file;
+    viewerOpenNew.href = m.file;
+  }
+
+  moduleSearch.addEventListener("input", applyModuleFilter);
+  moduleCategory.addEventListener("change", applyModuleFilter);
+
+  // --- Embeds boutons ---
+  const embedButtons = document.querySelectorAll(".embed-btn");
+  embedButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.embed;
+      const e = embeds[key];
+      if (!e) return;
+      activeModuleId = null;
+
+      const items = modulesContainer.querySelectorAll(".module-item");
+      items.forEach(el => el.classList.remove("active"));
+
+      viewerTitle.textContent = e.label;
+      viewerSubtitle.textContent = e.description || "";
+      viewerCategoryBadge.textContent = "Embed externe";
+      viewerKindBadge.textContent = "annexe / distraction";
+      viewerFile.textContent = "Fichier / URL : " + e.url;
+
+      // Pour Youtube/Spotify on laisse l’URL telle quelle, ça marche en iframe.
+      viewerFrame.src = e.url;
+      viewerOpenNew.href = e.url;
+    });
+  });
+
+  // Initialisation
+  document.addEventListener("DOMContentLoaded", () => {
+    applyModuleFilter();
+
+    // On peut automatiquement sélectionner un module par défaut si tu veux.
+    const defaultModule = modules.find(m => m.id === "site-ultime") || modules[0];
+    if (defaultModule) {
+      selectModule(defaultModule.id);
+    }
+  });
+</script>
+
+
+
+<pal-qyzvodoehdnk></pal-qyzvodoehdnk><style></style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
