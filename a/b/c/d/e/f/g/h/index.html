@@ -1,0 +1,755 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[CONFIDENTIEL] SCP-CORPORATE-001</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Orbitron:wght@700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00d4ff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes matrix {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #00d4ff; }
+            50% { text-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff; }
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(0, 10, 20, 0.95) 0%, rgba(10, 10, 30, 0.95) 100%);
+            border: 3px solid #00d4ff;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.4), inset 0 0 40px rgba(0, 212, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.05), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .classified-stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff0080 0%, #ff0040 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            transform: rotate(12deg);
+            font-weight: bold;
+            border: 3px solid #ffffff;
+            font-size: 1.3rem;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 5px 15px rgba(255, 0, 128, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            animation: glow 2s infinite;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            color: #00a8cc;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            margin-top: 1rem;
+            text-transform: uppercase;
+        }
+
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(255, 0, 80, 0.2) 0%, rgba(255, 0, 128, 0.2) 100%);
+            border: 2px solid #ff0080;
+            border-left: 8px solid #ff0080;
+            color: #ff4499;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: linear-gradient(135deg, rgba(0, 50, 80, 0.8) 0%, rgba(0, 30, 60, 0.8) 100%);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            padding: 0.85rem 1.75rem;
+            cursor: pointer;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .filter-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .filter-btn:hover {
+            border-color: #00ffff;
+            color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+            color: #000;
+            border-color: #00ffff;
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.6);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(0, 10, 20, 0.9);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            padding: 0.85rem 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1rem;
+            box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #005566;
+        }
+
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .job-card {
+            background: linear-gradient(135deg, rgba(0, 15, 30, 0.95) 0%, rgba(10, 20, 40, 0.95) 100%);
+            border: 2px solid #00d4ff;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.4s;
+            cursor: pointer;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .job-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.05) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .job-card:hover::before {
+            opacity: 1;
+        }
+
+        .job-card:hover {
+            border-color: #ff0080;
+            box-shadow: 0 10px 40px rgba(255, 0, 128, 0.4), 0 0 50px rgba(0, 212, 255, 0.3);
+            transform: translateY(-8px);
+        }
+
+        .job-id {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ff0080 0%, #ff0040 100%);
+            color: white;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 10px rgba(255, 0, 128, 0.5);
+        }
+
+        .job-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+            color: #00ffff;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .job-company {
+            color: #ffaa00;
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .job-company:hover {
+            color: #ffcc44;
+            text-decoration: underline;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+        }
+
+        .job-description {
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+            color: #00b8d4;
+            font-size: 0.95rem;
+        }
+
+        .job-salary {
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .job-tags {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 1.25rem;
+        }
+
+        .tag {
+            background: rgba(0, 100, 150, 0.3);
+            border: 1px solid #00d4ff;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .tag-toxic {
+            border-color: #ff0080;
+            color: #ff4499;
+            background: rgba(255, 0, 128, 0.2);
+        }
+
+        .tag-bullshit {
+            border-color: #ffaa00;
+            color: #ffcc44;
+            background: rgba(255, 170, 0, 0.2);
+        }
+
+        .tag-absurd {
+            border-color: #ff00ff;
+            color: #ff88ff;
+            background: rgba(255, 0, 255, 0.2);
+        }
+
+        .job-link {
+            display: inline-block;
+            margin-top: 1.25rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 100, 150, 0.8) 0%, rgba(0, 80, 120, 0.8) 100%);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        .job-link:hover {
+            background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+            transform: translateX(5px);
+        }
+
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: #005566;
+            font-size: 0.9rem;
+            padding: 2.5rem;
+            border-top: 2px solid #00d4ff;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 20, 40, 0.9) 0%, rgba(0, 30, 60, 0.9) 100%);
+            border: 2px solid #00d4ff;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff, 0 0 40px #00d4ff;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-label {
+            color: #00d4ff;
+            margin-top: 0.75rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .job-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .classified-stamp {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="classified-stamp">LEAKED</div>
+            <h1>SCP-CORPORATE-001</h1>
+            <p>SYSTÈME DE CATALOGAGE DES POSTES ABSURDES</p>
+            <p class="subtitle">Base de données des bullshit jobs et aberrations corporate</p>
+            <p class="subtitle">Classification : HYPERRÉALISTE | Dernière infiltration : 26/12/2025</p>
+        </div>
+
+        <div class="warning-banner">
+            ⚠️ ALERTE : CES OFFRES SONT FICTIVES MAIS LES ENTREPRISES SONT BIEN RÉELLES ⚠️<br>
+            Satire du monde corporate • Net art activiste • Critique sociale
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-jobs">0</div>
+                <div class="stat-label">Postes Absurdes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="companies-count">0</div>
+                <div class="stat-label">Entreprises Ciblées</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Victimes Potentielles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0%</div>
+                <div class="stat-label">Sens Détecté</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="filter-btn active" data-filter="all">TOUS</button>
+            <button class="filter-btn" data-filter="tech">TECH</button>
+            <button class="filter-btn" data-filter="consulting">CONSULTING</button>
+            <button class="filter-btn" data-filter="finance">FINANCE</button>
+            <button class="filter-btn" data-filter="retail">RETAIL</button>
+            <button class="filter-btn" data-filter="toxic">TOXIQUE</button>
+            <div class="search-box">
+                <input type="text" class="search-input" id="search" placeholder="[RECHERCHER DANS LA BASE DE DONNÉES...]">
+            </div>
+        </div>
+
+        <div class="job-grid" id="job-grid"></div>
+
+        <div class="footer">
+            <p>SCP-CORPORATE-001 © 2025 | PROJET ARTISTIQUE NON OFFICIEL</p>
+            <p>Les entreprises mentionnées sont réelles. Les offres sont parodiques et critiques.</p>
+            <p>Aucune affiliation avec les entreprises citées. Satire protégée par la liberté d'expression.</p>
+        </div>
+    </div>
+
+    <script>
+        const jobs = [
+            {
+                id: "CORP-001",
+                title: "Chief Happiness Officer",
+                company: "Google",
+                companyUrl: "https://careers.google.com",
+                category: "tech",
+                description: "Votre mission : maintenir l'illusion que travailler 70h/semaine dans une cage dorée est du 'bien-être'. Organisez des séances de yoga obligatoires pendant que nous réduisons les salaires. Compétences : gaslighting institutionnel, sourire permanent, déni de réalité.",
+                salary: "65K€ + fruits gratuits",
+                tags: ["Toxicité Positive", "Burn-out Garanti", "Culture d'Entreprise"],
+                toxic: true
+            },
+            {
+                id: "CORP-002",
+                title: "Synergy Integration Specialist",
+                company: "McKinsey & Company",
+                companyUrl: "https://www.mckinsey.com/careers",
+                category: "consulting",
+                description: "Créez des PowerPoint incompréhensibles pour justifier des licenciements massifs. Utilisez un maximum de jargon : 'disrupt', 'leverage', 'paradigm shift'. Exigences : MBA inutile, absence totale de conscience sociale, costume gris.",
+                salary: "95K€ + bonus destruction sociale",
+                tags: ["Bullshit Pur", "Jargon Maximal", "Consultant"],
+                bullshit: true
+            },
+            {
+                id: "CORP-003",
+                title: "Agile Scrum Master Level 99",
+                company: "Amazon",
+                companyUrl: "https://www.amazon.jobs",
+                category: "tech",
+                description: "Animez des daily meetings inutiles. Remplissez des tableaux Kanban qui ne servent à rien. Célébrez l'échec comme une 'opportunité d'apprentissage' pendant que les deadlines écrasent vos équipes. Certification Scrum obligatoire (mais inutile).",
+                salary: "58K€ + burnout inclus",
+                tags: ["Méthodologie Cargo Cult", "Réunionite", "Agile Theatre"],
+                bullshit: true
+            },
+            {
+                id: "CORP-004",
+                title: "Diversity & Inclusion Officer (Décoration)",
+                company: "Meta",
+                companyUrl: "https://www.metacareers.com",
+                category: "tech",
+                description: "Organisez des événements symboliques pendant que le conseil d'administration reste 100% masculin et blanc. Publiez des rapports trimestriels mensongers. Votre rôle : alibi moral de l'entreprise. Impact réel : 0.",
+                salary: "72K€ + culpabilité gratuite",
+                tags: ["Tokenisme", "Greenwashing Social", "Pure Façade"],
+                toxic: true
+            },
+            {
+                id: "CORP-005",
+                title: "Customer Success Evangelist",
+                company: "Salesforce",
+                companyUrl: "https://www.salesforce.com/company/careers/",
+                category: "tech",
+                description: "Vendez un CRM absurdement complexe que personne n'utilise correctement. Transformez chaque bug en 'feature'. Votre mission : gaslighter les clients insatisfaits. Compétence clé : sourire en mentant.",
+                salary: "68K€ + commission sur mensonges",
+                tags: ["SaaS Hell", "Manipulation Client", "Upselling Agressif"],
+                bullshit: true
+            },
+            {
+                id: "CORP-006",
+                title: "Growth Hacker Ninja Rockstar",
+                company: "Uber",
+                companyUrl: "https://www.uber.com/careers",
+                category: "tech",
+                description: "Exploitez des failles légales, harcelez les utilisateurs avec des notifications, vendez leurs données. Bref : 'disruption'. Bonus si vous arrivez à contourner le RGPD. Éthique non requise, buzzwords obligatoires.",
+                salary: "55K€ + stock-options sans valeur",
+                tags: ["Dark Patterns", "Disruption Toxique", "Startup Bro"],
+                toxic: true
+            },
+            {
+                id: "CORP-007",
+                title: "Strategic Alignment Coordinator",
+                company: "Deloitte",
+                companyUrl: "https://www2.deloitte.com/careers",
+                category: "consulting",
+                description: "Personne ne sait ce que vous faites, vous y compris. Assistez à des réunions pour préparer d'autres réunions. Créez des matrices 2x2 qui n'expliquent rien. Salaire élevé, utilité nulle. Le bullshit job absolu.",
+                salary: "88K€ + sens existentiel négatif",
+                tags: ["Bullshit Job Pur", "Réunionite Terminale", "Inutilité Certifiée"],
+                bullshit: true
+            },
+            {
+                id: "CORP-008",
+                title: "Retail Experience Designer",
+                company: "IKEA",
+                companyUrl: "https://www.ikea.com/careers",
+                category: "retail",
+                description: "Concevez des labyrinthes pour piéger les clients. Placez les articles essentiels au fond du magasin. Maximisez la frustration. Votre KPI : nombre de couples qui se disputent dans vos allées. PhD en psychologie manipulatrice apprécié.",
+                salary: "42K€ + meubles en kit cassés",
+                tags: ["Dark UX", "Manipulation Spatiale", "Design Hostile"],
+                absurd: true
+            },
+            {
+                id: "CORP-009",
+                title: "Innovation Disruption Officer",
+                company: "IBM",
+                companyUrl: "https://www.ibm.com/careers",
+                category: "tech",
+                description: "Utilisez 'blockchain', 'AI', 'quantum' dans chaque phrase sans rien comprendre. Vendez du vent à des directions qui n'y comprennent rien non plus. Budget illimité, résultats inexistants. Le paradis du consultant.",
+                salary: "105K€ + bullshit unlimited",
+                tags: ["Buzzword Bingo", "Snake Oil", "Innovation Théâtre"],
+                bullshit: true
+            },
+            {
+                id: "CORP-010",
+                title: "Employee Engagement Specialist",
+                company: "Accenture",
+                companyUrl: "https://www.accenture.com/careers",
+                category: "consulting",
+                description: "Organisez des team buildings forcés. Mesurez le bonheur avec des métriques absurdes. Ignorez systématiquement les vrais problèmes (salaires, conditions). Votre job : faire croire que pizza = reconnaissance.",
+                salary: "52K€ + baby-foot inutile",
+                tags: ["Pseudo-Empathie", "Culture Toxique", "Team Building Forcé"],
+                toxic: true
+            },
+            {
+                id: "CORP-011",
+                title: "Data Privacy Compliance Theater Manager",
+                company: "Facebook / Meta",
+                companyUrl: "https://www.metacareers.com",
+                category: "tech",
+                description: "Rédigez des politiques de confidentialité que personne ne lit. Validez des pratiques douteuses avec du jargon juridique. Votre mission : faire semblant de protéger la vie privée tout en la monétisant. Cynisme obligatoire.",
+                salary: "92K€ + conscience en option",
+                tags: ["Compliance Theatre", "RGPD Fiction", "Legal Bullshit"],
+                toxic: true
+            },
+            {
+                id: "CORP-012",
+                title: "Blockchain Solutions Architect",
+                company: "Oracle",
+                companyUrl: "https://www.oracle.com/careers",
+                category: "tech",
+                description: "Vendez de la blockchain pour des problèmes qui n'en ont pas besoin. Remplacez 'Excel' par 'distributed ledger'. Facturez 10x plus cher. Compétences : persuasion, absence d'éthique, costume coûteux.",
+                salary: "98K€ + NFTs sans valeur",
+                tags: ["Snake Oil 2.0", "Buzzword Premium", "Scam Légal"],
+                bullshit: true
+            },
+            {
+                id: "CORP-013",
+                title: "Sustainability Officer (Greenwashing Division)",
+                company: "Shell",
+                companyUrl: "https://www.shell.com/careers",
+                category: "finance",
+                description: "Publiez des rapports ESG mensongers. Plantez 10 arbres pendant que nous extrayons 10 millions de barils. Votre rôle : relations publiques et désinformation écologique. Bonus carbone inclus (ironiquement).",
+                salary: "115K€ + culpabilité climatique",
+                tags: ["Greenwashing", "Éco-Blanchiment", "PR Mensonger"],
+                toxic: true
+            },
+            {
+                id: "CORP-014",
+                title: "Vice President of First Impressions",
+                company: "WeWork",
+                companyUrl: "https://www.wework.com/careers",
+                category: "retail",
+                description: "Ancien titre : réceptionniste. Nouveau titre : pompeux et inutile. Même salaire, plus de responsabilités émotionnelles non payées. Souriez pendant que l'entreprise coule. Expertise : inflation de titres.",
+                salary: "28K€ + titre impressionnant",
+                tags: ["Title Inflation", "Sous-Payé", "Absurdité Pure"],
+                absurd: true
+            },
+            {
+                id: "CORP-015",
+                title: "Digital Transformation Guru",
+                company: "SAP",
+                companyUrl: "https://www.sap.com/careers",
+                category: "tech",
+                description: "Vendez des migrations cloud catastrophiques. Détruisez des systèmes qui fonctionnaient. Facturez des millions pour réparer vos propres erreurs. Compétences : PowerPoint, audace, absence de responsabilité.",
+                salary: "125K€ + désastres gratuits",
+                tags: ["Migration Hell", "Legacy Destroyer", "Consultant Premium"],
+                bullshit: true
+            },
+            {
+                id: "CORP-016",
+                title: "Agile Coach (Waterfall en Réalité)",
+                company: "Capgemini",
+                companyUrl: "https://www.capgemini.com/careers",
+                category: "consulting",
+                description: "Prêchez l'agilité pendant que tout reste waterfall. Organisez des cérémonies Scrum inutiles. Facturez 1200€/jour pour lire la documentation Scrum à haute voix. Le summum du cargo cult.",
+                salary: "78K€/an ou 1200€/jour",
+                tags: ["Agile Theatre", "Cargo Cult", "Certification Inutile"],
+                bullshit: true
+            },
+            {
+                id: "CORP-017",
+                title: "Community Manager (Modération Toxique)",
+                company: "Twitter / X",
+                companyUrl: "https://careers.twitter.com",
+                category: "tech",
+                description: "Gérez des trolls 12h/jour, salaire minimum, santé mentale en option. Appliquez des règles changeantes et contradictoires. Subissez la haine en première ligne pendant que les executives comptent leurs millions.",
+                salary: "32K€ + trauma inclus",
+                tags: ["Exploitation", "Santé Mentale", "Précariat Digital"],
+                toxic: true
+            },
+            {
+                id: "CORP-018",
+                title: "Revenue Optimization Specialist",
+                company: "Booking.com",
+                companyUrl: "https://careers.booking.com",
+                category: "tech",
+                description: "Créez des dark patterns. Cachez les vrais prix. Ajoutez des frais cachés. Votre mission : maximiser la confusion et l'arnaque légale. Éthique interdite, créativité malveillante encouragée.",
+                salary: "64K€ + conscience morte",
+                tags: ["Dark Patterns", "Manipulation UX", "Arnaque Légale"],
+                toxic: true
+            }
+        ];
+
+        const jobGrid = document.getElementById('job-grid');
+        const searchInput = document.getElementById('search');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        function renderJobs() {
+            const filtered = jobs.filter(job => {
+                const matchesFilter = currentFilter === 'all' || 
+                                     job.category === currentFilter ||
+                                     (currentFilter === 'toxic' && job.toxic);
+                const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                     job.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            jobGrid.innerHTML = filtered.map(job => `
+                <div class="job-card" data-category="${job.category}">
+                    <div class="job-id">${job.id}</div>
+                    <div class="job-title">${job.title}</div>
+                    <a href="${job.companyUrl}" class="job-company" target="_blank">
+                        🏢 ${job.company}
+                    </a>
+                    <div class="job-salary">💰 ${job.salary}</div>
+                    <div class="job-description">${job.description}</div>
+                    <div class="job-tags">
+                        ${job.tags.map(tag => {
+                            let tagClass = 'tag';
+                            if (job.toxic) tagClass += ' tag-toxic';
+                            else if (job.bullshit) tagClass += ' tag-bullshit';
+                            else if (job.absurd) tagClass += ' tag-absurd';
+                            return `<span class="${tagClass}">${tag}</span>`;
+                        }).join('')}
+                    </div>
+                    <a href="${job.companyUrl}" class="job-link" target="_blank">
+                        [ACCÉDER AU SITE RÉEL] →
+                    </a>
+                </div>
+            `).join('');
+
+            document.getElementById('total-jobs').textContent = filtered.length;
+            document.getElementById('companies-count').textContent = new Set(jobs.map(j => j.company)).size;
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderJobs();
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value;
+            renderJobs();
+        });
+
+        renderJobs();
+    </script>
+</body>
+</html>
