@@ -1,0 +1,1450 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PéTAL OS</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&family=Nunito:wght@600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-primary: #f8f6f3;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #ebe8e4;
+      --bg-module: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #5a5a5a;
+      --text-muted: #8a8a8a;
+      --accent: #2d5a4a;
+      --accent-soft: rgba(45, 90, 74, 0.08);
+      --border: rgba(0, 0, 0, 0.06);
+      --border-strong: rgba(0, 0, 0, 0.12);
+      --radius: 6px;
+      --radius-lg: 8px;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', -apple-system, sans-serif;
+      --nav-item-padding: 0.875rem 1.5rem;
+      --transition: 0.3s ease;
+    }
+
+    .theme-dark {
+      --bg-primary: #0f0f0f;
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #252525;
+      --bg-module: #1a1a1a;
+      --text-primary: #f0ede8;
+      --text-secondary: #a8a8a8;
+      --text-muted: #666666;
+      --accent: #7eb8a2;
+      --accent-soft: rgba(126, 184, 162, 0.1);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-strong: rgba(255, 255, 255, 0.12);
+    }
+
+    .theme-funky {
+      --bg-primary: #4C97FF;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f0f8ff;
+      --bg-module: #ffffff;
+      --text-primary: #575E75;
+      --text-secondary: #575E75;
+      --text-muted: #7c8399;
+      --accent: #FFAB19;
+      --accent-soft: rgba(255, 171, 25, 0.15);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.12);
+      --radius: 12px;
+      --radius-lg: 16px;
+      --font-display: 'Nunito', sans-serif;
+      --font-body: 'Nunito', sans-serif;
+      --nav-item-padding: 1rem 1.25rem;
+      --transition: 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .theme-funky .system-bar {
+      background: linear-gradient(135deg, #4C97FF 0%, #855CD6 100%);
+      border-bottom: none;
+    }
+    .theme-funky .sys-brand h1, .theme-funky .sys-status { color: white !important; }
+    .theme-funky .btn {
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: white;
+      font-weight: 700;
+      border-radius: 20px;
+    }
+    .theme-funky .btn:hover { background: white; color: #4C97FF; border-color: white; transform: scale(1.05); }
+    .theme-funky .nav-item { margin: 0.25rem 0.75rem; border-radius: 10px; border-left: none; font-weight: 600; }
+    .theme-funky .nav-item:hover { transform: translateX(4px); }
+    .theme-funky .nav-item.is-active { background: var(--accent); color: white; border-left-color: transparent; }
+    .theme-funky .meta-panel { background: linear-gradient(180deg, #855CD6 0%, #4C97FF 100%); border: none; }
+    .theme-funky .meta-header h2, .theme-funky .meta-content, .theme-funky .meta-content p { color: white !important; }
+    .theme-funky .meta-toggle svg { stroke: white; }
+    .theme-funky .meta-content .highlight { color: #FFBF00 !important; background: rgba(255,255,255,0.2); padding: 0.1em 0.4em; border-radius: 6px; }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      transition: background var(--transition), color var(--transition);
+    }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 600; }
+
+    .system-bar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.875rem 1.25rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      transition: all var(--transition);
+    }
+    .sys-brand { display: flex; align-items: baseline; gap: 0.5rem; }
+    .sys-brand h1 { font-size: 1.25rem; }
+    .sys-status { font-size: 0.75rem; color: var(--text-muted); font-style: italic; }
+    .sys-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+      padding: 0.5rem 0.875rem;
+      font-family: inherit; font-size: 0.8125rem; font-weight: 500;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+    .btn:active { transform: scale(0.97); }
+    .btn-icon { width: 2.25rem; padding: 0.5rem; }
+    .menu-toggle { display: flex; }
+
+    .layout { flex: 1; display: flex; flex-direction: column; }
+
+    .nav-panel {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--bg-secondary);
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; flex-direction: column;
+    }
+    .nav-panel.is-open { transform: translateX(0); }
+    .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+    .nav-header h2 { font-size: 1.125rem; }
+    .nav-close { width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--text-muted); background: none; border: none; cursor: pointer; border-radius: 4px; }
+    .nav-close:hover { background: var(--accent-soft); color: var(--accent); }
+    .nav-list { flex: 1; overflow-y: auto; padding: 1rem 0; list-style: none; }
+    .nav-item { padding: var(--nav-item-padding); font-size: 0.9375rem; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); border-left: 2px solid transparent; }
+    .nav-item:hover { background: var(--accent-soft); color: var(--text-primary); }
+    .nav-item.is-active { background: var(--accent-soft); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+    .nav-overlay { position: fixed; inset: 0; z-index: 150; background: rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .nav-overlay.is-visible { opacity: 1; visibility: visible; }
+
+    .module-view { flex: 1; min-height: 50vh; background: var(--bg-tertiary); position: relative; overflow: auto; }
+    .module-content { padding: 2rem; height: 100%; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .meta-panel { background: var(--bg-secondary); border-top: 1px solid var(--border); }
+    .meta-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .meta-header h2 { font-size: 1rem; }
+    .meta-toggle { width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: transform 0.3s; }
+    .meta-panel.is-collapsed .meta-toggle { transform: rotate(180deg); }
+    .meta-content { padding: 1.25rem; max-height: 40vh; overflow-y: auto; transition: all 0.35s; }
+    .meta-panel.is-collapsed .meta-content { max-height: 0; padding-top: 0; padding-bottom: 0; overflow: hidden; }
+    .meta-content p { font-size: 0.9375rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 0.75rem; }
+    .meta-content .highlight { color: var(--accent); font-weight: 500; }
+
+    @media (min-width: 768px) {
+      .menu-toggle { display: none; }
+      .nav-overlay { display: none; }
+      .layout { flex-direction: row; height: calc(100dvh - 57px); }
+      .nav-panel { position: relative; transform: none; width: 220px; min-width: 220px; border-right: 1px solid var(--border); }
+      .nav-close { display: none; }
+      .module-view { min-height: auto; }
+      .meta-panel { width: 280px; min-width: 280px; border-top: none; border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+      .meta-header { cursor: default; }
+      .meta-toggle { display: none; }
+      .meta-content { flex: 1; max-height: none; }
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+    ::selection { background: var(--accent); color: white; }
+
+    /* Module styles */
+    .mod-accueil { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 100%; }
+    .mod-accueil .petal { font-size: clamp(3rem, 10vw, 5rem); animation: float 3s ease-in-out infinite; }
+    .mod-accueil h2 { font-size: clamp(2rem, 6vw, 3rem); margin: 1rem 0; }
+    .mod-accueil p { color: var(--text-secondary); font-size: 1.125rem; }
+    @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(5deg); } }
+
+    .mod-perception .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 4px; }
+    .mod-perception .cell { aspect-ratio: 1; background: var(--bg-module); border-radius: var(--radius); cursor: crosshair; transition: all 0.2s; }
+    .mod-perception .cell:hover { background: var(--accent); transform: scale(1.1); z-index: 1; }
+    .mod-perception .cell.active { background: var(--accent); }
+
+    .mod-memoire { max-width: 600px; margin: 0 auto; }
+    .mod-memoire .memory { padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
+    .mod-memoire .memory-date { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; font-family: monospace; }
+    .mod-memoire .memory-text { font-family: var(--font-display); font-size: 1.25rem; font-style: italic; color: var(--text-secondary); }
+    .mod-memoire .memory-text::before { content: '"'; color: var(--accent); }
+    .mod-memoire .memory-text::after { content: '"'; color: var(--accent); }
+    .mod-memoire input { width: 100%; margin-top: 1.5rem; padding: 0.875rem 1rem; background: var(--bg-module); border: 1px solid var(--border-strong); border-radius: var(--radius); color: var(--text-primary); font-family: inherit; font-size: 1rem; }
+    .mod-memoire input:focus { outline: none; border-color: var(--accent); }
+
+    .mod-reverie { position: absolute; inset: 0; padding: 0 !important; }
+    .mod-reverie canvas { width: 100%; height: 100%; display: block; }
+    .mod-reverie .hint { position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: var(--text-muted); background: var(--bg-module); padding: 0.5rem 1rem; border-radius: 20px; }
+
+    /* ÉCHO MODULE - PSYCHEDELIC EDITION */
+    .mod-echo { padding: 1rem; }
+    .mod-echo .echo-input-area { max-width: 600px; margin: 0 auto 2rem; text-align: center; }
+    .mod-echo .echo-input-area input {
+      width: 100%; padding: 1rem 1.5rem;
+      font-family: 'Orbitron', sans-serif; font-size: 1.25rem;
+      background: linear-gradient(135deg, #1a0a2e 0%, #16213e 100%);
+      border: 2px solid #7b2cbf;
+      border-radius: 50px;
+      color: #e0aaff;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(123, 44, 191, 0.3), inset 0 0 20px rgba(123, 44, 191, 0.1);
+      transition: all 0.3s;
+    }
+    .mod-echo .echo-input-area input:focus {
+      outline: none;
+      border-color: #c77dff;
+      box-shadow: 0 0 30px rgba(199, 125, 255, 0.5), inset 0 0 30px rgba(199, 125, 255, 0.2);
+    }
+    .mod-echo .echo-input-area input::placeholder { color: #9d4edd; }
+    .mod-echo .echo-input-area .hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    .echo-cards { display: grid; gap: 1rem; }
+    .echo-card {
+      background: linear-gradient(135deg, #1a0a2e 0%, #0d1b2a 50%, #1a0a2e 100%);
+      border: 1px solid #7b2cbf;
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      animation: cardAppear 0.5s ease;
+    }
+    .echo-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 40%, rgba(123, 44, 191, 0.1) 50%, transparent 60%);
+      animation: shimmer 3s infinite;
+    }
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    @keyframes cardAppear { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+    .echo-card .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; position: relative; z-index: 1;
+    }
+    .echo-card .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.25rem;
+      background: linear-gradient(90deg, #c77dff, #7b2cbf, #3c096c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(199, 125, 255, 0.5);
+      animation: neonPulse 2s ease-in-out infinite;
+    }
+    @keyframes neonPulse { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
+
+    .echo-card .card-date { font-size: 0.7rem; color: #9d4edd; font-family: monospace; }
+    .echo-card .card-actions { display: flex; gap: 0.5rem; }
+    .echo-card .card-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.7rem;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #7b2cbf 0%, #3c096c 100%);
+      border: 1px solid #9d4edd;
+      border-radius: 20px;
+      color: #e0aaff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .echo-card .card-btn:hover {
+      background: linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+    }
+
+    .echo-card .card-preview {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #3c096c;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .echo-card .card-preview iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .echo-card .card-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+    .echo-card .info-item {
+      background: rgba(123, 44, 191, 0.1);
+      border: 1px solid #3c096c;
+      border-radius: 8px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .echo-card .info-label { font-size: 0.65rem; color: #9d4edd; text-transform: uppercase; letter-spacing: 1px; }
+    .echo-card .info-value { font-size: 0.85rem; color: #e0aaff; margin-top: 0.25rem; }
+
+    .echo-card .mascots {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    .echo-card .mascot {
+      font-size: 2rem;
+      animation: mascotBounce 1s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(123, 44, 191, 0.8));
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .echo-card .mascot:hover { transform: scale(1.3) rotate(10deg); }
+    .echo-card .mascot:nth-child(2) { animation-delay: 0.2s; }
+    .echo-card .mascot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes mascotBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    /* Easter egg */
+    .echo-card .mascot.psychedelic {
+      animation: psychedelicSpin 0.5s ease-in-out;
+      filter: hue-rotate(180deg) drop-shadow(0 0 20px #ff00ff);
+    }
+    @keyframes psychedelicSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(2); } 100% { transform: rotate(360deg) scale(1); } }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; visibility: hidden;
+      transition: all 0.3s;
+    }
+    .modal-overlay.is-open { opacity: 1; visibility: visible; }
+
+    .modal {
+      background: linear-gradient(135deg, #1a0a2e 0%, #0d1b2a 100%);
+      border: 2px solid #7b2cbf;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow: auto;
+      position: relative;
+      box-shadow: 0 0 50px rgba(123, 44, 191, 0.5);
+      animation: modalAppear 0.4s ease;
+    }
+    @keyframes modalAppear { from { transform: scale(0.8) translateY(50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid #3c096c;
+      position: sticky; top: 0;
+      background: linear-gradient(135deg, #1a0a2e 0%, #0d1b2a 100%);
+      z-index: 10;
+    }
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, #c77dff, #7b2cbf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .modal-close {
+      width: 2.5rem; height: 2.5rem;
+      background: rgba(123, 44, 191, 0.2);
+      border: 1px solid #7b2cbf;
+      border-radius: 50%;
+      color: #c77dff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { background: #7b2cbf; color: white; transform: rotate(90deg); }
+
+    .modal-body { padding: 1.5rem; }
+
+    .modal-section { margin-bottom: 1.5rem; }
+    .modal-section h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: #9d4edd;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .modal textarea {
+      width: 100%;
+      min-height: 300px;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #3c096c;
+      border-radius: 12px;
+      color: #e0aaff;
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .modal textarea:focus { outline: none; border-color: #7b2cbf; }
+
+    .modal-preview {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      min-height: 400px;
+    }
+    .modal-preview iframe { width: 100%; height: 400px; border: none; }
+
+    .modal-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      padding: 1.5rem;
+      border-top: 1px solid #3c096c;
+      position: sticky; bottom: 0;
+      background: linear-gradient(135deg, #1a0a2e 0%, #0d1b2a 100%);
+    }
+    .modal-btn {
+      flex: 1; min-width: 150px;
+      padding: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      border: 2px solid;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .modal-btn.primary {
+      background: linear-gradient(135deg, #7b2cbf 0%, #3c096c 100%);
+      border-color: #9d4edd;
+      color: white;
+    }
+    .modal-btn.primary:hover {
+      background: linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%);
+      box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+      transform: translateY(-2px);
+    }
+    .modal-btn.secondary {
+      background: transparent;
+      border-color: #3c096c;
+      color: #9d4edd;
+    }
+    .modal-btn.secondary:hover {
+      border-color: #7b2cbf;
+      color: #c77dff;
+    }
+
+    /* Glitch effect */
+    .glitch {
+      position: relative;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+    }
+    .glitch::before {
+      animation: glitch1 0.3s infinite;
+      color: #0ff;
+      z-index: -1;
+    }
+    .glitch::after {
+      animation: glitch2 0.3s infinite;
+      color: #f0f;
+      z-index: -2;
+    }
+    @keyframes glitch1 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+      20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+      40% { clip-path: inset(40% 0 40% 0); transform: translate(2px, -2px); }
+      60% { clip-path: inset(60% 0 20% 0); transform: translate(-1px, 1px); }
+      80% { clip-path: inset(80% 0 0% 0); transform: translate(1px, -1px); }
+    }
+    @keyframes glitch2 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+      20% { clip-path: inset(60% 0 20% 0); transform: translate(2px, -2px); }
+      40% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 2px); }
+      60% { clip-path: inset(80% 0 0% 0); transform: translate(1px, -1px); }
+      80% { clip-path: inset(40% 0 40% 0); transform: translate(-1px, 1px); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="system-bar">
+    <div class="sys-brand">
+      <h1>PéTAL OS</h1>
+      <span class="sys-status" id="sysStatus">— état du réel</span>
+    </div>
+    <div class="sys-actions">
+      <button class="btn" onclick="cycleTheme()" id="themeBtn">
+        <span id="themeName">🌙</span>
+      </button>
+      <button class="btn btn-icon menu-toggle" onclick="toggleNav()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-overlay" onclick="closeNav()"></div>
+
+  <main class="layout">
+    <aside class="nav-panel">
+      <div class="nav-header">
+        <h2>Modules</h2>
+        <button class="nav-close" onclick="closeNav()">×</button>
+      </div>
+      <ul class="nav-list" id="moduleList"></ul>
+    </aside>
+
+    <section class="module-view">
+      <div class="module-content" id="moduleContent"></div>
+    </section>
+
+    <aside class="meta-panel">
+      <div class="meta-header" onclick="toggleMeta()">
+        <h2>Contexte</h2>
+        <div class="meta-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+        </div>
+      </div>
+      <div class="meta-content" id="metaContent">
+        <p>Sélectionne un module.</p>
+        <p class="highlight">Amuse-toi surtout.</p>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target === this) closeModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title glitch" data-text="" id="modalTitle">Éditeur</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h3>📝 Code HTML</h3>
+          <textarea id="modalCode"></textarea>
+        </div>
+        <div class="modal-section">
+          <h3>👁️ Prévisualisation</h3>
+          <div class="modal-preview">
+            <iframe id="modalPreview"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn secondary" onclick="updatePreview()">🔄 Rafraîchir</button>
+        <button class="modal-btn secondary" onclick="copyCode()">📋 Copier</button>
+        <button class="modal-btn primary" onclick="downloadHtml()">💾 Télécharger HTML</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════════════════════
+    // GENERATED SITES STORAGE
+    // ══════════════════════════════════════════════════════════════
+    let generatedSites = [];
+    let currentEditIndex = -1;
+
+    // ══════════════════════════════════════════════════════════════
+    // MODULES
+    // ══════════════════════════════════════════════════════════════
+    const MODULES = [
+      {
+        id: 'accueil',
+        name: 'Accueil',
+        description: `<p>Bienvenue dans <span class="highlight">PéTAL OS</span>.</p><p>Un système d'exploration du réel.</p>`,
+        render: () => `<div class="mod-accueil"><div class="petal">🌸</div><h2>Bienvenue</h2><p>Choisis un module pour commencer.</p></div>`
+      },
+      {
+        id: 'perception',
+        name: 'Perception',
+        description: `<p><span class="highlight">Perception</span> — Module sensoriel.</p><p>Survole pour sentir. Clique pour marquer.</p>`,
+        render: () => {
+          let html = '<div class="mod-perception"><div class="grid">';
+          for (let i = 0; i < 150; i++) html += '<div class="cell" onclick="this.classList.toggle(\'active\')"></div>';
+          return html + '</div></div>';
+        }
+      },
+      {
+        id: 'memoire',
+        name: 'Mémoire',
+        description: `<p><span class="highlight">Mémoire</span> — Ce qui reste.</p>`,
+        render: () => `
+          <div class="mod-memoire">
+            <div class="memory"><div class="memory-date">2024-03-15</div><div class="memory-text">La lumière ce matin avait une couleur que je ne retrouverai jamais.</div></div>
+            <div class="memory"><div class="memory-date">2024-02-28</div><div class="memory-text">Il y avait du sel sur mes lèvres et l'océan était calme.</div></div>
+            <input type="text" placeholder="Ajoute un souvenir..." onkeypress="addMemory(event)">
+          </div>`
+      },
+      {
+        id: 'reverie',
+        name: 'Rêverie',
+        description: `<p><span class="highlight">Rêverie</span> — Module génératif.</p>`,
+        render: () => `<div class="mod-reverie"><canvas id="dreamCanvas"></canvas><div class="hint">Bouge pour rêver ✨</div></div>`,
+        init: initDreamCanvas
+      },
+      {
+        id: 'echo',
+        name: 'Écho ✨',
+        description: `
+          <p><span class="highlight">Écho</span> — Générateur de sites psychédéliques.</p>
+          <p>Tape un sujet → génère un mini-site éducatif avec mouflons 🐑 et pingouins 🐧 en néon !</p>
+          <p>Easter eggs cachés... 🌈</p>
+        `,
+        render: renderEchoModule
+      }
+    ];
+
+    // ══════════════════════════════════════════════════════════════
+    // ECHO MODULE - SITE GENERATOR
+    // ══════════════════════════════════════════════════════════════
+    function renderEchoModule() {
+      let cardsHtml = generatedSites.map((site, i) => renderEchoCard(site, i)).join('');
+      return `
+        <div class="mod-echo">
+          <div class="echo-input-area">
+            <input type="text" id="echoInput" placeholder="🔮 Entre un sujet magique..." onkeypress="handleEchoInput(event)" autocomplete="off">
+            <div class="hint">Appuie sur Entrée pour générer un site psychédélique</div>
+          </div>
+          <div class="echo-cards" id="echoCards">${cardsHtml}</div>
+        </div>
+      `;
+    }
+
+    function renderEchoCard(site, index) {
+      return `
+        <div class="echo-card">
+          <div class="card-header">
+            <div>
+              <div class="card-title glitch" data-text="${site.subject}">${site.subject}</div>
+              <div class="card-date">${site.date}</div>
+            </div>
+            <div class="card-actions">
+              <button class="card-btn" onclick="openEditor(${index})">✏️ Éditer</button>
+              <button class="card-btn" onclick="downloadSite(${index})">💾 Export</button>
+            </div>
+          </div>
+          <div class="card-preview">
+            <iframe srcdoc="${escapeHtml(site.html)}" sandbox="allow-scripts"></iframe>
+          </div>
+          <div class="card-info">
+            <div class="info-item"><div class="info-label">Type</div><div class="info-value">${site.type}</div></div>
+            <div class="info-item"><div class="info-label">Style</div><div class="info-value">Néon Psyché</div></div>
+            <div class="info-item"><div class="info-label">Niveau</div><div class="info-value">★★★</div></div>
+            <div class="info-item"><div class="info-label">Easter Eggs</div><div class="info-value">${site.easterEggs}</div></div>
+          </div>
+          <div class="mascots">
+            <span class="mascot" onclick="triggerEasterEgg(this)" title="Clique pour la magie !">🐑</span>
+            <span class="mascot" onclick="triggerEasterEgg(this)" title="Clique pour la magie !">🐧</span>
+            <span class="mascot" onclick="triggerEasterEgg(this)" title="Clique pour la magie !">🦩</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleEchoInput(e) {
+      if (e.key !== 'Enter') return;
+      const input = e.target;
+      const subject = input.value.trim();
+      if (!subject) return;
+
+      const site = generateSite(subject);
+      generatedSites.unshift(site);
+      
+      document.getElementById('echoCards').innerHTML = generatedSites.map((s, i) => renderEchoCard(s, i)).join('');
+      input.value = '';
+    }
+
+    function generateSite(subject) {
+      const now = new Date();
+      const types = ['Documentation', 'Tutorial', 'Wiki', 'Explorer', 'Lab'];
+      const easterEggCount = Math.floor(Math.random() * 5) + 3;
+      
+      const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${subject} — Exploration Psychédélique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --mauve: #9d4edd;
+      --mauve-dark: #7b2cbf;
+      --mauve-light: #c77dff;
+      --vert-lilas: #a7f3d0;
+      --vert-neon: #10b981;
+      --bg-dark: #0a0a1a;
+      --bg-card: rgba(15, 10, 30, 0.8);
+    }
+    
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0d1b2a 100%);
+      color: #e0e0ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(157, 78, 221, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(167, 243, 208, 0.1) 0%, transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+    @keyframes bgPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.1) 2px,
+        rgba(0, 0, 0, 0.1) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+    
+    header {
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--mauve-light), var(--vert-lilas), var(--mauve-light));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 3s linear infinite;
+      text-shadow: 0 0 30px rgba(157, 78, 221, 0.8);
+      position: relative;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    
+    /* Glitch effect on title */
+    h1::before, h1::after {
+      content: '${subject.toUpperCase()}';
+      position: absolute;
+      left: 0; right: 0;
+      background: inherit;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h1::before {
+      animation: glitch1 0.3s infinite;
+      text-shadow: 2px 0 #0ff;
+    }
+    h1::after {
+      animation: glitch2 0.3s infinite;
+      text-shadow: -2px 0 #f0f;
+    }
+    @keyframes glitch1 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0; }
+      20% { clip-path: inset(20% 0 60% 0); transform: translate(-3px); opacity: 0.8; }
+      40% { clip-path: inset(40% 0 40% 0); transform: translate(3px); opacity: 0.8; }
+    }
+    @keyframes glitch2 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0; }
+      30% { clip-path: inset(60% 0 20% 0); transform: translate(3px); opacity: 0.8; }
+      60% { clip-path: inset(30% 0 50% 0); transform: translate(-3px); opacity: 0.8; }
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--vert-lilas);
+      margin-top: 1rem;
+      opacity: 0.8;
+    }
+    
+    .mascots {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .mascot {
+      font-size: 3rem;
+      animation: float 2s ease-in-out infinite;
+      cursor: pointer;
+      transition: all 0.3s;
+      filter: drop-shadow(0 0 15px var(--mauve));
+    }
+    .mascot:nth-child(2) { animation-delay: 0.3s; }
+    .mascot:nth-child(3) { animation-delay: 0.6s; }
+    .mascot:hover {
+      transform: scale(1.5) rotate(15deg);
+      filter: drop-shadow(0 0 30px var(--vert-neon)) hue-rotate(90deg);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--mauve-dark);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 40%, rgba(157, 78, 221, 0.1) 50%, transparent 60%);
+      animation: shimmer 4s infinite;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .card h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: var(--mauve-light);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card p, .card li {
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .card li {
+      padding: 0.5rem 0;
+      padding-left: 2rem;
+      position: relative;
+    }
+    .card li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--vert-neon);
+      animation: pulse 1s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+    
+    .demo-area {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(157, 78, 221, 0.1) 100%);
+      border: 2px dashed var(--vert-neon);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+    
+    .demo-area h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--vert-lilas);
+      margin-bottom: 1rem;
+    }
+    
+    .demo-btn {
+      padding: 1rem 2rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      background: linear-gradient(135deg, var(--mauve) 0%, var(--vert-neon) 100%);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+    }
+    .demo-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.8);
+    }
+    
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .link-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--mauve-dark);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+    }
+    .link-card:hover {
+      border-color: var(--vert-neon);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    }
+    .link-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .link-card .label { font-size: 0.8rem; color: var(--mauve-light); }
+    
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid var(--mauve-dark);
+    }
+    .timeline-item {
+      position: relative;
+      padding: 1rem 0;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.35rem;
+      top: 1.5rem;
+      width: 12px;
+      height: 12px;
+      background: var(--vert-neon);
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--vert-neon);
+    }
+    .timeline-date {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      color: var(--mauve-light);
+    }
+    .timeline-content {
+      margin-top: 0.5rem;
+      color: var(--vert-lilas);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 3rem;
+      color: var(--mauve-light);
+      opacity: 0.6;
+      font-size: 0.8rem;
+    }
+    
+    /* Easter egg: Konami code */
+    .psychedelic-mode {
+      animation: rainbow 0.5s linear infinite;
+    }
+    @keyframes rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    
+    /* Floating particles */
+    .particle {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      animation: particleFloat 3s ease-in-out infinite;
+    }
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+      50% { transform: translateY(-20px) scale(1.2); opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>${subject.toUpperCase()}</h1>
+    <p class="subtitle">🌌 Exploration Psychédélique & Éducative 🌌</p>
+    <div class="mascots">
+      <span class="mascot" onclick="this.style.animation='spin 0.5s ease'">🐑</span>
+      <span class="mascot" onclick="this.style.animation='spin 0.5s ease'">🐧</span>
+      <span class="mascot" onclick="this.style.animation='spin 0.5s ease'">🦩</span>
+    </div>
+  </header>
+  
+  <main>
+    <section class="card">
+      <h2>📚 C'est quoi "${subject}" ?</h2>
+      <p>
+        <strong>${subject}</strong> est un sujet fascinant qui mérite toute notre attention.
+        Dans cette exploration psychédélique, nous allons plonger dans les profondeurs de ce thème
+        avec l'aide de nos mascottes : le mouflon sage 🐑, le pingouin studieux 🐧, et le flamant funky 🦩 !
+      </p>
+      <ul>
+        <li>Concept fondamental et définitions</li>
+        <li>Applications dans le monde réel</li>
+        <li>Pourquoi c'est important pour toi</li>
+        <li>Les secrets que personne ne te dit</li>
+      </ul>
+    </section>
+    
+    <section class="card">
+      <h2>🎮 Démo Interactive</h2>
+      <div class="demo-area">
+        <h3>✨ Expérimente ${subject} en direct !</h3>
+        <p style="margin-bottom: 1rem; opacity: 0.8;">Clique pour activer l'expérience immersive</p>
+        <button class="demo-btn" onclick="activateDemo()">
+          🚀 Lancer la démo
+        </button>
+        <div id="demoResult" style="margin-top: 1rem; min-height: 50px;"></div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>🔗 Ressources Officielles</h2>
+      <div class="links">
+        <div class="link-card" onclick="alert('🐑 Le mouflon approuve cette ressource !')">
+          <div class="icon">📖</div>
+          <div class="label">Documentation</div>
+        </div>
+        <div class="link-card" onclick="alert('🐧 Le pingouin a vérifié cette source !')">
+          <div class="icon">🎓</div>
+          <div class="label">Tutoriels</div>
+        </div>
+        <div class="link-card" onclick="alert('🦩 Le flamant trouve ça stylé !')">
+          <div class="icon">💻</div>
+          <div class="label">Code Source</div>
+        </div>
+        <div class="link-card" onclick="alert('🌈 Easter egg trouvé ! +100 points !')">
+          <div class="icon">🎁</div>
+          <div class="label">Surprises</div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>📅 Timeline de ${subject}</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">🕐 Les débuts</div>
+          <div class="timeline-content">Naissance du concept et premières explorations</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">🚀 L'expansion</div>
+          <div class="timeline-content">Développement et adoption massive</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">✨ Aujourd'hui</div>
+          <div class="timeline-content">État actuel et perspectives futures</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">🔮 Le futur</div>
+          <div class="timeline-content">Ce qui nous attend... (avec des mouflons et pingouins, évidemment)</div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="card">
+      <h2>🎯 Quiz Gamifié</h2>
+      <p>Teste tes connaissances sur ${subject} !</p>
+      <div style="margin-top: 1rem;">
+        <button class="demo-btn" onclick="startQuiz()" style="margin-right: 1rem;">
+          🎲 Jouer au Quiz
+        </button>
+        <span id="score" style="font-family: 'Orbitron', sans-serif; color: var(--vert-neon);">Score: 0</span>
+      </div>
+      <div id="quizArea" style="margin-top: 1rem;"></div>
+    </section>
+  </main>
+  
+  <footer>
+    <p>🌸 Généré par PéTAL OS — Module Écho 🌸</p>
+    <p style="margin-top: 0.5rem;">Avec amour, mouflons et pingouins 🐑🐧</p>
+  </footer>
+  
+  <script>
+    // Floating particles
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.top = Math.random() * 100 + 'vh';
+      particle.style.background = Math.random() > 0.5 ? '#9d4edd' : '#10b981';
+      particle.style.animationDelay = Math.random() * 3 + 's';
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 3000);
+    }
+    setInterval(createParticle, 500);
+    
+    // Demo activation
+    let demoActive = false;
+    function activateDemo() {
+      demoActive = !demoActive;
+      const result = document.getElementById('demoResult');
+      if (demoActive) {
+        result.innerHTML = \`
+          <div style="padding: 1rem; background: rgba(16, 185, 129, 0.2); border-radius: 10px; animation: pulse 1s infinite;">
+            <p style="font-size: 1.5rem;">🎉 Démo activée !</p>
+            <p>Tu explores maintenant "${subject}" en mode immersif.</p>
+            <p style="margin-top: 0.5rem;">🐑 "Baaa-rillant !" — Le Mouflon</p>
+          </div>
+        \`;
+      } else {
+        result.innerHTML = '<p style="opacity: 0.6;">Démo désactivée. Clique pour relancer !</p>';
+      }
+    }
+    
+    // Quiz
+    let score = 0;
+    const questions = [
+      { q: '${subject} est-il incroyable ?', a: 'Oui', options: ['Oui', 'Absolument', 'Carrément'] },
+      { q: 'Qui préfères-tu ?', a: 'Tous', options: ['🐑 Mouflon', '🐧 Pingouin', 'Tous'] },
+      { q: 'Cette expérience est...', a: 'Psychédélique', options: ['Psychédélique', 'Magique', 'Les deux'] }
+    ];
+    let currentQ = 0;
+    
+    function startQuiz() {
+      currentQ = 0;
+      score = 0;
+      document.getElementById('score').textContent = 'Score: 0';
+      showQuestion();
+    }
+    
+    function showQuestion() {
+      if (currentQ >= questions.length) {
+        document.getElementById('quizArea').innerHTML = \`
+          <div style="padding: 1rem; background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(16, 185, 129, 0.3)); border-radius: 10px;">
+            <p style="font-size: 1.5rem;">🏆 Quiz terminé !</p>
+            <p>Score final: \${score}/\${questions.length}</p>
+            <p style="margin-top: 0.5rem;">\${score === questions.length ? '🌟 Parfait ! Tu es un expert !' : '✨ Bien joué ! Continue d\\'explorer !'}</p>
+          </div>
+        \`;
+        return;
+      }
+      
+      const q = questions[currentQ];
+      document.getElementById('quizArea').innerHTML = \`
+        <div style="padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 10px;">
+          <p style="margin-bottom: 1rem; font-size: 1.1rem;">\${q.q}</p>
+          \${q.options.map(opt => \`
+            <button onclick="checkAnswer('\${opt}')" style="
+              margin: 0.25rem;
+              padding: 0.5rem 1rem;
+              background: rgba(157, 78, 221, 0.3);
+              border: 1px solid #9d4edd;
+              border-radius: 20px;
+              color: #e0e0ff;
+              cursor: pointer;
+            ">\${opt}</button>
+          \`).join('')}
+        </div>
+      \`;
+    }
+    
+    function checkAnswer(answer) {
+      if (answer === questions[currentQ].a || questions[currentQ].options.includes(answer)) {
+        score++;
+        document.getElementById('score').textContent = 'Score: ' + score;
+      }
+      currentQ++;
+      showQuestion();
+    }
+    
+    // Konami code easter egg
+    let konamiCode = [];
+    const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    document.addEventListener('keydown', (e) => {
+      konamiCode.push(e.keyCode);
+      if (konamiCode.length > 10) konamiCode.shift();
+      if (konamiCode.join(',') === konamiSequence.join(',')) {
+        document.body.classList.toggle('psychedelic-mode');
+        alert('🌈 MODE PSYCHÉDÉLIQUE ACTIVÉ ! 🌈\\n\\n🐑🐧🦩 Les mascottes dansent avec toi !');
+      }
+    });
+    
+    // Click anywhere for particles burst
+    document.addEventListener('click', (e) => {
+      for (let i = 0; i < 5; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = e.clientX + 'px';
+        p.style.top = e.clientY + 'px';
+        p.style.background = ['#9d4edd', '#10b981', '#c77dff', '#a7f3d0'][Math.floor(Math.random() * 4)];
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1000);
+      }
+    });
+  <\/script>
+</body>
+</html>`;
+
+      return {
+        subject: subject,
+        date: now.toLocaleString('fr-FR'),
+        type: types[Math.floor(Math.random() * types.length)],
+        easterEggs: easterEggCount,
+        html: html
+      };
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // MODAL FUNCTIONS
+    // ══════════════════════════════════════════════════════════════
+    function openEditor(index) {
+      currentEditIndex = index;
+      const site = generatedSites[index];
+      document.getElementById('modalTitle').textContent = site.subject;
+      document.getElementById('modalTitle').dataset.text = site.subject;
+      document.getElementById('modalCode').value = site.html;
+      updatePreview();
+      document.getElementById('modalOverlay').classList.add('is-open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('is-open');
+      if (currentEditIndex >= 0) {
+        generatedSites[currentEditIndex].html = document.getElementById('modalCode').value;
+        loadModule('echo');
+      }
+      currentEditIndex = -1;
+    }
+
+    function updatePreview() {
+      const code = document.getElementById('modalCode').value;
+      document.getElementById('modalPreview').srcdoc = code;
+    }
+
+    function copyCode() {
+      navigator.clipboard.writeText(document.getElementById('modalCode').value);
+      alert('📋 Code copié !');
+    }
+
+    function downloadHtml() {
+      const code = document.getElementById('modalCode').value;
+      const subject = generatedSites[currentEditIndex]?.subject || 'site';
+      const blob = new Blob([code], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${subject.toLowerCase().replace(/\s+/g, '-')}-psychedelique.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadSite(index) {
+      const site = generatedSites[index];
+      const blob = new Blob([site.html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${site.subject.toLowerCase().replace(/\s+/g, '-')}-psychedelique.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function triggerEasterEgg(el) {
+      el.classList.add('psychedelic');
+      setTimeout(() => el.classList.remove('psychedelic'), 500);
+      
+      // Random effect
+      const effects = [
+        () => alert('🐑 BÊÊÊH ! Le mouflon te salue depuis les montagnes mauve !'),
+        () => alert('🐧 Le pingouin glisse sur un arc-en-ciel néon !'),
+        () => alert('🦩 Le flamant danse en mode psychédélique !'),
+        () => alert('🌈 +50 points de magie ! Continue comme ça !'),
+        () => alert('✨ Tu as trouvé un easter egg secret !')
+      ];
+      effects[Math.floor(Math.random() * effects.length)]();
+    }
+
+    function escapeHtml(html) {
+      return html.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // STANDARD FUNCTIONS
+    // ══════════════════════════════════════════════════════════════
+    let currentModule = null;
+    let currentTheme = 0;
+    const themes = ['', 'theme-dark', 'theme-funky'];
+    const themeIcons = ['☀️', '🌙', '🎨'];
+
+    function init() {
+      MODULES.forEach(mod => {
+        const li = document.createElement('li');
+        li.className = 'nav-item';
+        li.textContent = mod.name;
+        li.dataset.moduleId = mod.id;
+        li.addEventListener('click', () => loadModule(mod.id));
+        document.getElementById('moduleList').appendChild(li);
+      });
+      loadModule('accueil');
+    }
+
+    function loadModule(moduleId) {
+      const mod = MODULES.find(m => m.id === moduleId);
+      if (!mod) return;
+      currentModule = mod;
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('is-active', item.dataset.moduleId === moduleId);
+      });
+      document.getElementById('moduleContent').innerHTML = mod.render();
+      if (mod.init) setTimeout(mod.init, 50);
+      document.getElementById('metaContent').innerHTML = mod.description;
+      document.getElementById('sysStatus').textContent = `— ${mod.name}`;
+      closeNav();
+    }
+
+    function cycleTheme() {
+      currentTheme = (currentTheme + 1) % 3;
+      document.body.className = themes[currentTheme];
+      document.getElementById('themeName').textContent = themeIcons[currentTheme];
+    }
+
+    function toggleNav() {
+      document.querySelector('.nav-panel').classList.toggle('is-open');
+      document.querySelector('.nav-overlay').classList.toggle('is-visible');
+    }
+    function closeNav() {
+      document.querySelector('.nav-panel').classList.remove('is-open');
+      document.querySelector('.nav-overlay').classList.remove('is-visible');
+    }
+    function toggleMeta() {
+      if (window.innerWidth < 768) document.querySelector('.meta-panel').classList.toggle('is-collapsed');
+    }
+
+    function addMemory(e) {
+      if (e.key !== 'Enter' || !e.target.value.trim()) return;
+      const container = document.querySelector('.mod-memoire');
+      const memory = document.createElement('div');
+      memory.className = 'memory';
+      memory.innerHTML = `<div class="memory-date">${new Date().toISOString().split('T')[0]}</div><div class="memory-text">${e.target.value}</div>`;
+      container.insertBefore(memory, e.target);
+      e.target.value = '';
+    }
+
+    function initDreamCanvas() {
+      const canvas = document.getElementById('dreamCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let particles = [], mouse = { x: 0, y: 0 }, hue = 150;
+
+      function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      }
+
+      class Particle {
+        constructor(x, y) {
+          this.x = x; this.y = y;
+          this.size = Math.random() * 3 + 1;
+          this.speedX = (Math.random() - 0.5) * 2;
+          this.speedY = (Math.random() - 0.5) * 2;
+          this.life = 1;
+          this.decay = Math.random() * 0.015 + 0.005;
+          this.hue = hue + Math.random() * 30 - 15;
+        }
+        update() { this.x += this.speedX; this.y += this.speedY; this.life -= this.decay; this.size *= 0.99; }
+        draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = `hsla(${this.hue}, 60%, 60%, ${this.life})`; ctx.fill(); }
+      }
+
+      function animate() {
+        ctx.fillStyle = 'rgba(15, 15, 15, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < 3; i++) particles.push(new Particle(mouse.x + (Math.random() - 0.5) * 50, mouse.y + (Math.random() - 0.5) * 50));
+        particles = particles.filter(p => p.life > 0);
+        particles.forEach(p => { p.update(); p.draw(); });
+        hue = (hue + 0.1) % 360;
+        requestAnimationFrame(animate);
+      }
+
+      resize();
+      mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+      window.addEventListener('resize', resize);
+      canvas.addEventListener('mousemove', e => { const r = canvas.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+      canvas.addEventListener('touchmove', e => { const r = canvas.getBoundingClientRect(); mouse.x = e.touches[0].clientX - r.left; mouse.y = e.touches[0].clientY - r.top; });
+      animate();
+    }
+
+    init();
+  </script>
+</body>
+</html>
