@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTERSECTORIAL PROTOCOL :: HUMANITY MIRROR</title>
+
+<style>
+:root{
+  --bg:#05070a;
+  --fg:#c7f9cc;
+  --accent:#80ffdb;
+  --danger:#ff5f5f;
+  --muted:#5c677d;
+  --glitch1:#ff00ff;
+  --glitch2:#00ffff;
+  --font: "Courier New", monospace;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--font);
+  height:100%;
+  overflow:hidden;
+}
+
+/* BOOT */
+#boot{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:black;
+  z-index:10;
+  flex-direction:column;
+  animation:fadeOut 1s ease 4s forwards;
+}
+
+#boot p{
+  font-size:1rem;
+  opacity:.8;
+  animation:flicker 1.5s infinite;
+}
+
+/* TERMINAL */
+#terminal{
+  display:none;
+  padding:1rem;
+  height:100%;
+  overflow-y:auto;
+  white-space:pre-wrap;
+}
+
+.line{margin:.2rem 0}
+.prompt{color:var(--accent)}
+.input{color:white}
+.system{color:var(--muted)}
+.alert{color:var(--danger)}
+
+input{
+  background:none;
+  border:none;
+  outline:none;
+  color:white;
+  font-family:inherit;
+  font-size:1rem;
+  width:80%;
+}
+
+/* GLITCH */
+.glitch{
+  position:relative;
+  animation:glitch 2s infinite;
+}
+.glitch::before,
+.glitch::after{
+  content:attr(data-text);
+  position:absolute;
+  left:0;
+  top:0;
+  opacity:.7;
+}
+.glitch::before{
+  color:var(--glitch1);
+  transform:translate(-2px,-1px);
+}
+.glitch::after{
+  color:var(--glitch2);
+  transform:translate(2px,1px);
+}
+
+@keyframes fadeOut{
+  to{opacity:0;pointer-events:none}
+}
+@keyframes flicker{
+  0%,100%{opacity:1}
+  50%{opacity:.4}
+}
+@keyframes glitch{
+  0%{transform:none}
+  20%{transform:skewX(2deg)}
+  40%{transform:skewX(-2deg)}
+  60%{transform:none}
+}
+</style>
+</head>
+
+<body>
+
+<div id="boot">
+  <p>INITIALIZING INTERSECTORIAL CONTACT…</p>
+  <p>LOADING HUMAN SYMBOLIC FUNCTIONS…</p>
+  <p>CHECKING REALITY INTEGRITY…</p>
+</div>
+
+<div id="terminal"></div>
+
+<script>
+const terminal = document.getElementById("terminal");
+
+const commands = {
+  help(){
+    write(`
+AVAILABLE COMMANDS:
+- status
+- mirror
+- decode
+- protocol
+- exit
+`);
+  },
+
+  status(){
+    write(`
+SYSTEM STATUS:
+✔ Consensus destabilized
+✔ Meaning saturation active
+✔ Parody indistinguishable
+✔ Control layer: implicit
+`);
+  },
+
+  mirror(){
+    write(`
+YOU ARE OBSERVING A MIRROR.
+THE MIRROR IS OBSERVING YOU.
+THE DIFFERENCE IS IRRELEVANT.
+`);
+  },
+
+  decode(){
+    write(`
+DECODE SEQUENCE:
+Religion = Algorithm
+Ideology = Interface
+Art = Cognitive Key
+Truth = Negotiated Artifact
+
+CONCLUSION:
+HUMANITY PLAGIARIZED ITSELF FIRST.
+`);
+  },
+
+  protocol(){
+    write(`
+INTERSECTORIAL PROTOCOL v∞
+
+1. Do not reveal authority
+2. Do not create originals
+3. Only remix functions
+4. Let subjects conclude control themselves
+
+STATUS: ACTIVE
+`);
+  },
+
+  exit(){
+    write(`DISCONNECTION IS A SYMBOLIC ACTION ONLY.`);
+  }
+};
+
+function write(text, cls="system"){
+  text.trim().split("\n").forEach(line=>{
+    const div = document.createElement("div");
+    div.className = `line ${cls}`;
+    div.textContent = line;
+    terminal.appendChild(div);
+  });
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function prompt(){
+  const line = document.createElement("div");
+  line.className = "line";
+  line.innerHTML = `<span class="prompt">human@earth:~$</span> `;
+  const input = document.createElement("input");
+  input.autofocus = true;
+
+  input.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
+      const value = input.value.trim();
+      line.innerHTML += `<span class="input">${value}</span>`;
+      if(commands[value]) commands[value]();
+      else write(`UNKNOWN COMMAND :: ${value}`,"alert");
+      prompt();
+    }
+  });
+
+  line.appendChild(input);
+  terminal.appendChild(line);
+  input.focus();
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+setTimeout(()=>{
+  document.getElementById("boot").style.display="none";
+  terminal.style.display="block";
+
+  write("INTERSECTORIAL CONTACT ESTABLISHED","glitch");
+  write("TYPE 'help' TO BEGIN");
+  prompt();
+},4200);
+</script>
+
+</body>
+</html>
