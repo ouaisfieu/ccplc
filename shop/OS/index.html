@@ -534,8 +534,10 @@
           <div class="mod-accueil">
             <div class="logo">📖</div>
             <h2>Bienvenue</h2>
-            <p>Génère des fiches éducatives complètes avec des sources officielles et vérifiées.</p>
-            <div class="version-badge">v329.2 — Grand Public</div>
+            <p>Génèrera des notes avec des sources officielles et vérifiées.</p>
+            <h2>C'est VOUS le produit, non ?</h2>
+            <h1>!!! LISEZ LA NOTICE !!! </h1>
+            <div class="version-badge">v329.2 — Pas Grand Public</div>
           </div>
         `
       },
@@ -571,7 +573,7 @@
         id: 'echo',
         name: 'Générateur',
         description: `
-          <p><span class="highlight">Générateur de Fiches</span></p>
+          <p><span class="highlight">Générateur de notes</span></p>
           <p>Crée des sites éducatifs complets avec :</p>
           <p>• Sources officielles vérifiées</p>
           <p>• Embeds Wikipédia</p>
@@ -593,7 +595,7 @@
         <div class="mod-echo">
           <div class="echo-input-area">
             <input type="text" id="echoInput" placeholder="Entrez un sujet à explorer..." onkeypress="handleEchoInput(event)" autocomplete="off">
-            <div class="hint">Appuyez sur Entrée pour générer une fiche éducative officielle</div>
+            <div class="hint">Appuyez sur Entrée pour générer une note éducative officielle</div>
           </div>
           <div class="echo-cards" id="echoCards">${cardsHtml}</div>
         </div>
@@ -653,7 +655,7 @@
 
     function generateOfficialSite(subject) {
       const now = new Date();
-      const types = ['Fiche Éducative', 'Guide Pratique', 'Dossier Complet', 'Introduction'];
+      const types = ['Note Éducative', 'Guide Pratique', 'Dossier Complet', 'Introduction'];
       const levels = ['Débutant', 'Intermédiaire', 'Tout public', 'Approfondi'];
       const sources = getRelevantSources(subject);
       const wikiSlug = encodeURIComponent(subject.replace(/\s+/g, '_'));
@@ -1012,7 +1014,7 @@
 </head>
 <body>
   <header>
-    <div class="badge">📚 Fiche Éducative Officielle</div>
+    <div class="badge">📚 Note Éducative Officielle</div>
     <h1>${subject}</h1>
     <p class="subtitle">Guide complet avec sources vérifiées et contenu pédagogique</p>
   </header>
@@ -1022,7 +1024,7 @@
       <h2>📖 Introduction</h2>
       <p>
         <strong>${subject}</strong> est un sujet qui mérite une exploration approfondie et documentée. 
-        Cette fiche vous propose une synthèse claire et accessible, basée exclusivement sur des sources officielles et vérifiées.
+        Cette note vous propose une synthèse claire et accessible, basée exclusivement sur des sources officielles et vérifiées.
       </p>
       <p>
         Vous y trouverez une définition complète, les points essentiels à retenir, une chronologie des événements marquants, 
@@ -1139,13 +1141,13 @@
     <section class="card">
       <h2>📥 Pour Aller Plus Loin</h2>
       <p>
-        Cette fiche constitue une introduction au sujet. Pour approfondir vos connaissances, 
+        Cette note constitue une introduction au sujet. Pour approfondir vos connaissances, 
         nous vous recommandons de consulter les sources officielles listées ci-dessus et de 
         vous référer aux ouvrages spécialisés disponibles en bibliothèque.
       </p>
       <div style="margin-top: 1rem;">
         <button class="cta-btn" onclick="window.print()">
-          🖨️ Imprimer cette fiche
+          🖨️ Imprimer cette note
         </button>
       </div>
     </section>
@@ -1255,7 +1257,7 @@
       } else if (score >= quizData.length / 2) {
         message = '👍 Bien joué ! Continuez à apprendre.';
       } else {
-        message = '📚 Relisez la fiche pour améliorer vos connaissances.';
+        message = '📚 Relisez la note pour améliorer vos connaissances.';
       }
       document.getElementById('quizMessage').textContent = message;
     }
@@ -1320,12 +1322,12 @@
 
     function downloadHtml() {
       const code = document.getElementById('modalCode').value;
-      const subject = generatedSites[currentEditIndex]?.subject || 'fiche';
+      const subject = generatedSites[currentEditIndex]?.subject || 'note';
       const blob = new Blob([code], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${subject.toLowerCase().replace(/\s+/g, '-')}-fiche-educative.html`;
+      a.download = `${subject.toLowerCase().replace(/\s+/g, '-')}-note.html`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -1336,7 +1338,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${site.subject.toLowerCase().replace(/\s+/g, '-')}-fiche-educative.html`;
+      a.download = `${site.subject.toLowerCase().replace(/\s+/g, '-')}-note-educative.html`;
       a.click();
       URL.revokeObjectURL(url);
     }
