@@ -1,0 +1,1466 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>NEXUS-Ω // Détecteur de Bullshit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --bg2: #16213e;
+      --bg3: #0f0f1a;
+      --text: #eee;
+      --text2: #aaa;
+      --green: #00ff88;
+      --cyan: #00d4ff;
+      --magenta: #ff00aa;
+      --orange: #ff9900;
+      --red: #ff4444;
+      --yellow: #ffee00;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HEADER - STATS BAR (RPG STYLE)
+    ═══════════════════════════════════════════════════════════ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--bg3);
+      border-bottom: 3px solid var(--green);
+      flex-shrink: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      font-size: 24px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .logo-text {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: var(--green);
+      text-shadow: 2px 2px 0 var(--bg3);
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--bg2);
+      border: 2px solid var(--bg);
+      border-radius: 4px;
+    }
+
+    .stat-icon { font-size: 16px; }
+    .stat-value { font-family: 'Press Start 2P', cursive; font-size: 10px; color: var(--yellow); }
+
+    .xp-bar {
+      width: 100px;
+      height: 12px;
+      background: var(--bg);
+      border: 2px solid var(--cyan);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      transition: width 0.5s;
+    }
+
+    .level-badge {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      padding: 4px 8px;
+      background: var(--magenta);
+      color: white;
+      border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MAIN LAYOUT
+    ═══════════════════════════════════════════════════════════ */
+    .main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAV - MODE SELECTOR
+    ═══════════════════════════════════════════════════════════ */
+    .nav {
+      width: 220px;
+      background: var(--bg2);
+      border-right: 3px solid var(--cyan);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .nav-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      color: var(--text2);
+      padding: 16px;
+      border-bottom: 2px solid var(--bg);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--bg);
+      transition: all 0.2s;
+    }
+
+    .nav-item:hover { background: var(--bg); }
+    .nav-item.active { background: var(--bg); border-left: 4px solid var(--green); }
+    .nav-item.locked { opacity: 0.4; cursor: not-allowed; }
+
+    .nav-icon { font-size: 24px; }
+    .nav-info { flex: 1; }
+    .nav-name { font-size: 16px; margin-bottom: 2px; }
+    .nav-desc { font-size: 12px; color: var(--text2); }
+    .nav-lock { font-size: 14px; }
+
+    .nav-badges {
+      padding: 16px;
+      border-top: 2px solid var(--bg);
+    }
+
+    .nav-badges-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 8px;
+      color: var(--text2);
+      margin-bottom: 12px;
+    }
+
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .badge {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: var(--bg);
+      border: 2px solid var(--bg3);
+      border-radius: 6px;
+      opacity: 0.3;
+    }
+
+    .badge.earned {
+      opacity: 1;
+      border-color: var(--yellow);
+      box-shadow: 0 0 10px rgba(255, 238, 0, 0.3);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CONTENT AREA
+    ═══════════════════════════════════════════════════════════ */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODE: ACCUEIL
+    ═══════════════════════════════════════════════════════════ */
+    .home {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .home-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .home-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+      color: var(--green);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .home-desc {
+      font-size: 20px;
+      color: var(--text2);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .home-stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .home-stat {
+      text-align: center;
+      padding: 16px 24px;
+      background: var(--bg2);
+      border: 2px solid var(--bg3);
+      border-radius: 8px;
+    }
+
+    .home-stat-value {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 20px;
+      color: var(--cyan);
+    }
+
+    .home-stat-label {
+      font-size: 14px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    .start-btn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      padding: 16px 32px;
+      background: linear-gradient(180deg, var(--green) 0%, #00cc66 100%);
+      border: none;
+      border-radius: 8px;
+      color: var(--bg);
+      cursor: pointer;
+      box-shadow: 0 4px 0 #009944;
+      transition: all 0.1s;
+    }
+
+    .start-btn:active {
+      transform: translateY(4px);
+      box-shadow: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODE: DÉTECTIVE (FIND THE RED FLAGS)
+    ═══════════════════════════════════════════════════════════ */
+    .detective {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .mode-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--bg3);
+    }
+
+    .mode-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      color: var(--cyan);
+    }
+
+    .mode-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-text {
+      font-size: 14px;
+      color: var(--text2);
+    }
+
+    .timer {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+      color: var(--orange);
+      padding: 6px 12px;
+      background: var(--bg3);
+      border-radius: 4px;
+    }
+
+    .fake-document {
+      background: var(--bg2);
+      border: 3px solid var(--bg3);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .fake-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed var(--bg3);
+    }
+
+    .fake-logo { font-size: 32px; }
+    .fake-site { font-size: 14px; color: var(--text2); }
+    .fake-date { font-size: 12px; color: var(--text2); margin-left: auto; }
+
+    .fake-title {
+      font-size: 24px;
+      color: var(--orange);
+      margin-bottom: 16px;
+    }
+
+    .fake-content {
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .fake-content p {
+      margin-bottom: 16px;
+    }
+
+    .red-flag {
+      background: rgba(255, 68, 68, 0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 2px dashed transparent;
+    }
+
+    .red-flag:hover {
+      background: rgba(255, 68, 68, 0.4);
+    }
+
+    .red-flag.found {
+      background: rgba(0, 255, 136, 0.3);
+      border-bottom-color: var(--green);
+    }
+
+    .flags-counter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg3);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .flags-found {
+      font-size: 18px;
+    }
+
+    .flags-hint-btn {
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      padding: 8px 16px;
+      background: var(--orange);
+      border: none;
+      border-radius: 6px;
+      color: var(--bg);
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      padding: 16px;
+      background: var(--green);
+      border: none;
+      border-radius: 8px;
+      color: var(--bg);
+      cursor: pointer;
+      box-shadow: 0 4px 0 #009944;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODE: QUIZ
+    ═══════════════════════════════════════════════════════════ */
+    .quiz {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .quiz-card {
+      background: var(--bg2);
+      border: 3px solid var(--bg3);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .quiz-category {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 12px;
+      background: var(--magenta);
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-question {
+      font-size: 22px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg);
+      border: 2px solid var(--bg3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--cyan);
+      transform: translateX(8px);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--cyan);
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--green);
+      background: rgba(0, 255, 136, 0.2);
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--red);
+      background: rgba(255, 68, 68, 0.2);
+    }
+
+    .option-letter {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      background: var(--bg2);
+      border-radius: 50%;
+    }
+
+    .option-text { flex: 1; }
+
+    .quiz-explanation {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--bg3);
+      border-left: 4px solid var(--green);
+      border-radius: 0 8px 8px 0;
+      display: none;
+    }
+
+    .quiz-explanation.show { display: block; }
+
+    .quiz-explanation h4 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .quiz-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .quiz-nav-btn {
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      padding: 12px 24px;
+      background: var(--bg2);
+      border: 2px solid var(--bg3);
+      border-radius: 8px;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .quiz-nav-btn:hover {
+      border-color: var(--cyan);
+    }
+
+    .quiz-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODE: TECHNIQUES
+    ═══════════════════════════════════════════════════════════ */
+    .techniques {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .tech-card {
+      background: var(--bg2);
+      border: 2px solid var(--bg3);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tech-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+    }
+
+    .tech-card.mastered {
+      border-color: var(--green);
+    }
+
+    .tech-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .tech-name {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--cyan);
+    }
+
+    .tech-desc {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .tech-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tech-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .tech-bar-fill {
+      height: 100%;
+      background: var(--green);
+      transition: width 0.3s;
+    }
+
+    .tech-percent {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODE: LABORATOIRE
+    ═══════════════════════════════════════════════════════════ */
+    .lab {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .lab-intro {
+      text-align: center;
+      padding: 20px;
+      background: var(--bg2);
+      border: 2px solid var(--orange);
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+
+    .lab-intro h3 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+
+    .lab-intro p {
+      color: var(--text2);
+      line-height: 1.6;
+    }
+
+    .lab-builder {
+      background: var(--bg2);
+      border: 2px solid var(--bg3);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .builder-section {
+      margin-bottom: 20px;
+    }
+
+    .builder-label {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .builder-select {
+      width: 100%;
+      padding: 12px;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      background: var(--bg);
+      border: 2px solid var(--bg3);
+      border-radius: 8px;
+      color: var(--text);
+    }
+
+    .builder-input {
+      width: 100%;
+      padding: 12px;
+      font-family: 'VT323', monospace;
+      font-size: 18px;
+      background: var(--bg);
+      border: 2px solid var(--bg3);
+      border-radius: 8px;
+      color: var(--text);
+    }
+
+    .builder-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .builder-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: var(--bg);
+      border: 2px solid var(--bg3);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .builder-check:hover { border-color: var(--cyan); }
+    .builder-check input { width: 18px; height: 18px; }
+
+    .generate-btn {
+      width: 100%;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      padding: 16px;
+      background: linear-gradient(180deg, var(--magenta) 0%, #cc0088 100%);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #990066;
+      margin-top: 20px;
+    }
+
+    .lab-result {
+      margin-top: 24px;
+      background: var(--bg3);
+      border: 2px solid var(--magenta);
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .lab-result.show { display: block; }
+
+    .result-header {
+      padding: 12px 16px;
+      background: var(--magenta);
+      color: white;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+    }
+
+    .result-content {
+      padding: 20px;
+    }
+
+    .result-preview {
+      background: white;
+      color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .result-preview h4 {
+      color: #c00;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .result-flags {
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 8px;
+    }
+
+    .result-flags h4 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .flag-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--bg2);
+    }
+
+    .flag-icon { color: var(--red); }
+    .flag-name { color: var(--orange); font-weight: bold; }
+    .flag-desc { color: var(--text2); font-size: 14px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       POPUP REWARDS
+    ═══════════════════════════════════════════════════════════ */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-overlay.show { display: flex; }
+
+    .popup {
+      background: var(--bg2);
+      border: 4px solid var(--yellow);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      max-width: 400px;
+      animation: popIn 0.3s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      animation: float 1s ease-in-out infinite;
+    }
+
+    .popup-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+
+    .popup-desc {
+      font-size: 18px;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+
+    .popup-xp {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 20px;
+      color: var(--green);
+      margin-bottom: 20px;
+    }
+
+    .popup-btn {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 10px;
+      padding: 12px 24px;
+      background: var(--yellow);
+      border: none;
+      border-radius: 8px;
+      color: var(--bg);
+      cursor: pointer;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 800px) {
+      .nav { display: none; }
+      .stats { gap: 8px; }
+      .stat { padding: 4px 8px; }
+      .xp-bar { width: 60px; }
+    }
+
+    @media (max-width: 500px) {
+      .header { flex-wrap: wrap; gap: 10px; }
+      .home-stats { flex-direction: column; }
+      .builder-checkboxes { grid-template-columns: 1fr; }
+      .quiz-option { padding: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER - RPG STATS -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">🛡️</span>
+      <span class="logo-text">DÉTECTEUR DE BULLSHIT</span>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-icon">⭐</span>
+        <span class="stat-value" id="statXP">0</span>
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+      </div>
+      <div class="level-badge">LVL <span id="statLevel">1</span></div>
+      <div class="stat">
+        <span class="stat-icon">🔥</span>
+        <span class="stat-value" id="statStreak">0</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+      <div class="nav-title">MODES DE JEU</div>
+      
+      <div class="nav-item active" data-mode="home">
+        <span class="nav-icon">🏠</span>
+        <div class="nav-info">
+          <div class="nav-name">Accueil</div>
+          <div class="nav-desc">Tableau de bord</div>
+        </div>
+      </div>
+
+      <div class="nav-item" data-mode="detective">
+        <span class="nav-icon">🔍</span>
+        <div class="nav-info">
+          <div class="nav-name">Détective</div>
+          <div class="nav-desc">Trouve les red flags</div>
+        </div>
+      </div>
+
+      <div class="nav-item" data-mode="quiz">
+        <span class="nav-icon">❓</span>
+        <div class="nav-info">
+          <div class="nav-name">Quiz</div>
+          <div class="nav-desc">Vrai ou intox ?</div>
+        </div>
+      </div>
+
+      <div class="nav-item" data-mode="techniques">
+        <span class="nav-icon">📚</span>
+        <div class="nav-info">
+          <div class="nav-name">Techniques</div>
+          <div class="nav-desc">Apprends les ficelles</div>
+        </div>
+      </div>
+
+      <div class="nav-item" data-mode="lab">
+        <span class="nav-icon">🧪</span>
+        <div class="nav-info">
+          <div class="nav-name">Laboratoire</div>
+          <div class="nav-desc">Crée un fake (pour comprendre)</div>
+        </div>
+      </div>
+
+      <div class="nav-item locked" data-mode="boss">
+        <span class="nav-icon">👹</span>
+        <div class="nav-info">
+          <div class="nav-name">Boss Final</div>
+          <div class="nav-desc">Niveau 5 requis</div>
+        </div>
+        <span class="nav-lock">🔒</span>
+      </div>
+
+      <div class="nav-badges">
+        <div class="nav-badges-title">BADGES GAGNÉS</div>
+        <div class="badges-grid">
+          <div class="badge earned">🎯</div>
+          <div class="badge">🧠</div>
+          <div class="badge">🦅</div>
+          <div class="badge">🏆</div>
+          <div class="badge">💎</div>
+          <div class="badge">🌟</div>
+          <div class="badge">👑</div>
+          <div class="badge">🚀</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <section class="content" id="content"></section>
+  </main>
+
+  <!-- POPUP -->
+  <div class="popup-overlay" id="popup">
+    <div class="popup">
+      <div class="popup-icon" id="popupIcon">🏆</div>
+      <div class="popup-title" id="popupTitle">BRAVO !</div>
+      <div class="popup-desc" id="popupDesc">Tu as trouvé tous les red flags !</div>
+      <div class="popup-xp" id="popupXP">+50 XP</div>
+      <button class="popup-btn" onclick="closePopup()">CONTINUER</button>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════════════════════
+    // GAME STATE
+    // ════════════════════════════════════════════════════════════
+    var state = {
+      xp: 0,
+      level: 1,
+      streak: 0,
+      badges: ['firstflag'],
+      techProgress: {},
+      quizIndex: 0,
+      flagsFound: []
+    };
+
+    var XP_PER_LEVEL = 100;
+
+    // ════════════════════════════════════════════════════════════
+    // EDUCATIONAL CONTENT DATABASE
+    // ════════════════════════════════════════════════════════════
+
+    // TECHNIQUES DE MANIPULATION
+    var TECHNIQUES = [
+      { id: 'authority', icon: '👔', name: 'Fausse Autorité', desc: 'Citer un "expert" inventé ou hors sujet', progress: 0 },
+      { id: 'emotion', icon: '😱', name: 'Appel aux Émotions', desc: 'Jouer sur la peur, la colère, ou l\'indignation', progress: 0 },
+      { id: 'urgency', icon: '⚡', name: 'Urgence Artificielle', desc: '"URGENT", "AVANT CENSURE", "ILS NE VEULENT PAS QUE..."', progress: 0 },
+      { id: 'numbers', icon: '📊', name: 'Chiffres Bidons', desc: 'Stats inventées ou sorties de leur contexte', progress: 0 },
+      { id: 'source', icon: '🔗', name: 'Source Floue', desc: '"Des études montrent", "On sait que", sans citer', progress: 0 },
+      { id: 'conspiracy', icon: '🕵️', name: 'Complotisme', desc: '"Ils", "Le système", "On nous cache"', progress: 0 },
+      { id: 'cherry', icon: '🍒', name: 'Cherry Picking', desc: 'Sélectionner uniquement les faits qui arrangent', progress: 0 },
+      { id: 'strawman', icon: '🎃', name: 'Homme de Paille', desc: 'Déformer l\'argument adverse pour mieux l\'attaquer', progress: 0 }
+    ];
+
+    // QUIZ QUESTIONS
+    var QUIZ = [
+      {
+        category: '📰 Sources',
+        question: 'Un article cite "une étude de Harvard" sans donner le lien ni le nom des chercheurs. Que faire ?',
+        options: [
+          { text: 'C\'est Harvard, donc c\'est fiable', correct: false },
+          { text: 'Chercher l\'étude originale avant de croire', correct: true },
+          { text: 'Partager quand même, ça a l\'air sérieux', correct: false },
+          { text: 'Ignorer l\'article complètement', correct: false }
+        ],
+        explanation: 'N\'importe qui peut dire "Harvard a prouvé que...". Toujours vérifier la source primaire. Si elle n\'est pas citée, c\'est un RED FLAG majeur !'
+      },
+      {
+        category: '😱 Émotions',
+        question: 'Un titre dit : "SCANDALE ! Ce que le gouvernement vous CACHE sur [sujet]". C\'est probablement :',
+        options: [
+          { text: 'Une enquête journalistique sérieuse', correct: false },
+          { text: 'Du clickbait émotionnel', correct: true },
+          { text: 'Une fuite de documents officiels', correct: false },
+          { text: 'Impossible à dire sans lire', correct: false }
+        ],
+        explanation: 'Les MAJUSCULES, les mots comme "SCANDALE", "CACHÉ", "ILS" sont des techniques pour activer tes émotions et court-circuiter ton esprit critique.'
+      },
+      {
+        category: '📊 Statistiques',
+        question: '"80% des Français pensent que..." sans préciser l\'échantillon ni la source. Cette stat est :',
+        options: [
+          { text: 'Probablement vraie si c\'est un gros chiffre', correct: false },
+          { text: 'Suspecte car non vérifiable', correct: true },
+          { text: 'Fausse à 100%', correct: false },
+          { text: 'Vraie car les sondages sont fiables', correct: false }
+        ],
+        explanation: 'Une stat sans source, sans méthodologie, sans taille d\'échantillon ne vaut RIEN. Qui a posé la question ? À combien de personnes ? Comment ?'
+      },
+      {
+        category: '🕵️ Complot',
+        question: 'Quelqu\'un dit "fais tes propres recherches" après une affirmation douteuse. Ça signifie souvent :',
+        options: [
+          { text: 'Il veut t\'aider à apprendre', correct: false },
+          { text: 'Il n\'a pas de preuves solides', correct: true },
+          { text: 'C\'est un expert qui te teste', correct: false },
+          { text: 'Tu dois vraiment chercher', correct: false }
+        ],
+        explanation: '"Fais tes recherches" est une technique pour éviter de fournir des preuves. Si quelqu\'un affirme quelque chose, c\'est à LUI de prouver, pas à toi de chercher.'
+      },
+      {
+        category: '⚡ Urgence',
+        question: '"PARTAGEZ AVANT QUE CE SOIT CENSURÉ !" Ce message veut te faire :',
+        options: [
+          { text: 'Sauver une info importante', correct: false },
+          { text: 'Agir sans réfléchir', correct: true },
+          { text: 'Protéger la liberté d\'expression', correct: false },
+          { text: 'Rien de particulier', correct: false }
+        ],
+        explanation: 'L\'urgence artificielle t\'empêche de vérifier. C\'est une technique classique de manipulation. Rien de vrai n\'a besoin d\'être partagé "avant censure".'
+      }
+    ];
+
+    // FAKE DOCUMENTS FOR DETECTIVE MODE
+    var FAKE_DOCS = [
+      {
+        site: 'santealternative-info.com',
+        date: '15 octobre 2024',
+        title: '🚨 URGENT : Le remède miracle que Big Pharma veut vous cacher !',
+        content: '<p>Un <span class="red-flag" data-tech="authority">célèbre médecin suisse</span> vient de révéler ce que <span class="red-flag" data-tech="conspiracy">l\'industrie pharmaceutique nous cache depuis des années</span>.</p><p>Selon <span class="red-flag" data-tech="source">plusieurs études</span>, le simple fait de boire du jus de citron chaud le matin <span class="red-flag" data-tech="numbers">guérit 89% des maladies</span>.</p><p><span class="red-flag" data-tech="urgency">PARTAGEZ AVANT CENSURE !</span> <span class="red-flag" data-tech="emotion">Ils ne veulent pas que vous sachiez la vérité !</span></p>',
+        flags: 6
+      },
+      {
+        site: 'verite-cachee.net',
+        date: '3 novembre 2024',
+        title: 'EXCLUSIF : La preuve que les élections sont truquées !',
+        content: '<p>Un <span class="red-flag" data-tech="authority">ancien agent des services secrets</span> a fait fuiter des documents prouvant que <span class="red-flag" data-tech="conspiracy">le système est manipulé depuis le début</span>.</p><p>D\'après <span class="red-flag" data-tech="source">nos sources</span>, <span class="red-flag" data-tech="numbers">73% des votes</span> seraient modifiés par un algorithme secret.</p><p><span class="red-flag" data-tech="emotion">Réveillez-vous !</span> <span class="red-flag" data-tech="urgency">C\'est maintenant ou jamais !</span></p>',
+        flags: 7
+      }
+    ];
+
+    // ════════════════════════════════════════════════════════════
+    // CORE FUNCTIONS
+    // ════════════════════════════════════════════════════════════
+    function addXP(amount) {
+      state.xp += amount;
+      while (state.xp >= state.level * XP_PER_LEVEL) {
+        state.xp -= state.level * XP_PER_LEVEL;
+        state.level++;
+        showPopup('🎉', 'NIVEAU ' + state.level + ' !', 'Tu deviens un pro !', '');
+      }
+      updateStats();
+      saveState();
+    }
+
+    function updateStats() {
+      document.getElementById('statXP').textContent = state.xp;
+      document.getElementById('statLevel').textContent = state.level;
+      document.getElementById('statStreak').textContent = state.streak;
+      var percent = (state.xp / (state.level * XP_PER_LEVEL)) * 100;
+      document.getElementById('xpFill').style.width = percent + '%';
+    }
+
+    function showPopup(icon, title, desc, xp) {
+      document.getElementById('popupIcon').textContent = icon;
+      document.getElementById('popupTitle').textContent = title;
+      document.getElementById('popupDesc').textContent = desc;
+      document.getElementById('popupXP').textContent = xp;
+      document.getElementById('popup').classList.add('show');
+    }
+
+    function closePopup() {
+      document.getElementById('popup').classList.remove('show');
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('bullshit_detector', JSON.stringify(state));
+      } catch(e) {}
+    }
+
+    function loadState() {
+      try {
+        var saved = localStorage.getItem('bullshit_detector');
+        if (saved) state = JSON.parse(saved);
+      } catch(e) {}
+      updateStats();
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // RENDERERS
+    // ════════════════════════════════════════════════════════════
+    function renderHome() {
+      return '<div class="home">' +
+        '<div class="home-icon">🛡️</div>' +
+        '<h1 class="home-title">DÉTECTEUR DE BULLSHIT</h1>' +
+        '<p class="home-desc">Apprends à repérer les fake news, les arnaques, et les manipulations. Deviens incorruptible !</p>' +
+        '<div class="home-stats">' +
+        '<div class="home-stat"><div class="home-stat-value">' + state.level + '</div><div class="home-stat-label">Niveau</div></div>' +
+        '<div class="home-stat"><div class="home-stat-value">' + state.xp + '</div><div class="home-stat-label">XP Total</div></div>' +
+        '<div class="home-stat"><div class="home-stat-value">' + state.streak + '</div><div class="home-stat-label">Série</div></div>' +
+        '</div>' +
+        '<button class="start-btn" onclick="loadMode(\'detective\')">▶ COMMENCER</button>' +
+        '</div>';
+    }
+
+    function renderDetective() {
+      var doc = FAKE_DOCS[0];
+      state.flagsFound = [];
+      
+      return '<div class="detective">' +
+        '<div class="mode-header">' +
+        '<h2 class="mode-title">🔍 MODE DÉTECTIVE</h2>' +
+        '<div class="mode-progress"><span class="progress-text">Niveau 1</span></div>' +
+        '</div>' +
+        '<div class="fake-document">' +
+        '<div class="fake-header">' +
+        '<span class="fake-logo">🌐</span>' +
+        '<span class="fake-site">' + doc.site + '</span>' +
+        '<span class="fake-date">' + doc.date + '</span>' +
+        '</div>' +
+        '<h3 class="fake-title">' + doc.title + '</h3>' +
+        '<div class="fake-content" id="fakeContent">' + doc.content + '</div>' +
+        '</div>' +
+        '<div class="flags-counter">' +
+        '<span class="flags-found">🚩 Red Flags trouvés : <strong id="flagCount">0</strong> / ' + doc.flags + '</span>' +
+        '<button class="flags-hint-btn" onclick="showHint()">💡 Indice (-10 XP)</button>' +
+        '</div>' +
+        '<button class="submit-btn" onclick="submitDetective()">✓ VALIDER MES RÉPONSES</button>' +
+        '</div>';
+    }
+
+    function renderQuiz() {
+      var q = QUIZ[state.quizIndex];
+      var options = '';
+      var letters = ['A', 'B', 'C', 'D'];
+      
+      for (var i = 0; i < q.options.length; i++) {
+        options += '<div class="quiz-option" data-idx="' + i + '" data-correct="' + q.options[i].correct + '">' +
+          '<span class="option-letter">' + letters[i] + '</span>' +
+          '<span class="option-text">' + q.options[i].text + '</span>' +
+          '</div>';
+      }
+
+      return '<div class="quiz">' +
+        '<div class="mode-header">' +
+        '<h2 class="mode-title">❓ QUIZ</h2>' +
+        '<div class="mode-progress"><span class="progress-text">Question ' + (state.quizIndex + 1) + ' / ' + QUIZ.length + '</span></div>' +
+        '</div>' +
+        '<div class="quiz-card">' +
+        '<span class="quiz-category">' + q.category + '</span>' +
+        '<p class="quiz-question">' + q.question + '</p>' +
+        '<div class="quiz-options" id="quizOptions">' + options + '</div>' +
+        '<div class="quiz-explanation" id="quizExplanation"><h4>💡 EXPLICATION</h4><p>' + q.explanation + '</p></div>' +
+        '</div>' +
+        '<div class="quiz-nav">' +
+        '<button class="quiz-nav-btn" onclick="prevQuiz()" ' + (state.quizIndex === 0 ? 'disabled' : '') + '>← Précédent</button>' +
+        '<button class="quiz-nav-btn" onclick="nextQuiz()" id="nextQuizBtn" disabled>Suivant →</button>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function renderTechniques() {
+      var cards = '';
+      for (var i = 0; i < TECHNIQUES.length; i++) {
+        var t = TECHNIQUES[i];
+        var progress = state.techProgress[t.id] || 0;
+        cards += '<div class="tech-card" data-tech="' + t.id + '">' +
+          '<div class="tech-icon">' + t.icon + '</div>' +
+          '<div class="tech-name">' + t.name + '</div>' +
+          '<div class="tech-desc">' + t.desc + '</div>' +
+          '<div class="tech-progress">' +
+          '<div class="tech-bar"><div class="tech-bar-fill" style="width:' + progress + '%"></div></div>' +
+          '<span class="tech-percent">' + progress + '%</span>' +
+          '</div>' +
+          '</div>';
+      }
+
+      return '<div class="techniques">' +
+        '<div class="mode-header">' +
+        '<h2 class="mode-title">📚 TECHNIQUES DE MANIPULATION</h2>' +
+        '</div>' +
+        '<p style="color:var(--text2);margin-bottom:20px;line-height:1.6;">Apprends à reconnaître les 8 techniques les plus utilisées pour te manipuler. Clique sur chaque carte pour en savoir plus !</p>' +
+        '<div class="tech-grid">' + cards + '</div>' +
+        '</div>';
+    }
+
+    function renderLab() {
+      return '<div class="lab">' +
+        '<div class="mode-header">' +
+        '<h2 class="mode-title">🧪 LABORATOIRE</h2>' +
+        '</div>' +
+        '<div class="lab-intro">' +
+        '<h3>⚠️ POURQUOI CE MODE ?</h3>' +
+        '<p>Comprendre COMMENT les fakes sont fabriqués te rend IMPOSSIBLE À MANIPULER. Tu vas créer un faux article pour apprendre les ficelles... et ne plus jamais tomber dans le panneau !</p>' +
+        '</div>' +
+        '<div class="lab-builder">' +
+        '<div class="builder-section">' +
+        '<label class="builder-label">📰 Sujet de ton fake :</label>' +
+        '<input type="text" class="builder-input" id="labSubject" placeholder="Ex: Le café, Les vaccins, Les élections...">' +
+        '</div>' +
+        '<div class="builder-section">' +
+        '<label class="builder-label">🎭 Type de manipulation :</label>' +
+        '<select class="builder-select" id="labType">' +
+        '<option value="health">🏥 Santé miracle</option>' +
+        '<option value="conspiracy">🕵️ Complot caché</option>' +
+        '<option value="politics">🏛️ Scandale politique</option>' +
+        '<option value="science">🔬 Fausse science</option>' +
+        '</select>' +
+        '</div>' +
+        '<div class="builder-section">' +
+        '<label class="builder-label">🚩 Techniques à utiliser :</label>' +
+        '<div class="builder-checkboxes">' +
+        '<label class="builder-check"><input type="checkbox" id="techAuth" checked> 👔 Fausse autorité</label>' +
+        '<label class="builder-check"><input type="checkbox" id="techEmo" checked> 😱 Appel aux émotions</label>' +
+        '<label class="builder-check"><input type="checkbox" id="techUrg"> ⚡ Urgence artificielle</label>' +
+        '<label class="builder-check"><input type="checkbox" id="techNum"> 📊 Chiffres bidons</label>' +
+        '<label class="builder-check"><input type="checkbox" id="techSrc"> 🔗 Source floue</label>' +
+        '<label class="builder-check"><input type="checkbox" id="techCon"> 🕵️ "Ils nous cachent"</label>' +
+        '</div>' +
+        '</div>' +
+        '<button class="generate-btn" onclick="generateFake()">🧪 GÉNÉRER LE FAKE</button>' +
+        '</div>' +
+        '<div class="lab-result" id="labResult">' +
+        '<div class="result-header">📰 FAKE GÉNÉRÉ</div>' +
+        '<div class="result-content">' +
+        '<div class="result-preview" id="resultPreview"></div>' +
+        '<div class="result-flags" id="resultFlags"></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // GAME LOGIC
+    // ════════════════════════════════════════════════════════════
+    function initDetective() {
+      var flags = document.querySelectorAll('.red-flag');
+      for (var i = 0; i < flags.length; i++) {
+        flags[i].addEventListener('click', function() {
+          if (!this.classList.contains('found')) {
+            this.classList.add('found');
+            state.flagsFound.push(this.dataset.tech);
+            document.getElementById('flagCount').textContent = state.flagsFound.length;
+            
+            // Update technique progress
+            var tech = this.dataset.tech;
+            state.techProgress[tech] = Math.min(100, (state.techProgress[tech] || 0) + 20);
+          }
+        });
+      }
+    }
+
+    function submitDetective() {
+      var doc = FAKE_DOCS[0];
+      var found = state.flagsFound.length;
+      var total = doc.flags;
+      var xp = found * 10;
+      
+      if (found === total) {
+        xp += 30; // Bonus
+        state.streak++;
+        showPopup('🏆', 'PARFAIT !', 'Tu as trouvé TOUS les red flags !', '+' + xp + ' XP');
+      } else if (found >= total / 2) {
+        state.streak++;
+        showPopup('👍', 'BIEN JOUÉ !', found + '/' + total + ' red flags trouvés', '+' + xp + ' XP');
+      } else {
+        state.streak = 0;
+        showPopup('🤔', 'CONTINUE !', 'Seulement ' + found + '/' + total + '. Réessaie !', '+' + xp + ' XP');
+      }
+      
+      addXP(xp);
+    }
+
+    function showHint() {
+      var unfound = document.querySelector('.red-flag:not(.found)');
+      if (unfound) {
+        unfound.style.animation = 'pulse 0.5s 3';
+        state.xp = Math.max(0, state.xp - 10);
+        updateStats();
+      }
+    }
+
+    function initQuiz() {
+      var options = document.querySelectorAll('.quiz-option');
+      for (var i = 0; i < options.length; i++) {
+        options[i].addEventListener('click', function() {
+          if (this.classList.contains('selected') || this.classList.contains('correct') || this.classList.contains('wrong')) return;
+          
+          // Mark all as disabled
+          for (var j = 0; j < options.length; j++) {
+            if (options[j].dataset.correct === 'true') {
+              options[j].classList.add('correct');
+            }
+          }
+          
+          var isCorrect = this.dataset.correct === 'true';
+          if (isCorrect) {
+            addXP(20);
+            state.streak++;
+          } else {
+            this.classList.add('wrong');
+            state.streak = 0;
+          }
+          
+          document.getElementById('quizExplanation').classList.add('show');
+          document.getElementById('nextQuizBtn').disabled = false;
+          updateStats();
+        });
+      }
+    }
+
+    function nextQuiz() {
+      state.quizIndex = (state.quizIndex + 1) % QUIZ.length;
+      loadMode('quiz');
+    }
+
+    function prevQuiz() {
+      state.quizIndex = Math.max(0, state.quizIndex - 1);
+      loadMode('quiz');
+    }
+
+    function generateFake() {
+      var subject = document.getElementById('labSubject').value || 'le sujet mystère';
+      var type = document.getElementById('labType').value;
+      
+      var useTechs = [];
+      if (document.getElementById('techAuth').checked) useTechs.push('authority');
+      if (document.getElementById('techEmo').checked) useTechs.push('emotion');
+      if (document.getElementById('techUrg').checked) useTechs.push('urgency');
+      if (document.getElementById('techNum').checked) useTechs.push('numbers');
+      if (document.getElementById('techSrc').checked) useTechs.push('source');
+      if (document.getElementById('techCon').checked) useTechs.push('conspiracy');
+
+      var templates = {
+        authority: ['Un célèbre professeur de Harvard', 'Un ancien directeur de la NASA', 'Un prix Nobel anonyme'],
+        emotion: ['SCANDALE !', 'C\'est RÉVOLTANT !', 'Ils osent nous mentir !'],
+        urgency: ['PARTAGEZ AVANT CENSURE !', 'URGENT : à lire maintenant !', 'Ils vont supprimer cet article !'],
+        numbers: ['97% des experts confirment', 'Selon une étude sur 10 000 personnes', 'Les chiffres parlent : 84%'],
+        source: ['Des études récentes prouvent', 'Selon nos sources exclusives', 'Des documents fuités révèlent'],
+        conspiracy: ['Ce que le gouvernement vous cache', 'La vérité qu\'ILS ne veulent pas', 'Le complot enfin révélé']
+      };
+
+      var title = '';
+      var content = '';
+      var flagsHtml = '';
+
+      if (useTechs.indexOf('emotion') >= 0) {
+        title = templates.emotion[Math.floor(Math.random() * 3)] + ' ';
+      }
+      title += 'La vérité sur ' + subject + ' !';
+
+      content = '<p>';
+      for (var i = 0; i < useTechs.length; i++) {
+        var t = useTechs[i];
+        content += '<span style="color:#ff6666">[' + t.toUpperCase() + ']</span> ' + templates[t][Math.floor(Math.random() * 3)] + ' ';
+      }
+      content += '</p>';
+
+      // Explain flags
+      flagsHtml = '<h4>🚩 TECHNIQUES UTILISÉES :</h4>';
+      for (var i = 0; i < useTechs.length; i++) {
+        var tech = TECHNIQUES.find(function(t) { return t.id === useTechs[i]; });
+        if (tech) {
+          flagsHtml += '<div class="flag-item"><span class="flag-icon">🚩</span><div><span class="flag-name">' + tech.name + '</span><br><span class="flag-desc">' + tech.desc + '</span></div></div>';
+        }
+      }
+
+      document.getElementById('resultPreview').innerHTML = '<h4>' + title + '</h4>' + content;
+      document.getElementById('resultFlags').innerHTML = flagsHtml;
+      document.getElementById('labResult').classList.add('show');
+
+      addXP(15);
+      showPopup('🧪', 'FAKE CRÉÉ !', 'Tu comprends maintenant comment ils font !', '+15 XP');
+    }
+
+    // ════════════════════════════════════════════════════════════
+    // NAV & INIT
+    // ════════════════════════════════════════════════════════════
+    function loadMode(mode) {
+      var content = document.getElementById('content');
+      var items = document.querySelectorAll('.nav-item');
+      
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.toggle('active', items[i].dataset.mode === mode);
+      }
+
+      if (mode === 'home') content.innerHTML = renderHome();
+      else if (mode === 'detective') { content.innerHTML = renderDetective(); setTimeout(initDetective, 100); }
+      else if (mode === 'quiz') { content.innerHTML = renderQuiz(); setTimeout(initQuiz, 100); }
+      else if (mode === 'techniques') content.innerHTML = renderTechniques();
+      else if (mode === 'lab') content.innerHTML = renderLab();
+    }
+
+    function init() {
+      loadState();
+
+      var items = document.querySelectorAll('.nav-item:not(.locked)');
+      for (var i = 0; i < items.length; i++) {
+        items[i].addEventListener('click', function() {
+          loadMode(this.dataset.mode);
+        });
+      }
+
+      loadMode('home');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
