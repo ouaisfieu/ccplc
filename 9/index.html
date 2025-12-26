@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PTAL Toolkit – Créez votre propre PTAL</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap');
+    :root{--bg:#0a0a0a;--bg2:#111318;--card:#161921;--surface:#1e222a;--surface2:#252a35;--border:rgba(255,255,255,0.1);--text:#e2e8f0;--text2:#a1a1aa;--muted:#71717a;--accent:#00ff41;--accent2:#00cc33;--glow:rgba(0,255,65,0.15);--blue:#3b82f6;--orange:#f59e0b;--red:#ef4444;--pink:#ec4899;--kw:#ff79c6;--str:#f1fa8c;--num:#bd93f9;--cmt:#6272a4;--fn:#50fa7b;--var:#8be9fd}
+    [data-theme="light"]{--bg:#f8fafc;--bg2:#f1f5f9;--card:#fff;--surface:#f1f5f9;--surface2:#e2e8f0;--border:rgba(0,0,0,0.1);--text:#1e293b;--text2:#475569;--muted:#64748b;--accent:#059669;--accent2:#047857;--glow:rgba(5,150,105,0.12);--kw:#d946ef;--str:#16a34a;--num:#7c3aed;--cmt:#9ca3af;--fn:#2563eb;--var:#0891b2}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;transition:background .3s,color .3s}
+    header{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;position:sticky;top:0;z-index:100}
+    .header-content{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .logo{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--accent)}
+    .logo-sub{font-size:.75rem;color:var(--muted)}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .btn{padding:8px 14px;border-radius:6px;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);color:var(--text)}
+    .btn:hover{background:var(--surface2);border-color:var(--accent)}
+    .btn-primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600}
+    .btn-primary:hover{background:var(--accent2);box-shadow:0 0 20px var(--glow)}
+    .btn-icon{width:36px;height:36px;padding:0;justify-content:center;font-size:1.1rem}
+    .main-container{max-width:1600px;margin:0 auto;padding:20px;display:grid;grid-template-columns:280px 1fr;gap:20px;min-height:calc(100vh - 70px)}
+    @media(max-width:1100px){.main-container{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:16px}}
+    @media(max-width:700px){.sidebar{grid-template-columns:1fr}}
+    .sidebar{display:flex;flex-direction:column;gap:16px}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+    .panel-header{padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--border);font-weight:600;font-size:.8rem;display:flex;align-items:center;gap:8px;color:var(--text2)}
+    .panel-body{padding:14px}
+    .intro-text{font-size:.8rem;color:var(--text2);line-height:1.6}
+    .intro-text strong{color:var(--accent)}
+    .intro-list{margin:10px 0;padding-left:18px}
+    .intro-list li{margin:5px 0;font-size:.8rem;color:var(--text2)}
+    .ptal-list{display:flex;flex-direction:column;gap:6px;max-height:250px;overflow-y:auto}
+    .ptal-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border-radius:6px;cursor:pointer;transition:all .2s;border:1px solid transparent}
+    .ptal-item:hover,.ptal-item.active{border-color:var(--accent);background:var(--glow)}
+    .ptal-item-info{flex:1;min-width:0}
+    .ptal-item-name{font-size:.8rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ptal-item-date{font-size:.7rem;color:var(--muted)}
+    .ptal-item-actions{display:flex;gap:4px;opacity:0;transition:opacity .2s}
+    .ptal-item:hover .ptal-item-actions{opacity:1}
+    .ptal-item-btn{width:26px;height:26px;border-radius:4px;border:none;background:var(--card);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+    .ptal-item-btn:hover{background:var(--accent);color:#000}
+    .ptal-item-btn.delete:hover{background:var(--red);color:#fff}
+    .empty-state{text-align:center;padding:24px 16px;color:var(--muted);font-size:.8rem}
+    .empty-state .icon{font-size:2rem;margin-bottom:8px;opacity:.5}
+    .templates-grid{display:grid;gap:8px}
+    .template-item{padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .2s}
+    .template-item:hover{border-color:var(--accent);background:var(--glow)}
+    .template-item-title{font-weight:600;font-size:.8rem;margin-bottom:2px}
+    .template-item-desc{font-size:.7rem;color:var(--muted)}
+    .main-content{display:flex;flex-direction:column;gap:16px}
+    .editor-toolbar{display:flex;gap:6px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;align-items:center}
+    .toolbar-group{display:flex;gap:4px;align-items:center}
+    .toolbar-separator{width:1px;height:24px;background:var(--border);margin:0 6px}
+    .toolbar-btn{width:32px;height:32px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;transition:all .2s;font-family:'JetBrains Mono',monospace}
+    .toolbar-btn:hover{border-color:var(--accent);background:var(--glow);color:var(--accent)}
+    .toolbar-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+    .filename-input{flex:1;min-width:180px;padding:7px 12px;border-radius:5px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.8rem}
+    .filename-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+    .editor-area{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:500px}
+    .editor-area.view-editor{grid-template-columns:1fr}
+    .editor-area.view-editor .preview-pane{display:none}
+    .editor-area.view-preview{grid-template-columns:1fr}
+    .editor-area.view-preview .editor-pane{display:none}
+    @media(max-width:900px){.editor-area{grid-template-columns:1fr}}
+    .editor-pane,.preview-pane{background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;overflow:hidden}
+    .pane-header{padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border);font-size:.75rem;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:6px}
+    .editor-textarea{flex:1;padding:16px;border:none;background:transparent;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:1.7;resize:none;tab-size:2}
+    .editor-textarea:focus{outline:none}
+    .editor-textarea::placeholder{color:var(--muted)}
+    .preview-content{flex:1;padding:20px;overflow-y:auto;font-size:.9rem}
+    .preview-content h1{font-size:1.7rem;margin:0 0 16px;color:var(--accent);font-weight:700}
+    .preview-content h2{font-size:1.3rem;margin:28px 0 12px;color:var(--text);border-bottom:1px solid var(--border);padding-bottom:8px;font-weight:600}
+    .preview-content h3{font-size:1.1rem;margin:22px 0 10px;color:var(--text);font-weight:600}
+    .preview-content p{margin:12px 0;color:var(--text2);line-height:1.7}
+    .preview-content strong{color:var(--text);font-weight:600}
+    .preview-content ul,.preview-content ol{margin:12px 0 12px 20px;color:var(--text2)}
+    .preview-content li{margin:6px 0}
+    .preview-content a{color:var(--blue);text-decoration:none}
+    .preview-content a:hover{text-decoration:underline}
+    .preview-content code{background:var(--surface);padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em;color:var(--pink);border:1px solid var(--border)}
+    .preview-content pre{background:var(--bg2);padding:16px;border-radius:8px;overflow-x:auto;margin:16px 0;border:1px solid var(--border);position:relative}
+    .preview-content pre code{background:none;padding:0;border:none;color:var(--text);font-size:.8rem;line-height:1.6;display:block}
+    .preview-content pre .lang-label{position:absolute;top:8px;right:10px;font-size:.65rem;color:var(--muted);text-transform:uppercase}
+    .preview-content .kw{color:var(--kw)}.preview-content .str{color:var(--str)}.preview-content .num{color:var(--num)}.preview-content .cmt{color:var(--cmt);font-style:italic}.preview-content .fn{color:var(--fn)}.preview-content .var{color:var(--var)}
+    .preview-content blockquote{border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;background:var(--glow);border-radius:0 8px 8px 0}
+    .preview-content blockquote p{margin:0;color:var(--text);font-style:italic}
+    .preview-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.85rem;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+    .preview-content thead{background:var(--surface)}
+    .preview-content th{padding:10px 14px;text-align:left;font-weight:600;color:var(--text);border-bottom:1px solid var(--border)}
+    .preview-content td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+    .preview-content tr:last-child td{border-bottom:none}
+    .preview-content tbody tr:hover{background:var(--glow)}
+    .preview-content hr{border:none;border-top:1px solid var(--border);margin:28px 0}
+    .preview-content img{max-width:100%;border-radius:8px;margin:16px 0}
+    .status-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:.7rem;color:var(--muted)}
+    .status-item{display:flex;align-items:center;gap:6px}
+    .status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+    .status-dot.modified{background:var(--orange)}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+    .modal-overlay.active{display:flex}
+    .modal{background:var(--card);border:1px solid var(--border);border-radius:10px;width:100%;max-width:1000px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+    .modal-header{padding:14px 18px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .modal-title{font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:8px}
+    .modal-close{width:30px;height:30px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+    .modal-close:hover{background:var(--red);color:#fff}
+    .modal-body{flex:1;overflow:auto}
+    .modal-body iframe{width:100%;height:70vh;border:none;background:#fff}
+    .modal-footer{padding:12px 18px;background:var(--surface);border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+    .help-content{padding:20px}
+    .help-content h3{font-size:.95rem;margin-bottom:14px;color:var(--text)}
+    .help-content h3:not(:first-child){margin-top:24px}
+    .help-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+    .help-item{padding:10px;background:var(--surface);border-radius:6px;text-align:center;font-size:.75rem}
+    .help-item kbd{display:inline-block;padding:2px 6px;background:var(--card);border:1px solid var(--border);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.7rem}
+    .help-item span{display:block;color:var(--muted);margin-top:4px}
+    .help-syntax{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--surface);padding:14px;border-radius:6px}
+    .help-syntax div{margin-bottom:6px}
+    .help-syntax code{color:var(--accent)}
+    .toast{position:fixed;bottom:20px;right:20px;padding:12px 18px;background:var(--card);border:1px solid var(--accent);border-radius:8px;color:var(--text);font-size:.85rem;display:flex;align-items:center;gap:8px;transform:translateY(100px);opacity:0;transition:all .3s;z-index:2000;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+    .toast.active{transform:translateY(0);opacity:1}
+    .toast.error{border-color:var(--red)}
+    ::-webkit-scrollbar{width:8px;height:8px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:var(--surface);border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo-section">
+        <div><div class="logo">PTAL Toolkit</div><div class="logo-sub">Créez · Éditez · Partagez</div></div>
+      </div>
+      <div class="header-actions">
+        <button class="btn" onclick="newPTAL()">📄 Nouveau</button>
+        <button class="btn" onclick="openFile()">📂 Ouvrir</button>
+        <button class="btn" onclick="savePTAL()">💾 Sauver</button>
+        <div class="toolbar-separator"></div>
+        <button class="btn btn-primary" onclick="exportHTML()">🌐 Export HTML</button>
+        <button class="btn" onclick="exportMD()">📝 Export MD</button>
+        <div class="toolbar-separator"></div>
+        <button class="btn btn-icon" onclick="toggleTheme()" title="Thème"><span id="themeIcon">🌙</span></button>
+        <button class="btn btn-icon" onclick="showHelp()" title="Aide">❓</button>
+      </div>
+    </div>
+  </header>
+  <div class="main-container">
+    <aside class="sidebar">
+      <div class="panel">
+        <div class="panel-header">💡 C'est quoi un PTAL ?</div>
+        <div class="panel-body">
+          <p class="intro-text"><strong>PTAL</strong> = Please Take A Look<br><em>(Prenez le Temps d'Analyser Librement)</em></p>
+          <p class="intro-text" style="margin-top:10px">Un <strong>document web autonome</strong> :</p>
+          <ul class="intro-list">
+            <li>📥 Fonctionne hors ligne</li>
+            <li>✏️ Modifiable</li>
+            <li>🌐 Publiable gratuitement</li>
+            <li>📤 Partageable librement</li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel" style="flex:1">
+        <div class="panel-header">📚 Mes PTAL <span style="margin-left:auto;font-size:.7rem;color:var(--muted)" id="ptalCount">0</span></div>
+        <div class="panel-body">
+          <div class="ptal-list" id="ptalList"><div class="empty-state"><div class="icon">📭</div><p>Aucun PTAL</p></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">📋 Modèles</div>
+        <div class="panel-body">
+          <div class="templates-grid">
+            <div class="template-item" onclick="loadTemplate('doc')"><div class="template-item-title">📄 Documentation</div><div class="template-item-desc">Structure classique</div></div>
+            <div class="template-item" onclick="loadTemplate('guide')"><div class="template-item-title">📖 Guide</div><div class="template-item-desc">Étape par étape</div></div>
+            <div class="template-item" onclick="loadTemplate('analyse')"><div class="template-item-title">🔍 Analyse</div><div class="template-item-desc">Décortiquer un sujet</div></div>
+            <div class="template-item" onclick="loadTemplate('ressources')"><div class="template-item-title">🔗 Ressources</div><div class="template-item-desc">Liens commentés</div></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <main class="main-content">
+      <div class="editor-toolbar">
+        <div class="toolbar-group">
+          <button class="toolbar-btn" onclick="insertFormat('**','**')" title="Gras">B</button>
+          <button class="toolbar-btn" onclick="insertFormat('*','*')" title="Italique" style="font-style:italic">I</button>
+          <button class="toolbar-btn" onclick="insertFormat('\`','\`')" title="Code">&lt;&gt;</button>
+          <button class="toolbar-btn" onclick="insertFormat('[','](url)')" title="Lien">🔗</button>
+        </div>
+        <div class="toolbar-separator"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" onclick="insertLine('# ')" title="H1">H1</button>
+          <button class="toolbar-btn" onclick="insertLine('## ')" title="H2">H2</button>
+          <button class="toolbar-btn" onclick="insertLine('### ')" title="H3">H3</button>
+        </div>
+        <div class="toolbar-separator"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" onclick="insertLine('- ')" title="Liste">•</button>
+          <button class="toolbar-btn" onclick="insertLine('> ')" title="Citation">❝</button>
+          <button class="toolbar-btn" onclick="insertCodeBlock()" title="Code">{ }</button>
+          <button class="toolbar-btn" onclick="insertTable()" title="Tableau">▦</button>
+        </div>
+        <div class="toolbar-separator"></div>
+        <input type="text" class="filename-input" id="filename" value="mon-ptal.md">
+        <div class="toolbar-separator"></div>
+        <div class="toolbar-group">
+          <button class="toolbar-btn" id="viewSplit" onclick="setView('split')" title="Split">◫</button>
+          <button class="toolbar-btn" id="viewEditor" onclick="setView('editor')" title="Éditeur">📝</button>
+          <button class="toolbar-btn active" id="viewPreview" onclick="setView('preview')" title="Aperçu">👁</button>
+        </div>
+        <div class="toolbar-separator"></div>
+        <button class="btn" onclick="previewInModal()">🔍 Aperçu</button>
+        <button class="btn" onclick="openInNewTab()">↗️</button>
+      </div>
+      <div class="editor-area" id="editorArea">
+        <div class="editor-pane">
+          <div class="pane-header"><span>✏️</span> Markdown</div>
+          <textarea class="editor-textarea" id="editor" placeholder="# Mon PTAL"></textarea>
+        </div>
+        <div class="preview-pane">
+          <div class="pane-header"><span>👁</span> Aperçu</div>
+          <div class="preview-content" id="preview"></div>
+        </div>
+      </div>
+      <div class="status-bar">
+        <div class="status-item"><span class="status-dot" id="statusDot"></span><span id="statusText">Prêt</span></div>
+        <div class="status-item"><span id="charCount">0</span> car · <span id="wordCount">0</span> mots</div>
+      </div>
+    </main>
+  </div>
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">👁 <span id="modalTitle">Aperçu</span></div>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body"><iframe id="modalFrame"></iframe></div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Fermer</button>
+        <button class="btn" onclick="openInNewTab()">↗️ Nouvel onglet</button>
+        <button class="btn btn-primary" onclick="exportHTML()">🌐 Export HTML</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="helpModal" onclick="closeHelp(event)">
+    <div class="modal" style="max-width:600px" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">❓ Aide</div>
+        <button class="modal-close" onclick="closeHelp()">×</button>
+      </div>
+      <div class="modal-body help-content">
+        <h3>⌨️ Raccourcis</h3>
+        <div class="help-grid">
+          <div class="help-item"><kbd>Ctrl</kbd>+<kbd>S</kbd><span>Sauver</span></div>
+          <div class="help-item"><kbd>Ctrl</kbd>+<kbd>B</kbd><span>Gras</span></div>
+          <div class="help-item"><kbd>Ctrl</kbd>+<kbd>I</kbd><span>Italique</span></div>
+          <div class="help-item"><kbd>Ctrl</kbd>+<kbd>K</kbd><span>Lien</span></div>
+          <div class="help-item"><kbd>Ctrl</kbd>+<kbd>E</kbd><span>Export MD</span></div>
+          <div class="help-item"><kbd>Ctrl</kbd>+<kbd>N</kbd><span>Nouveau</span></div>
+        </div>
+        <h3>📝 Markdown</h3>
+        <div class="help-syntax">
+          <div><code># H1</code> · <code>## H2</code> · <code>### H3</code></div>
+          <div><code>**gras**</code> · <code>*italique*</code></div>
+          <div><code>[texte](url)</code> · <code>\`code\`</code></div>
+          <div><code>- liste</code> · <code>> citation</code></div>
+          <div><code>| A | B |</code> → tableau</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <input type="file" id="fileInput" accept=".md,.txt,.html" onchange="handleFileOpen(event)" style="display:none">
+<script>
+let ptals=JSON.parse(localStorage.getItem('ptals')||'[]'),currentPtalId=null,isModified=false,currentTheme=localStorage.getItem('theme')||'dark';
+const editor=document.getElementById('editor'),preview=document.getElementById('preview'),filename=document.getElementById('filename');
+
+function initTheme(){document.body.setAttribute('data-theme',currentTheme);document.getElementById('themeIcon').textContent=currentTheme==='dark'?'🌙':'☀️'}
+function toggleTheme(){currentTheme=currentTheme==='dark'?'light':'dark';localStorage.setItem('theme',currentTheme);initTheme()}
+
+function parseMarkdown(md){
+  let html=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Code blocks
+  html=html.replace(/```(\w*)\n([\s\S]*?)```/g,(m,lang,code)=>{
+    const hl=highlightCode(code.trim(),lang);
+    return `<pre>${lang?`<span class="lang-label">${lang}</span>`:''}<code>${hl}</code></pre>`;
+  });
+  // Tables
+  html=html.replace(/^\|(.+)\|\s*\n\|[-:\s|]+\|\s*\n((?:\|.+\|\s*\n?)+)/gm,(m,hdr,body)=>{
+    const hs=hdr.split('|').map(h=>h.trim()).filter(h=>h);
+    const rs=body.trim().split('\n').map(r=>r.split('|').map(c=>c.trim()).filter(c=>c));
+    let t='<table><thead><tr>'+hs.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>';
+    rs.forEach(r=>{t+='<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>'});
+    return t+'</tbody></table>';
+  });
+  html=html.replace(/^#### (.*$)/gm,'<h4>$1</h4>').replace(/^### (.*$)/gm,'<h3>$1</h3>').replace(/^## (.*$)/gm,'<h2>$1</h2>').replace(/^# (.*$)/gm,'<h1>$1</h1>');
+  html=html.replace(/\*\*\*(.*?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>');
+  html=html.replace(/`([^`]+)`/g,'<code>$1</code>');
+  html=html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1">').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
+  html=html.replace(/^&gt; (.*$)/gm,'<blockquote><p>$1</p></blockquote>');
+  html=html.replace(/^---$/gm,'<hr>');
+  html=html.replace(/^[\-\*] (.*$)/gm,'<li>$1</li>');
+  html=html.replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>').replace(/<\/ul>\s*<ul>/g,'');
+  html=html.replace(/\n\n+/g,'</p><p>').replace(/\n/g,'<br>');
+  if(!html.startsWith('<'))html='<p>'+html+'</p>';
+  return html.replace(/<p><\/p>/g,'').replace(/<p>(<[huo])/g,'$1').replace(/(<\/[huo][^>]*>)<\/p>/g,'$1').replace(/<p>(<table>)/g,'$1').replace(/(<\/table>)<\/p>/g,'$1').replace(/<p>(<blockquote>)/g,'$1').replace(/(<\/blockquote>)<\/p>/g,'$1').replace(/<p>(<pre>)/g,'$1').replace(/(<\/pre>)<\/p>/g,'$1').replace(/<p>(<hr>)/g,'$1').replace(/(<hr>)<\/p>/g,'$1');
+}
+
+function highlightCode(code,lang){
+  const kws={js:['const','let','var','function','return','if','else','for','while','class','import','export','from','async','await','try','catch','new','this','true','false','null','undefined'],python:['def','class','import','from','return','if','elif','else','for','while','try','except','with','as','True','False','None','and','or','not','in','self'],css:['@import','@media','@keyframes'],bash:['echo','cd','ls','mkdir','rm','cp','mv','cat','grep','if','then','else','fi','for','do','done','sudo','npm','git']};
+  const k=kws[lang]||kws.js;
+  code=code.replace(/(["'\`])(?:(?!\1|\\).|\\.)*\1/g,'<span class="str">$&</span>');
+  code=code.replace(/(\/\/.*$)/gm,'<span class="cmt">$1</span>').replace(/(\/\*[\s\S]*?\*\/)/g,'<span class="cmt">$1</span>').replace(/(#[^{].*$)/gm,'<span class="cmt">$1</span>');
+  code=code.replace(/\b(\d+\.?\d*)\b/g,'<span class="num">$1</span>');
+  k.forEach(w=>{code=code.replace(new RegExp(`\\b(${w})\\b`,'g'),'<span class="kw">$1</span>')});
+  code=code.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g,'<span class="fn">$1</span>');
+  return code;
+}
+
+function updatePreview(){preview.innerHTML=parseMarkdown(editor.value);updateStats();markModified()}
+function updateStats(){const t=editor.value;document.getElementById('charCount').textContent=t.length;document.getElementById('wordCount').textContent=t.trim()?t.trim().split(/\s+/).length:0}
+function markModified(){if(!isModified){isModified=true;document.getElementById('statusDot').classList.add('modified');document.getElementById('statusText').textContent='Modifié'}}
+function markSaved(){isModified=false;document.getElementById('statusDot').classList.remove('modified');document.getElementById('statusText').textContent='Sauvegardé'}
+
+function savePTAL(){
+  const name=filename.value.replace(/\.(md|html)$/,''),content=editor.value,now=new Date().toISOString();
+  if(currentPtalId){const p=ptals.find(x=>x.id===currentPtalId);if(p){p.name=name;p.content=content;p.modified=now}}
+  else{const np={id:Date.now().toString(),name,content,created:now,modified:now};ptals.unshift(np);currentPtalId=np.id}
+  localStorage.setItem('ptals',JSON.stringify(ptals));renderPtalList();markSaved();showToast('💾 Sauvegardé !')
+}
+function loadPTAL(id){const p=ptals.find(x=>x.id===id);if(p){editor.value=p.content;filename.value=p.name+'.md';currentPtalId=id;updatePreview();markSaved();renderPtalList()}}
+function deletePTAL(id,e){e.stopPropagation();if(confirm('Supprimer ?')){ptals=ptals.filter(x=>x.id!==id);localStorage.setItem('ptals',JSON.stringify(ptals));if(currentPtalId===id)newPTAL();renderPtalList();showToast('🗑️ Supprimé')}}
+function newPTAL(){if(isModified&&!confirm('Modifications non sauvegardées. Continuer ?'))return;editor.value='';filename.value='nouveau-ptal.md';currentPtalId=null;isModified=false;updatePreview();document.getElementById('statusDot').classList.remove('modified');document.getElementById('statusText').textContent='Nouveau'}
+function renderPtalList(){
+  const list=document.getElementById('ptalList');document.getElementById('ptalCount').textContent=ptals.length;
+  if(!ptals.length){list.innerHTML='<div class="empty-state"><div class="icon">📭</div><p>Aucun PTAL</p></div>';return}
+  list.innerHTML=ptals.map(p=>{
+    const d=new Date(p.modified).toLocaleDateString('fr-FR',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    return `<div class="ptal-item ${p.id===currentPtalId?'active':''}" onclick="loadPTAL('${p.id}')"><span>📄</span><div class="ptal-item-info"><div class="ptal-item-name">${p.name}</div><div class="ptal-item-date">${d}</div></div><div class="ptal-item-actions"><button class="ptal-item-btn delete" onclick="deletePTAL('${p.id}',event)">🗑️</button></div></div>`
+  }).join('')
+}
+
+const templates={
+doc:`# Mon Document
+
+## Introduction
+
+Présentez votre sujet ici.
+
+## Section 1
+
+Développez votre premier point...
+
+## Conclusion
+
+Résumez les points clés.`,
+guide:`# Guide : [Titre]
+
+## Prérequis
+
+- Élément 1
+- Élément 2
+
+## Étape 1
+
+\`\`\`bash
+echo "Hello"
+\`\`\`
+
+## Étape 2
+
+Continuez...`,
+analyse:`# Analyse : [Sujet]
+
+## Contexte
+
+Présentez le sujet.
+
+## Les faits
+
+| Élément | Détail |
+|---------|--------|
+| Fait 1 | Desc |
+| Fait 2 | Desc |
+
+## Conclusion
+
+Synthèse.`,
+ressources:`# Ressources : [Thème]
+
+## 📚 Livres
+
+- **Titre** — Auteur
+
+## 🔗 Sites
+
+| Site | Description |
+|------|-------------|
+| [Nom](url) | Desc |`
+};
+function loadTemplate(name){if(isModified&&!confirm('Modifications non sauvegardées ?'))return;editor.value=templates[name]||'';filename.value=name+'-ptal.md';currentPtalId=null;updatePreview();showToast('📋 Modèle chargé')}
+
+function generateHTML(){
+  const title=filename.value.replace(/\.(md|html)$/,''),content=parseMarkdown(editor.value);
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${title} – PTAL</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;line-height:1.7;color:#374151;background:#f9fafb;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+.container{width:100%;max-width:800px;background:#fff;padding:48px 56px;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1)}
+h1{font-size:2rem;margin-bottom:24px;color:#111827;font-weight:700}
+h2{font-size:1.5rem;margin:36px 0 16px;color:#1f2937;font-weight:600;padding-bottom:8px;border-bottom:2px solid #e5e7eb}
+h3{font-size:1.25rem;margin:28px 0 12px;color:#374151;font-weight:600}
+p{margin:16px 0;color:#4b5563}
+strong{color:#1f2937;font-weight:600}
+a{color:#2563eb;text-decoration:none}
+a:hover{text-decoration:underline}
+ul,ol{margin:16px 0 16px 24px;color:#4b5563}
+li{margin:8px 0}
+code{background:#f3f4f6;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.875em;color:#db2777}
+pre{background:#1f2937;color:#e5e7eb;padding:20px 24px;border-radius:8px;overflow-x:auto;margin:20px 0;position:relative}
+pre code{background:none;color:inherit;padding:0;font-size:.85rem}
+pre .lang-label{position:absolute;top:8px;right:12px;font-size:.7rem;color:#9ca3af;text-transform:uppercase}
+.kw{color:#f472b6}.str{color:#fbbf24}.num{color:#a78bfa}.cmt{color:#6b7280;font-style:italic}.fn{color:#34d399}
+blockquote{border-left:4px solid #2563eb;padding:16px 20px;margin:20px 0;background:#eff6ff;border-radius:0 8px 8px 0}
+blockquote p{margin:0;color:#1e40af;font-style:italic}
+hr{border:none;border-top:1px solid #e5e7eb;margin:32px 0}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.9rem}
+thead{background:#f9fafb}
+th,td{padding:12px 16px;border:1px solid #e5e7eb;text-align:left}
+th{font-weight:600;color:#374151}
+td{color:#6b7280}
+tbody tr:hover{background:#f9fafb}
+img{max-width:100%;border-radius:8px;margin:20px 0}
+.footer{margin-top:48px;padding-top:24px;border-top:1px solid #e5e7eb;font-size:.85rem;color:#9ca3af;text-align:center}
+@media(max-width:640px){body{padding:20px 16px}.container{padding:32px 24px}h1{font-size:1.75rem}}
+@media print{body{background:#fff;padding:0}.container{box-shadow:none;padding:0}}
+</style>
+</head>
+<body>
+<div class="container">
+${content}
+<div class="footer"><p>Créé avec PTAL Toolkit</p></div>
+</div>
+</body>
+</html>`
+}
+
+function exportHTML(){downloadFile(generateHTML(),filename.value.replace(/\.(md|html)$/,'')+'.html','text/html');showToast('🌐 HTML exporté !')}
+function exportMD(){downloadFile(editor.value,filename.value.replace(/\.(md|html)$/,'')+'.md','text/markdown');showToast('📝 MD exporté !')}
+function downloadFile(c,n,t){const b=new Blob([c],{type:t}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u)}
+
+function previewInModal(){const h=generateHTML(),b=new Blob([h],{type:'text/html'}),u=URL.createObjectURL(b);document.getElementById('modalFrame').src=u;document.getElementById('modalTitle').textContent=filename.value.replace('.md','');document.getElementById('modalOverlay').classList.add('active')}
+function openInNewTab(){const h=generateHTML(),b=new Blob([h],{type:'text/html'}),u=URL.createObjectURL(b);window.open(u,'_blank')}
+function closeModal(e){if(!e||e.target===document.getElementById('modalOverlay')){document.getElementById('modalOverlay').classList.remove('active');document.getElementById('modalFrame').src=''}}
+
+function setView(v){const a=document.getElementById('editorArea');a.classList.remove('view-editor','view-preview');['viewSplit','viewEditor','viewPreview'].forEach(x=>document.getElementById(x).classList.remove('active'));if(v==='editor'){a.classList.add('view-editor');document.getElementById('viewEditor').classList.add('active')}else if(v==='preview'){a.classList.add('view-preview');document.getElementById('viewPreview').classList.add('active')}else{document.getElementById('viewSplit').classList.add('active')}}
+
+function insertFormat(b,a){const s=editor.selectionStart,e=editor.selectionEnd,t=editor.value,sel=t.substring(s,e);editor.value=t.substring(0,s)+b+sel+a+t.substring(e);editor.focus();editor.setSelectionRange(s+b.length,s+b.length+sel.length);updatePreview()}
+function insertLine(p){const s=editor.selectionStart,t=editor.value;let ls=s;while(ls>0&&t[ls-1]!=='\n')ls--;editor.value=t.substring(0,ls)+p+t.substring(ls);editor.focus();editor.setSelectionRange(ls+p.length,ls+p.length);updatePreview()}
+function insertCodeBlock(){const s=editor.selectionStart,e=editor.selectionEnd,t=editor.value,sel=t.substring(s,e)||'code';editor.value=t.substring(0,s)+'\n```js\n'+sel+'\n```\n'+t.substring(e);editor.focus();updatePreview()}
+function insertTable(){const s=editor.selectionStart,t=editor.value;editor.value=t.substring(0,s)+'\n| Col 1 | Col 2 | Col 3 |\n|-------|-------|-------|\n| A | B | C |\n'+t.substring(s);editor.focus();updatePreview()}
+
+function openFile(){document.getElementById('fileInput').click()}
+function handleFileOpen(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=x=>{editor.value=x.target.result;filename.value=f.name;currentPtalId=null;updatePreview();showToast('📂 Fichier ouvert !')};r.readAsText(f);e.target.value=''}
+
+function showHelp(){document.getElementById('helpModal').classList.add('active')}
+function closeHelp(e){if(!e||e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('active')}
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('active');setTimeout(()=>t.classList.remove('active'),2500)}
+
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey){switch(e.key.toLowerCase()){case's':e.preventDefault();savePTAL();break;case'b':e.preventDefault();insertFormat('**','**');break;case'i':e.preventDefault();insertFormat('*','*');break;case'k':e.preventDefault();insertFormat('[','](url)');break;case'e':e.preventDefault();exportMD();break;case'n':e.preventDefault();newPTAL();break}}if(e.key==='Escape'){closeModal();closeHelp()}});
+
+initTheme();
+editor.addEventListener('input',updatePreview);
+if(ptals.length>0)loadPTAL(ptals[0].id);
+else{editor.value=`# Bienvenue ! 👋
+
+## PTAL Toolkit
+
+**PTAL** = Please Take A Look
+
+Un document web autonome, modifiable et partageable.
+
+## Exemple de code
+
+\`\`\`javascript
+function saluer(nom) {
+  // Message de bienvenue
+  console.log("Bonjour " + nom);
+  return true;
+}
+saluer("Monde");
+\`\`\`
+
+## Tableau
+
+| Feature | Status |
+|---------|--------|
+| Syntax highlighting | ✅ |
+| Tables | ✅ |
+| Mode clair/sombre | ✅ |
+
+> Créez votre propre PTAL !`;updatePreview()}
+renderPtalList();
+setView('split');
+</script>
+</body>
+</html>
