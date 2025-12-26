@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Œil de Sauron - Échiquier Politique Belge</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --card-bg: #12121a;
+  --border: rgba(134, 239, 172, 0.3);
+  --text: #a7f3d0;
+  --accent: #c4b5fd;
+  --eye: #ef4444;
+  --eye-glow: rgba(239, 68, 68, 0.5);
+  --ext-gauche: #dc2626;
+  --socialiste: #f97316;
+  --ecolo: #22c55e;
+  --liberal: #3b82f6;
+  --chretien: #a855f7;
+  --nationaliste: #eab308;
+}
+[data-theme="light"] {
+  --bg: #f0fdf4;
+  --card-bg: #ffffff;
+  --border: rgba(192, 132, 252, 0.4);
+  --text: #166534;
+  --accent: #7c3aed;
+  --eye: #ea580c;
+  --eye-glow: rgba(234, 88, 12, 0.4);
+}
+[data-theme="matrix"] {
+  --bg: #000;
+  --card-bg: #001100;
+  --border: #00ff00;
+  --text: #00ff00;
+  --accent: #00ff00;
+  --eye: #00ff00;
+  --eye-glow: rgba(0, 255, 0, 0.6);
+  --ext-gauche: #00ff00;
+  --socialiste: #00dd00;
+  --ecolo: #00bb00;
+  --liberal: #009900;
+  --chretien: #007700;
+  --nationaliste: #005500;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: all 0.4s;
+}
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+.eye-container { position: relative; width: 32px; height: 32px; }
+.eye {
+  width: 32px; height: 16px;
+  border: 2px solid var(--eye);
+  border-radius: 50%;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 12px var(--eye-glow), inset 0 0 8px var(--eye-glow);
+}
+.pupil {
+  width: 6px; height: 6px;
+  background: var(--eye);
+  border-radius: 50%;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: look 4s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 12px var(--eye-glow), inset 0 0 8px var(--eye-glow); }
+  50% { box-shadow: 0 0 25px var(--eye-glow), inset 0 0 15px var(--eye-glow); }
+}
+@keyframes look {
+  0%, 100% { transform: translate(-50%, -50%); }
+  25% { transform: translate(-80%, -50%); }
+  75% { transform: translate(-20%, -50%); }
+}
+.controls { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.btn {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.active { background: var(--accent); color: var(--bg); }
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.toolbar input, .toolbar select {
+  padding: 0.4rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  font-size: 0.75rem;
+}
+.toolbar input { flex: 1; min-width: 100px; }
+.legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem;
+  padding: 0.4rem;
+  font-size: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+@media (min-width: 600px) { .legend { grid-template-columns: repeat(6, 1fr); } }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.4rem;
+  background: var(--card-bg);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.legend-item:hover, .legend-item.active { opacity: 1; transform: scale(1.02); }
+.legend-item.dimmed { opacity: 0.4; }
+.legend-color { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.stats {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.7rem;
+  color: var(--accent);
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.board-container {
+  padding: 0.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 3px;
+  background: var(--border);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+.zone {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  padding: 3px;
+  position: relative;
+}
+.zone-label {
+  position: absolute;
+  top: 2px; left: 4px;
+  font-size: 0.55rem;
+  font-weight: bold;
+  opacity: 0.8;
+  text-transform: uppercase;
+  pointer-events: none;
+  text-shadow: 0 0 4px var(--bg);
+  z-index: 5;
+}
+.zone-parties {
+  position: absolute;
+  bottom: 2px; right: 4px;
+  font-size: 0.5rem;
+  opacity: 0.6;
+  pointer-events: none;
+  text-align: right;
+}
+.zone.ext-gauche { background: linear-gradient(135deg, rgba(220,38,38,0.2), rgba(220,38,38,0.05)); }
+.zone.socialiste { background: linear-gradient(135deg, rgba(249,115,22,0.2), rgba(249,115,22,0.05)); }
+.zone.ecolo { background: linear-gradient(135deg, rgba(34,197,94,0.2), rgba(34,197,94,0.05)); }
+.zone.liberal { background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(59,130,246,0.05)); }
+.zone.chretien { background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(168,85,247,0.05)); }
+.zone.nationaliste { background: linear-gradient(135deg, rgba(234,179,8,0.2), rgba(234,179,8,0.05)); }
+.zone.ext-gauche .zone-label { color: var(--ext-gauche); }
+.zone.socialiste .zone-label { color: var(--socialiste); }
+.zone.ecolo .zone-label { color: var(--ecolo); }
+.zone.liberal .zone-label { color: var(--liberal); }
+.zone.chretien .zone-label { color: var(--chretien); }
+.zone.nationaliste .zone-label { color: var(--nationaliste); }
+.cell {
+  aspect-ratio: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 0.45rem;
+}
+.cell:hover {
+  transform: scale(1.15);
+  z-index: 10;
+  box-shadow: 0 0 10px var(--eye-glow);
+}
+.cell.filled { border-width: 2px; }
+.cell-logo { width: 100%; height: 100%; object-fit: cover; }
+.cell-initial { font-size: 0.7rem; font-weight: bold; }
+.cell-number { opacity: 0.3; }
+.sauron-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px; height: 50px;
+  z-index: 100;
+  pointer-events: none;
+}
+.sauron-center .s-eye {
+  width: 50px; height: 25px;
+  border: 3px solid var(--eye);
+  border-radius: 50%;
+  position: absolute; top: 50%; transform: translateY(-50%);
+  box-shadow: 0 0 20px var(--eye-glow), 0 0 40px var(--eye-glow), inset 0 0 12px var(--eye-glow);
+  animation: pulse 2s infinite;
+  background: radial-gradient(ellipse, transparent 30%, var(--eye-glow) 100%);
+}
+.sauron-center .s-pupil {
+  width: 14px; height: 14px;
+  background: var(--eye);
+  border-radius: 50%;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px var(--eye-glow);
+  animation: look 4s infinite;
+}
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card-bg);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 95vh;
+  overflow-y: auto;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: var(--card-bg);
+  z-index: 10;
+}
+.modal-header h3 { font-size: 0.95rem; }
+.modal-close {
+  background: none; border: none;
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.modal-body { padding: 0.8rem; }
+.form-group { margin-bottom: 0.6rem; }
+.form-group label {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--accent);
+  font-size: 0.7rem;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.45rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 5px;
+  font-size: 0.8rem;
+}
+.form-group textarea { min-height: 50px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.range-row input[type="range"] { flex: 1; }
+.range-row span { min-width: 25px; text-align: center; font-size: 0.75rem; }
+.color-row { display: flex; gap: 0.4rem; align-items: center; }
+.color-row input[type="color"] { width: 40px; height: 28px; padding: 0; border: none; cursor: pointer; }
+.tendance-btn {
+  padding: 0.4rem;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.65rem;
+  text-align: center;
+  transition: all 0.2s;
+}
+.tendance-btn:hover { opacity: 0.8; }
+.tendance-btn.selected { border-width: 3px; transform: scale(1.02); }
+.tendance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+.position-preview {
+  margin-top: 0.4rem;
+  padding: 0.4rem;
+  background: var(--bg);
+  border-radius: 5px;
+  text-align: center;
+  font-size: 0.7rem;
+}
+.position-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+.media-preview {
+  margin-top: 0.2rem;
+  max-height: 80px;
+  overflow: hidden;
+}
+.media-preview img { max-width: 100%; max-height: 75px; border-radius: 4px; }
+.modal-actions {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.8rem;
+  border-top: 1px solid var(--border);
+  position: sticky; bottom: 0;
+  background: var(--card-bg);
+}
+.btn-danger { border-color: #ef4444; color: #ef4444; }
+.btn-danger:hover { background: #ef4444; color: white; }
+.btn-primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.axes-info {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<header>
+  <div class="logo">
+    <div class="eye-container"><div class="eye"><div class="pupil"></div></div></div>
+    <span>SAURON INTEL 🇧🇪</span>
+  </div>
+  <div class="controls">
+    <button class="btn active" onclick="setTheme('dark')">🌙</button>
+    <button class="btn" onclick="setTheme('light')">☀️</button>
+    <button class="btn" onclick="setTheme('matrix')">🟢</button>
+    <button class="btn" onclick="exportData('json')">JSON</button>
+    <button class="btn" onclick="exportData('csv')">CSV</button>
+    <button class="btn" onclick="exportData('md')">MD</button>
+    <button class="btn" onclick="exportData('html')">HTML</button>
+    <button class="btn" onclick="importData()">📤</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="🔍 Rechercher..." oninput="filterCells()">
+  <select id="categoryFilter" onchange="filterCells()">
+    <option value="">Toutes catégories</option>
+    <option value="personne">👤 Personne</option>
+    <option value="parti">🏛️ Parti</option>
+    <option value="media">📺 Média</option>
+    <option value="entreprise">🏢 Entreprise</option>
+    <option value="organisation">🌐 Organisation</option>
+    <option value="syndicat">✊ Syndicat</option>
+    <option value="lobby">💼 Lobby</option>
+    <option value="autre">📁 Autre</option>
+  </select>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<div class="stats" id="stats"></div>
+
+<div class="board-container">
+  <div class="board" id="board">
+    <div class="sauron-center">
+      <div class="s-eye"></div>
+      <div class="s-pupil"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modalTitle">Fiche</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nom / Titre *</label>
+        <input type="text" id="fName" placeholder="Nom de l'entité">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="fCategory">
+            <option value="">-- Choisir --</option>
+            <option value="personne">👤 Personne</option>
+            <option value="parti">🏛️ Parti</option>
+            <option value="media">📺 Média</option>
+            <option value="entreprise">🏢 Entreprise</option>
+            <option value="organisation">🌐 Organisation</option>
+            <option value="syndicat">✊ Syndicat</option>
+            <option value="lobby">💼 Lobby</option>
+            <option value="autre">📁 Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Couleur</label>
+          <div class="color-row">
+            <input type="color" id="fColor" value="#86efac">
+            <span id="colorHex" style="font-size:0.7rem">#86efac</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Tendance politique</label>
+        <div class="tendance-grid" id="tendanceGrid"></div>
+      </div>
+      
+      <div class="form-group">
+        <label>Position économique</label>
+        <div class="range-row">
+          <span>Gauche</span>
+          <input type="range" id="fEco" min="-10" max="10" value="0" oninput="updatePreview()">
+          <span>Droite</span>
+          <span id="ecoVal" style="color:var(--accent)">0</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Position sociétale</label>
+        <div class="range-row">
+          <span>Progr.</span>
+          <input type="range" id="fSoc" min="-10" max="10" value="0" oninput="updatePreview()">
+          <span>Conserv.</span>
+          <span id="socVal" style="color:var(--accent)">0</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Position communautaire</label>
+        <div class="range-row">
+          <span>Unitaire</span>
+          <input type="range" id="fComm" min="-10" max="10" value="0" oninput="updatePreview()">
+          <span>Région.</span>
+          <span id="commVal" style="color:var(--accent)">0</span>
+        </div>
+      </div>
+      
+      <div class="position-preview" id="positionPreview"></div>
+      
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="fDescription" placeholder="Description..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Logo (URL)</label>
+          <input type="url" id="fLogo" placeholder="https://..." oninput="previewMedia()">
+          <div class="media-preview" id="logoPreview"></div>
+        </div>
+        <div class="form-group">
+          <label>Média embed</label>
+          <input type="url" id="fMedia" placeholder="https://...">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tags (séparés par virgule)</label>
+        <input type="text" id="fTags" placeholder="manipulation, lobbying...">
+      </div>
+      <div class="form-group">
+        <label>Relations (IDs)</label>
+        <input type="text" id="fLinks" placeholder="12, 45, 89">
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea id="fNotes" placeholder="Notes privées..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveCard()">💾 Sauver</button>
+      <button class="btn btn-danger" onclick="deleteCard()">🗑️</button>
+      <button class="btn" onclick="exportCard('json')">JSON</button>
+      <button class="btn" onclick="exportCard('md')">MD</button>
+      <button class="btn" onclick="exportCard('html')">HTML</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<script>
+const ZONES = [
+  { id: 'ext-gauche', name: 'Extrême Gauche', color: '#dc2626', parties: 'PTB-PVDA', icon: '🔴' },
+  { id: 'socialiste', name: 'Social-démocrate', color: '#f97316', parties: 'PS, Vooruit', icon: '🟠' },
+  { id: 'ecolo', name: 'Écologiste', color: '#22c55e', parties: 'Ecolo, Groen', icon: '🟢' },
+  { id: 'liberal', name: 'Libéral', color: '#3b82f6', parties: 'MR, Open VLD', icon: '🔵' },
+  { id: 'chretien', name: 'Chrétien-démocrate', color: '#a855f7', parties: 'Engagés, CD&V', icon: '🟣' },
+  { id: 'nationaliste', name: 'Nationaliste/Conservateur', color: '#eab308', parties: 'N-VA, VB', icon: '🟡' }
+];
+
+const CELLS_PER_ZONE = 50;
+const TOTAL_CELLS = 300;
+let cards = {};
+let currentCell = null;
+let activeZoneFilter = null;
+
+function init() {
+  loadData();
+  renderLegend();
+  renderBoard();
+  renderTendanceGrid();
+  updateStats();
+  document.getElementById('fColor').addEventListener('input', e => {
+    document.getElementById('colorHex').textContent = e.target.value;
+  });
+}
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem('sauronCardsBE');
+    if (saved) cards = JSON.parse(saved);
+  } catch(e) { cards = {}; }
+}
+
+function saveData() {
+  localStorage.setItem('sauronCardsBE', JSON.stringify(cards));
+  updateStats();
+}
+
+function renderLegend() {
+  const legend = document.getElementById('legend');
+  legend.innerHTML = ZONES.map(z => `
+    <div class="legend-item" data-zone="${z.id}" onclick="toggleZoneFilter('${z.id}')">
+      <div class="legend-color" style="background:${z.color}"></div>
+      <span>${z.icon} ${z.name}</span>
+    </div>
+  `).join('');
+}
+
+function toggleZoneFilter(zoneId) {
+  const items = document.querySelectorAll('.legend-item');
+  if (activeZoneFilter === zoneId) {
+    activeZoneFilter = null;
+    items.forEach(i => i.classList.remove('active', 'dimmed'));
+  } else {
+    activeZoneFilter = zoneId;
+    items.forEach(i => {
+      i.classList.toggle('active', i.dataset.zone === zoneId);
+      i.classList.toggle('dimmed', i.dataset.zone !== zoneId);
+    });
+  }
+  filterCells();
+}
+
+function renderTendanceGrid() {
+  const grid = document.getElementById('tendanceGrid');
+  grid.innerHTML = ZONES.map(z => `
+    <div class="tendance-btn" data-zone="${z.id}" 
+         style="border-color:${z.color};color:${z.color}" 
+         onclick="selectTendance('${z.id}')">
+      ${z.icon} ${z.name.split('/')[0]}
+    </div>
+  `).join('');
+}
+
+function selectTendance(zoneId) {
+  document.querySelectorAll('.tendance-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector(`.tendance-btn[data-zone="${zoneId}"]`).classList.add('selected');
+  updatePreview();
+}
+
+function getSelectedTendance() {
+  const selected = document.querySelector('.tendance-btn.selected');
+  return selected ? selected.dataset.zone : null;
+}
+
+function renderBoard() {
+  const board = document.getElementById('board');
+  const sauronEl = board.querySelector('.sauron-center');
+  board.innerHTML = '';
+  board.appendChild(sauronEl);
+  
+  const cardsByZone = {};
+  ZONES.forEach(z => cardsByZone[z.id] = []);
+  
+  Object.entries(cards).forEach(([id, card]) => {
+    if (card.tendance && cardsByZone[card.tendance]) {
+      cardsByZone[card.tendance].push({ id: parseInt(id), card });
+    }
+  });
+  
+  ZONES.forEach((zone, zoneIdx) => {
+    const zoneEl = document.createElement('div');
+    zoneEl.className = `zone ${zone.id}`;
+    zoneEl.dataset.zone = zone.id;
+    zoneEl.innerHTML = `
+      <span class="zone-label">${zone.icon} ${zone.name}</span>
+      <span class="zone-parties">${zone.parties}</span>
+    `;
+    
+    const baseId = zoneIdx * CELLS_PER_ZONE + 1;
+    const zoneCards = cardsByZone[zone.id];
+    const usedIds = new Set(zoneCards.map(c => c.id));
+    
+    let emptyIdx = 0;
+    for (let i = 0; i < CELLS_PER_ZONE; i++) {
+      const cell = document.createElement('div');
+      
+      let cardData = zoneCards.find(c => {
+        const pos = getPositionInZone(c.card);
+        return pos === i;
+      });
+      
+      if (!cardData) {
+        cardData = zoneCards.find(c => !c.positioned);
+        if (cardData) cardData.positioned = true;
+      }
+      
+      let cellId;
+      if (cardData) {
+        cellId = cardData.id;
+        cell.className = 'cell filled';
+        if (cardData.card.logo) {
+          cell.innerHTML = `<img class="cell-logo" src="${cardData.card.logo}" alt="">`;
+        } else {
+          cell.innerHTML = `<span class="cell-initial" style="color:${cardData.card.color || zone.color}">${cardData.card.name.charAt(0).toUpperCase()}</span>`;
+        }
+        cell.style.borderColor = cardData.card.color || zone.color;
+      } else {
+        while (cards[baseId + emptyIdx]) emptyIdx++;
+        cellId = baseId + emptyIdx;
+        emptyIdx++;
+        cell.className = 'cell';
+        cell.innerHTML = `<span class="cell-number">${cellId}</span>`;
+      }
+      
+      cell.dataset.id = cellId;
+      cell.dataset.zone = zone.id;
+      cell.onclick = () => openModal(cellId, zone.id);
+      zoneEl.appendChild(cell);
+    }
+    
+    board.appendChild(zoneEl);
+  });
+}
+
+function getPositionInZone(card) {
+  if (!card.eco && !card.soc) return null;
+  const eco = Math.abs(card.eco || 0);
+  const soc = Math.abs(card.soc || 0);
+  const col = Math.min(4, Math.floor(eco / 2.5));
+  const row = Math.min(9, Math.floor(((card.soc || 0) + 10) / 2.5));
+  return row * 5 + col;
+}
+
+function openModal(id, zone) {
+  currentCell = id;
+  const card = cards[id] || {};
+  
+  document.getElementById('modalTitle').textContent = `Fiche #${id}`;
+  document.getElementById('fName').value = card.name || '';
+  document.getElementById('fCategory').value = card.category || '';
+  document.getElementById('fDescription').value = card.description || '';
+  document.getElementById('fColor').value = card.color || '#86efac';
+  document.getElementById('colorHex').textContent = card.color || '#86efac';
+  document.getElementById('fEco').value = card.eco ?? 0;
+  document.getElementById('fSoc').value = card.soc ?? 0;
+  document.getElementById('fComm').value = card.comm ?? 0;
+  document.getElementById('fLogo').value = card.logo || '';
+  document.getElementById('fMedia').value = card.media || '';
+  document.getElementById('fTags').value = (card.tags || []).join(', ');
+  document.getElementById('fLinks').value = (card.links || []).join(', ');
+  document.getElementById('fNotes').value = card.notes || '';
+  
+  document.querySelectorAll('.tendance-btn').forEach(b => {
+    b.classList.toggle('selected', b.dataset.zone === (card.tendance || zone));
+  });
+  
+  previewMedia();
+  updatePreview();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function updatePreview() {
+  const eco = parseInt(document.getElementById('fEco').value);
+  const soc = parseInt(document.getElementById('fSoc').value);
+  const comm = parseInt(document.getElementById('fComm').value);
+  
+  document.getElementById('ecoVal').textContent = eco;
+  document.getElementById('socVal').textContent = soc;
+  document.getElementById('commVal').textContent = comm;
+  
+  const tendance = getSelectedTendance();
+  const zone = ZONES.find(z => z.id === tendance);
+  
+  if (zone) {
+    document.getElementById('positionPreview').innerHTML = 
+      `<strong style="color:${zone.color}">${zone.icon} ${zone.name}</strong><br>
+       <small>Éco: ${eco < 0 ? 'Gauche' : eco > 0 ? 'Droite' : 'Centre'} | 
+       Soc: ${soc < 0 ? 'Progressiste' : soc > 0 ? 'Conservateur' : 'Modéré'} | 
+       Comm: ${comm < 0 ? 'Unitariste' : comm > 0 ? 'Régionaliste' : 'Neutre'}</small>`;
+  } else {
+    document.getElementById('positionPreview').innerHTML = '<em>Sélectionnez une tendance</em>';
+  }
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentCell = null;
+}
+
+function saveCard() {
+  const name = document.getElementById('fName').value.trim();
+  const tendance = getSelectedTendance();
+  if (!name) { alert('Le nom est requis'); return; }
+  if (!tendance) { alert('Sélectionnez une tendance politique'); return; }
+  
+  cards[currentCell] = {
+    name,
+    category: document.getElementById('fCategory').value,
+    tendance,
+    eco: parseInt(document.getElementById('fEco').value),
+    soc: parseInt(document.getElementById('fSoc').value),
+    comm: parseInt(document.getElementById('fComm').value),
+    description: document.getElementById('fDescription').value,
+    color: document.getElementById('fColor').value,
+    logo: document.getElementById('fLogo').value,
+    media: document.getElementById('fMedia').value,
+    tags: document.getElementById('fTags').value.split(',').map(s => s.trim()).filter(Boolean),
+    links: document.getElementById('fLinks').value.split(',').map(s => s.trim()).filter(Boolean),
+    notes: document.getElementById('fNotes').value,
+    updated: new Date().toISOString()
+  };
+  saveData();
+  renderBoard();
+  closeModal();
+}
+
+function deleteCard() {
+  if (!confirm('Supprimer cette fiche ?')) return;
+  delete cards[currentCell];
+  saveData();
+  renderBoard();
+  closeModal();
+}
+
+function previewMedia() {
+  const url = document.getElementById('fLogo').value.trim();
+  const preview = document.getElementById('logoPreview');
+  if (!url) { preview.innerHTML = ''; return; }
+  preview.innerHTML = `<img src="${url}" alt="preview" onerror="this.style.display='none'">`;
+}
+
+function filterCells() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const category = document.getElementById('categoryFilter').value;
+  
+  document.querySelectorAll('.zone').forEach(zone => {
+    zone.style.display = (!activeZoneFilter || zone.dataset.zone === activeZoneFilter) ? '' : 'none';
+  });
+  
+  document.querySelectorAll('.cell').forEach(cell => {
+    if (activeZoneFilter && cell.dataset.zone !== activeZoneFilter) return;
+    
+    const id = cell.dataset.id;
+    const card = cards[id];
+    let show = true;
+    
+    if (card) {
+      if (search && !card.name.toLowerCase().includes(search) && 
+          !(card.tags || []).some(t => t.toLowerCase().includes(search))) {
+        show = false;
+      }
+      if (category && card.category !== category) show = false;
+    } else if (search || category) {
+      show = false;
+    }
+    
+    cell.style.display = show ? '' : 'none';
+  });
+}
+
+function updateStats() {
+  const filled = Object.keys(cards).length;
+  const byZone = {};
+  ZONES.forEach(z => byZone[z.id] = 0);
+  
+  Object.values(cards).forEach(c => {
+    if (c.tendance && byZone[c.tendance] !== undefined) byZone[c.tendance]++;
+  });
+  
+  document.getElementById('stats').innerHTML = 
+    `<span><strong>${filled}/${TOTAL_CELLS}</strong> fiches</span>` +
+    ZONES.map(z => `<span style="color:${z.color}">${z.icon} ${byZone[z.id]}</span>`).join('');
+}
+
+function setTheme(theme) {
+  document.body.dataset.theme = theme;
+  document.querySelectorAll('.controls .btn').forEach((b, i) => {
+    b.classList.toggle('active', i === ['dark', 'light', 'matrix'].indexOf(theme));
+  });
+}
+
+function getZoneInfo(tendance) {
+  return ZONES.find(z => z.id === tendance) || ZONES[0];
+}
+
+function exportData(format) {
+  let content, filename, type;
+  
+  if (format === 'json') {
+    content = JSON.stringify(cards, null, 2);
+    filename = 'sauron-intel-be.json';
+    type = 'application/json';
+  } else if (format === 'csv') {
+    const headers = ['ID','Nom','Catégorie','Tendance','Éco','Soc','Comm','Description','Tags','MàJ'];
+    const rows = Object.entries(cards).map(([id, c]) => [
+      id, c.name, c.category, c.tendance, c.eco, c.soc, c.comm, c.description,
+      (c.tags||[]).join(';'), c.updated
+    ].map(v => `"${(v||'').toString().replace(/"/g, '""')}"`).join(','));
+    content = [headers.join(','), ...rows].join('\n');
+    filename = 'sauron-intel-be.csv';
+    type = 'text/csv';
+  } else if (format === 'md') {
+    content = `# 🔴 SAURON INTEL 🇧🇪 - Échiquier Politique Belge\n\n`;
+    content += `> Exporté le ${new Date().toLocaleString('fr-FR')}\n\n---\n\n`;
+    ZONES.forEach(zone => {
+      const zoneCards = Object.entries(cards).filter(([id, c]) => c.tendance === zone.id);
+      if (zoneCards.length) {
+        content += `## ${zone.icon} ${zone.name}\n\n`;
+        zoneCards.forEach(([id, c]) => {
+          content += `### #${id} - ${c.name}\n`;
+          content += `Éco: ${c.eco} | Soc: ${c.soc} | Comm: ${c.comm}\n\n`;
+          if (c.description) content += `${c.description}\n\n`;
+          if (c.tags?.length) content += `Tags: ${c.tags.join(', ')}\n\n`;
+        });
+      }
+    });
+    filename = 'sauron-intel-be.md';
+    type = 'text/markdown';
+  } else if (format === 'html') {
+    content = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>SAURON INTEL 🇧🇪</title>
+<style>body{font-family:system-ui;background:#0a0a0f;color:#a7f3d0;padding:2rem;max-width:900px;margin:auto}
+h1{text-align:center}h2{margin-top:2rem;padding:0.5rem;border-radius:4px}
+.card{background:#12121a;border-left:4px solid;border-radius:8px;padding:1rem;margin:0.5rem 0}</style></head><body>
+<h1>🔴 SAURON INTEL 🇧🇪</h1>`;
+    ZONES.forEach(zone => {
+      const zoneCards = Object.entries(cards).filter(([id, c]) => c.tendance === zone.id);
+      if (zoneCards.length) {
+        content += `<h2 style="background:${zone.color}22;color:${zone.color}">${zone.icon} ${zone.name}</h2>`;
+        zoneCards.forEach(([id, c]) => {
+          content += `<div class="card" style="border-color:${zone.color}">
+            <strong>#${id} - ${c.name}</strong><br>
+            <small>Éco: ${c.eco} | Soc: ${c.soc} | Comm: ${c.comm}</small>
+            ${c.description ? `<p>${c.description}</p>` : ''}
+          </div>`;
+        });
+      }
+    });
+    content += `</body></html>`;
+    filename = 'sauron-intel-be.html';
+    type = 'text/html';
+  }
+  
+  const blob = new Blob([content], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function exportCard(format) {
+  const card = cards[currentCell];
+  if (!card) { alert('Aucune fiche'); return; }
+  
+  const zone = getZoneInfo(card.tendance);
+  const safeName = card.name.replace(/[^a-zA-Z0-9]/g, '_');
+  let content, filename, type;
+  
+  if (format === 'json') {
+    content = JSON.stringify({[currentCell]: card}, null, 2);
+    filename = `fiche-${currentCell}-${safeName}.json`;
+    type = 'application/json';
+  } else if (format === 'md') {
+    content = `# ${zone.icon} #${currentCell} - ${card.name}\n\n`;
+    content += `**Tendance:** ${zone.name}\n\n`;
+    content += `**Positions:** Éco ${card.eco} | Soc ${card.soc} | Comm ${card.comm}\n\n`;
+    if (card.description) content += `${card.description}\n\n`;
+    if (card.tags?.length) content += `**Tags:** ${card.tags.join(', ')}\n`;
+    filename = `fiche-${currentCell}-${safeName}.md`;
+    type = 'text/markdown';
+  } else if (format === 'html') {
+    content = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${card.name}</title>
+<style>body{font-family:system-ui;background:#0a0a0f;color:#a7f3d0;padding:2rem;max-width:500px;margin:auto}
+h1{border-left:4px solid ${zone.color};padding-left:1rem;color:${zone.color}}</style></head><body>
+<h1>${zone.icon} #${currentCell} - ${card.name}</h1>
+<p><strong>${zone.name}</strong></p>
+<p>Éco: ${card.eco} | Soc: ${card.soc} | Comm: ${card.comm}</p>
+${card.description ? `<p>${card.description}</p>` : ''}
+</body></html>`;
+    filename = `fiche-${currentCell}-${safeName}.html`;
+    type = 'text/html';
+  }
+  
+  const blob = new Blob([content], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function importData() { document.getElementById('fileInput').click(); }
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      const imported = JSON.parse(event.target.result);
+      Object.assign(cards, imported);
+      saveData();
+      renderBoard();
+      alert('Import réussi !');
+    } catch(err) { alert('Erreur JSON'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+init();
+</script>
+</body>
+</html>
