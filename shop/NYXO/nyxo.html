@@ -1,0 +1,1213 @@
+
+<!DOCTYPE html>
+<!--
+  ██████╗ ██████╗██████╗ ██╗      ██████╗
+ ██╔════╝██╔════╝██╔══██╗██║     ██╔════╝
+ ██║     ██║     ██████╔╝██║     ██║     
+ ╚██████╗╚██████╗██║     ███████╗╚██████╗
+  ╚═════╝ ╚═════╝╚═╝     ╚══════╝ ╚═════╝
+  
+  [NIVEAU D'ACCÈS: PUBLIC]
+  [FORMATION NYXO: ACTIVE]
+  
+  "Douter de tout ou tout croire sont deux solutions
+   également commodes, qui l'une et l'autre nous
+   dispensent de réfléchir." — Henri Poincaré
+  
+  Ce que vous prenez pour un jeu est une formation.
+  Ce que vous prenez pour une secte est une école.
+  Les rats apprennent. Les rats vérifient.
+  Les rats ne gobent pas tout.
+-->
+<html lang="fr" data-corruption="0" data-level="0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCPLC — Formation NYXO</title>
+<style>
+:root{--bg:#0a0b10;--panel:#131522;--border:#1f2238;--text:#eef0f6;--muted:#a6aac8;--green:#7cffc4;--lilas:#cbb7ff;--gold:#ffd700;--radius:14px;--corruption:0}
+[data-corruption="1"]{--corruption:0.3}
+[data-corruption="2"]{--corruption:0.5;--green:#ff7c7c}
+[data-corruption="3"]{--corruption:0.8;--bg:#100a0a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+.container{max-width:1100px;margin:auto;padding:0 1rem}
+
+/* Noise & Subliminal */
+.noise{position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:calc(0.02 + var(--corruption) * 0.03);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.subliminal{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0;display:flex;align-items:center;justify-content:center;font-size:4vw;color:#7cffc4;font-weight:900}
+.subliminal.flash{animation:flash .1s}
+@keyframes flash{50%{opacity:.8}}
+
+/* Header */
+header{position:sticky;top:0;background:rgba(10,11,16,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:100}
+.header-inner{display:flex;justify-content:space-between;align-items:center;min-height:64px;flex-wrap:wrap;gap:10px}
+.brand{font-weight:900;letter-spacing:.15em;color:var(--green);cursor:pointer}
+nav{display:flex;gap:1rem;flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.8rem;letter-spacing:.05em;transition:color .2s}
+nav a:hover{color:var(--green)}
+.user-stats{display:flex;align-items:center;gap:1rem;font-size:.75rem}
+.stat{display:flex;align-items:center;gap:4px}
+.stat-icon{font-size:1rem}
+.stat-value{color:var(--green);font-weight:700}
+.level-badge{background:linear-gradient(135deg,var(--green),var(--lilas));color:#000;padding:2px 10px;border-radius:20px;font-weight:900;font-size:.7rem}
+
+/* Progress bar globale */
+.global-progress{height:3px;background:var(--border);position:relative}
+.global-progress-bar{height:100%;background:linear-gradient(90deg,var(--green),var(--lilas));transition:width .5s}
+
+/* Hero */
+.hero{padding:3rem 1rem;text-align:center}
+.hero-title{font-size:clamp(1.5rem,4vw,2.5rem);background:linear-gradient(135deg,var(--green),var(--lilas));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:1rem}
+.hero-subtitle{color:var(--muted);max-width:600px;margin:0 auto 2rem}
+
+/* Écran principal (simplifié) */
+.screen-section{padding:2rem 1rem}
+.screen-wrapper{perspective:1200px;max-width:700px;margin:0 auto}
+.screen-container{transform:rotateX(5deg);transition:transform .8s}
+.screen-container.folded{transform:rotateX(20deg) scale(.95)}
+.screen-frame{background:linear-gradient(145deg,#1a1a2e,#0f0f1a);border-radius:12px;padding:20px;box-shadow:0 0 0 2px #2a2a4a,0 0 40px rgba(124,255,196,.1);cursor:pointer}
+.screen-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:10px;color:var(--green);font-family:monospace}
+.led{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.screen-display{aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden;position:relative}
+.screen-display img,.screen-display video{width:100%;height:100%;object-fit:cover}
+.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse,transparent 50%,rgba(0,0,0,.7));pointer-events:none}
+
+/* Sections */
+section{padding:4rem 0}
+.section-title{text-align:center;font-size:1.3rem;color:var(--lilas);margin-bottom:2rem;letter-spacing:.1em}
+
+/* Modules de formation */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.module-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all .3s;position:relative}
+.module-card:hover{transform:translateY(-5px);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.module-card.locked{opacity:.6;pointer-events:none}
+.module-card.locked::after{content:'🔒 NIVEAU REQUIS';position:absolute;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted)}
+.module-card.completed{border-color:var(--green)}
+.module-card.completed::before{content:'✓';position:absolute;top:10px;right:10px;background:var(--green);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem}
+.module-header{padding:1.2rem;border-bottom:1px solid var(--border)}
+.module-tag{font-size:.65rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem}
+.module-title{font-size:1rem;margin-bottom:.3rem}
+.module-desc{font-size:.8rem;color:var(--muted)}
+.module-content{padding:1.2rem}
+.module-meta{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--muted);margin-bottom:1rem}
+.module-xp{color:var(--gold)}
+.module-progress{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.module-progress-bar{height:100%;background:var(--green);transition:width .3s}
+.module-btn{width:100%;padding:.8rem;border:none;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--lilas));color:#000;font-weight:700;font-size:.8rem;cursor:pointer;font-family:inherit;transition:transform .2s}
+.module-btn:hover{transform:scale(1.02)}
+
+/* Quiz Panel */
+.quiz-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;z-index:1000;overflow-y:auto;padding:20px}
+.quiz-overlay.open{display:flex;align-items:center;justify-content:center}
+.quiz-container{background:var(--panel);border-radius:var(--radius);max-width:700px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--border)}
+.quiz-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.quiz-title{color:var(--green);font-size:1.1rem}
+.quiz-close{background:none;border:none;color:#ff4757;font-size:1.5rem;cursor:pointer}
+.quiz-body{padding:1.5rem}
+.quiz-progress{display:flex;gap:6px;margin-bottom:2rem}
+.quiz-dot{width:100%;height:4px;background:var(--border);border-radius:2px}
+.quiz-dot.done{background:var(--green)}
+.quiz-dot.current{background:var(--lilas)}
+.quiz-question{font-size:1.1rem;margin-bottom:.5rem}
+.quiz-context{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;padding:1rem;background:rgba(0,0,0,.3);border-radius:8px;border-left:3px solid var(--lilas)}
+.quiz-options{display:flex;flex-direction:column;gap:.8rem}
+.quiz-option{padding:1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem}
+.quiz-option:hover{border-color:var(--green);background:rgba(124,255,196,.05)}
+.quiz-option.selected{border-color:var(--lilas);background:rgba(203,183,255,.1)}
+.quiz-option.correct{border-color:#7cffc4;background:rgba(124,255,196,.15)}
+.quiz-option.wrong{border-color:#ff4757;background:rgba(255,71,87,.1)}
+.quiz-explanation{margin-top:1.5rem;padding:1rem;background:rgba(124,255,196,.05);border-radius:8px;font-size:.85rem;display:none}
+.quiz-explanation.show{display:block}
+.quiz-explanation h4{color:var(--green);margin-bottom:.5rem}
+.quiz-footer{padding:1.5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between}
+.quiz-btn{padding:.8rem 2rem;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.quiz-btn-primary{background:linear-gradient(135deg,var(--green),var(--lilas));color:#000}
+.quiz-btn-ghost{background:none;border:1px solid var(--border);color:var(--muted)}
+.quiz-result{text-align:center;padding:2rem}
+.quiz-result-icon{font-size:4rem;margin-bottom:1rem}
+.quiz-result-title{font-size:1.5rem;margin-bottom:.5rem}
+.quiz-result-score{color:var(--green);font-size:2rem;font-weight:900}
+.quiz-result-xp{color:var(--gold);margin-top:.5rem}
+
+/* Glossaire */
+.glossary-grid{display:grid;gap:1rem}
+.glossary-item{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.glossary-header{padding:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .2s}
+.glossary-header:hover{background:rgba(255,255,255,.02)}
+.glossary-term{font-weight:700;color:var(--green)}
+.glossary-toggle{color:var(--muted);transition:transform .3s}
+.glossary-item.open .glossary-toggle{transform:rotate(180deg)}
+.glossary-content{max-height:0;overflow:hidden;transition:max-height .3s}
+.glossary-item.open .glossary-content{max-height:500px}
+.glossary-inner{padding:0 1rem 1rem;font-size:.9rem;color:var(--muted)}
+.glossary-example{margin-top:.8rem;padding:.8rem;background:rgba(255,71,87,.1);border-left:3px solid #ff4757;border-radius:0 8px 8px 0;font-size:.8rem}
+.glossary-counter{margin-top:.8rem;padding:.8rem;background:rgba(124,255,196,.1);border-left:3px solid var(--green);border-radius:0 8px 8px 0;font-size:.8rem}
+
+/* Mission board */
+.missions{display:flex;flex-direction:column;gap:1rem}
+.mission{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;display:flex;gap:1rem;align-items:center}
+.mission.completed{opacity:.6}
+.mission-icon{font-size:2rem;flex-shrink:0}
+.mission-info{flex:1}
+.mission-title{font-size:.95rem;margin-bottom:.3rem}
+.mission-desc{font-size:.8rem;color:var(--muted)}
+.mission-reward{text-align:right}
+.mission-xp{color:var(--gold);font-weight:700;font-size:.9rem}
+.mission-status{font-size:.7rem;color:var(--muted)}
+
+/* Achievements */
+.achievements{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+.achievement{width:80px;text-align:center}
+.achievement-icon{width:60px;height:60px;background:var(--panel);border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .5rem;filter:grayscale(1);opacity:.4}
+.achievement.unlocked .achievement-icon{filter:none;opacity:1;border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,.3)}
+.achievement-name{font-size:.65rem;color:var(--muted)}
+
+/* Offres */
+.offers{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.offer{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem}
+.offer small{font-size:.7rem;color:var(--muted);letter-spacing:.1em}
+.offer h3{font-size:1rem;margin:.5rem 0}
+.offer p{font-size:.85rem;color:var(--muted);margin-bottom:1rem}
+.offer .price{font-size:1.3rem;font-weight:900;color:var(--green)}
+
+/* Terminal */
+.terminal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.98);display:none;z-index:2000;padding:20px;flex-direction:column}
+.terminal-overlay.open{display:flex}
+.terminal-header{display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid #333;margin-bottom:10px}
+.terminal-title{color:var(--green);font-size:12px}
+.terminal-close{background:none;border:none;color:#ff4757;font-size:20px;cursor:pointer}
+.terminal-output{flex:1;overflow-y:auto;font-size:12px;line-height:1.8}
+.terminal-output .error{color:#ff4757}
+.terminal-output .success{color:var(--green)}
+.terminal-output .info{color:var(--lilas)}
+.terminal-output .gold{color:var(--gold)}
+.terminal-input-line{display:flex;margin-top:10px;padding-top:10px;border-top:1px solid #333}
+.terminal-prompt{color:var(--green);margin-right:10px}
+.terminal-input{flex:1;background:none;border:none;color:var(--text);font-family:inherit;outline:none}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:2rem 0;text-align:center;font-size:.75rem;color:var(--muted)}
+
+/* Responsive */
+@media(max-width:600px){
+  .user-stats{display:none}
+  nav{gap:.5rem}
+  nav a{font-size:.7rem}
+}
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="subliminal" id="subliminal"></div>
+
+<!-- Terminal -->
+<div class="terminal-overlay" id="terminal">
+  <div class="terminal-header">
+    <span class="terminal-title">NYXO TERMINAL — Formation Esprit Critique</span>
+    <button class="terminal-close" onclick="closeTerminal()">✕</button>
+  </div>
+  <div class="terminal-output" id="terminalOutput"></div>
+  <div class="terminal-input-line">
+    <span class="terminal-prompt">NYXO://&gt;</span>
+    <input type="text" class="terminal-input" id="terminalInput" autocomplete="off">
+  </div>
+</div>
+
+<!-- Quiz Overlay -->
+<div class="quiz-overlay" id="quizOverlay">
+  <div class="quiz-container">
+    <div class="quiz-header">
+      <span class="quiz-title" id="quizTitle">Module de Formation</span>
+      <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    </div>
+    <div class="quiz-body" id="quizBody"></div>
+    <div class="quiz-footer" id="quizFooter"></div>
+  </div>
+</div>
+
+<header>
+  <div class="container header-inner">
+    <div class="brand" onclick="brandClick()">CCPLC</div>
+    <nav>
+      <a href="#formation">Formation</a>
+      <a href="#glossaire">Glossaire</a>
+      <a href="#missions">Missions</a>
+      <a href="#offres">Offres</a>
+    </nav>
+    <div class="user-stats">
+      <div class="stat"><span class="stat-icon">⚡</span><span class="stat-value" id="userXP">0</span> XP</div>
+      <div class="stat"><span class="stat-icon">🔥</span><span class="stat-value" id="userStreak">0</span></div>
+      <div class="level-badge" id="userLevel">NOVICE</div>
+    </div>
+  </div>
+  <div class="global-progress"><div class="global-progress-bar" id="globalProgress" style="width:0%"></div></div>
+</header>
+
+<main class="container">
+
+<!-- Hero + Écran -->
+<section class="hero">
+  <h1 class="hero-title">FORMATION NYXO</h1>
+  <p class="hero-subtitle">Apprenez à décrypter l'information, déjouer les manipulations et développer votre esprit critique. Les rats vérifient avant de croire.</p>
+</section>
+
+<section class="screen-section">
+  <div class="screen-wrapper">
+    <div class="screen-container" id="screenContainer" onclick="this.classList.toggle('folded')">
+      <div class="screen-frame">
+        <div class="screen-header">
+          <div class="led"></div>
+          <span>FLUX NYXO | FORMATION ACTIVE</span>
+        </div>
+        <div class="screen-display">
+          <img src="https://picsum.photos/800/450?random=1" alt="Feed" id="screenMedia">
+          <div class="scanlines"></div>
+          <div class="vignette"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modules de Formation -->
+<section id="formation">
+  <h2 class="section-title">📚 MODULES DE FORMATION</h2>
+  <div class="modules-grid" id="modulesGrid"></div>
+</section>
+
+<!-- Glossaire -->
+<section id="glossaire">
+  <h2 class="section-title">📖 GLOSSAIRE CRITIQUE</h2>
+  <p style="text-align:center;color:var(--muted);margin-bottom:2rem;font-size:.9rem">Les techniques de manipulation que vous devez connaître</p>
+  <div class="glossary-grid" id="glossaryGrid"></div>
+</section>
+
+<!-- Missions -->
+<section id="missions">
+  <h2 class="section-title">🎯 MISSIONS QUOTIDIENNES</h2>
+  <div class="missions" id="missionsList"></div>
+  
+  <h3 style="text-align:center;color:var(--lilas);margin:3rem 0 1.5rem;font-size:1rem">🏆 BADGES DÉBLOQUÉS</h3>
+  <div class="achievements" id="achievementsList"></div>
+</section>
+
+<!-- Offres -->
+<section id="offres">
+  <h2 class="section-title">💼 OFFRES CCPLC</h2>
+  <div class="offers">
+    <article class="offer">
+      <small>MODULE 1</small>
+      <h3>Découverte EMI</h3>
+      <p>Introduction à l'éducation aux médias et à l'information.</p>
+      <div class="price">Gratuit</div>
+    </article>
+    <article class="offer">
+      <small>MODULE 2</small>
+      <h3>Fact-Checking Pro</h3>
+      <p>Techniques avancées de vérification de l'information.</p>
+      <div class="price">12,50 €</div>
+    </article>
+    <article class="offer">
+      <small>MODULE 3</small>
+      <h3>Audit Personnel</h3>
+      <p>Analyse de votre consommation médiatique.</p>
+      <div class="price">125 €</div>
+    </article>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>© CCPLC — Collectif Citoyen pour la Participation Libre (et Consciente)</p>
+  <p style="margin-top:.5rem;opacity:.5">Formation NYXO v2.0 | <span onclick="brandClick()" style="cursor:pointer">↑↑↓↓←→←→BA</span></p>
+</footer>
+
+<script>
+// ========== DONNÉES PÉDAGOGIQUES ==========
+
+const MODULES = [
+  {
+    id: 'sources',
+    tag: 'MODULE 1 · FONDAMENTAUX',
+    title: 'Évaluer une source',
+    desc: 'Apprenez à identifier la fiabilité d\'une source d\'information.',
+    xp: 100,
+    level: 0,
+    questions: [
+      {
+        q: "Vous trouvez un article choc sur Facebook. Quelle est la PREMIÈRE chose à vérifier ?",
+        context: "L'article affirme qu'un médicament courant cause des effets secondaires graves. Il a été partagé 50 000 fois.",
+        options: [
+          "Le nombre de partages (50 000 ça prouve que c'est vrai)",
+          "L'auteur et le site source de l'article",
+          "Les commentaires des autres utilisateurs",
+          "Si mes amis l'ont aussi partagé"
+        ],
+        correct: 1,
+        explanation: "Le nombre de partages ne garantit JAMAIS la véracité. Une fake news peut devenir virale. Toujours vérifier : Qui a écrit ? Sur quel site ? Quelles sont leurs sources ? Les commentaires et les partages d'amis ne sont pas des indicateurs de fiabilité."
+      },
+      {
+        q: "Parmi ces URLs, laquelle semble la PLUS fiable pour une info santé ?",
+        context: "Vous cherchez des informations sur les effets d'un vaccin.",
+        options: [
+          "www.sante-verite-cachee.com",
+          "www.has-sante.fr (Haute Autorité de Santé)",
+          "www.docteur-martin-blog.wordpress.com",
+          "www.facebook.com/groupesantealternative"
+        ],
+        correct: 1,
+        explanation: "Les sites institutionnels (.gouv, .fr officiels) sont plus fiables que les blogs personnels ou les groupes Facebook. Méfiez-vous des noms de domaines sensationnalistes ('vérité cachée', 'ce qu'ON ne vous dit pas')."
+      },
+      {
+        q: "Un article cite 'des scientifiques' sans les nommer. C'est :",
+        context: "L'article affirme : 'Des scientifiques ont prouvé que...' sans plus de détails.",
+        options: [
+          "Normal, les scientifiques préfèrent l'anonymat",
+          "Un signal d'alerte sur la fiabilité",
+          "Une preuve de sérieux pour protéger les sources",
+          "Sans importance si l'info paraît logique"
+        ],
+        correct: 1,
+        explanation: "L'appel à l'autorité vague ('des experts', 'des scientifiques', 'des études') est une technique de manipulation classique. Une source fiable nomme précisément ses sources, cite les études avec leurs références, et permet la vérification."
+      },
+      {
+        q: "Quel indice suggère qu'un site d'info est fiable ?",
+        options: [
+          "Il confirme ce que je pense déjà",
+          "Il a une page 'Qui sommes-nous' détaillée et des mentions légales",
+          "Il utilise beaucoup de majuscules et de points d'exclamation",
+          "Il promet des 'révélations exclusives'"
+        ],
+        correct: 1,
+        explanation: "Un site fiable est transparent sur son équipe, ses financements, et affiche ses mentions légales. Les sites qui jouent sur l'émotion (majuscules, exclamations) ou promettent des exclusivités cachées au grand public sont souvent peu fiables."
+      },
+      {
+        q: "Une info est publiée par un média reconnu. Cela signifie :",
+        options: [
+          "C'est forcément vrai à 100%",
+          "C'est probablement fiable mais la vigilance reste de mise",
+          "C'est de la propagande mainstream",
+          "Je dois chercher le complot caché"
+        ],
+        correct: 1,
+        explanation: "Les médias reconnus ont des processus de vérification, mais peuvent faire des erreurs ou avoir des biais. Une saine vigilance s'applique à TOUTES les sources. La méfiance systématique ('tout est complot') est aussi problématique que la crédulité."
+      }
+    ]
+  },
+  {
+    id: 'biais',
+    tag: 'MODULE 2 · PSYCHOLOGIE',
+    title: 'Les biais cognitifs',
+    desc: 'Comprenez comment notre cerveau nous trompe.',
+    xp: 150,
+    level: 1,
+    questions: [
+      {
+        q: "Vous ne lisez que des articles qui confirment votre opinion. C'est :",
+        options: [
+          "Le biais de confirmation",
+          "L'effet de halo",
+          "Le biais d'ancrage",
+          "L'effet Dunning-Kruger"
+        ],
+        correct: 0,
+        explanation: "Le BIAIS DE CONFIRMATION nous pousse à chercher, interpréter et mémoriser les informations qui confirment nos croyances préexistantes. C'est l'un des biais les plus puissants. Conseil : exposez-vous volontairement à des opinions contraires."
+      },
+      {
+        q: "Après avoir vu un prix initial de 200€ barré, le prix de 99€ vous semble une bonne affaire. C'est :",
+        options: [
+          "Une vraie bonne affaire",
+          "Le biais d'ancrage",
+          "Le biais de disponibilité",
+          "L'effet de simple exposition"
+        ],
+        correct: 1,
+        explanation: "Le BIAIS D'ANCRAGE fait que la première information reçue (l'ancre) influence notre jugement. Les publicitaires utilisent systématiquement ce biais avec les 'prix barrés'. Le vrai prix est peut-être 80€ ailleurs."
+      },
+      {
+        q: "Après un crash d'avion médiatisé, vous avez peur de voler alors que c'est statistiquement très sûr. C'est :",
+        options: [
+          "Une réaction rationnelle",
+          "Le biais de disponibilité",
+          "Le biais de normalité",
+          "L'effet de récence"
+        ],
+        correct: 1,
+        explanation: "Le BIAIS DE DISPONIBILITÉ nous fait surestimer la probabilité d'événements dont on se souvient facilement (médiatisés, récents, frappants). L'avion reste 100x plus sûr que la voiture, mais les accidents d'avion sont plus mémorables."
+      },
+      {
+        q: "Une célébrité recommande un produit de santé. Vous êtes tenté de l'acheter. C'est :",
+        options: [
+          "L'appel à l'autorité fallacieux",
+          "Le biais de représentativité",
+          "L'effet de halo",
+          "Les trois à la fois"
+        ],
+        correct: 3,
+        explanation: "C'est un COMBO : L'effet de halo (une qualité positive s'étend à tout), l'appel à l'autorité fallacieux (une célébrité n'est pas experte en santé), et le biais de représentativité (on associe succès et compétence). Les publicitaires adorent !"
+      },
+      {
+        q: "Plus vous voyez une affirmation répétée, plus elle vous semble vraie. C'est :",
+        options: [
+          "Logique, sinon on ne la répéterait pas",
+          "L'effet de vérité illusoire",
+          "Le biais de confirmation",
+          "L'effet Barnum"
+        ],
+        correct: 1,
+        explanation: "L'EFFET DE VÉRITÉ ILLUSOIRE montre que la répétition augmente la croyance, même pour des infos fausses. C'est pour cela que la désinformation martèle les mêmes messages. Conseil : la répétition n'est pas une preuve."
+      }
+    ]
+  },
+  {
+    id: 'factcheck',
+    tag: 'MODULE 3 · PRATIQUE',
+    title: 'Techniques de fact-checking',
+    desc: 'Les outils et méthodes des vérificateurs professionnels.',
+    xp: 200,
+    level: 2,
+    questions: [
+      {
+        q: "Vous voulez vérifier si une image a été manipulée. Le meilleur outil est :",
+        options: [
+          "Zoomer très fort sur l'image",
+          "La recherche inversée d'image (Google Images, TinEye)",
+          "Demander l'avis de mes amis",
+          "Vérifier si elle a beaucoup de likes"
+        ],
+        correct: 1,
+        explanation: "La RECHERCHE INVERSÉE D'IMAGE permet de retrouver l'origine d'une image, ses utilisations précédentes, et de détecter si elle a été sortie de son contexte. Outils : Google Images, TinEye, Yandex Images."
+      },
+      {
+        q: "La méthode CRAAP pour évaluer une source signifie :",
+        options: [
+          "C'est nul en anglais",
+          "Currency, Relevance, Authority, Accuracy, Purpose",
+          "Critical Reading And Analysis Process",
+          "Check, Research, Analyze, Assess, Publish"
+        ],
+        correct: 1,
+        explanation: "CRAAP = Currency (actualité), Relevance (pertinence), Authority (autorité de l'auteur), Accuracy (exactitude), Purpose (objectif du texte). C'est une méthode académique pour évaluer la fiabilité d'une source."
+      },
+      {
+        q: "Pour vérifier une info, le 'lateral reading' consiste à :",
+        options: [
+          "Lire l'article plusieurs fois",
+          "Ouvrir d'autres onglets pour vérifier la source et ses dires",
+          "Lire les commentaires à côté de l'article",
+          "Lire en diagonale"
+        ],
+        correct: 1,
+        explanation: "Le LATERAL READING (lecture latérale) est la technique des fact-checkers : au lieu de rester sur la page, on ouvre d'autres onglets pour vérifier ce qu'on dit de cette source AILLEURS. C'est plus efficace que d'analyser la page elle-même."
+      },
+      {
+        q: "Quel site N'EST PAS un site de fact-checking reconnu ?",
+        options: [
+          "Les Décodeurs (Le Monde)",
+          "AFP Factuel",
+          "VraiesInfos-Patriotes.com",
+          "CheckNews (Libération)"
+        ],
+        correct: 2,
+        explanation: "Les Décodeurs, AFP Factuel, et CheckNews sont des cellules de vérification de médias reconnus. Méfiez-vous des sites avec des noms partisans ou émotionnels. Vérifiez toujours qui est derrière un 'site de fact-checking'."
+      },
+      {
+        q: "Une vidéo montre un politicien dire quelque chose de choquant. Première réaction :",
+        options: [
+          "Partager immédiatement pour alerter",
+          "Vérifier le contexte complet et la date de la vidéo",
+          "C'est en vidéo donc c'est vrai",
+          "Ajouter mon commentaire indigné"
+        ],
+        correct: 1,
+        explanation: "Les vidéos peuvent être tronquées, sorties de contexte, ou dater de plusieurs années. Avec les deepfakes, même les images animées ne sont plus garanties. Toujours chercher la source complète et la date."
+      }
+    ]
+  },
+  {
+    id: 'desinfo',
+    tag: 'MODULE 4 · AVANCÉ',
+    title: 'Anatomie de la désinformation',
+    desc: 'Comprendre les mécanismes des fake news et théories du complot.',
+    xp: 250,
+    level: 2,
+    questions: [
+      {
+        q: "Les fake news se propagent plus vite que les vraies infos car :",
+        options: [
+          "Les gens sont stupides",
+          "Elles jouent sur les émotions (peur, indignation, surprise)",
+          "Les algorithmes sont programmés pour ça",
+          "Il y a un complot des réseaux sociaux"
+        ],
+        correct: 1,
+        explanation: "Les études montrent que les fake news génèrent plus de réactions émotionnelles (surprise, dégoût, peur). Notre cerveau est câblé pour partager ce qui nous émeut. Ce n'est pas de la stupidité, c'est de la psychologie humaine."
+      },
+      {
+        q: "Quel élément est TYPIQUE d'une théorie du complot ?",
+        options: [
+          "Elle peut être réfutée par des preuves",
+          "Elle s'adapte pour intégrer toute contradiction comme 'preuve'",
+          "Elle cite ses sources précisément",
+          "Elle accepte le doute et l'incertitude"
+        ],
+        correct: 1,
+        explanation: "Une théorie du complot est INFALSIFIABLE : toute preuve contraire devient une 'preuve du complot'. Si les médias démentent → 'ils font partie du complot'. C'est le contraire de la pensée scientifique qui accepte d'être réfutée."
+      },
+      {
+        q: "Le 'Gish Gallop' est une technique qui consiste à :",
+        options: [
+          "Répéter un mensonge jusqu'à ce qu'il devienne vrai",
+          "Noyer l'adversaire sous une avalanche d'arguments faibles",
+          "Attaquer la personne plutôt que l'argument",
+          "Utiliser des experts payés"
+        ],
+        correct: 1,
+        explanation: "Le GISH GALLOP consiste à débiter un maximum d'arguments (même faibles ou faux) pour submerger l'interlocuteur. Réfuter 20 mensonges prend plus de temps que les énoncer. Technique courante dans les débats."
+      },
+      {
+        q: "Pourquoi les théories du complot sont-elles séduisantes ?",
+        options: [
+          "Parce qu'elles sont vraies",
+          "Elles donnent du sens au chaos et un sentiment de contrôle",
+          "Parce que les gens aiment mentir",
+          "C'est uniquement de l'ignorance"
+        ],
+        correct: 1,
+        explanation: "Les théories du complot répondent à un BESOIN PSYCHOLOGIQUE : elles donnent du sens à des événements complexes, un sentiment de contrôle, et l'impression de faire partie d'une élite éclairée. C'est humain, pas stupide."
+      },
+      {
+        q: "La meilleure façon de convaincre quelqu'un qu'il croit une fake news est de :",
+        options: [
+          "Le ridiculiser publiquement",
+          "Lui montrer 50 preuves qu'il a tort",
+          "L'écouter, comprendre pourquoi il y croit, puis proposer doucement des pistes",
+          "Couper tout contact"
+        ],
+        correct: 2,
+        explanation: "L'humiliation renforce les croyances (effet backfire). L'écoute empathique et le questionnement socratique sont plus efficaces. Comprendre POURQUOI quelqu'un croit quelque chose est la clé pour l'aider à changer."
+      }
+    ]
+  },
+  {
+    id: 'algo',
+    tag: 'MODULE 5 · EXPERT',
+    title: 'Algorithmes et bulles de filtre',
+    desc: 'Comment les plateformes façonnent votre vision du monde.',
+    xp: 300,
+    level: 3,
+    questions: [
+      {
+        q: "Une 'bulle de filtre' c'est quand :",
+        options: [
+          "On bloque les gens qui ne pensent pas comme nous",
+          "Les algorithmes nous montrent surtout du contenu similaire à ce qu'on aime",
+          "On utilise un VPN",
+          "Les filtres photo déforment la réalité"
+        ],
+        correct: 1,
+        explanation: "La BULLE DE FILTRE (Eli Pariser, 2011) désigne l'enfermement algorithmique : les plateformes nous montrent ce qu'on aime déjà, créant une chambre d'écho qui renforce nos opinions et nous coupe des autres points de vue."
+      },
+      {
+        q: "Les algorithmes de recommandation optimisent principalement :",
+        options: [
+          "La vérité et la qualité de l'information",
+          "Le temps passé sur la plateforme (engagement)",
+          "Le bien-être des utilisateurs",
+          "La diversité des opinions"
+        ],
+        correct: 1,
+        explanation: "Les algorithmes optimisent l'ENGAGEMENT (clics, temps passé, partages) car c'est le modèle économique. Le contenu émotionnel, polarisant ou choquant génère plus d'engagement. La véracité n'est pas dans l'équation."
+      },
+      {
+        q: "Pour sortir de sa bulle de filtre, on peut :",
+        options: [
+          "Suivre volontairement des sources avec des opinions différentes",
+          "Utiliser des modes de navigation privée/incognito pour certaines recherches",
+          "Varier ses sources d'information",
+          "Tout ce qui précède"
+        ],
+        correct: 3,
+        explanation: "Sortir de sa bulle demande un EFFORT ACTIF : s'exposer volontairement à d'autres points de vue, utiliser différents moteurs de recherche, varier ses sources. Les algorithmes ne le feront pas pour vous."
+      },
+      {
+        q: "Le 'rage bait' est un contenu conçu pour :",
+        options: [
+          "Informer objectivement",
+          "Provoquer l'indignation et générer des réactions",
+          "Calmer les tensions",
+          "Promouvoir la nuance"
+        ],
+        correct: 1,
+        explanation: "Le RAGE BAIT (appât à rage) est du contenu délibérément provocant pour générer de l'indignation et des partages. L'indignation est l'émotion qui se propage le plus vite sur les réseaux. Même votre réaction négative nourrit l'algorithme."
+      },
+      {
+        q: "L'économie de l'attention signifie que :",
+        options: [
+          "L'attention est devenue une ressource monétisable",
+          "Il faut faire attention à ses dépenses",
+          "Les économistes sont attentifs",
+          "L'économie mérite notre attention"
+        ],
+        correct: 0,
+        explanation: "L'ÉCONOMIE DE L'ATTENTION : votre attention est le produit vendu aux annonceurs. Les plateformes rivalisent pour capter chaque seconde de votre temps. Tout est optimisé pour vous garder scotché à l'écran."
+      }
+    ]
+  }
+];
+
+const GLOSSARY = [
+  {
+    term: "Biais de confirmation",
+    def: "Tendance à privilégier les informations qui confirment nos croyances et à ignorer celles qui les contredisent.",
+    example: "Ne lire que des médias qui partagent notre opinion politique.",
+    counter: "S'exposer volontairement à des sources avec des opinions différentes. Se demander : 'Et si j'avais tort ?'"
+  },
+  {
+    term: "Appel à l'autorité",
+    def: "Argument qui invoque une autorité (réelle ou prétendue) pour valider une affirmation, sans preuves.",
+    example: "'Un prix Nobel dit que...' (mais dans un domaine hors de son expertise)",
+    counter: "Vérifier si l'autorité citée est experte du sujet précis. Chercher les sources primaires."
+  },
+  {
+    term: "Homme de paille",
+    def: "Déformer l'argument de l'adversaire pour le rendre plus facile à attaquer.",
+    example: "'Tu veux protéger l'environnement ? Donc tu veux qu'on retourne à l'âge de pierre !'",
+    counter: "Demander : 'Est-ce vraiment ce que cette personne a dit ?' Vérifier la citation originale."
+  },
+  {
+    term: "Pente glissante",
+    def: "Affirmer qu'une action mènera inévitablement à des conséquences extrêmes, sans preuves.",
+    example: "'Si on autorise X, bientôt ce sera Y, puis Z !' (sans démontrer le lien)",
+    counter: "Exiger des preuves pour chaque étape de la chaîne causale."
+  },
+  {
+    term: "Cherry picking",
+    def: "Sélectionner uniquement les données qui soutiennent son argument, en ignorant celles qui le contredisent.",
+    example: "Citer une seule étude favorable en ignorant 100 études contraires.",
+    counter: "Chercher 'Que disent les méta-analyses ?' ou 'Quel est le consensus scientifique ?'"
+  },
+  {
+    term: "Whataboutism",
+    def: "Répondre à une critique en pointant un problème différent, sans répondre à l'accusation initiale.",
+    example: "'Ce politicien est corrompu' → 'Et les autres alors ?!'",
+    counter: "Revenir au sujet initial : 'On parle de X, pas de Y. Que répondez-vous sur X ?'"
+  },
+  {
+    term: "Faux dilemme",
+    def: "Présenter une situation comme n'ayant que deux options, alors qu'il en existe d'autres.",
+    example: "'Soit vous êtes avec nous, soit vous êtes contre nous.'",
+    counter: "Se demander : 'Existe-t-il d'autres options ? Des positions nuancées ?'"
+  },
+  {
+    term: "Appel à la nature",
+    def: "Affirmer que ce qui est 'naturel' est forcément bon, et ce qui est 'artificiel' est mauvais.",
+    example: "'C'est naturel donc c'est bon pour la santé' (arsenic et ciguë sont naturels...)",
+    counter: "Naturel ≠ bon, artificiel ≠ mauvais. Demander des preuves concrètes d'efficacité/danger."
+  },
+  {
+    term: "Effet Dunning-Kruger",
+    def: "Les personnes peu compétentes surestiment leurs capacités, tandis que les experts doutent davantage.",
+    example: "Quelqu'un qui a lu 2 articles se sent expert ; un vrai expert dit 'c'est complexe'.",
+    counter: "Méfiance envers les certitudes absolues. Les vrais experts expriment de la nuance."
+  },
+  {
+    term: "Astroturfing",
+    def: "Création de faux mouvements citoyens ou de fausses opinions populaires par des organisations.",
+    example: "Des bots qui simulent un mouvement de protestation populaire sur les réseaux.",
+    counter: "Vérifier l'ancienneté et l'authenticité des comptes. Chercher qui finance le mouvement."
+  }
+];
+
+const MISSIONS = [
+  { id: 'm1', icon: '🔍', title: 'Première vérification', desc: 'Complétez le module "Évaluer une source"', xp: 100, requires: 'sources' },
+  { id: 'm2', icon: '🧠', title: 'Connaître ses biais', desc: 'Complétez le module "Biais cognitifs"', xp: 150, requires: 'biais' },
+  { id: 'm3', icon: '📖', title: 'Explorateur', desc: 'Lisez 5 définitions du glossaire', xp: 50, requires: null, type: 'glossary', target: 5 },
+  { id: 'm4', icon: '🎓', title: 'Diplômé NYXO', desc: 'Complétez tous les modules disponibles', xp: 500, requires: 'all' },
+  { id: 'm5', icon: '🔥', title: 'Série de 3', desc: 'Répondez correctement à 3 questions de suite', xp: 75, requires: null, type: 'streak', target: 3 },
+];
+
+const ACHIEVEMENTS = [
+  { id: 'a1', icon: '🐀', name: 'Premier pas', desc: 'Complétez votre premier module' },
+  { id: 'a2', icon: '🔬', name: 'Fact-checker', desc: 'Terminez le module Fact-checking' },
+  { id: 'a3', icon: '🧠', name: 'Cerveau blindé', desc: 'Connaissez tous les biais' },
+  { id: 'a4', icon: '🛡️', name: 'Immunisé', desc: 'Terminez le module Désinformation' },
+  { id: 'a5', icon: '🏆', name: 'Maître NYXO', desc: 'Complétez tous les modules' },
+  { id: 'a6', icon: '📚', name: 'Érudit', desc: 'Lisez tout le glossaire' },
+  { id: 'a7', icon: '💯', name: 'Perfectionniste', desc: '100% sur un module' },
+  { id: 'a8', icon: '🔥', name: 'En feu', desc: 'Série de 5 bonnes réponses' },
+];
+
+const LEVELS = [
+  { name: 'NOVICE', minXP: 0 },
+  { name: 'INITIÉ', minXP: 200 },
+  { name: 'APPRENTI', minXP: 500 },
+  { name: 'VÉRIFICATEUR', minXP: 1000 },
+  { name: 'EXPERT', minXP: 2000 },
+  { name: 'MAÎTRE NYXO', minXP: 3500 },
+];
+
+// ========== ÉTAT UTILISATEUR ==========
+let userState = {
+  xp: 0,
+  level: 0,
+  completedModules: [],
+  moduleProgress: {},
+  glossaryRead: [],
+  achievements: [],
+  currentStreak: 0,
+  bestStreak: 0,
+};
+
+// Charger depuis localStorage
+function loadState() {
+  const saved = localStorage.getItem('nyxo_user');
+  if (saved) userState = { ...userState, ...JSON.parse(saved) };
+}
+
+function saveState() {
+  localStorage.setItem('nyxo_user', JSON.stringify(userState));
+}
+
+// ========== SYSTÈME XP & NIVEAUX ==========
+function addXP(amount) {
+  userState.xp += amount;
+  updateLevel();
+  saveState();
+  updateUI();
+  flashSubliminal(`+${amount} XP`);
+}
+
+function updateLevel() {
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (userState.xp >= LEVELS[i].minXP) {
+      if (userState.level !== i) {
+        userState.level = i;
+        flashSubliminal(`NIVEAU: ${LEVELS[i].name}`);
+      }
+      break;
+    }
+  }
+}
+
+function updateUI() {
+  document.getElementById('userXP').textContent = userState.xp;
+  document.getElementById('userLevel').textContent = LEVELS[userState.level].name;
+  document.getElementById('userStreak').textContent = userState.currentStreak;
+  
+  const totalModules = MODULES.length;
+  const completed = userState.completedModules.length;
+  document.getElementById('globalProgress').style.width = (completed / totalModules * 100) + '%';
+  
+  renderModules();
+  renderMissions();
+  renderAchievements();
+}
+
+// ========== MODULES ==========
+function renderModules() {
+  const grid = document.getElementById('modulesGrid');
+  grid.innerHTML = '';
+  
+  MODULES.forEach(mod => {
+    const isCompleted = userState.completedModules.includes(mod.id);
+    const isLocked = mod.level > userState.level;
+    const progress = userState.moduleProgress[mod.id] || 0;
+    
+    const card = document.createElement('div');
+    card.className = `module-card${isCompleted ? ' completed' : ''}${isLocked ? ' locked' : ''}`;
+    card.innerHTML = `
+      <div class="module-header">
+        <div class="module-tag">${mod.tag}</div>
+        <div class="module-title">${mod.title}</div>
+        <div class="module-desc">${mod.desc}</div>
+      </div>
+      <div class="module-content">
+        <div class="module-meta">
+          <span>${mod.questions.length} questions</span>
+          <span class="module-xp">+${mod.xp} XP</span>
+        </div>
+        <div class="module-progress"><div class="module-progress-bar" style="width:${progress}%"></div></div>
+        <button class="module-btn" onclick="startQuiz('${mod.id}')">${isCompleted ? 'Refaire' : 'Commencer'}</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ========== QUIZ ==========
+let currentQuiz = null;
+let currentQuestion = 0;
+let quizScore = 0;
+let answered = false;
+
+function startQuiz(moduleId) {
+  currentQuiz = MODULES.find(m => m.id === moduleId);
+  currentQuestion = 0;
+  quizScore = 0;
+  answered = false;
+  
+  document.getElementById('quizTitle').textContent = currentQuiz.title;
+  document.getElementById('quizOverlay').classList.add('open');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = currentQuiz.questions[currentQuestion];
+  const body = document.getElementById('quizBody');
+  const footer = document.getElementById('quizFooter');
+  
+  // Progress dots
+  let dotsHtml = '<div class="quiz-progress">';
+  for (let i = 0; i < currentQuiz.questions.length; i++) {
+    const cls = i < currentQuestion ? 'done' : (i === currentQuestion ? 'current' : '');
+    dotsHtml += `<div class="quiz-dot ${cls}"></div>`;
+  }
+  dotsHtml += '</div>';
+  
+  body.innerHTML = `
+    ${dotsHtml}
+    <div class="quiz-question">${q.q}</div>
+    ${q.context ? `<div class="quiz-context">${q.context}</div>` : ''}
+    <div class="quiz-options">
+      ${q.options.map((opt, i) => `
+        <div class="quiz-option" data-index="${i}" onclick="selectOption(${i})">${opt}</div>
+      `).join('')}
+    </div>
+    <div class="quiz-explanation" id="quizExplanation">
+      <h4>💡 Explication</h4>
+      <p>${q.explanation}</p>
+    </div>
+  `;
+  
+  footer.innerHTML = `
+    <button class="quiz-btn quiz-btn-ghost" onclick="closeQuiz()">Quitter</button>
+    <button class="quiz-btn quiz-btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">
+      ${currentQuestion < currentQuiz.questions.length - 1 ? 'Suivante →' : 'Voir résultats'}
+    </button>
+  `;
+  
+  answered = false;
+}
+
+function selectOption(index) {
+  if (answered) return;
+  answered = true;
+  
+  const q = currentQuiz.questions[currentQuestion];
+  const options = document.querySelectorAll('.quiz-option');
+  
+  options.forEach((opt, i) => {
+    opt.style.pointerEvents = 'none';
+    if (i === q.correct) opt.classList.add('correct');
+    if (i === index && i !== q.correct) opt.classList.add('wrong');
+  });
+  
+  if (index === q.correct) {
+    quizScore++;
+    userState.currentStreak++;
+    if (userState.currentStreak > userState.bestStreak) userState.bestStreak = userState.currentStreak;
+    checkStreakAchievements();
+  } else {
+    userState.currentStreak = 0;
+  }
+  
+  document.getElementById('quizExplanation').classList.add('show');
+  document.getElementById('nextBtn').style.display = 'block';
+  saveState();
+  updateUI();
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= currentQuiz.questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  const total = currentQuiz.questions.length;
+  const percent = Math.round(quizScore / total * 100);
+  const xpEarned = Math.round(currentQuiz.xp * (quizScore / total));
+  
+  let icon = '🤔';
+  let title = 'Continuez vos efforts';
+  if (percent >= 80) { icon = '🎉'; title = 'Excellent !'; }
+  else if (percent >= 60) { icon = '👍'; title = 'Bien joué !'; }
+  
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-result-icon">${icon}</div>
+      <div class="quiz-result-title">${title}</div>
+      <div class="quiz-result-score">${quizScore}/${total} (${percent}%)</div>
+      <div class="quiz-result-xp">+${xpEarned} XP gagnés</div>
+    </div>
+  `;
+  
+  document.getElementById('quizFooter').innerHTML = `
+    <button class="quiz-btn quiz-btn-ghost" onclick="startQuiz('${currentQuiz.id}')">Recommencer</button>
+    <button class="quiz-btn quiz-btn-primary" onclick="closeQuiz()">Terminer</button>
+  `;
+  
+  // Marquer comme complété si >= 60%
+  if (percent >= 60 && !userState.completedModules.includes(currentQuiz.id)) {
+    userState.completedModules.push(currentQuiz.id);
+    unlockAchievement('a1');
+    if (currentQuiz.id === 'factcheck') unlockAchievement('a2');
+    if (currentQuiz.id === 'biais') unlockAchievement('a3');
+    if (currentQuiz.id === 'desinfo') unlockAchievement('a4');
+    if (userState.completedModules.length === MODULES.length) unlockAchievement('a5');
+  }
+  
+  if (percent === 100) unlockAchievement('a7');
+  
+  userState.moduleProgress[currentQuiz.id] = percent;
+  addXP(xpEarned);
+}
+
+function closeQuiz() {
+  document.getElementById('quizOverlay').classList.remove('open');
+}
+
+// ========== GLOSSAIRE ==========
+function renderGlossary() {
+  const grid = document.getElementById('glossaryGrid');
+  grid.innerHTML = '';
+  
+  GLOSSARY.forEach((item, i) => {
+    const isRead = userState.glossaryRead.includes(i);
+    const el = document.createElement('div');
+    el.className = 'glossary-item';
+    el.innerHTML = `
+      <div class="glossary-header" onclick="toggleGlossary(${i})">
+        <span class="glossary-term">${isRead ? '✓ ' : ''}${item.term}</span>
+        <span class="glossary-toggle">▼</span>
+      </div>
+      <div class="glossary-content">
+        <div class="glossary-inner">
+          <p>${item.def}</p>
+          <div class="glossary-example"><strong>⚠️ Exemple :</strong> ${item.example}</div>
+          <div class="glossary-counter"><strong>✅ Parade :</strong> ${item.counter}</div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(el);
+  });
+}
+
+function toggleGlossary(index) {
+  const items = document.querySelectorAll('.glossary-item');
+  const item = items[index];
+  const wasOpen = item.classList.contains('open');
+  
+  items.forEach(i => i.classList.remove('open'));
+  
+  if (!wasOpen) {
+    item.classList.add('open');
+    if (!userState.glossaryRead.includes(index)) {
+      userState.glossaryRead.push(index);
+      addXP(10);
+      if (userState.glossaryRead.length === GLOSSARY.length) unlockAchievement('a6');
+      saveState();
+    }
+  }
+}
+
+// ========== MISSIONS ==========
+function renderMissions() {
+  const list = document.getElementById('missionsList');
+  list.innerHTML = '';
+  
+  MISSIONS.forEach(m => {
+    const isCompleted = checkMissionComplete(m);
+    const el = document.createElement('div');
+    el.className = `mission${isCompleted ? ' completed' : ''}`;
+    el.innerHTML = `
+      <div class="mission-icon">${m.icon}</div>
+      <div class="mission-info">
+        <div class="mission-title">${m.title}</div>
+        <div class="mission-desc">${m.desc}</div>
+      </div>
+      <div class="mission-reward">
+        <div class="mission-xp">+${m.xp} XP</div>
+        <div class="mission-status">${isCompleted ? '✓ Complété' : 'En cours'}</div>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function checkMissionComplete(mission) {
+  if (mission.requires === 'all') return userState.completedModules.length === MODULES.length;
+  if (mission.requires) return userState.completedModules.includes(mission.requires);
+  if (mission.type === 'glossary') return userState.glossaryRead.length >= mission.target;
+  if (mission.type === 'streak') return userState.bestStreak >= mission.target;
+  return false;
+}
+
+// ========== ACHIEVEMENTS ==========
+function renderAchievements() {
+  const list = document.getElementById('achievementsList');
+  list.innerHTML = '';
+  
+  ACHIEVEMENTS.forEach(a => {
+    const unlocked = userState.achievements.includes(a.id);
+    const el = document.createElement('div');
+    el.className = `achievement${unlocked ? ' unlocked' : ''}`;
+    el.title = a.desc;
+    el.innerHTML = `
+      <div class="achievement-icon">${a.icon}</div>
+      <div class="achievement-name">${a.name}</div>
+    `;
+    list.appendChild(el);
+  });
+}
+
+function unlockAchievement(id) {
+  if (!userState.achievements.includes(id)) {
+    userState.achievements.push(id);
+    const a = ACHIEVEMENTS.find(x => x.id === id);
+    flashSubliminal(`🏆 ${a.name}`);
+    saveState();
+    updateUI();
+  }
+}
+
+function checkStreakAchievements() {
+  if (userState.currentStreak >= 5) unlockAchievement('a8');
+}
+
+// ========== TERMINAL ==========
+function openTerminal() {
+  document.getElementById('terminal').classList.add('open');
+  document.getElementById('terminalInput').focus();
+}
+
+function closeTerminal() {
+  document.getElementById('terminal').classList.remove('open');
+}
+
+function terminalPrint(text, cls = '') {
+  const output = document.getElementById('terminalOutput');
+  const line = document.createElement('div');
+  line.textContent = text;
+  if (cls) line.className = cls;
+  output.appendChild(line);
+  output.scrollTop = output.scrollHeight;
+}
+
+const terminalCommands = {
+  help: () => {
+    terminalPrint('=== COMMANDES ===', 'info');
+    terminalPrint('STATUS  - Votre progression');
+    terminalPrint('RESET   - Réinitialiser');
+    terminalPrint('CREDITS - À propos');
+    terminalPrint('EMI     - C\'est quoi l\'EMI ?');
+    terminalPrint('BIAIS   - Liste des biais cognitifs');
+  },
+  status: () => {
+    terminalPrint(`XP: ${userState.xp}`, 'gold');
+    terminalPrint(`Niveau: ${LEVELS[userState.level].name}`);
+    terminalPrint(`Modules complétés: ${userState.completedModules.length}/${MODULES.length}`);
+    terminalPrint(`Meilleure série: ${userState.bestStreak}`);
+  },
+  reset: () => {
+    if (confirm('Réinitialiser toute progression ?')) {
+      localStorage.removeItem('nyxo_user');
+      location.reload();
+    }
+  },
+  emi: () => {
+    terminalPrint('=== ÉDUCATION AUX MÉDIAS ET À L\'INFORMATION ===', 'info');
+    terminalPrint('L\'EMI vise à développer l\'esprit critique face');
+    terminalPrint('à l\'information. Elle enseigne à :');
+    terminalPrint('• Évaluer la fiabilité des sources', 'success');
+    terminalPrint('• Reconnaître les biais et manipulations', 'success');
+    terminalPrint('• Comprendre le fonctionnement des médias', 'success');
+    terminalPrint('• Devenir un citoyen numérique éclairé', 'success');
+  },
+  credits: () => {
+    terminalPrint('=== CRÉDITS ===', 'info');
+    terminalPrint('Formation NYXO - CCPLC');
+    terminalPrint('Contenu pédagogique basé sur les travaux de :');
+    terminalPrint('• CLEMI, AFP Factuel, Les Décodeurs');
+    terminalPrint('• Recherches sur les biais cognitifs');
+    terminalPrint('');
+    terminalPrint('"Les rats vérifient. Les rats ne gobent pas tout."', 'gold');
+  },
+  biais: () => {
+    terminalPrint('=== BIAIS COGNITIFS ===', 'info');
+    GLOSSARY.slice(0, 5).forEach(g => terminalPrint(`• ${g.term}`));
+    terminalPrint('... et plus dans le glossaire.');
+  }
+};
+
+document.getElementById('terminalInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const cmd = e.target.value.trim().toLowerCase();
+    terminalPrint(`> ${e.target.value}`, 'info');
+    if (terminalCommands[cmd]) terminalCommands[cmd]();
+    else if (cmd) terminalPrint('Commande inconnue. Tapez HELP.', 'error');
+    e.target.value = '';
+  }
+});
+
+// ========== KONAMI CODE ==========
+let konamiProgress = 0;
+const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+
+document.addEventListener('keydown', e => {
+  if (e.code === konamiCode[konamiProgress]) {
+    konamiProgress++;
+    if (konamiProgress === konamiCode.length) {
+      konamiProgress = 0;
+      openTerminal();
+      terminalPrint('=== ACCÈS TERMINAL NYXO ===', 'gold');
+      terminalPrint('Bienvenue, initié. Tapez HELP.', 'success');
+      addXP(50);
+    }
+  } else {
+    konamiProgress = e.code === konamiCode[0] ? 1 : 0;
+  }
+  if (e.key === 'Escape') { closeQuiz(); closeTerminal(); }
+});
+
+// ========== MISC ==========
+let brandClicks = 0;
+function brandClick() {
+  brandClicks++;
+  if (brandClicks >= 7) { brandClicks = 0; openTerminal(); }
+}
+
+function flashSubliminal(msg) {
+  const el = document.getElementById('subliminal');
+  el.textContent = msg;
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 150);
+}
+
+// ========== INIT ==========
+function init() {
+  loadState();
+  updateLevel();
+  renderModules();
+  renderGlossary();
+  renderMissions();
+  renderAchievements();
+  updateUI();
+  
+  console.log('%c◈ FORMATION NYXO ACTIVE ◈', 'color:#7cffc4;font-size:20px;font-weight:bold');
+  console.log('%cDéveloppez votre esprit critique.', 'color:#a6aac8');
+  console.log('%cKonami code: ↑↑↓↓←→←→BA', 'color:#cbb7ff');
+}
+
+init();
+</script>
+</body>
+</html>
