@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS - Ultra Modern Visual Experience</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@300;700&display=swap');
+
+        :root {
+            --neon-cyan: #00fff5;
+            --neon-pink: #ff006e;
+            --neon-purple: #b537f2;
+            --neon-yellow: #ffea00;
+            --dark: #0a0a0f;
+            --darker: #050508;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: white;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--neon-pink);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        /* Animated background with particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-50px) translateX(-50px); }
+            75% { transform: translateY(-150px) translateX(100px); }
+        }
+
+        /* Gradient mesh background */
+        .gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(181, 55, 242, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 110, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 245, 0.2) 0%, transparent 50%);
+            animation: meshMove 15s ease infinite;
+            z-index: 0;
+        }
+
+        @keyframes meshMove {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        /* Glass morphism container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero section with 3D effect */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(4rem, 15vw, 12rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple), var(--neon-yellow));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 8s ease infinite, glitch 5s infinite;
+            margin-bottom: 2rem;
+            text-shadow: 
+                0 0 30px rgba(0, 255, 245, 0.5),
+                0 0 60px rgba(255, 0, 110, 0.3);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-5px, 3px); }
+            92% { transform: translate(5px, -3px); }
+            93% { transform: translate(-5px, -3px); }
+            94% { transform: translate(5px, 3px); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 300;
+            color: var(--neon-cyan);
+            margin-bottom: 3rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating CTA button */
+        .cta-floating {
+            position: relative;
+            padding: 2rem 4rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border: none;
+            border-radius: 100px;
+            color: white;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            animation: float-btn 3s ease-in-out infinite;
+        }
+
+        @keyframes float-btn {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .cta-floating::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-floating:hover::before {
+            left: 100%;
+        }
+
+        .cta-floating:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 60px rgba(255, 0, 110, 0.6);
+        }
+
+        /* Cards with glassmorphism */
+        .cards-section {
+            margin: 10rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            padding: 2rem;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 255, 245, 0.1),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-20px) rotateX(5deg);
+            box-shadow: 
+                0 30px 80px rgba(0, 255, 245, 0.3),
+                inset 0 0 40px rgba(255, 0, 110, 0.1);
+            border-color: var(--neon-cyan);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: rotate-icon 10s linear infinite;
+        }
+
+        @keyframes rotate-icon {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .card-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Pricing section with neon glow */
+        .pricing-section {
+            margin: 10rem 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 5rem;
+            background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 50px rgba(255, 234, 0, 0.5);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            padding: 2rem;
+        }
+
+        .price-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid transparent;
+            border-radius: 30px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple), var(--neon-yellow));
+            background-size: 400% 400%;
+            border-radius: 30px;
+            z-index: -1;
+            animation: borderGlow 8s ease infinite;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .price-card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .price-card:hover {
+            transform: scale(1.05) translateZ(50px);
+            box-shadow: 0 40px 100px rgba(181, 55, 242, 0.5);
+        }
+
+        .price-amount {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 40px var(--neon-cyan);
+            margin: 2rem 0;
+        }
+
+        .price-features {
+            list-style: none;
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .price-features li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        .price-features li::before {
+            content: '✦ ';
+            color: var(--neon-pink);
+            margin-right: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Gallery with parallax */
+        .gallery-section {
+            margin: 10rem 0;
+            position: relative;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(0, 255, 245, 0.2), rgba(255, 0, 110, 0.2));
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .gallery-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 30px 80px rgba(0, 255, 245, 0.4);
+        }
+
+        .gallery-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Testimonials with glow */
+        .testimonials-section {
+            margin: 10rem 0;
+            padding: 5rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            position: relative;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 2rem 0;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--neon-pink);
+            transform: translateX(20px);
+        }
+
+        .testimonial-text {
+            font-size: 1.3rem;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--neon-yellow);
+            font-size: 1.2rem;
+        }
+
+        /* Footer with wave effect */
+        .footer {
+            margin-top: 10rem;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(0, 255, 245, 0.1),
+                transparent,
+                rgba(255, 0, 110, 0.1),
+                transparent
+            );
+            animation: wave 8s linear infinite;
+        }
+
+        @keyframes wave {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 10px;
+            background: var(--neon-cyan);
+            border-radius: 3px;
+            animation: scroll-down 2s infinite;
+        }
+
+        @keyframes scroll-down {
+            0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(20px); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 4rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            .cta-floating { padding: 1.5rem 2.5rem; font-size: 1rem; }
+            .cards-section, .pricing-grid, .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    <div class="gradient-bg"></div>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-title">NEXUS</h1>
+            <p class="hero-subtitle">Lorem Ipsum Dolor</p>
+            <button class="cta-floating" onclick="alert('Lorem ipsum dolor sit amet')">Commencer</button>
+        </section>
+
+        <!-- Cards Section -->
+        <section class="cards-section">
+            <div class="glass-card">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Lorem Ipsum</h3>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div class="glass-card">
+                <div class="card-icon">🚀</div>
+                <h3 class="card-title">Dolor Sit Amet</h3>
+                <p class="card-text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+            <div class="glass-card">
+                <div class="card-icon">✨</div>
+                <h3 class="card-title">Consectetur</h3>
+                <p class="card-text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            </div>
+            <div class="glass-card">
+                <div class="card-icon">💎</div>
+                <h3 class="card-title">Adipiscing Elit</h3>
+                <p class="card-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+            <div class="glass-card">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">Sed Do Eiusmod</h3>
+                <p class="card-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+            </div>
+            <div class="glass-card">
+                <div class="card-icon">🔥</div>
+                <h3 class="card-title">Tempor Incididunt</h3>
+                <p class="card-text">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.</p>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section">
+            <h2 class="section-title">Lorem Pricing</h2>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3 style="font-size: 2rem; color: var(--neon-cyan); margin-bottom: 1rem;">Starter</h3>
+                    <div class="price-amount">$49</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">per month</p>
+                    <ul class="price-features">
+                        <li>Lorem ipsum dolor</li>
+                        <li>Consectetur adipiscing</li>
+                        <li>Sed do eiusmod</li>
+                        <li>Tempor incididunt</li>
+                        <li>Ut labore et dolore</li>
+                    </ul>
+                    <button class="cta-floating" style="padding: 1rem 2rem; font-size: 1rem; margin-top: 2rem;">Choose Plan</button>
+                </div>
+                <div class="price-card">
+                    <h3 style="font-size: 2rem; color: var(--neon-pink); margin-bottom: 1rem;">Pro</h3>
+                    <div class="price-amount" style="color: var(--neon-pink);">$99</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">per month</p>
+                    <ul class="price-features">
+                        <li>Magna aliqua enim</li>
+                        <li>Quis nostrud exercitation</li>
+                        <li>Ullamco laboris nisi</li>
+                        <li>Aliquip ex ea commodo</li>
+                        <li>Duis aute irure dolor</li>
+                        <li>Reprehenderit in voluptate</li>
+                    </ul>
+                    <button class="cta-floating" style="padding: 1rem 2rem; font-size: 1rem; margin-top: 2rem;">Choose Plan</button>
+                </div>
+                <div class="price-card">
+                    <h3 style="font-size: 2rem; color: var(--neon-purple); margin-bottom: 1rem;">Enterprise</h3>
+                    <div class="price-amount" style="color: var(--neon-purple);">$199</div>
+                    <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">per month</p>
+                    <ul class="price-features">
+                        <li>Excepteur sint occaecat</li>
+                        <li>Cupidatat non proident</li>
+                        <li>Sunt in culpa qui</li>
+                        <li>Officia deserunt mollit</li>
+                        <li>Sed ut perspiciatis</li>
+                        <li>Omnis iste natus</li>
+                        <li>Accusantium doloremque</li>
+                    </ul>
+                    <button class="cta-floating" style="padding: 1rem 2rem; font-size: 1rem; margin-top: 2rem;">Choose Plan</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section">
+            <h2 class="section-title">Lorem Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-content">01</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">02</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">03</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">04</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">05</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-content">06</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <h2 class="section-title">Lorem Testimonials</h2>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."</p>
+                <p class="testimonial-author">— John Doe, CEO</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse."</p>
+                <p class="testimonial-author">— Jane Smith, Designer</p>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis."</p>
+                <p class="testimonial-author">— Mike Johnson, Developer</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <h2 class="section-title">Lorem Contact</h2>
+                <p style="font-size: 1.3rem; color: rgba(255,255,255,0.7); margin-bottom: 3rem;">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
+                <button class="cta-floating">Get Started</button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="scroll-indicator"></div>
+
+    <script>
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        // Generate particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Parallax effect on cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `translateY(-20px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+            });
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.glass-card, .price-card, .gallery-item, .testimonial-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.23, 1, 0.32, 1)';
+            observer.observe(el);
+        });
+
+        // Hide scroll indicator after scroll
+        window.addEventListener('scroll', () => {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 100) {
+                indicator.style.opacity = '0';
+            } else {
+                indicator.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>
