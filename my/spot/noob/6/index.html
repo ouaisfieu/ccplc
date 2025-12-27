@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>mySPOT — spot stop STIB</title>
+
+<style>
+:root{
+  --bg:#0b0e14;
+  --panel:#121726;
+  --card:#171c2e;
+  --text:#e8ecff;
+  --muted:#9aa3d1;
+  --accent:#7cffc4;
+  --accent2:#cbb7ff;
+  --danger:#ff6b6b;
+  --radius:14px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:var(--sans)}
+header{
+  position:sticky;top:0;z-index:5;
+  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(11,14,20,.9), rgba(11,14,20,.6));
+  border-bottom:1px solid #1e2440;
+}
+.wrap{max-width:1200px;margin:auto;padding:1rem}
+.brand{
+  display:flex;align-items:center;gap:.75rem
+}
+.brand h1{
+  margin:0;font-weight:900;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.brand small{color:var(--muted)}
+.toolbar{
+  display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem
+}
+.btn{
+  background:var(--panel);border:1px solid #1e2440;color:var(--text);
+  padding:.6rem .9rem;border-radius:999px;cursor:pointer;font-weight:700
+}
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#04110c;border:none
+}
+.btn.ghost{background:transparent}
+.btn:active{transform:translateY(1px)}
+input[type="search"], input[type="text"]{
+  background:var(--panel);border:1px solid #1e2440;color:var(--text);
+  padding:.6rem .9rem;border-radius:999px;outline:none;min-width:220px
+}
+
+main .grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1rem
+}
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.2)),var(--card);
+  border:1px solid #1e2440;border-radius:var(--radius);padding:1rem;
+  display:flex;flex-direction:column;gap:.5rem;position:relative
+}
+.card:hover{border-color:#2c3570}
+.badge{
+  font-family:var(--mono);font-size:.65rem;padding:.2rem .45rem;border-radius:6px;
+  background:#20265a;color:#bcd2ff;display:inline-block
+}
+.lines{display:flex;flex-wrap:wrap;gap:.25rem}
+.line{
+  font-family:var(--mono);font-size:.65rem;padding:.2rem .45rem;border-radius:6px;
+  background:#1c224b
+}
+.card h3{margin:.25rem 0 .1rem 0;font-size:1rem}
+.card p{margin:0;color:var(--muted);font-size:.85rem}
+.card .actions{margin-top:auto;display:flex;gap:.4rem;flex-wrap:wrap}
+.card .claim{
+  background:transparent;border:1px dashed var(--accent2);color:var(--accent2)
+}
+.card.claimed{border-color:var(--accent)}
+.card.claimed::after{
+  content:"CLAIMED";position:absolute;top:.75rem;right:.75rem;
+  font-family:var(--mono);font-size:.6rem;color:#04110c;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  padding:.2rem .45rem;border-radius:6px
+}
+
+aside{
+  position:fixed;right:0;top:0;height:100%;width:min(420px,100%);
+  background:linear-gradient(180deg,#0b0e14,#0b0e14);
+  border-left:1px solid #1e2440;transform:translateX(100%);
+  transition:.25s ease;z-index:10
+}
+aside.open{transform:none}
+aside .wrap{height:100%;display:flex;flex-direction:column}
+aside h2{margin:.25rem 0}
+aside textarea{
+  width:100%;min-height:160px;background:var(--panel);
+  border:1px solid #1e2440;color:var(--text);border-radius:12px;padding:.75rem;
+  font-family:var(--mono)
+}
+aside .row{display:flex;gap:.5rem;flex-wrap:wrap}
+
+footer{border-top:1px solid #1e2440;margin-top:2rem}
+footer .wrap{color:var(--muted);font-size:.8rem}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <h1>mySPOT</h1>
+      <small>spot · stop · STIB</small>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Rechercher un arrêt, une ligne…"/>
+      <button class="btn" id="btnImport">Importer .json</button>
+      <button class="btn" id="btnGenerate">Générateur</button>
+      <button class="btn ghost" id="btnExport">Exporter JSON</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="stats" class="badge">0 stops</div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<aside id="generator">
+  <div class="wrap">
+    <h2>Générateur mySPOT</h2>
+    <p class="badge">façon PéTAL — données synthétiques</p>
+    <div class="row">
+      <input type="text" id="genCount" placeholder="Nombre d’arrêts (ex: 24)"/>
+      <input type="text" id="genPrefix" placeholder="Préfixe nom (ex: SPOT)"/>
+    </div>
+    <textarea id="genLines" placeholder="Lignes (une par ligne)&#10;STIB-1&#10;STIB-2&#10;TRAM-92"></textarea>
+    <div class="row">
+      <button class="btn primary" id="doGenerate">Générer</button>
+      <button class="btn" id="closeGen">Fermer</button>
+    </div>
+    <p class="badge">Le générateur produit un JSON compatible import.</p>
+  </div>
+</aside>
+
+<input type="file" id="file" class="hidden" accept=".json"/>
+
+<script>
+/* ========= STATE ========= */
+let stops = []; // {id,name,desc,lines:[],claimed:false}
+
+/* ========= UI ========= */
+const grid = document.getElementById('grid');
+const stats = document.getElementById('stats');
+const q = document.getElementById('q');
+const file = document.getElementById('file');
+const gen = document.getElementById('generator');
+
+/* ========= RENDER ========= */
+function render(list = stops){
+  grid.innerHTML = '';
+  list.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'card' + (s.claimed ? ' claimed':'');
+    el.innerHTML = `
+      <span class="badge">${s.id}</span>
+      <h3>${s.name}</h3>
+      <p>${s.desc || 'Arrêt STIB'}</p>
+      <div class="lines">${(s.lines||[]).map(l=>`<span class="line">${l}</span>`).join('')}</div>
+      <div class="actions">
+        <button class="btn claim">${s.claimed?'Unclaim':'Claim'}</button>
+        <button class="btn">Détails</button>
+      </div>
+    `;
+    el.querySelector('.claim').onclick = ()=>{
+      s.claimed = !s.claimed; render(filter());
+    };
+    grid.appendChild(el);
+  });
+  stats.textContent = `${list.length} stops`;
+}
+
+function filter(){
+  const t = q.value.toLowerCase().trim();
+  if(!t) return stops;
+  return stops.filter(s =>
+    s.name.toLowerCase().includes(t) ||
+    (s.lines||[]).join(' ').toLowerCase().includes(t) ||
+    s.id.toLowerCase().includes(t)
+  );
+}
+
+/* ========= IMPORT / EXPORT ========= */
+document.getElementById('btnImport').onclick = ()=> file.click();
+file.onchange = async e=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const json = JSON.parse(await f.text());
+  if(Array.isArray(json)) stops = json;
+  else if(Array.isArray(json.stops)) stops = json.stops;
+  render();
+};
+
+document.getElementById('btnExport').onclick = ()=>{
+  const blob = new Blob([JSON.stringify(stops,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mySPOT-export.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+/* ========= SEARCH ========= */
+q.oninput = ()=> render(filter());
+
+/* ========= GENERATOR ========= */
+document.getElementById('btnGenerate').onclick = ()=> gen.classList.add('open');
+document.getElementById('closeGen').onclick = ()=> gen.classList.remove('open');
+
+document.getElementById('doGenerate').onclick = ()=>{
+  const n = parseInt(document.getElementById('genCount').value || '12',10);
+  const prefix = document.getElementById('genPrefix').value || 'SPOT';
+  const lines = document.getElementById('genLines').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  const out = [];
+  for(let i=1;i<=n;i++){
+    out.push({
+      id:`${prefix}-${String(i).padStart(3,'0')}`,
+      name:`${prefix} ${i}`,
+      desc:'Arrêt généré',
+      lines: shuffle(lines).slice(0, Math.max(1, Math.floor(Math.random()*Math.min(3,lines.length)))),
+      claimed:false
+    });
+  }
+  stops = stops.concat(out);
+  gen.classList.remove('open');
+  render();
+};
+
+function shuffle(a){
+  const b = a.slice();
+  for(let i=b.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i],b[j]]=[b[j],b[i]];
+  }
+  return b;
+}
+
+/* ========= INIT ========= */
+render();
+</script>
+</body>
+</html>
