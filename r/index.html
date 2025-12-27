@@ -1,0 +1,2389 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCPLC — Rejoins l'Aventure Citoyenne | Réserve de Recrutement 2030</title>
+    <meta name="description" content="42 ETP pour construire la démocratie de demain. Candidatures spontanées et bénévoles bienvenu·e·s.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #134a5f;
+            --secondary: #2d8a6e;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --bg-card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #38bdf8;
+            --primary-dark: #0ea5e9;
+            --secondary: #34d399;
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-light: #64748b;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        /* === PROGRESS BAR === */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.2s ease;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            top: 4px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.9);
+        }
+
+        [data-theme="dark"] nav {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo span {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background: var(--bg-alt);
+        }
+
+        .theme-toggle {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--border);
+        }
+
+        /* === XP BAR (Gamification) === */
+        .xp-bar-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            min-width: 250px;
+            transition: var(--transition);
+        }
+
+        .xp-bar-container.minimized {
+            min-width: auto;
+            padding: 0.75rem;
+        }
+
+        .xp-bar-container.minimized .xp-details {
+            display: none;
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .xp-level {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .xp-level-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .xp-minimize {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .xp-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .xp-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* === ACHIEVEMENTS POPUP === */
+        .achievement-popup {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1002;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .achievement-popup.show {
+            transform: translateX(0);
+        }
+
+        .achievement-popup .icon {
+            font-size: 2rem;
+        }
+
+        .achievement-popup .text h4 {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .achievement-popup .text p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-alt) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(26, 95, 122, 0.03) 0%, transparent 50%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-stat .label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 14px rgba(26, 95, 122, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* === SECTIONS === */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-alt {
+            background: var(--bg-alt);
+        }
+
+        /* === QUOTE BANNER === */
+        .quote-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .quote-banner blockquote {
+            font-size: 1.5rem;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .quote-banner cite {
+            display: block;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            opacity: 0.9;
+            font-style: normal;
+        }
+
+        /* === MISSION CARDS === */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .mission-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mission-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .mission-card.completed {
+            border-color: var(--success);
+        }
+
+        .mission-card.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .mission-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .mission-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .mission-card p {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+        }
+
+        .mission-card .xp-reward {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* === VALUES TABLE === */
+        .values-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .values-table th, .values-table td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .values-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .values-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .values-table tr:hover td {
+            background: var(--bg-alt);
+        }
+
+        .values-table td:first-child {
+            font-weight: 600;
+            color: var(--primary);
+            width: 180px;
+        }
+
+        /* === PROFILE QUIZ === */
+        .quiz-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .quiz-progress {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-progress-step {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .quiz-progress-step.active {
+            background: var(--primary);
+        }
+
+        .quiz-progress-step.completed {
+            background: var(--success);
+        }
+
+        .quiz-question {
+            display: none;
+        }
+
+        .quiz-question.active {
+            display: block;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-question p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-alt);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(26, 95, 122, 0.1);
+        }
+
+        .quiz-option input {
+            display: none;
+        }
+
+        .quiz-option .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .quiz-option.selected .radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .quiz-option.selected .radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .quiz-result {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .quiz-result.active {
+            display: block;
+        }
+
+        .quiz-result .profile-match {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .quiz-result h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-result .profiles-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .quiz-result .profile-tag {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+        }
+
+        /* === PROFILES SECTION === */
+        .profiles-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .profile-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .profile-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .profile-category-header:hover {
+            background: var(--bg-alt);
+        }
+
+        .profile-category-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .profile-category-header .count {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .profile-category-header .chevron {
+            transition: transform 0.3s ease;
+        }
+
+        .profile-category.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .profile-category-content {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .profile-category.open .profile-category-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .profile-item {
+            background: var(--bg-alt);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .profile-item:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* === TIMELINE === */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--bg-card);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .timeline-item.completed::before {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .timeline-item.completed::after {
+            content: '✓';
+            position: absolute;
+            left: calc(-3rem + 6px);
+            top: 3px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item p {
+            color: var(--text-muted);
+        }
+
+        /* === FAQ === */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: var(--bg-alt);
+        }
+
+        .faq-question .icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-question .icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        /* === APPLICATION FORM === */
+        .application-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 95, 122, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--primary);
+        }
+
+        .checkbox-item.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .form-success .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-success h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        /* === ACHIEVEMENTS === */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .achievement {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .achievement.unlocked {
+            opacity: 1;
+            filter: none;
+            border-color: var(--accent);
+        }
+
+        .achievement .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .achievement h4 {
+            font-size: 0.9375rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* === CONTACT CTA === */
+        .contact-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .contact-cta h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-cta p {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255,255,255,0.15);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .contact-link:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--bg-alt);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-license {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* === MOBILE === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+                flex-direction: column;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .xp-bar-container {
+                left: 20px;
+                right: 20px;
+                bottom: 10px;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .values-table td:first-child {
+                width: auto;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* === UTILITY === */
+        .text-center { text-align: center; }
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="nav-logo">
+                CCPLC <span>2030</span>
+            </a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="#mission">Mission</a>
+                <a href="#profils">Profils</a>
+                <a href="#quiz">Quiz</a>
+                <a href="#candidater">Candidater</a>
+                <a href="#faq">FAQ</a>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">🌓</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- XP Bar -->
+    <div class="xp-bar-container" id="xpContainer">
+        <div class="xp-header">
+            <div class="xp-level">
+                <div class="xp-level-badge" id="levelBadge">1</div>
+                <span>Niveau <span id="levelNumber">1</span></span>
+            </div>
+            <button class="xp-minimize" onclick="toggleXpBar()">−</button>
+        </div>
+        <div class="xp-details">
+            <div class="xp-bar">
+                <div class="xp-bar-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+            <div class="xp-text"><span id="currentXp">0</span> / <span id="nextLevelXp">100</span> XP</div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="icon">🏆</div>
+        <div class="text">
+            <h4 id="achievementTitle">Succès débloqué !</h4>
+            <p id="achievementDesc">+50 XP</p>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Réserve de recrutement ouverte
+            </div>
+            <h1>
+                Rejoins l'aventure<br>
+                <span class="gradient">citoyenne</span>
+            </h1>
+            <p class="hero-subtitle">
+                Le Collectif Citoyen pour la Participation Libre & Consciente construit la démocratie de demain. 
+                42 postes ETP à horizon 2030 — et toi, tu viens ?
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="number">42</div>
+                    <div class="label">Postes ETP</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">2030</div>
+                    <div class="label">Horizon</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="number">∞</div>
+                    <div class="label">Bénévoles</div>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <a href="#candidater" class="btn btn-primary">
+                    🚀 Rejoindre l'aventure
+                </a>
+                <a href="#quiz" class="btn btn-secondary">
+                    🎯 Découvrir mon profil
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Banner -->
+    <div class="quote-banner">
+        <blockquote>
+            « Parce qu'une démocratie vivante se nourrit d'informations ouvertes et d'actions partagées, 
+            le CCPLC documente, mutualise et transmet tout ce qui favorise l'empowerment citoyen. »
+        </blockquote>
+        <cite>— Charte du CCPLC</cite>
+    </div>
+
+    <!-- Mission Section -->
+    <section id="mission" data-section="mission">
+        <div class="container">
+            <div class="section-header">
+                <h2>Notre mission</h2>
+                <p>Quatre piliers pour construire une démocratie active et éclairée</p>
+            </div>
+            
+            <div class="mission-grid">
+                <div class="mission-card" data-mission="observer" onclick="completeMission('observer')">
+                    <div class="icon">👁️</div>
+                    <h3>OBSERVER</h3>
+                    <p>Veiller à la transparence de l'action publique et produire une veille stratégique sur la participation citoyenne.</p>
+                    <div class="xp-reward">+25 XP</div>
+                </div>
+                
+                <div class="mission-card" data-mission="documenter" onclick="completeMission('documenter')">
+                    <div class="icon">📚</div>
+                    <h3>DOCUMENTER</h3>
+                    <p>Démocratiser l'accès à l'information via des rapports, guides et données sous licence libre CC BY-NC.</p>
+                    <div class="xp-reward">+25 XP</div>
+                </div>
+                
+                <div class="mission-card" data-mission="former" onclick="completeMission('former')">
+                    <div class="icon">🎓</div>
+                    <h3>FORMER</h3>
+                    <p>Proposer ateliers, webinaires et tutoriels pour renforcer le pouvoir d'agir citoyen.</p>
+                    <div class="xp-reward">+25 XP</div>
+                </div>
+                
+                <div class="mission-card" data-mission="connecter" onclick="completeMission('connecter')">
+                    <div class="icon">🔗</div>
+                    <h3>CONNECTER</h3>
+                    <p>Mettre en réseau citoyen·ne·s, associations et collectivités autour de projets concrets.</p>
+                    <div class="xp-reward">+25 XP</div>
+                </div>
+            </div>
+            
+            <p class="text-center mt-2" style="color: var(--text-muted); font-size: 0.875rem;">
+                💡 Clique sur chaque carte pour découvrir nos missions et gagner de l'XP !
+            </p>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="section-alt" id="valeurs" data-section="valeurs">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nos valeurs</h2>
+                <p>Ce qui nous guide au quotidien</p>
+            </div>
+            
+            <table class="values-table">
+                <thead>
+                    <tr>
+                        <th>Principe</th>
+                        <th>Ce que ça signifie concrètement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🔍 Transparence</td>
+                        <td>Toutes nos productions et décisions sont publiques et archivées sur GitHub.</td>
+                    </tr>
+                    <tr>
+                        <td>🤝 Inclusion</td>
+                        <td>Langage clair, accessibilité numérique, supports hors-ligne, facile-à-lire.</td>
+                    </tr>
+                    <tr>
+                        <td>✨ Co-création</td>
+                        <td>Les membres rédigent, commentent et améliorent les contenus ensemble.</td>
+                    </tr>
+                    <tr>
+                        <td>💚 Non-lucrativité</td>
+                        <td>Aucune utilisation commerciale des contenus sans accord explicite.</td>
+                    </tr>
+                    <tr>
+                        <td>📖 Licence ouverte</td>
+                        <td>Tout sous CC BY-NC 4.0 : partage, remix, adaptation OK — sauf usage lucratif.</td>
+                    </tr>
+                    <tr>
+                        <td>💬 Respect</td>
+                        <td>Discussions courtoises, bienveillance, pluralité des points de vue.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Transparency Section -->
+    <section id="transparence" data-section="transparence">
+        <div class="container">
+            <div class="section-header">
+                <h2>Parlons cash</h2>
+                <p>La transparence, c'est aussi sur les sujets qui fâchent</p>
+            </div>
+            
+            <div class="mission-grid">
+                <div class="mission-card" style="cursor: default;">
+                    <div class="icon">📅</div>
+                    <h3>Pas avant 2030</h3>
+                    <p>Les 42 postes ETP ne seront pas disponibles avant 2030. D'ici là, on a le temps de faire connaissance et de construire ensemble.</p>
+                </div>
+                
+                <div class="mission-card" style="cursor: default;">
+                    <div class="icon">💶</div>
+                    <h3>Salaires modestes</h3>
+                    <p>Barèmes du secteur non-marchand belge. Décents mais pas mirobolants. Ce qu'on offre : du sens, une équipe formidable, un impact réel.</p>
+                </div>
+                
+                <div class="mission-card" style="cursor: default;">
+                    <div class="icon">🌱</div>
+                    <h3>Dès maintenant</h3>
+                    <p>Rejoins la communauté comme bénévole, participe aux projets, forme-toi. Quand les postes s'ouvrent, on se connaîtra déjà.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profiles Section -->
+    <section class="section-alt" id="profils" data-section="profils">
+        <div class="container">
+            <div class="section-header">
+                <h2>Tous les profils sont bienvenus</h2>
+                <p>Vraiment tous — et si tu ne te retrouves nulle part, candidate quand même</p>
+            </div>
+            
+            <div class="profiles-accordion">
+                <div class="profile-category" onclick="toggleCategory(this)">
+                    <div class="profile-category-header">
+                        <h3>🔬 Veille, recherche & analyse <span class="count">5</span></h3>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="profile-category-content">
+                        <div class="profile-list">
+                            <span class="profile-item">Chercheur·euse</span>
+                            <span class="profile-item">Documentaliste</span>
+                            <span class="profile-item">Journaliste d'investigation</span>
+                            <span class="profile-item">Analyste de politiques</span>
+                            <span class="profile-item">Bibliothécaire</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-category" onclick="toggleCategory(this)">
+                    <div class="profile-category-header">
+                        <h3>📢 Communication & pédagogie <span class="count">6</span></h3>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="profile-category-content">
+                        <div class="profile-list">
+                            <span class="profile-item">Rédacteur·rice web</span>
+                            <span class="profile-item">Spécialiste langage clair</span>
+                            <span class="profile-item">Community manager</span>
+                            <span class="profile-item">Formateur·rice</span>
+                            <span class="profile-item">Animateur·rice d'ateliers</span>
+                            <span class="profile-item">Vulgarisateur·rice</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-category" onclick="toggleCategory(this)">
+                    <div class="profile-category-header">
+                        <h3>💻 Technique & numérique <span class="count">6</span></h3>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="profile-category-content">
+                        <div class="profile-list">
+                            <span class="profile-item">Développeur·euse web</span>
+                            <span class="profile-item">Spécialiste open data</span>
+                            <span class="profile-item">Designer UX/UI</span>
+                            <span class="profile-item">Admin systèmes</span>
+                            <span class="profile-item">Passionné·e logiciels libres</span>
+                            <span class="profile-item">Expert·e GitHub/Markdown</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-category" onclick="toggleCategory(this)">
+                    <div class="profile-category-header">
+                        <h3>🎨 Création & design <span class="count">5</span></h3>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="profile-category-content">
+                        <div class="profile-list">
+                            <span class="profile-item">Graphiste</span>
+                            <span class="profile-item">Vidéaste</span>
+                            <span class="profile-item">Podcasteur·euse</span>
+                            <span class="profile-item">Photographe</span>
+                            <span class="profile-item">Artiste engagé·e</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-category" onclick="toggleCategory(this)">
+                    <div class="profile-category-header">
+                        <h3>🤲 Animation & terrain <span class="count">5</span></h3>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="profile-category-content">
+                        <div class="profile-list">
+                            <span class="profile-item">Facilitateur·rice</span>
+                            <span class="profile-item">Médiateur·rice</span>
+                            <span class="profile-item">Organisateur·rice communautaire</span>
+                            <span class="profile-item">Travailleur·euse social·e</span>
+                            <span class="profile-item">Militant·e associatif</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-category" onclick="toggleCategory(this)">
+                    <div class="profile-category-header">
+                        <h3>⚡ Et aussi... <span class="count">6</span></h3>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="profile-category-content">
+                        <div class="profile-list">
+                            <span class="profile-item">Traducteur·rice</span>
+                            <span class="profile-item">En reconversion</span>
+                            <span class="profile-item">Étudiant·e</span>
+                            <span class="profile-item">Retraité·e actif·ve</span>
+                            <span class="profile-item">Autodidacte</span>
+                            <span class="profile-item">Toi, avec ton profil unique</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" data-section="quiz">
+        <div class="container">
+            <div class="section-header">
+                <h2>🎯 Découvre ton profil</h2>
+                <p>Un petit quiz pour voir comment tu pourrais contribuer</p>
+            </div>
+            
+            <div class="quiz-container">
+                <div class="quiz-progress" id="quizProgress">
+                    <div class="quiz-progress-step"></div>
+                    <div class="quiz-progress-step"></div>
+                    <div class="quiz-progress-step"></div>
+                    <div class="quiz-progress-step"></div>
+                    <div class="quiz-progress-step"></div>
+                </div>
+                
+                <!-- Question 1 -->
+                <div class="quiz-question active" data-question="1">
+                    <h3>Question 1/5</h3>
+                    <p>Qu'est-ce qui t'attire le plus dans un projet collectif ?</p>
+                    <div class="quiz-options">
+                        <label class="quiz-option" onclick="selectOption(this, 'analyse')">
+                            <input type="radio" name="q1" value="analyse">
+                            <span class="radio"></span>
+                            <span>Comprendre, analyser, décrypter</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'communication')">
+                            <input type="radio" name="q1" value="communication">
+                            <span class="radio"></span>
+                            <span>Expliquer, vulgariser, transmettre</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'technique')">
+                            <input type="radio" name="q1" value="technique">
+                            <span class="radio"></span>
+                            <span>Construire, coder, automatiser</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'terrain')">
+                            <input type="radio" name="q1" value="terrain">
+                            <span class="radio"></span>
+                            <span>Rencontrer, animer, mobiliser</span>
+                        </label>
+                    </div>
+                    <div class="quiz-nav">
+                        <div></div>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="btnNext1" disabled>Suivant →</button>
+                    </div>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="quiz-question" data-question="2">
+                    <h3>Question 2/5</h3>
+                    <p>Quel est ton rapport au numérique ?</p>
+                    <div class="quiz-options">
+                        <label class="quiz-option" onclick="selectOption(this, 'tech-expert')">
+                            <input type="radio" name="q2" value="tech-expert">
+                            <span class="radio"></span>
+                            <span>Je code, j'auto-héberge, je suis dans le libre</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'tech-user')">
+                            <input type="radio" name="q2" value="tech-user">
+                            <span class="radio"></span>
+                            <span>À l'aise avec les outils classiques</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'tech-learner')">
+                            <input type="radio" name="q2" value="tech-learner">
+                            <span class="radio"></span>
+                            <span>Je veux apprendre, j'ai les bases</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'tech-minimal')">
+                            <input type="radio" name="q2" value="tech-minimal">
+                            <span class="radio"></span>
+                            <span>Le minimum, je préfère le terrain</span>
+                        </label>
+                    </div>
+                    <div class="quiz-nav">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Précédent</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" disabled>Suivant →</button>
+                    </div>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="quiz-question" data-question="3">
+                    <h3>Question 3/5</h3>
+                    <p>Quel temps pourrais-tu consacrer au projet ?</p>
+                    <div class="quiz-options">
+                        <label class="quiz-option" onclick="selectOption(this, 'time-full')">
+                            <input type="radio" name="q3" value="time-full">
+                            <span class="radio"></span>
+                            <span>Je cherche un emploi à temps plein</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'time-part')">
+                            <input type="radio" name="q3" value="time-part">
+                            <span class="radio"></span>
+                            <span>Quelques heures par semaine en bénévole</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'time-occasional')">
+                            <input type="radio" name="q3" value="time-occasional">
+                            <span class="radio"></span>
+                            <span>Ponctuellement, sur des projets précis</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'time-unknown')">
+                            <input type="radio" name="q3" value="time-unknown">
+                            <span class="radio"></span>
+                            <span>Je ne sais pas encore, ça dépend</span>
+                        </label>
+                    </div>
+                    <div class="quiz-nav">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Précédent</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" disabled>Suivant →</button>
+                    </div>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="quiz-question" data-question="4">
+                    <h3>Question 4/5</h3>
+                    <p>Quel thème te passionne le plus ?</p>
+                    <div class="quiz-options">
+                        <label class="quiz-option" onclick="selectOption(this, 'theme-demo')">
+                            <input type="radio" name="q4" value="theme-demo">
+                            <span class="radio"></span>
+                            <span>Démocratie, participation citoyenne</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'theme-media')">
+                            <input type="radio" name="q4" value="theme-media">
+                            <span class="radio"></span>
+                            <span>Éducation aux médias, fact-checking</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'theme-open')">
+                            <input type="radio" name="q4" value="theme-open">
+                            <span class="radio"></span>
+                            <span>Open data, logiciels libres, communs</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'theme-social')">
+                            <input type="radio" name="q4" value="theme-social">
+                            <span class="radio"></span>
+                            <span>Inclusion, justice sociale, empowerment</span>
+                        </label>
+                    </div>
+                    <div class="quiz-nav">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Précédent</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" disabled>Suivant →</button>
+                    </div>
+                </div>
+                
+                <!-- Question 5 -->
+                <div class="quiz-question" data-question="5">
+                    <h3>Question 5/5</h3>
+                    <p>Comment préfères-tu travailler ?</p>
+                    <div class="quiz-options">
+                        <label class="quiz-option" onclick="selectOption(this, 'work-solo')">
+                            <input type="radio" name="q5" value="work-solo">
+                            <span class="radio"></span>
+                            <span>En autonomie sur des projets définis</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'work-team')">
+                            <input type="radio" name="q5" value="work-team">
+                            <span class="radio"></span>
+                            <span>En équipe, en co-construction</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'work-lead')">
+                            <input type="radio" name="q5" value="work-lead">
+                            <span class="radio"></span>
+                            <span>En coordination, j'aime organiser</span>
+                        </label>
+                        <label class="quiz-option" onclick="selectOption(this, 'work-flex')">
+                            <input type="radio" name="q5" value="work-flex">
+                            <span class="radio"></span>
+                            <span>Ça dépend du contexte, je m'adapte</span>
+                        </label>
+                    </div>
+                    <div class="quiz-nav">
+                        <button class="btn btn-secondary" onclick="prevQuestion()">← Précédent</button>
+                        <button class="btn btn-accent" onclick="showQuizResult()" disabled>Voir mon profil 🎉</button>
+                    </div>
+                </div>
+                
+                <!-- Result -->
+                <div class="quiz-result" id="quizResult">
+                    <div class="profile-match" id="matchScore">92%</div>
+                    <h3>Tu as le profil parfait !</h3>
+                    <p>D'après tes réponses, voici les contributions qui te correspondraient le mieux :</p>
+                    <div class="profiles-list" id="matchedProfiles">
+                        <!-- Filled by JS -->
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                        Mais rappelle-toi : tous les profils sont bienvenus. Ce quiz est indicatif, pas limitatif !
+                    </p>
+                    <a href="#candidater" class="btn btn-primary">Rejoindre l'aventure →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="section-alt" id="parcours" data-section="parcours">
+        <div class="container">
+            <div class="section-header">
+                <h2>Le parcours après ta candidature</h2>
+                <p>Ce qui se passe une fois que tu as fait le premier pas</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>1. On te répond</h4>
+                    <p>Toujours. Même si ça prend quelques jours. Personne ne reste sans nouvelles.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>2. On échange</h4>
+                    <p>Par email, par visio, autour d'un café si tu es en Belgique. On fait connaissance, sans pression.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>3. On t'intègre à la communauté</h4>
+                    <p>Accès aux canaux de discussion, invitation aux événements, possibilité de contribuer comme bénévole.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>4. On construit ensemble</h4>
+                    <p>D'ici 2030, on aura le temps de travailler sur des projets, de voir si on fonctionne bien ensemble.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>5. Quand les postes s'ouvrent</h4>
+                    <p>Les membres actifs de la réserve seront naturellement prioritaires, avec un processus transparent.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Section -->
+    <section id="candidater" data-section="candidater">
+        <div class="container">
+            <div class="section-header">
+                <h2>Rejoins la réserve</h2>
+                <p>Pas de formulaire à rallonge. On veut te connaître, pas t'évaluer.</p>
+            </div>
+            
+            <div class="application-form" id="applicationForm">
+                <form onsubmit="submitApplication(event)">
+                    <div class="form-group">
+                        <label for="name">Comment on t'appelle ? *</label>
+                        <input type="text" id="name" required placeholder="Ton prénom ou pseudo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Ton email *</label>
+                        <input type="email" id="email" required placeholder="pour qu'on puisse te répondre">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Ce qui t'intéresse</label>
+                        <div class="checkbox-group" id="interestGroup">
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" name="interest" value="emploi">
+                                Emploi en 2030
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" name="interest" value="benevole">
+                                Bénévolat maintenant
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" name="interest" value="formations">
+                                Formations gratuites
+                            </label>
+                            <label class="checkbox-item" onclick="toggleCheckbox(this)">
+                                <input type="checkbox" name="interest" value="communaute">
+                                Juste suivre
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Raconte-nous un peu</label>
+                        <textarea id="message" placeholder="Pourquoi ça te parle ? Ce que tu aimerais faire ? Ce que tu sais faire ? (format libre, pas de pression)"></textarea>
+                        <p class="form-hint">Pas besoin de formules pompeuses, on préfère l'authenticité.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cv">Un lien vers ton CV/portfolio (optionnel)</label>
+                        <input type="url" id="cv" placeholder="https://...">
+                        <p class="form-hint">LinkedIn, GitHub, site perso, PDF en ligne... ce que tu veux.</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        🚀 Envoyer ma candidature
+                    </button>
+                </form>
+                
+                <div class="form-success" id="formSuccess">
+                    <div class="icon">🎉</div>
+                    <h3>C'est envoyé !</h3>
+                    <p>On te répond très vite. En attendant, suis-nous sur Bluesky et explore le site !</p>
+                    <a href="#achievements" class="btn btn-accent mt-2">Voir mes succès →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section-alt" id="faq" data-section="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Questions fréquentes</h2>
+                <p>Les vraies questions qu'on nous pose</p>
+            </div>
+            
+            <div class="faq-list">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span>Je n'ai pas d'expérience dans le secteur associatif, c'est un problème ?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Pas du tout. On cherche des personnes motivées, pas des CV parfaits. Ton regard neuf peut être une richesse.
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span>Je ne connais pas GitHub/Markdown/Jekyll, c'est grave ?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Non. On forme. On accompagne. Et il y a plein de façons de contribuer sans toucher à ces outils.
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span>Je suis en Flandre/à l'étranger, c'est possible ?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Oui. On travaille beaucoup en ligne, et la diversité géographique enrichit nos perspectives.
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span>Je ne peux donner que 2h par mois, ça sert à quelque chose ?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolument. Deux heures bien utilisées, c'est une relecture, une traduction, un partage, une idée. Tout compte.
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span>Pourquoi attendre 2030 ?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Parce que les financements prennent du temps. Parce qu'on veut construire quelque chose de solide. Parce qu'on préfère prendre le temps de bien faire plutôt que de se précipiter.
+                    </div>
+                </div>
+                
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-question">
+                        <span>Et si je change d'avis d'ici là ?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Aucun souci. La réserve n'est pas un engagement contraignant. La vie change, les envies évoluent, on comprend ça parfaitement.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" data-section="achievements">
+        <div class="container">
+            <div class="section-header">
+                <h2>🏆 Tes succès</h2>
+                <p>Explore le site et débloque des achievements !</p>
+            </div>
+            
+            <div class="achievements-grid" id="achievementsGrid">
+                <div class="achievement" data-achievement="explorer">
+                    <div class="icon">🗺️</div>
+                    <h4>Explorateur·rice</h4>
+                    <p>Scroll jusqu'en bas</p>
+                </div>
+                <div class="achievement" data-achievement="curieux">
+                    <div class="icon">🔍</div>
+                    <h4>Curieux·se</h4>
+                    <p>Découvre les 4 missions</p>
+                </div>
+                <div class="achievement" data-achievement="quizmaster">
+                    <div class="icon">🎯</div>
+                    <h4>Quiz Master</h4>
+                    <p>Termine le quiz</p>
+                </div>
+                <div class="achievement" data-achievement="candidat">
+                    <div class="icon">🚀</div>
+                    <h4>Candidat·e</h4>
+                    <p>Envoie ta candidature</p>
+                </div>
+                <div class="achievement" data-achievement="nocturne">
+                    <div class="icon">🌙</div>
+                    <h4>Nocturne</h4>
+                    <p>Active le mode sombre</p>
+                </div>
+                <div class="achievement" data-achievement="veteran">
+                    <div class="icon">⭐</div>
+                    <h4>Vétéran·e</h4>
+                    <p>Atteins le niveau 5</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="section-alt">
+        <div class="container">
+            <div class="contact-cta">
+                <h3>Prêt·e à nous rejoindre ?</h3>
+                <p>Les candidatures spontanées sont PLUS que bienvenues. On adore être surpris.</p>
+                <div class="contact-links">
+                    <a href="mailto:rickroll.again@haha.com" class="contact-link">
+                        ✉️ rickroll.again@haha.com
+                    </a>
+                    <a href="https://ouaisfieu.github.io/tech/ccplc/" target="_blank" class="contact-link">
+                        🌐 ouaisfieu.github.io
+                    </a>
+                    <a href="https://bsky.app/profile/ouaisfieu.bsky.social" target="_blank" class="contact-link">
+                        🦋 @ouaisfieu.bsky.social
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">CCPLC</div>
+            <div class="footer-links">
+                <a href="https://ouaisfieu.github.io/tech/ccplc/" target="_blank">Documentation</a>
+                <a href="https://github.com/ouaisfieu" target="_blank">GitHub</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <div class="footer-license">
+                CC BY-NC 4.0 — Décembre 2025
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // === STATE ===
+        let state = {
+            xp: 0,
+            level: 1,
+            achievements: [],
+            completedMissions: [],
+            quizAnswers: {},
+            currentQuestion: 1,
+            theme: 'light'
+        };
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('ccplc_state');
+            if (saved) {
+                state = { ...state, ...JSON.parse(saved) };
+                updateUI();
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('ccplc_state', JSON.stringify(state));
+        }
+
+        // === XP SYSTEM ===
+        function addXP(amount, reason) {
+            state.xp += amount;
+            
+            // Level up check
+            const xpForLevel = level => level * 100;
+            while (state.xp >= xpForLevel(state.level)) {
+                state.xp -= xpForLevel(state.level);
+                state.level++;
+                showAchievement(`Niveau ${state.level} !`, `Tu progresses dans l'aventure CCPLC`);
+                
+                if (state.level >= 5 && !state.achievements.includes('veteran')) {
+                    unlockAchievement('veteran');
+                }
+            }
+            
+            updateXPBar();
+            saveState();
+        }
+
+        function updateXPBar() {
+            const xpForNextLevel = state.level * 100;
+            const percentage = (state.xp / xpForNextLevel) * 100;
+            
+            document.getElementById('xpFill').style.width = percentage + '%';
+            document.getElementById('currentXp').textContent = state.xp;
+            document.getElementById('nextLevelXp').textContent = xpForNextLevel;
+            document.getElementById('levelBadge').textContent = state.level;
+            document.getElementById('levelNumber').textContent = state.level;
+        }
+
+        function toggleXpBar() {
+            document.getElementById('xpContainer').classList.toggle('minimized');
+        }
+
+        // === ACHIEVEMENTS ===
+        function unlockAchievement(id) {
+            if (state.achievements.includes(id)) return;
+            
+            state.achievements.push(id);
+            
+            const achievementEl = document.querySelector(`[data-achievement="${id}"]`);
+            if (achievementEl) {
+                achievementEl.classList.add('unlocked');
+            }
+            
+            const titles = {
+                'explorer': 'Explorateur·rice',
+                'curieux': 'Curieux·se',
+                'quizmaster': 'Quiz Master',
+                'candidat': 'Candidat·e',
+                'nocturne': 'Nocturne',
+                'veteran': 'Vétéran·e'
+            };
+            
+            showAchievement(titles[id] || 'Succès débloqué !', '+50 XP');
+            addXP(50, 'achievement');
+            saveState();
+        }
+
+        function showAchievement(title, desc) {
+            const popup = document.getElementById('achievementPopup');
+            document.getElementById('achievementTitle').textContent = title;
+            document.getElementById('achievementDesc').textContent = desc;
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        function updateAchievementsUI() {
+            state.achievements.forEach(id => {
+                const el = document.querySelector(`[data-achievement="${id}"]`);
+                if (el) el.classList.add('unlocked');
+            });
+        }
+
+        // === MISSIONS ===
+        function completeMission(id) {
+            if (state.completedMissions.includes(id)) return;
+            
+            state.completedMissions.push(id);
+            
+            const card = document.querySelector(`[data-mission="${id}"]`);
+            if (card) card.classList.add('completed');
+            
+            addXP(25, 'mission');
+            
+            if (state.completedMissions.length >= 4) {
+                unlockAchievement('curieux');
+            }
+            
+            saveState();
+        }
+
+        function updateMissionsUI() {
+            state.completedMissions.forEach(id => {
+                const card = document.querySelector(`[data-mission="${id}"]`);
+                if (card) card.classList.add('completed');
+            });
+        }
+
+        // === QUIZ ===
+        function selectOption(el, value) {
+            const question = el.closest('.quiz-question');
+            question.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+            
+            const qNum = question.dataset.question;
+            state.quizAnswers[qNum] = value;
+            
+            question.querySelector('.quiz-nav button:last-child').disabled = false;
+        }
+
+        function nextQuestion() {
+            const questions = document.querySelectorAll('.quiz-question');
+            const progress = document.querySelectorAll('.quiz-progress-step');
+            
+            questions[state.currentQuestion - 1].classList.remove('active');
+            progress[state.currentQuestion - 1].classList.add('completed');
+            
+            state.currentQuestion++;
+            
+            if (state.currentQuestion <= 5) {
+                questions[state.currentQuestion - 1].classList.add('active');
+                progress[state.currentQuestion - 1].classList.add('active');
+            }
+            
+            saveState();
+        }
+
+        function prevQuestion() {
+            const questions = document.querySelectorAll('.quiz-question');
+            const progress = document.querySelectorAll('.quiz-progress-step');
+            
+            questions[state.currentQuestion - 1].classList.remove('active');
+            progress[state.currentQuestion - 1].classList.remove('active');
+            
+            state.currentQuestion--;
+            
+            questions[state.currentQuestion - 1].classList.add('active');
+            progress[state.currentQuestion - 1].classList.remove('completed');
+        }
+
+        function showQuizResult() {
+            document.querySelectorAll('.quiz-question').forEach(q => q.classList.remove('active'));
+            document.getElementById('quizResult').classList.add('active');
+            
+            // Calculate result
+            const profiles = [];
+            if (state.quizAnswers['1'] === 'analyse') profiles.push('Veille & Recherche', 'Analyse de données');
+            if (state.quizAnswers['1'] === 'communication') profiles.push('Communication', 'Pédagogie');
+            if (state.quizAnswers['1'] === 'technique') profiles.push('Développement', 'Open Data');
+            if (state.quizAnswers['1'] === 'terrain') profiles.push('Animation', 'Facilitation');
+            
+            if (state.quizAnswers['2'] === 'tech-expert') profiles.push('Logiciels libres', 'GitHub');
+            if (state.quizAnswers['4'] === 'theme-demo') profiles.push('Démocratie participative');
+            if (state.quizAnswers['4'] === 'theme-media') profiles.push('Éducation aux médias');
+            if (state.quizAnswers['4'] === 'theme-open') profiles.push('Communs numériques');
+            if (state.quizAnswers['4'] === 'theme-social') profiles.push('Inclusion sociale');
+            
+            const uniqueProfiles = [...new Set(profiles)].slice(0, 5);
+            const matchScore = 75 + Math.floor(Math.random() * 20);
+            
+            document.getElementById('matchScore').textContent = matchScore + '%';
+            document.getElementById('matchedProfiles').innerHTML = uniqueProfiles
+                .map(p => `<span class="profile-tag">${p}</span>`)
+                .join('');
+            
+            unlockAchievement('quizmaster');
+            addXP(100, 'quiz');
+        }
+
+        // === NAVIGATION ===
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            state.theme = newTheme;
+            saveState();
+            
+            if (newTheme === 'dark') {
+                unlockAchievement('nocturne');
+            }
+        }
+
+        // === UI INTERACTIONS ===
+        function toggleCategory(el) {
+            el.classList.toggle('open');
+        }
+
+        function toggleFaq(el) {
+            el.classList.toggle('open');
+        }
+
+        function toggleCheckbox(el) {
+            el.classList.toggle('selected');
+        }
+
+        function submitApplication(e) {
+            e.preventDefault();
+            
+            document.querySelector('#applicationForm form').style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+            
+            unlockAchievement('candidat');
+            addXP(200, 'application');
+        }
+
+        // === SCROLL PROGRESS ===
+        function updateScrollProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Check explorer achievement
+            if (progress > 90 && !state.achievements.includes('explorer')) {
+                unlockAchievement('explorer');
+            }
+        }
+
+        // === NAVIGATION HIGHLIGHTING ===
+        function updateNavHighlight() {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                const id = section.getAttribute('id');
+                const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+                
+                if (link) {
+                    if (scrollPos >= top && scrollPos < bottom) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // === UPDATE UI ===
+        function updateUI() {
+            updateXPBar();
+            updateAchievementsUI();
+            updateMissionsUI();
+            
+            if (state.theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // === INIT ===
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            
+            window.addEventListener('scroll', () => {
+                updateScrollProgress();
+                updateNavHighlight();
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    // Close mobile menu
+                    document.getElementById('navLinks').classList.remove('open');
+                });
+            });
+            
+            // Initialize quiz progress
+            document.querySelector('.quiz-progress-step').classList.add('active');
+        });
+    </script>
+</body>
+</html>
