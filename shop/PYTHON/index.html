@@ -57,12 +57,16 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.5
 .ins-i.g{border-color:#22c55e}.ins-i.b{border-color:#ef4444}.ins-i.t{border-color:#eab308}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;padding:0.75rem}
 .modal.open{display:flex}
-.mbox{background:var(--card);border:2px solid var(--accent);border-radius:8px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto;padding:0.75rem}
+.mbox{background:var(--card);border:2px solid var(--accent);border-radius:8px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto;padding:0.75rem}
 .mbox h3{color:var(--accent);margin-bottom:0.75rem;text-align:center;font-size:0.95rem}
 .preview{background:var(--bg);border-radius:5px;padding:0.4rem;font-size:0.55rem;max-height:120px;overflow-y:auto;margin-bottom:0.75rem;font-family:monospace;white-space:pre-wrap}
-.exp-btns{display:flex;flex-direction:column;gap:0.4rem}
-.exp-btns .btn{padding:0.6rem;font-size:0.75rem;text-align:center}
-.btn-gh{background:linear-gradient(135deg,#238636,#2ea043);border:none;color:#fff}
+.exp-tabs{display:flex;gap:0.25rem;margin-bottom:0.5rem}
+.tab{flex:1;padding:0.4rem;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:4px 4px 0 0;font-size:0.7rem;cursor:pointer}
+.tab.on{background:var(--accent);color:var(--bg);border-bottom-color:var(--accent)}
+.edit-area{width:100%;min-height:200px;padding:0.5rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:0 0 5px 5px;font-size:0.7rem;font-family:monospace;resize:vertical;margin-bottom:0.5rem}
+.exp-btns{display:flex;gap:0.3rem;flex-wrap:wrap}
+.exp-btns .btn{padding:0.5rem 0.75rem;font-size:0.7rem;flex:1}
+.btn-gh{background:var(--accent);color:var(--bg);border-color:var(--accent)}
 @media(min-width:500px){.wrap{height:55vw;max-height:400px}.wheel{max-width:380px;max-height:380px}.dom{width:72px;height:72px}.dom-i{font-size:1.4rem}.center{width:75px;height:75px}.fields{grid-template-columns:1fr 1fr}}
 @media(min-width:800px){.main{display:flex;gap:1rem;padding:1rem}.wrap{flex:1;height:420px;max-height:none}.wheel{max-width:400px;max-height:400px}.side{width:320px}.panel,.ins{border:1px solid var(--border);border-radius:6px;margin-bottom:0.75rem}}
 </style>
@@ -110,11 +114,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.5
 <div class="modal" id="M" onclick="clEx(event)">
 <div class="mbox" onclick="event.stopPropagation()">
 <h3>📤 Exporter</h3>
-<div class="preview" id="prev"></div>
+<div class="exp-tabs">
+<button class="tab on" onclick="setTab('md')">📝 MD</button>
+<button class="tab" onclick="setTab('json')">💾 JSON</button>
+<button class="tab" onclick="setTab('html')">🌐 HTML</button>
+</div>
+<textarea class="edit-area" id="editArea" placeholder="Contenu à exporter..."></textarea>
 <div class="exp-btns">
-<button class="btn btn-gh" onclick="exGH()">🚀 GitHub Pages HTML</button>
-<button class="btn" onclick="exJS()">💾 JSON</button>
-<button class="btn" onclick="exMD()">📝 Markdown</button>
+<button class="btn btn-gh" onclick="dlEdit()">⬇️ Télécharger</button>
+<button class="btn" onclick="copyEdit()">📋 Copier</button>
 <button class="btn" onclick="clEx()">✕ Fermer</button>
 </div>
 </div>
@@ -132,7 +140,7 @@ const D=[
 {id:'sens',n:'Sens',i:'✨',c:'#a855f7'},
 {id:'impact',n:'Impact',i:'🌍',c:'#84cc16'}
 ];
-let dt={d:{},u:null},cur=null,spc=null,rot=0,drag=false,sA=0,sR=0;
+let dt={d:{},u:null},cur=null,spc=null,rot=0,drag=false,sA=0,sR=0,curTab='md';
 
 function init(){
 ld();
@@ -229,19 +237,46 @@ document.getElementById('I').innerHTML=h;
 function T(t){document.body.dataset.theme=t;document.querySelectorAll('.ctrls .btn').forEach((b,i)=>b.classList.toggle('on',i===['dark','light','matrix'].indexOf(t)))}
 
 function openEx(){
-const sc=D.map(x=>dt.d[x.id]?.s||5),av=sc.reduce((a,b)=>a+b,0)/sc.length;
-let p='ROUE DE VIE - Score: '+av.toFixed(1)+'/10\n'+'─'.repeat(28)+'\n';
-D.forEach(x=>{const s=dt.d[x.id]?.s||5;p+=x.i+' '+x.n.padEnd(10)+' ['+'█'.repeat(s)+'░'.repeat(10-s)+'] '+s+'/10\n'});
-document.getElementById('prev').textContent=p;
+curTab='md';
+document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===0));
+genContent();
 document.getElementById('M').classList.add('open');
 }
 
-function clEx(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('M').classList.remove('open')}
+function setTab(t){
+curTab=t;
+document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',
+(t==='md'&&b.textContent.includes('MD'))||
+(t==='json'&&b.textContent.includes('JSON'))||
+(t==='html'&&b.textContent.includes('HTML'))
+));
+genContent();
+}
 
-function exGH(){
+function genContent(){
 const sc=D.map(x=>dt.d[x.id]?.s||5),av=sc.reduce((a,b)=>a+b,0)/sc.length,da=new Date().toLocaleDateString('fr-FR');
-const h=`<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+let c='';
+if(curTab==='md'){
+c='# 🎯 Roue de Vie\n\n';
+c+='**Score Global: '+av.toFixed(1)+'/10** | '+da+'\n\n---\n\n';
+D.forEach(x=>{
+const dd=dt.d[x.id]||{s:5};
+const bar='█'.repeat(dd.s)+'░'.repeat(10-dd.s);
+c+='## '+x.i+' '+x.n+' ['+bar+'] '+dd.s+'/10\n\n';
+if(dd.f1)c+='**Situation:** '+dd.f1+'\n\n';
+if(dd.f2)c+='**Objectif:** '+dd.f2+'\n\n';
+if(dd.f3)c+='**Action:** '+dd.f3+'\n\n';
+if(dd.f4)c+='**Obstacles:** '+dd.f4+'\n\n';
+c+='---\n\n';
+});
+}else if(curTab==='json'){
+c=JSON.stringify(dt,null,2);
+}else if(curTab==='html'){
+c=`<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ma Roue de Vie</title>
 <meta name="description" content="Mon diagnostic personnel - Score: ${av.toFixed(1)}/10">
 <style>
@@ -266,25 +301,55 @@ h1{font-size:1.8rem;color:#c4b5fd}
 .cta h2{color:#c4b5fd;margin-bottom:0.75rem}
 .cta-btn{display:inline-block;padding:0.9rem 1.8rem;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;text-decoration:none;border-radius:6px;font-weight:bold}
 footer{text-align:center;padding:1.5rem;opacity:0.5;font-size:0.7rem}
-</style></head><body><div class="c">
+</style>
+</head>
+<body>
+<div class="c">
 <header><h1>🎯 Ma Roue de Vie</h1><p>${da}</p></header>
 <div class="hero"><div class="big">${av.toFixed(1)}/10</div><div>Score global</div></div>
-<div class="grid">${D.map(x=>{const dd=dt.d[x.id]||{s:5},s=dd.s,col=s>=7?'#22c55e':s>=4?'#eab308':'#ef4444';
-return `<div class="card" style="border-color:${dd.c||x.c}"><div class="card-h"><span class="card-i">${x.i}</span><span class="card-n">${x.n}</span><span class="card-s" style="color:${col}">${s}/10</span></div><div class="bar"><div class="fill" style="width:${s*10}%;background:${col}"></div></div>${dd.f1?`<p><b>Situation:</b> ${dd.f1}</p>`:''}${dd.f2?`<p><b>Objectif:</b> ${dd.f2}</p>`:''}${dd.f3?`<p><b>Action:</b> ${dd.f3}</p>`:''}</div>`}).join('')}</div>
-<div class="cta"><h2>🚀 Créez votre diagnostic</h2><p>Suivez votre évolution personnelle</p><a href="#" class="cta-btn">Découvrir →</a></div>
-<footer>Généré par Roue de Vie • ${da}</footer></div></body></html>`;
-dl(h,'index.html','text/html');
-alert('✅ index.html téléchargé!\\n\\n📌 GitHub Pages:\\n1. Créez un repo\\n2. Uploadez index.html\\n3. Settings → Pages → Deploy');
+<div class="grid">
+${D.map(x=>{
+const dd=dt.d[x.id]||{s:5},s=dd.s,col=s>=7?'#22c55e':s>=4?'#eab308':'#ef4444';
+return `<div class="card" style="border-color:${dd.c||x.c}">
+<div class="card-h">
+<span class="card-i">${x.i}</span>
+<span class="card-n">${x.n}</span>
+<span class="card-s" style="color:${col}">${s}/10</span>
+</div>
+<div class="bar"><div class="fill" style="width:${s*10}%;background:${col}"></div></div>
+${dd.f1?'<p><b>Situation:</b> '+dd.f1+'</p>':''}
+${dd.f2?'<p><b>Objectif:</b> '+dd.f2+'</p>':''}
+${dd.f3?'<p><b>Action:</b> '+dd.f3+'</p>':''}
+</div>`;
+}).join('\n')}
+</div>
+<div class="cta">
+<h2>🚀 Créez votre diagnostic</h2>
+<p>Suivez votre évolution personnelle</p>
+<a href="#" class="cta-btn">Découvrir →</a>
+</div>
+<footer>Généré par Roue de Vie • ${da}</footer>
+</div>
+</body>
+</html>`;
+}
+document.getElementById('editArea').value=c;
 }
 
-function exJS(){dl(JSON.stringify(dt,null,2),'roue-vie.json','application/json')}
+function clEx(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('M').classList.remove('open')}
 
-function exMD(){
-const sc=D.map(x=>dt.d[x.id]?.s||5),av=sc.reduce((a,b)=>a+b,0)/sc.length;
-let m='# 🎯 Roue de Vie\\n\\n**Score: '+av.toFixed(1)+'/10**\\n\\n---\\n\\n';
-D.forEach(x=>{const dd=dt.d[x.id]||{s:5};m+='## '+x.i+' '+x.n+' - '+dd.s+'/10\\n\\n';
-if(dd.f1)m+='**Situation:** '+dd.f1+'\\n\\n';if(dd.f2)m+='**Objectif:** '+dd.f2+'\\n\\n';m+='---\\n\\n'});
-dl(m,'roue-vie.md','text/markdown');
+function dlEdit(){
+const c=document.getElementById('editArea').value;
+const ext=curTab==='md'?'.md':curTab==='json'?'.json':'.html';
+const type=curTab==='md'?'text/markdown':curTab==='json'?'application/json':'text/html';
+dl(c,'roue-vie'+ext,type);
+}
+
+function copyEdit(){
+const area=document.getElementById('editArea');
+area.select();
+document.execCommand('copy');
+alert('📋 Copié!');
 }
 
 function dl(c,n,t){const b=new Blob([c],{type:t}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();document.body.removeChild(a)}
