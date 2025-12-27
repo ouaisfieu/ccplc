@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mySPOT v329.02 - STIB Network Control</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --bg: #0a0e1a;
+      --card: #131824;
+      --accent: #00ff88;
+      --accent-dim: #00aa55;
+      --text: #e0e6ed;
+      --text-dim: #8b92a0;
+      --border: #1e2740;
+      --danger: #ff4466;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .glitch {
+      animation: glitch 3s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 100% { text-shadow: 0 0 1px var(--accent); }
+      25% { text-shadow: -2px 0 var(--accent), 2px 2px var(--danger); }
+      50% { text-shadow: 2px -2px var(--danger), -2px 2px var(--accent); }
+      75% { text-shadow: -2px -2px var(--accent), 2px 0 var(--danger); }
+    }
+
+    header {
+      background: var(--card);
+      border-bottom: 2px solid var(--accent);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      letter-spacing: 0.3rem;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .version {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-left: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .tab:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tab.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .toolbar {
+      background: var(--card);
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .btn {
+      padding: 0.75rem 1.25rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.active {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .import-zone {
+      background: var(--card);
+      border: 2px dashed var(--border);
+      padding: 3rem;
+      margin: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .import-zone:hover {
+      border-color: var(--accent);
+    }
+
+    .import-zone.dragging {
+      border-color: var(--accent);
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    .generator {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+
+    .generator-input {
+      width: 100%;
+      padding: 1rem;
+      background: var(--card);
+      border: 2px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s;
+    }
+
+    .generator-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .generate-btn {
+      width: 100%;
+      padding: 1.25rem;
+      background: var(--accent);
+      border: none;
+      color: var(--bg);
+      font-family: inherit;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+
+    .generate-btn:hover {
+      opacity: 0.8;
+    }
+
+    .generated-card {
+      background: var(--card);
+      border: 2px solid var(--accent);
+      padding: 2rem;
+      margin-top: 2rem;
+      animation: slideIn 0.5s;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .generated-card h2 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .generated-card p {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .generated-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .spot-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .spot-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .spot-card.claimed {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, var(--card) 0%, rgba(0, 255, 136, 0.05) 100%);
+    }
+
+    .spot-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .spot-id {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
+    }
+
+    .spot-coords {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin: 0.5rem 0;
+    }
+
+    .claimed-by {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border: 2px solid var(--accent);
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: var(--bg);
+      font-family: inherit;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .export-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .export-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .export-card:hover {
+      border-color: var(--accent);
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    footer {
+      background: var(--card);
+      border-top: 2px solid var(--accent);
+      padding: 2rem;
+      margin-top: 3rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="glitch">my<span style="color: var(--danger)">SPOT</span><span class="version">v329.02</span></h1>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('network')">🗺️ Network</div>
+      <div class="tab" onclick="switchTab('generator')">⚡ Generator</div>
+      <div class="tab" onclick="switchTab('import')">📥 Import</div>
+      <div class="tab" onclick="switchTab('export')">📤 Export</div>
+    </div>
+  </header>
+
+  <!-- NETWORK TAB -->
+  <div id="tab-network" class="tab-content active">
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search stops..." autocomplete="off">
+      </div>
+      <button class="btn active" data-filter="all">All</button>
+      <button class="btn" data-filter="claimed">Claimed</button>
+      <button class="btn" data-filter="unclaimed">Free</button>
+    </div>
+
+    <div style="padding: 1rem 2rem; background: var(--card); border-bottom: 1px solid var(--border);">
+      <div class="stats">
+        <div style="text-align: center;">
+          <div class="stat-value" id="totalStops">0</div>
+          <div class="stat-label">Stops</div>
+        </div>
+        <div style="text-align: center;">
+          <div class="stat-value" id="claimedCount">0</div>
+          <div class="stat-label">Claimed</div>
+        </div>
+        <div style="text-align: center;">
+          <div class="stat-value" id="yourClaims">0</div>
+          <div class="stat-label">Your claims</div>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div class="board" id="board"></div>
+    </main>
+  </div>
+
+  <!-- GENERATOR TAB -->
+  <div id="tab-generator" class="tab-content">
+    <div class="generator">
+      <h2 style="color: var(--accent); margin-bottom: 1rem; text-align: center;">Territory Generator</h2>
+      <p style="color: var(--text-dim); text-align: center; margin-bottom: 2rem;">
+        Generate fictional stops, claims, or ARG content
+      </p>
+      
+      <input type="text" id="genInput" class="generator-input" placeholder="Enter a concept, location, or idea...">
+      
+      <button class="generate-btn" onclick="generate()">Generate</button>
+      
+      <div id="generatedContent"></div>
+    </div>
+  </div>
+
+  <!-- IMPORT TAB -->
+  <div id="tab-import" class="tab-content">
+    <div class="import-zone" id="importZone">
+      <input type="file" id="fileInput" accept=".txt,.csv,.json" style="display: none">
+      <div onclick="document.getElementById('fileInput').click()">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
+        <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">Drop files here</div>
+        <div style="font-size: 0.9rem; color: var(--text-dim);">Accepts: stops.txt, .json, .csv</div>
+        <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 1rem;">
+          Or paste GTFS JSON URL and click below
+        </div>
+      </div>
+    </div>
+    
+    <div style="max-width: 600px; margin: 0 auto 2rem; padding: 0 2rem;">
+      <input type="text" id="jsonUrl" placeholder="https://data.stib-mivb.brussels/..." 
+        style="width: 100%; padding: 0.75rem; background: var(--card); border: 1px solid var(--border); color: var(--text); font-family: inherit; margin-bottom: 1rem;">
+      <button class="btn-primary" onclick="fetchFromURL()">Load from URL</button>
+    </div>
+  </div>
+
+  <!-- EXPORT TAB -->
+  <div id="tab-export" class="tab-content">
+    <div style="max-width: 800px; margin: 2rem auto; padding: 0 2rem;">
+      <h2 style="color: var(--accent); margin-bottom: 2rem; text-align: center;">Export Options</h2>
+      <div class="export-grid">
+        <div class="export-card" onclick="exportJSON()">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">{ }</div>
+          <div>JSON Data</div>
+        </div>
+        <div class="export-card" onclick="exportMarkdown()">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📝</div>
+          <div>Markdown</div>
+        </div>
+        <div class="export-card" onclick="exportHTML()">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+          <div>GitHub Pages</div>
+        </div>
+        <div class="export-card" onclick="exportVercel()">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">▲</div>
+          <div>Vercel Config</div>
+        </div>
+        <div class="export-card" onclick="exportGeoJSON()">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🗺️</div>
+          <div>GeoJSON Map</div>
+        </div>
+        <div class="export-card" onclick="exportCSV()">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+          <div>CSV Report</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div style="color: var(--text-dim); margin-bottom: 1rem;">
+      Ce jeu n'a pas de règles. Le but est de trouver le créateur.<br>
+      Mais le créateur est protégé par le RGPD.<br>
+      Chaque arrêt réclamé laisse une trace.
+    </div>
+    <div style="color: var(--accent); font-size: 1.5rem; font-weight: bold;">— S.</div>
+  </footer>
+
+  <!-- Claim Modal -->
+  <div class="modal-overlay" id="claimModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">—</h2>
+        <button class="modal-close" onclick="closeModal('claimModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Coordinates</label>
+          <input type="text" id="modalCoords" readonly>
+        </div>
+        <div class="form-group">
+          <label>Your handle</label>
+          <input type="text" id="claimName" placeholder="Agent_███" maxlength="30">
+        </div>
+        <div class="form-group">
+          <label>Message (optional)</label>
+          <textarea id="claimMessage" placeholder="Leave a trace..."></textarea>
+        </div>
+        <button class="btn-primary" onclick="claimSpot()">⚡ Claim Territory</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var allStops = [];
+    var claimedSpots = JSON.parse(localStorage.getItem('myspot_claims') || '{}');
+    var currentStop = null;
+    var filterMode = 'all';
+    var searchTerm = '';
+
+    function generateFallbackStops() {
+      return [
+        { id: 'S1', name: 'Bourse', lat: 50.8471, lon: 4.3486, type: 'metro' },
+        { id: 'S2', name: 'De Brouckère', lat: 50.8515, lon: 4.3522, type: 'metro' },
+        { id: 'S3', name: 'Rogier', lat: 50.8577, lon: 4.3577, type: 'metro' },
+        { id: 'S4', name: 'Botanique', lat: 50.8531, lon: 4.3654, type: 'metro' },
+        { id: 'S5', name: 'Arts-Loi', lat: 50.8435, lon: 4.3694, type: 'metro' },
+        { id: 'S6', name: 'Schuman', lat: 50.8417, lon: 4.3800, type: 'metro' },
+        { id: 'S7', name: 'Gare du Midi', lat: 50.8356, lon: 4.3369, type: 'metro' },
+        { id: 'S8', name: 'Louise', lat: 50.8323, lon: 4.3597, type: 'metro' }
+      ];
+    }
+
+    function init() {
+      allStops = generateFallbackStops();
+      renderBoard();
+      updateStats();
+      setupEventListeners();
+    }
+
+    function setupEventListeners() {
+      document.getElementById('searchInput').addEventListener('input', function(e) {
+        searchTerm = e.target.value;
+        renderBoard();
+      });
+
+      var filterBtns = document.querySelectorAll('.btn[data-filter]');
+      for (var i = 0; i < filterBtns.length; i++) {
+        filterBtns[i].addEventListener('click', function() {
+          var btns = document.querySelectorAll('.btn[data-filter]');
+          for (var j = 0; j < btns.length; j++) {
+            btns[j].classList.remove('active');
+          }
+          this.classList.add('active');
+          filterMode = this.getAttribute('data-filter');
+          renderBoard();
+        });
+      }
+
+      var fileInput = document.getElementById('fileInput');
+      fileInput.addEventListener('change', handleFileSelect);
+
+      var zone = document.getElementById('importZone');
+      zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragging');
+      });
+      zone.addEventListener('dragleave', function() {
+        this.classList.remove('dragging');
+      });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragging');
+        if (e.dataTransfer.files.length) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    function switchTab(tab) {
+      var tabs = document.querySelectorAll('.tab');
+      var contents = document.querySelectorAll('.tab-content');
+      
+      for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+      }
+      for (var i = 0; i < contents.length; i++) {
+        contents[i].classList.remove('active');
+      }
+      
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    function handleFileSelect(e) {
+      if (e.target.files.length) {
+        handleFile(e.target.files[0]);
+      }
+    }
+
+    function handleFile(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var content = e.target.result;
+        
+        if (file.name.endsWith('.json')) {
+          try {
+            var data = JSON.parse(content);
+            parseJSON(data);
+          } catch (err) {
+            alert('Invalid JSON: ' + err.message);
+          }
+        } else {
+          parseGTFS(content);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function parseJSON(data) {
+      var stops = [];
+      
+      if (Array.isArray(data)) {
+        for (var i = 0; i < data.length; i++) {
+          var item = data[i];
+          if (item.file && item.file.url && item.file.filename === 'stops.txt') {
+            fetchFromURL(item.file.url);
+            return;
+          }
+        }
+      }
+      
+      if (data.stops) {
+        stops = data.stops;
+      } else if (data.results) {
+        for (var i = 0; i < data.results.length; i++) {
+          var r = data.results[i];
+          if (r.stop_lat && r.stop_lon) {
+            stops.push({
+              id: r.stop_id || 'S' + i,
+              name: r.stop_name || 'Stop ' + i,
+              lat: parseFloat(r.stop_lat),
+              lon: parseFloat(r.stop_lon),
+              type: 'imported'
+            });
+          }
+        }
+      }
+      
+      if (stops.length > 0) {
+        allStops = stops;
+        renderBoard();
+        updateStats();
+        switchTab('network');
+        alert('Imported ' + stops.length + ' stops!');
+      } else {
+        alert('No valid stops found in JSON');
+      }
+    }
+
+    function parseGTFS(content) {
+      var lines = content.split('\n');
+      var headers = lines[0].split(',');
+      var stops = [];
+
+      for (var i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        var values = lines[i].split(',');
+        var stop = {};
+        for (var j = 0; j < headers.length; j++) {
+          stop[headers[j].trim()] = values[j] ? values[j].trim().replace(/"/g, '') : '';
+        }
+        
+        if (stop.stop_lat && stop.stop_lon) {
+          stops.push({
+            id: stop.stop_id || 'S' + i,
+            name: stop.stop_name || 'Stop ' + i,
+            lat: parseFloat(stop.stop_lat),
+            lon: parseFloat(stop.stop_lon),
+            type: 'imported'
+          });
+        }
+      }
+
+      if (stops.length > 0) {
+        allStops = stops;
+        renderBoard();
+        updateStats();
+        switchTab('network');
+        alert('Imported ' + stops.length + ' stops!');
+      }
+    }
+
+    function fetchFromURL() {
+      var url = document.getElementById('jsonUrl').value.trim();
+      if (!url) {
+        alert('Enter a URL');
+        return;
+      }
+      
+      fetch(url)
+        .then(function(r) { return r.text(); })
+        .then(function(content) {
+          try {
+            var data = JSON.parse(content);
+            parseJSON(data);
+          } catch (e) {
+            parseGTFS(content);
+          }
+        })
+        .catch(function(err) {
+          alert('Failed to fetch: ' + err.message);
+        });
+    }
+
+    function generate() {
+      var input = document.getElementById('genInput').value.trim();
+      if (!input) return;
+      
+      var templates = [
+        {
+          title: 'Territory: ' + input,
+          content: 'A mysterious node in the network. Those who claim it gain control over the surrounding area. The coordinates lead to a place of significance, hidden in plain sight.',
+          coords: (50 + Math.random() * 0.2).toFixed(4) + '°N, ' + (4 + Math.random() * 0.5).toFixed(4) + '°E'
+        },
+        {
+          title: 'Agent Report: ' + input,
+          content: 'Field notes indicate unusual activity. Multiple claims detected in this sector. Recommendation: investigate further. Coordinates encrypted within local transit data.',
+          coords: (50 + Math.random() * 0.2).toFixed(4) + '°N, ' + (4 + Math.random() * 0.5).toFixed(4) + '°E'
+        },
+        {
+          title: 'Network Node: ' + input,
+          content: 'Critical junction point. Controls data flow through the system. RGPD compliance required. Access restricted to verified agents only.',
+          coords: (50 + Math.random() * 0.2).toFixed(4) + '°N, ' + (4 + Math.random() * 0.5).toFixed(4) + '°E'
+        }
+      ];
+      
+      var template = templates[Math.floor(Math.random() * templates.length)];
+      
+      var html = '<div class="generated-card">';
+      html += '<h2>' + template.title + '</h2>';
+      html += '<p>' + template.content + '</p>';
+      html += '<p style="color: var(--accent); font-family: monospace;">' + template.coords + '</p>';
+      html += '<div class="generated-actions">';
+      html += '<button class="btn-primary" onclick="claimGenerated(\'' + input + '\', ' + template.coords.split(',')[0].replace('°N', '') + ', ' + template.coords.split(',')[1].replace('°E', '') + ')">Claim This</button>';
+      html += '</div>';
+      html += '</div>';
+      
+      document.getElementById('generatedContent').innerHTML = html;
+    }
+
+    function claimGenerated(name, lat, lon) {
+      var newStop = {
+        id: 'GEN' + Date.now(),
+        name: name,
+        lat: parseFloat(lat),
+        lon: parseFloat(lon),
+        type: 'generated'
+      };
+      
+      allStops.push(newStop);
+      currentStop = newStop;
+      
+      document.getElementById('claimName').value = localStorage.getItem('myspot_agent') || '';
+      document.getElementById('claimMessage').value = '';
+      document.getElementById('modalTitle').textContent = name;
+      document.getElementById('modalCoords').value = lat + ', ' + lon;
+      
+      switchTab('network');
+      document.getElementById('claimModal').classList.add('active');
+    }
+
+    function renderBoard() {
+      var board = document.getElementById('board');
+      board.innerHTML = '';
+      
+      var filtered = allStops.filter(function(stop) {
+        var matchesSearch = !searchTerm || 
+          stop.name.toLowerCase().includes(searchTerm.toLowerCase());
+        
+        var matchesFilter = 
+          filterMode === 'all' ||
+          (filterMode === 'claimed' && claimedSpots[stop.id]) ||
+          (filterMode === 'unclaimed' && !claimedSpots[stop.id]);
+        
+        return matchesSearch && matchesFilter;
+      });
+
+      if (filtered.length === 0) {
+        board.innerHTML = '<div style="text-align: center; padding: 4rem; color: var(--text-dim);">No stops found</div>';
+        return;
+      }
+
+      for (var i = 0; i < filtered.length; i++) {
+        var stop = filtered[i];
+        var claim = claimedSpots[stop.id];
+        
+        var card = document.createElement('div');
+        card.className = 'spot-card' + (claim ? ' claimed' : '');
+        card.onclick = (function(s) {
+          return function() { openClaimModal(s); };
+        })(stop);
+        
+        var name = document.createElement('div');
+        name.className = 'spot-name';
+        name.textContent = stop.name;
+        
+        var id = document.createElement('div');
+        id.className = 'spot-id';
+        id.textContent = stop.id;
+        
+        var coords = document.createElement('div');
+        coords.className = 'spot-coords';
+        coords.textContent = stop.lat.toFixed(4) + '°N, ' + stop.lon.toFixed(4) + '°E';
+        
+        card.appendChild(name);
+        card.appendChild(id);
+        card.appendChild(coords);
+        
+        if (claim) {
+          var status = document.createElement('div');
+          status.style.marginTop = '1rem';
+          status.style.paddingTop = '1rem';
+          status.style.borderTop = '1px solid var(--border)';
+          
+          var text = document.createTextNode('Claimed by ');
+          var agentSpan = document.createElement('span');
+          agentSpan.className = 'claimed-by';
+          agentSpan.textContent = claim.agent;
+          status.appendChild(text);
+          status.appendChild(agentSpan);
+          
+          if (claim.message) {
+            var msg = document.createElement('div');
+            msg.style.marginTop = '0.5rem';
+            msg.style.fontStyle = 'italic';
+            msg.textContent = '"' + claim.message + '"';
+            status.appendChild(msg);
+          }
+          
+          card.appendChild(status);
+        }
+        
+        board.appendChild(card);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalStops').textContent = allStops.length;
+      document.getElementById('claimedCount').textContent = Object.keys(claimedSpots).length;
+      
+      var myAgent = localStorage.getItem('myspot_agent') || '';
+      var count = 0;
+      for (var key in claimedSpots) {
+        if (claimedSpots[key].agent === myAgent) count++;
+      }
+      document.getElementById('yourClaims').textContent = count;
+    }
+
+    function openClaimModal(stop) {
+      currentStop = stop;
+      document.getElementById('modalTitle').textContent = stop.name;
+      document.getElementById('modalCoords').value = stop.lat.toFixed(6) + ', ' + stop.lon.toFixed(6);
+      
+      var claim = claimedSpots[stop.id];
+      if (claim) {
+        document.getElementById('claimName').value = claim.agent;
+        document.getElementById('claimMessage').value = claim.message || '';
+      } else {
+        document.getElementById('claimName').value = localStorage.getItem('myspot_agent') || '';
+        document.getElementById('claimMessage').value = '';
+      }
+      
+      document.getElementById('claimModal').classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      if (id === 'claimModal') currentStop = null;
+    }
+
+    function claimSpot() {
+      if (!currentStop) return;
+      
+      var agent = document.getElementById('claimName').value.trim();
+      var message = document.getElementById('claimMessage').value.trim();
+      
+      if (!agent) {
+        alert('Enter your handle!');
+        return;
+      }
+      
+      claimedSpots[currentStop.id] = {
+        agent: agent,
+        message: message,
+        timestamp: new Date().toISOString(),
+        stop: currentStop.name,
+        coords: { lat: currentStop.lat, lon: currentStop.lon }
+      };
+      
+      localStorage.setItem('myspot_claims', JSON.stringify(claimedSpots));
+      localStorage.setItem('myspot_agent', agent);
+      
+      closeModal('claimModal');
+      renderBoard();
+      updateStats();
+    }
+
+    function download(filename, content, type) {
+      var blob = new Blob([content], { type: type });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+    }
+
+    function exportJSON() {
+      var data = {
+        version: '329.02',
+        agent: localStorage.getItem('myspot_agent'),
+        claims: claimedSpots,
+        stops: allStops,
+        exported: new Date().toISOString()
+      };
+      download('myspot-export.json', JSON.stringify(data, null, 2), 'application/json');
+    }
+
+    function exportMarkdown() {
+      var md = '# mySPOT Claims Report\n\n';
+      md += '**Agent:** ' + (localStorage.getItem('myspot_agent') || 'Unknown') + '\n';
+      md += '**Date:** ' + new Date().toLocaleString() + '\n\n';
+      md += '## Claimed Territories\n\n';
+      
+      for (var id in claimedSpots) {
+        var claim = claimedSpots[id];
+        md += '### ' + claim.stop + ' (' + id + ')\n';
+        md += '- **Agent:** ' + claim.agent + '\n';
+        md += '- **Coords:** ' + claim.coords.lat + ', ' + claim.coords.lon + '\n';
+        if (claim.message) md += '- **Message:** "' + claim.message + '"\n';
+        md += '\n';
+      }
+      
+      md += '---\n*Generated by mySPOT v329.02 — S.*\n';
+      download('myspot-claims.md', md, 'text/markdown');
+    }
+
+    function exportHTML() {
+      var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>mySPOT Claims</title>';
+      html += '<style>body{font-family:monospace;background:#0a0e1a;color:#e0e6ed;padding:2rem;}';
+      html += 'h1{color:#00ff88;}table{width:100%;border-collapse:collapse;}';
+      html += 'th,td{border:1px solid #1e2740;padding:0.5rem;text-align:left;}</style></head><body>';
+      html += '<h1>mySPOT Claims</h1><p>Agent: ' + (localStorage.getItem('myspot_agent') || 'Unknown') + '</p>';
+      html += '<table><tr><th>Stop</th><th>Agent</th><th>Coordinates</th><th>Message</th></tr>';
+      
+      for (var id in claimedSpots) {
+        var claim = claimedSpots[id];
+        html += '<tr><td>' + claim.stop + '</td><td>' + claim.agent + '</td>';
+        html += '<td>' + claim.coords.lat + ', ' + claim.coords.lon + '</td>';
+        html += '<td>' + (claim.message || '-') + '</td></tr>';
+      }
+      
+      html += '</table><p style="margin-top:2rem;color:#8b92a0;">— S.</p></body></html>';
+      download('myspot-claims.html', html, 'text/html');
+    }
+
+    function exportVercel() {
+      var config = {
+        "version": 2,
+        "name": "myspot-claims",
+        "builds": [{ "src": "index.html", "use": "@vercel/static" }]
+      };
+      download('vercel.json', JSON.stringify(config, null, 2), 'application/json');
+    }
+
+    function exportGeoJSON() {
+      var features = [];
+      for (var id in claimedSpots) {
+        var claim = claimedSpots[id];
+        features.push({
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [claim.coords.lon, claim.coords.lat]
+          },
+          "properties": {
+            "name": claim.stop,
+            "agent": claim.agent,
+            "message": claim.message || '',
+            "timestamp": claim.timestamp
+          }
+        });
+      }
+      
+      var geojson = {
+        "type": "FeatureCollection",
+        "features": features
+      };
+      download('myspot-claims.geojson', JSON.stringify(geojson, null, 2), 'application/geo+json');
+    }
+
+    function exportCSV() {
+      var csv = 'Stop,ID,Agent,Latitude,Longitude,Message,Timestamp\n';
+      for (var id in claimedSpots) {
+        var claim = claimedSpots[id];
+        csv += '"' + claim.stop + '","' + id + '","' + claim.agent + '",';
+        csv += claim.coords.lat + ',' + claim.coords.lon + ',"';
+        csv += (claim.message || '') + '","' + claim.timestamp + '"\n';
+      }
+      download('myspot-claims.csv', csv, 'text/csv');
+    }
+
+    init();
+    console.log('%c███ mySPOT v329.02 ███', 'color: #00ff88; font-weight: bold; font-size: 1.2rem;');
+    console.log('%cCherchez entre les lignes. Les données ne mentent pas.', 'color: #8b92a0;');
+  </script>
+</body>
+</html>
