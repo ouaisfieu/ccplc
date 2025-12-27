@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCPLC — Ressources & Guide d'Étude | 5 Leçons Surprenantes</title>
+    <meta name="description" content="Découvrez les 5 leçons surprenantes du CCPLC et testez vos connaissances avec notre guide d'étude interactif.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --primary-dark: #134a5f;
+            --secondary: #2d8a6e;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --bg-card: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #38bdf8;
+            --primary-dark: #0ea5e9;
+            --secondary: #34d399;
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --bg-card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-light: #64748b;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        /* === PROGRESS BAR === */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.2s ease;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            top: 4px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 0.75rem 2rem;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.9);
+        }
+
+        [data-theme="dark"] nav {
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo span {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background: var(--bg-alt);
+        }
+
+        .theme-toggle {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--border);
+        }
+
+        /* === XP BAR === */
+        .xp-bar-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            min-width: 250px;
+            transition: var(--transition);
+        }
+
+        .xp-bar-container.minimized {
+            min-width: auto;
+            padding: 0.75rem;
+        }
+
+        .xp-bar-container.minimized .xp-details {
+            display: none;
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .xp-level {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .xp-level-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .xp-minimize {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .xp-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .xp-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* === ACHIEVEMENT POPUP === */
+        .achievement-popup {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1002;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .achievement-popup.show {
+            transform: translateX(0);
+        }
+
+        .achievement-popup .icon {
+            font-size: 2rem;
+        }
+
+        .achievement-popup .text h4 {
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .achievement-popup .text p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* === ARTICLE HERO === */
+        .article-hero {
+            padding: 8rem 2rem 4rem;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-alt) 100%);
+            text-align: center;
+        }
+
+        .article-hero .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .article-hero .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .article-hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .article-hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* === TABLE OF CONTENTS === */
+        .toc-container {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .toc-container h4 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-list a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .toc-list a:hover, .toc-list a.active {
+            color: var(--primary);
+            background: var(--bg-alt);
+        }
+
+        .toc-list a .number {
+            background: var(--bg-alt);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .toc-list a.completed .number {
+            background: var(--success);
+            color: white;
+        }
+
+        /* === ARTICLE LAYOUT === */
+        .article-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .article-layout {
+                grid-template-columns: 1fr;
+            }
+            .toc-container {
+                position: static;
+                max-height: none;
+            }
+        }
+
+        /* === ARTICLE CONTENT === */
+        .article-content {
+            max-width: 750px;
+        }
+
+        .article-content h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 3rem 0 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .article-content h2:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .article-content h2 .lesson-number {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            color: var(--primary);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 1.0625rem;
+            line-height: 1.8;
+        }
+
+        .article-content .lead {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            font-style: italic;
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* === BLOCKQUOTE === */
+        .article-content blockquote {
+            background: linear-gradient(135deg, rgba(26, 95, 122, 0.05), rgba(45, 138, 110, 0.05));
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-style: italic;
+            font-family: 'Merriweather', Georgia, serif;
+        }
+
+        .article-content blockquote p {
+            margin-bottom: 0;
+        }
+
+        /* === LESSON CARD === */
+        .lesson-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lesson-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .lesson-card.read {
+            border-color: var(--success);
+        }
+
+        .lesson-card.read::after {
+            content: '✓ Lu';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .lesson-card .xp-reward {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* === TABS === */
+        .tabs-container {
+            margin: 3rem 0;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === QUIZ SECTION === */
+        .study-quiz {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+        }
+
+        .quiz-question-card {
+            background: var(--bg-alt);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .quiz-question-card.answered {
+            border: 2px solid var(--success);
+        }
+
+        .quiz-question-card .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-question-card .question-number {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .quiz-question-card h4 {
+            flex: 1;
+            margin-left: 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .quiz-question-card .xp-badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .quiz-answer-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9375rem;
+            font-family: inherit;
+            background: var(--bg);
+            color: var(--text);
+            resize: vertical;
+            min-height: 100px;
+            transition: var(--transition);
+        }
+
+        .quiz-answer-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .quiz-answer-input:disabled {
+            background: var(--bg-alt);
+            cursor: not-allowed;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 95, 122, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+        }
+
+        /* === ANSWER REVEAL === */
+        .answer-reveal {
+            display: none;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid var(--success);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .answer-reveal.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .answer-reveal h5 {
+            color: var(--success);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .answer-reveal p {
+            font-size: 0.9375rem;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* === GLOSSARY === */
+        .glossary-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .glossary-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .glossary-item:hover {
+            border-color: var(--primary);
+        }
+
+        .glossary-item dt {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.0625rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .glossary-item dt .icon {
+            font-size: 1.25rem;
+        }
+
+        .glossary-item dd {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* === ESSAY TOPICS === */
+        .essay-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .essay-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            transition: var(--transition);
+        }
+
+        .essay-item:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .essay-item .number {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .essay-item p {
+            margin: 0;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* === PROGRESS TRACKER === */
+        .progress-tracker {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-tracker h4 {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .progress-stat {
+            padding: 1rem;
+            background: var(--bg-alt);
+            border-radius: var(--radius-sm);
+        }
+
+        .progress-stat .number {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .progress-stat .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* === CTA SECTION === */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.125rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons .btn {
+            background: white;
+            color: var(--primary);
+        }
+
+        .cta-buttons .btn:hover {
+            background: var(--bg-alt);
+        }
+
+        .cta-buttons .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .cta-buttons .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--bg-alt);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-license {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* === MOBILE === */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+                flex-direction: column;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .xp-bar-container {
+                left: 20px;
+                right: 20px;
+                bottom: 10px;
+            }
+
+            .progress-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-nav {
+                flex-wrap: nowrap;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        /* === CONFETTI === */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="ccplc-recrutement.html" class="nav-logo">
+                CCPLC <span>2030</span>
+            </a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-links" id="navLinks">
+                <a href="ccplc-recrutement.html">Accueil</a>
+                <a href="#article" class="active">Article</a>
+                <a href="#guide">Guide d'étude</a>
+                <a href="#glossaire">Glossaire</a>
+                <a href="ccplc-recrutement.html#candidater">Candidater</a>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">🌓</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- XP Bar -->
+    <div class="xp-bar-container" id="xpContainer">
+        <div class="xp-header">
+            <div class="xp-level">
+                <div class="xp-level-badge" id="levelBadge">1</div>
+                <span>Niveau <span id="levelNumber">1</span></span>
+            </div>
+            <button class="xp-minimize" onclick="toggleXpBar()">−</button>
+        </div>
+        <div class="xp-details">
+            <div class="xp-bar">
+                <div class="xp-bar-fill" id="xpFill" style="width: 0%"></div>
+            </div>
+            <div class="xp-text"><span id="currentXp">0</span> / <span id="nextLevelXp">100</span> XP</div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="icon">🏆</div>
+        <div class="text">
+            <h4 id="achievementTitle">Succès débloqué !</h4>
+            <p id="achievementDesc">+50 XP</p>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Article Hero -->
+    <header class="article-hero">
+        <div class="breadcrumb">
+            <a href="ccplc-recrutement.html">CCPLC</a>
+            <span>›</span>
+            <span>Ressources</span>
+        </div>
+        <h1>Ils recrutent pour 2030. Et 4 autres leçons surprenantes.</h1>
+        <p class="subtitle">
+            Qui n'a jamais connu cette sensation ? Polir son CV, rédiger une lettre de motivation inspirée, 
+            cliquer sur "envoyer", puis... le silence. Le CCPLC fait tout l'inverse.
+        </p>
+        <div class="article-meta">
+            <span>📚 Lecture : 8 min</span>
+            <span>🎓 Quiz : 10 questions</span>
+            <span>⭐ +500 XP à débloquer</span>
+        </div>
+    </header>
+
+    <!-- Article Layout -->
+    <div class="article-layout" id="article">
+        <!-- TOC Sidebar -->
+        <aside>
+            <div class="toc-container">
+                <h4>📑 Sommaire</h4>
+                <ul class="toc-list">
+                    <li><a href="#intro" data-lesson="intro"><span class="number">↓</span> Introduction</a></li>
+                    <li><a href="#lesson1" data-lesson="1"><span class="number">1</span> Recruter pour l'avenir</a></li>
+                    <li><a href="#lesson2" data-lesson="2"><span class="number">2</span> Parler d'argent</a></li>
+                    <li><a href="#lesson3" data-lesson="3"><span class="number">3</span> CV secondaire</a></li>
+                    <li><a href="#lesson4" data-lesson="4"><span class="number">4</span> Tout est public</a></li>
+                    <li><a href="#lesson5" data-lesson="5"><span class="number">5</span> Pas de followers</a></li>
+                    <li><a href="#conclusion" data-lesson="conclusion"><span class="number">✓</span> Conclusion</a></li>
+                </ul>
+
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Progression article</div>
+                    <div class="xp-bar">
+                        <div class="xp-bar-fill" id="articleProgress" style="width: 0%"></div>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;">
+                        <span id="lessonsRead">0</span>/5 leçons lues
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="article-content">
+            <!-- Introduction -->
+            <section id="intro">
+                <p class="lead">
+                    Dans le sillage de la « Grande Démission » et d'une quête de sens systémique, 
+                    l'expérience déshumanisante de la recherche d'emploi est devenue le symbole d'un malaise professionnel largement partagé.
+                </p>
+
+                <p>
+                    Mais imaginez une approche qui serait l'antidote à cette vacuité. Un collectif citoyen belge, 
+                    le <strong>CCPLC</strong> (Collectif Citoyen pour la Participation Libre & Consciente), ne se contente pas 
+                    de réinventer l'engagement démocratique ; il bouscule jusqu'aux codes les plus établis du recrutement.
+                </p>
+
+                <p>
+                    En analysant leur démarche, on découvre bien plus qu'une offre d'emploi : une véritable philosophie 
+                    du travail et de l'engagement. J'en ai tiré <strong>cinq leçons</strong>, aussi surprenantes qu'inspirantes, 
+                    sur la manière de construire un projet collectif qui a de l'âme.
+                </p>
+            </section>
+
+            <!-- Lesson 1 -->
+            <h2 id="lesson1">
+                <span class="lesson-number">1</span>
+                Ils recrutent pour l'avenir (littéralement, pour 2030)
+            </h2>
+
+            <div class="lesson-card" onclick="markLessonRead(1)">
+                <p>
+                    Dans un monde où l'urgence est la norme, le CCPLC lance une campagne pour constituer une 
+                    "réserve de recrutement" de <strong>42 postes équivalents temps plein (ETP)</strong> à l'horizon 2030. 
+                    Cette démarche, à contre-courant de toute logique de marché, est en réalité profondément stratégique.
+                </p>
+
+                <p>
+                    Plutôt que de chercher des employés pour combler un besoin immédiat, ils cherchent des 
+                    <strong>partenaires pour un projet à long terme</strong>. Cette approche permet de "faire connaissance", 
+                    de "construire ensemble" et de s'assurer que les futures recrues partagent non seulement des compétences, 
+                    mais surtout les valeurs fondamentales du projet.
+                </p>
+
+                <p>
+                    Ce qui est frappant ici, c'est le rejet radical de la précarité et de la pensée à court terme 
+                    de la gig economy. C'est un retour audacieux à la <strong>construction patiente d'une communauté organisationnelle</strong>.
+                </p>
+
+                <div class="xp-reward">+30 XP</div>
+            </div>
+
+            <blockquote>
+                <p>
+                    « Parce que les financements prennent du temps. Parce qu'on veut construire quelque chose de solide. 
+                    Parce qu'on préfère prendre le temps de bien faire plutôt que de se précipiter. »
+                </p>
+            </blockquote>
+
+            <!-- Lesson 2 -->
+            <h2 id="lesson2">
+                <span class="lesson-number">2</span>
+                Ils parlent d'argent (surtout pour dire qu'il n'y en a pas beaucoup)
+            </h2>
+
+            <div class="lesson-card" onclick="markLessonRead(2)">
+                <p>
+                    Le tabou du salaire est balayé avec une <strong>transparence radicale</strong>. Dès les premières lignes 
+                    de leur annonce, le ton est donné : les postes offriront des "salaires modestes", alignés sur les 
+                    barèmes du secteur non-marchand en Belgique francophone. Pas de promesses mirobolantes, pas de bonus cachés.
+                </p>
+
+                <p>
+                    Cette honnêteté est une forme de <strong>filtre puissant</strong>. Le CCPLC n'offre pas une rémunération capable 
+                    de rivaliser avec le secteur privé, mais il promet "du sens, une équipe formidable, un impact réel". 
+                    En affichant clairement ses contraintes financières, le collectif s'assure d'attirer des personnes 
+                    dont la motivation première est la mission, et non le gain.
+                </p>
+
+                <p>
+                    C'est un pari sur l'<strong>engagement intrinsèque</strong>, une manière de dire que la vraie valeur du travail 
+                    qu'ils proposent se trouve ailleurs que sur la fiche de paie.
+                </p>
+
+                <div class="xp-reward">+30 XP</div>
+            </div>
+
+            <blockquote>
+                <p>
+                    « Si vous cherchez avant tout un gros salaire, ce n'est probablement pas ici. 
+                    Si vous cherchez un travail qui a du sens et une équipe formidable, continuez à lire. »
+                </p>
+            </blockquote>
+
+            <!-- Lesson 3 -->
+            <h2 id="lesson3">
+                <span class="lesson-number">3</span>
+                Votre CV est secondaire (mais votre personnalité, essentielle)
+            </h2>
+
+            <div class="lesson-card" onclick="markLessonRead(3)">
+                <p>
+                    Oubliez la course aux mots-clés. Le CCPLC adopte une approche résolument <strong>"anti-CV"</strong>. 
+                    Mais ce n'est pas qu'un slogan : ils remplacent le processus d'évaluation traditionnel par une 
+                    expérience ludique et engageante. Les candidats sont invités à répondre à un quiz pour 
+                    "Découvrir leur profil", à gagner des points d'expérience (XP) et à débloquer des succès comme "Quiz Master".
+                </p>
+
+                <p>
+                    L'objectif n'est pas de "cocher des cases", mais de "rencontrer" des "personnes". 
+                    Leur démarche est profondément <strong>inclusive</strong>. Ils encouragent explicitement les candidatures 
+                    "surtout si votre profil ne coche pas toutes les cases" et listent des profils aussi variés que les 
+                    "Personnes en reconversion professionnelle", les "Retraité·e·s actif·ve·s" ou les "Autodidactes passionné·e·s".
+                </p>
+
+                <p>
+                    Ce qu'ils recherchent avant tout, ce sont des traits de caractère comme la <strong>curiosité</strong>, 
+                    l'<strong>humilité</strong>, l'<strong>autonomie</strong> et la <strong>bienveillance</strong>, 
+                    considérés comme le véritable carburant du collectif.
+                </p>
+
+                <div class="xp-reward">+30 XP</div>
+            </div>
+
+            <blockquote>
+                <p>
+                    « Nous pensons que recruter, c'est d'abord se rencontrer. Pas cocher des cases. 
+                    Pas aligner des mots-clés. Se rencontrer pour de vrai, avec nos forces et nos limites, 
+                    nos ambitions et nos doutes. »
+                </p>
+            </blockquote>
+
+            <!-- Lesson 4 -->
+            <h2 id="lesson4">
+                <span class="lesson-number">4</span>
+                Tout est public, tout est copiable (et c'est le but)
+            </h2>
+
+            <div class="lesson-card" onclick="markLessonRead(4)">
+                <p>
+                    Dans une ère où la propriété intellectuelle est reine, le CCPLC prend le chemin inverse. 
+                    Toutes leurs productions, décisions et méthodologies sont publiques sur <strong>GitHub</strong> et placées 
+                    sous licence <strong>CC BY-NC 4.0</strong>. Cette approche est une transposition directe des principes 
+                    de l'open source et des communs numériques au secteur de l'innovation sociale.
+                </p>
+
+                <p>
+                    Cette philosophie va bien au-delà de la simple transparence. C'est une mission visant à renforcer 
+                    le "pouvoir d'agir" citoyen. Le but est de créer des ressources concrètes — des "Gabarits Markdown + JSON-LD" 
+                    ou des "workflows GitHub Actions" — que <strong>n'importe qui peut réutiliser et adapter</strong>.
+                </p>
+
+                <p>
+                    En agissant ainsi, le CCPLC n'est pas une forteresse gardant ses secrets, mais un 
+                    <strong>laboratoire ouvert</strong> dont l'infrastructure même est conçue pour être partagée.
+                </p>
+
+                <div class="xp-reward">+30 XP</div>
+            </div>
+
+            <blockquote>
+                <p>
+                    « Le CCPLC sert de laboratoire ouvert : ce qui fonctionne ici doit pouvoir être reproduit ailleurs, 
+                    sans dépendances propriétaires ni barrières financières. »
+                </p>
+            </blockquote>
+
+            <!-- Lesson 5 -->
+            <h2 id="lesson5">
+                <span class="lesson-number">5</span>
+                Ils ne veulent pas de "followers" (mais des acteurs autonomes)
+            </h2>
+
+            <div class="lesson-card" onclick="markLessonRead(5)">
+                <p>
+                    Mais la leçon la plus radicale se trouve peut-être dans ce qu'ils <strong>refusent de devenir</strong>. 
+                    Le CCPLC se méfie activement du rôle d'"influenceur" et met en garde contre les "anti-communautés", 
+                    ces groupes fragiles basés sur la "consommation passive" et la "centralisation excessive".
+                </p>
+
+                <p>
+                    Leur vision est celle d'un collectif qui favorise la <strong>décentralisation et l'autonomie</strong>. 
+                    Leur objectif final n'est pas de bâtir une organisation massive, mais de catalyser l'émergence 
+                    d'une multitude de communautés locales autonomes.
+                </p>
+
+                <p>
+                    C'est une forme radicale de confiance qui va jusqu'à encourager une "posture critique face aux 
+                    influences extérieures, y compris celles du collectif initial". En somme, ils incarnent un principe 
+                    crucial pour les mouvements durables : <strong>faire grandir l'impact, sans nécessairement faire grandir l'organisation</strong>. 
+                    Leur rôle est d'« outiller, pas de diriger ».
+                </p>
+
+                <div class="xp-reward">+30 XP</div>
+            </div>
+
+            <!-- Conclusion -->
+            <h2 id="conclusion">
+                <span class="lesson-number">✓</span>
+                Et si on s'inspirait ?
+            </h2>
+
+            <p>
+                L'approche du Collectif Citoyen pour la Participation Libre & Consciente est bien plus qu'une méthode 
+                de recrutement originale. C'est une <strong>leçon d'organisation collective</strong>, où la manière de faire 
+                est aussi fondamentale que ce qui est fait.
+            </p>
+
+            <p>
+                En plaçant la confiance, la transparence et le long terme au cœur de leur projet, ils ne se contentent 
+                pas de rappeler que les relations humaines sont le socle de toute action durable : ils en font 
+                <strong>l'infrastructure même de leur action</strong>.
+            </p>
+
+            <p style="font-size: 1.25rem; font-weight: 600; text-align: center; padding: 2rem; background: var(--bg-alt); border-radius: var(--radius); margin-top: 2rem;">
+                Et si la manière la plus efficace de changer le monde commençait par changer 
+                la façon dont on s'organise pour y travailler ensemble ?
+            </p>
+        </main>
+    </div>
+
+    <!-- Guide d'étude Section -->
+    <section style="padding: 4rem 2rem; background: var(--bg-alt);" id="guide">
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">🎓 Guide d'Étude Interactif</h2>
+                <p style="color: var(--text-muted); font-size: 1.125rem;">
+                    Testez vos connaissances et gagnez jusqu'à 500 XP !
+                </p>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="progress-tracker">
+                <h4>📊 Votre progression</h4>
+                <div class="progress-stats">
+                    <div class="progress-stat">
+                        <div class="number" id="quizAnswered">0</div>
+                        <div class="label">Questions</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="number" id="quizXP">0</div>
+                        <div class="label">XP gagnés</div>
+                    </div>
+                    <div class="progress-stat">
+                        <div class="number" id="quizPercent">0%</div>
+                        <div class="label">Complété</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" onclick="showTab('quiz')">📝 Quiz (10 questions)</button>
+                    <button class="tab-btn" onclick="showTab('essays')">✍️ Sujets de réflexion</button>
+                    <button class="tab-btn" onclick="showTab('glossary')">📖 Glossaire</button>
+                </div>
+
+                <!-- Quiz Tab -->
+                <div class="tab-content active" id="tab-quiz">
+                    <div class="study-quiz">
+                        <!-- Question 1 -->
+                        <div class="quiz-question-card" data-question="1">
+                            <div class="question-header">
+                                <span class="question-number">1</span>
+                                <h4>Quelle est la mission fondamentale du CCPLC, telle que citée dans sa charte ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(1)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(1)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-1">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>La mission fondamentale du CCPLC est : « Parce qu'une démocratie vivante se nourrit d'informations ouvertes et d'actions partagées, le CCPLC documente, mutualise et transmet tout ce qui favorise l'empowerment citoyen. » Cette phrase résume son engagement à renforcer le pouvoir d'agir des citoyens par le partage de la connaissance.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="quiz-question-card" data-question="2">
+                            <div class="question-header">
+                                <span class="question-number">2</span>
+                                <h4>Quels sont les quatre piliers d'action du CCPLC et que représente chacun d'eux ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(2)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(2)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-2">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Les quatre piliers sont : <strong>Observer</strong> (veiller à la transparence de l'action publique et effectuer une veille stratégique) ; <strong>Documenter</strong> (démocratiser l'accès à l'information via des publications libres) ; <strong>Former</strong> (renforcer le pouvoir d'agir citoyen par des ateliers et tutoriels) ; et <strong>Connecter</strong> (mettre en réseau les différents acteurs de la société civile).</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="quiz-question-card" data-question="3">
+                            <div class="question-header">
+                                <span class="question-number">3</span>
+                                <h4>Pourquoi le CCPLC constitue-t-il une réserve de recrutement pour 42 postes ETP avec un horizon fixé à 2030 ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(3)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(3)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-3">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Le collectif constitue cette réserve dès maintenant car il croit que les meilleures collaborations se construisent sur la durée. Cette approche permet de faire connaissance, d'aligner les visions et de tester des projets ensemble avant l'ouverture des postes, qui est conditionnée par l'obtention de financements solides, un processus qui prend du temps.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="quiz-question-card" data-question="4">
+                            <div class="question-header">
+                                <span class="question-number">4</span>
+                                <h4>Expliquez les conditions d'utilisation des contenus produits par le CCPLC sous la licence CC BY-NC 4.0.</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(4)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(4)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-4">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>La licence CC BY-NC 4.0 (Pas d'Usage Commercial) autorise le public à partager, copier, redistribuer, adapter et transformer les contenus du collectif. La seule condition restrictive majeure est l'interdiction de toute utilisation commerciale, comme vendre, louer ou intégrer les contenus dans un produit ou service payant sans un accord explicite et préalable du CCPLC.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="quiz-question-card" data-question="5">
+                            <div class="question-header">
+                                <span class="question-number">5</span>
+                                <h4>Comment le principe d'« Inclusion » est-il concrètement mis en œuvre par le collectif ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(5)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(5)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-5">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Le principe d'inclusion se traduit par des actions concrètes visant à rendre les informations accessibles à tous. Cela inclut l'utilisation d'un langage clair et du « facile-à-lire », la garantie de l'accessibilité numérique des plateformes, et la mise à disposition de supports hors-ligne pour ne laisser personne de côté.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 6 -->
+                        <div class="quiz-question-card" data-question="6">
+                            <div class="question-header">
+                                <span class="question-number">6</span>
+                                <h4>Quelle est la philosophie du CCPLC en matière de rémunération pour les futurs postes salariés ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(6)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(6)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-6">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>La philosophie du CCPLC est la transparence totale : les salaires seront modestes mais décents, alignés sur les barèmes du secteur non-marchand en Belgique francophone. Le collectif n'offre pas de salaires mirobolants, mais met en avant le sens du travail, l'impact réel des missions et une équipe partageant des valeurs fortes.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 7 -->
+                        <div class="quiz-question-card" data-question="7">
+                            <div class="question-header">
+                                <span class="question-number">7</span>
+                                <h4>Au-delà des compétences techniques, quelles sont les cinq qualités humaines attendues des membres du CCPLC ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(7)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(7)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-7">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Le CCPLC recherche des personnes faisant preuve d'<strong>adhésion à ses valeurs</strong>, de <strong>curiosité</strong> pour creuser des sujets complexes, d'<strong>humilité</strong> pour apprendre des autres et de ses erreurs, d'<strong>autonomie</strong> dans un fonctionnement horizontal, et de <strong>bienveillance</strong> dans les échanges.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 8 -->
+                        <div class="quiz-question-card" data-question="8">
+                            <div class="question-header">
+                                <span class="question-number">8</span>
+                                <h4>Comment une personne peut-elle contribuer au CCPLC en tant que bénévole dès maintenant ? Citez au moins trois exemples.</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(8)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(8)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-8">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Les bénévoles peuvent contribuer de multiples façons : relire et améliorer les publications, traduire des contenus dans d'autres langues, participer à la veille citoyenne, proposer des sujets de dossiers, partager les productions du collectif dans leurs propres réseaux, tester les outils et faire des retours, ou simplement échanger et apporter un regard neuf.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 9 -->
+                        <div class="quiz-question-card" data-question="9">
+                            <div class="question-header">
+                                <span class="question-number">9</span>
+                                <h4>Selon la charte en discussion, quelle est la définition d'une « anti-communauté » et pourquoi le CCPLC cherche-t-il à éviter ce modèle ?</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(9)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(9)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-9">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Une « anti-communauté » est un groupe où les liens sont faibles, fragmentés et souvent basés sur une consommation passive de contenu, sans co-création ni autonomie. Le CCPLC veut éviter ce modèle car il est contraire à ses objectifs d'émancipation citoyenne et ne favorise pas l'action collective réfléchie, pouvant même créer une illusion d'appartenance sans fondement réel.</p>
+                            </div>
+                        </div>
+
+                        <!-- Question 10 -->
+                        <div class="quiz-question-card" data-question="10">
+                            <div class="question-header">
+                                <span class="question-number">10</span>
+                                <h4>Décrivez le processus qui suit une candidature auprès du CCPLC, de la prise de contact à l'intégration.</h4>
+                                <span class="xp-badge">+20 XP</span>
+                            </div>
+                            <textarea class="quiz-answer-input" placeholder="Rédigez votre réponse en 2-3 phrases..."></textarea>
+                            <div class="quiz-actions">
+                                <button class="btn btn-primary btn-sm" onclick="validateAnswer(10)">Valider ma réponse</button>
+                                <button class="btn btn-secondary btn-sm" onclick="showAnswer(10)">Voir la réponse</button>
+                            </div>
+                            <div class="answer-reveal" id="answer-10">
+                                <h5>✅ Réponse modèle</h5>
+                                <p>Après une candidature, le CCPLC s'engage à toujours répondre. S'ensuit un échange informel (email, visio, café) pour faire connaissance sans pression. La personne est ensuite intégrée à la communauté avec un accès aux canaux de discussion et aux événements, lui offrant la possibilité de contribuer comme bénévole et de construire une relation en vue des futures ouvertures de postes.</p>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 2rem; padding: 2rem; background: var(--bg-alt); border-radius: var(--radius);">
+                            <button class="btn btn-accent" onclick="completeQuiz()" id="completeQuizBtn" style="display: none;">
+                                🎉 Valider toutes mes réponses (+100 XP bonus)
+                            </button>
+                            <p style="color: var(--text-muted); font-size: 0.875rem; margin-top: 1rem;">
+                                Répondez à au moins 5 questions pour débloquer le bonus de complétion
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Essays Tab -->
+                <div class="tab-content" id="tab-essays">
+                    <div style="margin-bottom: 2rem;">
+                        <p style="color: var(--text-muted);">
+                            Ces sujets sont conçus pour encourager une réflexion approfondie. Aucune réponse n'est fournie — 
+                            c'est à vous de construire votre argumentation !
+                        </p>
+                    </div>
+
+                    <div class="essay-list">
+                        <div class="essay-item">
+                            <span class="number">1</span>
+                            <p><strong>Cohérence valeurs-outils</strong> — Analysez la cohérence entre les valeurs du CCPLC (transparence, co-création, inclusion) et ses choix d'outils et de méthodes de travail (GitHub, Markdown, licences libres, pull requests).</p>
+                        </div>
+
+                        <div class="essay-item">
+                            <span class="number">2</span>
+                            <p><strong>Stratégie long terme</strong> — Discutez la stratégie de recrutement du CCPLC, notamment la décision de constituer une réserve bien avant l'horizon 2030. Quels sont les avantages et les défis potentiels de cette approche à long terme ?</p>
+                        </div>
+
+                        <div class="essay-item">
+                            <span class="number">3</span>
+                            <p><strong>Empowerment citoyen</strong> — Expliquez le concept d'« empowerment citoyen » tel que présenté dans les documents, en le reliant aux quatre piliers d'action et aux livrables concrets prévus dans la feuille de route 2025-2026.</p>
+                        </div>
+
+                        <div class="essay-item">
+                            <span class="number">4</span>
+                            <p><strong>Dérives potentielles</strong> — Dans sa charte en discussion, le CCPLC met en garde contre les dérives potentielles (devenir un « influenceur », créer des « anti-communautés »). Analysez l'importance de ces avertissements dans le contexte de la mission globale.</p>
+                        </div>
+
+                        <div class="essay-item">
+                            <span class="number">5</span>
+                            <p><strong>Portrait-robot</strong> — En vous basant sur la philosophie de recrutement et les valeurs énoncées, dressez le portrait-robot du contributeur idéal pour le CCPLC, non pas en termes de profil métier, mais en termes de mentalité, de motivations et de posture.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glossary Tab -->
+                <div class="tab-content" id="tab-glossary">
+                    <div class="glossary-grid" id="glossaire">
+                        <dl class="glossary-item">
+                            <dt><span class="icon">🚫</span> Anti-communauté</dt>
+                            <dd>Un rassemblement de personnes où les liens sont faibles, fragmentés, et souvent basés sur des intérêts superficiels ou une consommation passive. Ce modèle s'oppose à l'objectif de co-création et d'autonomie du CCPLC.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">📜</span> CC BY-NC 4.0</dt>
+                            <dd>Licence de propriété intellectuelle utilisée par le CCPLC. Elle autorise le partage, la copie, la redistribution et l'adaptation des contenus à la condition expresse de ne pas en faire un usage commercial sans accord.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">🏛️</span> CCPLC</dt>
+                            <dd>Acronyme de Collectif Citoyen pour la Participation Libre & Consciente, une organisation basée en Wallonie-Bruxelles visant à renforcer la démocratie participative.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">🤝</span> Co-création</dt>
+                            <dd>Un principe de fonctionnement où les membres rédigent, commentent et améliorent les contenus de manière collaborative, notamment via des outils comme GitHub (pull-requests, issues).</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">🌐</span> Décentralisation</dt>
+                            <dd>Un principe d'action stipulant que chaque communauté thématique est autonome et responsable. Le CCPLC agit comme un catalyseur, sans centraliser ni contrôler les initiatives locales.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">💪</span> Empowerment citoyen</dt>
+                            <dd>Le renforcement du pouvoir d'agir des citoyens. C'est l'objectif central du CCPLC, qui vise à donner aux individus et aux collectifs les capacités d'agir de manière autonome et consciente.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">⏱️</span> ETP</dt>
+                            <dd>Acronyme d'Équivalent Temps Plein. Il s'agit d'une unité de mesure de la charge de travail correspondant à un poste à temps plein. Les 42 ETP prévus peuvent se décliner en plusieurs postes à temps partiel.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">🏗️</span> Piliers d'action</dt>
+                            <dd>Les quatre grands axes stratégiques du CCPLC : Observer (veille), Documenter (démocratisation de l'info), Former (renforcement des compétences) et Connecter (mise en réseau).</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">📋</span> Réserve de recrutement</dt>
+                            <dd>Le processus de constitution d'un vivier de candidats potentiels pour les 42 postes ETP qui seront ouverts à l'horizon 2030, permettant de construire des relations en amont.</dd>
+                        </dl>
+
+                        <dl class="glossary-item">
+                            <dt><span class="icon">🔍</span> Transparence</dt>
+                            <dd>Une valeur fondamentale du CCPLC qui se traduit par le fait que toutes les productions, décisions et archives sont rendues publiques, notamment sur la plateforme GitHub.</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Prêt·e à passer à l'action ?</h2>
+        <p>
+            Maintenant que vous connaissez le CCPLC sur le bout des doigts, 
+            pourquoi ne pas rejoindre l'aventure ?
+        </p>
+        <div class="cta-buttons">
+            <a href="ccplc-recrutement.html#candidater" class="btn">🚀 Candidater maintenant</a>
+            <a href="ccplc-recrutement.html#quiz" class="btn btn-outline">🎯 Découvrir mon profil</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">CCPLC</div>
+            <div class="footer-links">
+                <a href="ccplc-recrutement.html">Accueil</a>
+                <a href="https://ouaisfieu.github.io/tech/ccplc/" target="_blank">Documentation</a>
+                <a href="https://github.com/ouaisfieu" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-license">
+                CC BY-NC 4.0 — Décembre 2025
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // === STATE ===
+        let state = {
+            xp: 0,
+            level: 1,
+            achievements: [],
+            lessonsRead: [],
+            quizAnswered: [],
+            theme: 'light'
+        };
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('ccplc_state');
+            if (saved) {
+                state = { ...state, ...JSON.parse(saved) };
+                updateUI();
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('ccplc_state', JSON.stringify(state));
+        }
+
+        // === XP SYSTEM ===
+        function addXP(amount, reason) {
+            state.xp += amount;
+            
+            const xpForLevel = level => level * 100;
+            while (state.xp >= xpForLevel(state.level)) {
+                state.xp -= xpForLevel(state.level);
+                state.level++;
+                showAchievement(`Niveau ${state.level} !`, `Tu progresses dans l'aventure CCPLC`);
+            }
+            
+            updateXPBar();
+            saveState();
+        }
+
+        function updateXPBar() {
+            const xpForNextLevel = state.level * 100;
+            const percentage = (state.xp / xpForNextLevel) * 100;
+            
+            document.getElementById('xpFill').style.width = percentage + '%';
+            document.getElementById('currentXp').textContent = state.xp;
+            document.getElementById('nextLevelXp').textContent = xpForNextLevel;
+            document.getElementById('levelBadge').textContent = state.level;
+            document.getElementById('levelNumber').textContent = state.level;
+        }
+
+        function toggleXpBar() {
+            document.getElementById('xpContainer').classList.toggle('minimized');
+        }
+
+        // === ACHIEVEMENTS ===
+        function unlockAchievement(id) {
+            if (state.achievements.includes(id)) return;
+            state.achievements.push(id);
+            showAchievement('Succès débloqué !', '+50 XP');
+            addXP(50, 'achievement');
+            saveState();
+        }
+
+        function showAchievement(title, desc) {
+            const popup = document.getElementById('achievementPopup');
+            document.getElementById('achievementTitle').textContent = title;
+            document.getElementById('achievementDesc').textContent = desc;
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        // === LESSONS ===
+        function markLessonRead(num) {
+            if (state.lessonsRead.includes(num)) return;
+            
+            state.lessonsRead.push(num);
+            
+            // Update UI
+            const card = document.querySelector(`.lesson-card[onclick="markLessonRead(${num})"]`);
+            if (card) card.classList.add('read');
+            
+            const tocLink = document.querySelector(`.toc-list a[data-lesson="${num}"]`);
+            if (tocLink) tocLink.classList.add('completed');
+            
+            // Update progress
+            document.getElementById('lessonsRead').textContent = state.lessonsRead.length;
+            document.getElementById('articleProgress').style.width = (state.lessonsRead.length / 5 * 100) + '%';
+            
+            addXP(30, 'lesson');
+            
+            // Check if all lessons read
+            if (state.lessonsRead.length >= 5 && !state.achievements.includes('scholar')) {
+                unlockAchievement('scholar');
+                showAchievement('📚 Érudit·e', 'Toutes les leçons lues !');
+                triggerConfetti();
+            }
+            
+            saveState();
+        }
+
+        // === QUIZ ===
+        function validateAnswer(num) {
+            if (state.quizAnswered.includes(num)) return;
+            
+            const card = document.querySelector(`.quiz-question-card[data-question="${num}"]`);
+            const textarea = card.querySelector('.quiz-answer-input');
+            
+            if (textarea.value.trim().length < 20) {
+                textarea.style.borderColor = 'var(--danger)';
+                setTimeout(() => textarea.style.borderColor = 'var(--border)', 2000);
+                return;
+            }
+            
+            state.quizAnswered.push(num);
+            card.classList.add('answered');
+            textarea.disabled = true;
+            
+            // Show answer
+            document.getElementById(`answer-${num}`).classList.add('show');
+            
+            addXP(20, 'quiz-answer');
+            updateQuizProgress();
+            
+            // Check completion
+            if (state.quizAnswered.length >= 5) {
+                document.getElementById('completeQuizBtn').style.display = 'inline-flex';
+            }
+            
+            if (state.quizAnswered.length >= 10 && !state.achievements.includes('master')) {
+                unlockAchievement('master');
+                showAchievement('🎓 Maître·sse', 'Quiz complet !');
+                triggerConfetti();
+            }
+            
+            saveState();
+        }
+
+        function showAnswer(num) {
+            document.getElementById(`answer-${num}`).classList.toggle('show');
+        }
+
+        function updateQuizProgress() {
+            const answered = state.quizAnswered.length;
+            const xpEarned = answered * 20;
+            const percent = Math.round(answered / 10 * 100);
+            
+            document.getElementById('quizAnswered').textContent = answered;
+            document.getElementById('quizXP').textContent = xpEarned;
+            document.getElementById('quizPercent').textContent = percent + '%';
+        }
+
+        function completeQuiz() {
+            if (state.achievements.includes('quiz-complete')) return;
+            
+            state.achievements.push('quiz-complete');
+            addXP(100, 'quiz-complete');
+            showAchievement('🏆 Quiz Terminé', '+100 XP bonus !');
+            triggerConfetti();
+            
+            document.getElementById('completeQuizBtn').textContent = '✓ Quiz complété !';
+            document.getElementById('completeQuizBtn').disabled = true;
+            
+            saveState();
+        }
+
+        // === TABS ===
+        function showTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        // === CONFETTI ===
+        function triggerConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#f59e0b', '#10b981', '#1a5f7a', '#ef4444', '#8b5cf6'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animation = `confetti-fall ${2 + Math.random() * 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                container.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // === NAVIGATION ===
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            state.theme = newTheme;
+            saveState();
+        }
+
+        // === SCROLL PROGRESS ===
+        function updateScrollProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // === UPDATE UI ===
+        function updateUI() {
+            updateXPBar();
+            updateQuizProgress();
+            
+            // Restore lessons
+            state.lessonsRead.forEach(num => {
+                const card = document.querySelector(`.lesson-card[onclick="markLessonRead(${num})"]`);
+                if (card) card.classList.add('read');
+                
+                const tocLink = document.querySelector(`.toc-list a[data-lesson="${num}"]`);
+                if (tocLink) tocLink.classList.add('completed');
+            });
+            
+            document.getElementById('lessonsRead').textContent = state.lessonsRead.length;
+            document.getElementById('articleProgress').style.width = (state.lessonsRead.length / 5 * 100) + '%';
+            
+            // Restore quiz
+            state.quizAnswered.forEach(num => {
+                const card = document.querySelector(`.quiz-question-card[data-question="${num}"]`);
+                if (card) {
+                    card.classList.add('answered');
+                    card.querySelector('.quiz-answer-input').disabled = true;
+                    document.getElementById(`answer-${num}`).classList.add('show');
+                }
+            });
+            
+            if (state.quizAnswered.length >= 5) {
+                document.getElementById('completeQuizBtn').style.display = 'inline-flex';
+            }
+            
+            if (state.theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        // === INIT ===
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            
+            window.addEventListener('scroll', updateScrollProgress);
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    document.getElementById('navLinks').classList.remove('open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
