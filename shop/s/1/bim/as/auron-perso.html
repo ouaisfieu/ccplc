@@ -2,1052 +2,359 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic Personnel - Cartographie de Vie</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Roue de Vie</title>
 <style>
-:root {
-  --bg: #0a0a0f;
-  --card-bg: #12121a;
-  --border: rgba(134, 239, 172, 0.3);
-  --text: #a7f3d0;
-  --accent: #c4b5fd;
-  --eye: #ef4444;
-  --eye-glow: rgba(239, 68, 68, 0.5);
-  --special-mauve: #ff00ff;
-  --special-matrix: #00ff00;
-}
-[data-theme="light"] {
-  --bg: #f0fdf4;
-  --card-bg: #ffffff;
-  --border: rgba(192, 132, 252, 0.4);
-  --text: #166534;
-  --accent: #7c3aed;
-  --eye: #ea580c;
-  --eye-glow: rgba(234, 88, 12, 0.4);
-}
-[data-theme="matrix"] {
-  --bg: #000;
-  --card-bg: #001100;
-  --border: #00ff00;
-  --text: #00ff00;
-  --accent: #00ff00;
-  --eye: #00ff00;
-  --eye-glow: rgba(0, 255, 0, 0.6);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  transition: all 0.4s;
-}
-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5rem;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: bold;
-  font-size: 0.95rem;
-}
-.eye-container { position: relative; width: 28px; height: 28px; }
-.eye {
-  width: 28px; height: 14px;
-  border: 2px solid var(--eye);
-  border-radius: 50%;
-  position: absolute; top: 50%; transform: translateY(-50%);
-  animation: pulse 2s infinite;
-  box-shadow: 0 0 10px var(--eye-glow), inset 0 0 6px var(--eye-glow);
-}
-.pupil {
-  width: 5px; height: 5px;
-  background: var(--eye);
-  border-radius: 50%;
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation: look 4s infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 10px var(--eye-glow), inset 0 0 6px var(--eye-glow); }
-  50% { box-shadow: 0 0 20px var(--eye-glow), inset 0 0 12px var(--eye-glow); }
-}
-@keyframes look {
-  0%, 100% { transform: translate(-50%, -50%); }
-  25% { transform: translate(-80%, -50%); }
-  75% { transform: translate(-20%, -50%); }
-}
-@keyframes blinkMauve {
-  0%, 100% { box-shadow: 0 0 5px var(--special-mauve), inset 0 0 8px rgba(255,0,255,0.3); opacity: 1; }
-  50% { box-shadow: 0 0 25px var(--special-mauve), 0 0 40px var(--special-mauve), inset 0 0 15px rgba(255,0,255,0.6); opacity: 0.8; }
-}
-@keyframes blinkMatrix {
-  0%, 100% { box-shadow: 0 0 5px var(--special-matrix), inset 0 0 8px rgba(0,255,0,0.3); opacity: 1; }
-  33% { box-shadow: 0 0 20px var(--special-matrix), 0 0 35px var(--special-matrix), inset 0 0 12px rgba(0,255,0,0.5); opacity: 0.85; }
-  66% { box-shadow: 0 0 10px var(--special-matrix), inset 0 0 10px rgba(0,255,0,0.4); opacity: 0.9; }
-}
-.controls { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-.btn {
-  padding: 0.35rem 0.6rem;
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  color: var(--text);
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.7rem;
-  transition: all 0.2s;
-}
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn.active { background: var(--accent); color: var(--bg); }
-.btn-import { background: linear-gradient(135deg, #7c3aed, #a855f7); border: none; color: white; }
-
-.intro {
-  padding: 1rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-}
-.intro h2 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.1rem; }
-.intro p { font-size: 0.8rem; opacity: 0.8; max-width: 600px; margin: 0 auto; }
-
-.wheel-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1rem;
-  justify-content: center;
-}
-
-.wheel {
-  position: relative;
-  width: 320px;
-  height: 320px;
-}
-
-.wheel-center {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80px; height: 80px;
-  background: var(--card-bg);
-  border: 3px solid var(--eye);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 10;
-  box-shadow: 0 0 20px var(--eye-glow);
-}
-.wheel-center .score-total { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
-.wheel-center .score-label { font-size: 0.6rem; opacity: 0.7; }
-
-.domain-slice {
-  position: absolute;
-  width: 120px; height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background: var(--card-bg);
-  border: 2px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-align: center;
-  padding: 0.5rem;
-}
-.domain-slice:hover {
-  transform: scale(1.05);
-  z-index: 20;
-  box-shadow: 0 0 15px var(--eye-glow);
-}
-.domain-slice.special-mauve { border-color: var(--special-mauve) !important; animation: blinkMauve 1.2s infinite; }
-.domain-slice.special-matrix { border-color: var(--special-matrix) !important; animation: blinkMatrix 0.8s infinite; }
-
-.domain-icon { font-size: 1.5rem; margin-bottom: 0.2rem; }
-.domain-name { font-size: 0.65rem; font-weight: bold; margin-bottom: 0.2rem; }
-.domain-score {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: var(--accent);
-}
-.domain-bar {
-  width: 80%;
-  height: 6px;
-  background: var(--bg);
-  border-radius: 3px;
-  margin-top: 0.3rem;
-  overflow: hidden;
-}
-.domain-bar-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.3s;
-}
-
-.side-panel {
-  flex: 1;
-  min-width: 280px;
-  max-width: 400px;
-}
-
-.panel-section {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.panel-section h3 {
-  color: var(--accent);
-  font-size: 0.9rem;
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.insight-item {
-  padding: 0.5rem;
-  background: var(--bg);
-  border-radius: 5px;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-}
-.insight-item.strength { border-left: 3px solid #22c55e; }
-.insight-item.weakness { border-left: 3px solid #ef4444; }
-.insight-item.opportunity { border-left: 3px solid #eab308; }
-
-.goals-list {
-  max-height: 200px;
-  overflow-y: auto;
-}
-.goal-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem;
-  background: var(--bg);
-  border-radius: 4px;
-  margin-bottom: 0.3rem;
-  font-size: 0.7rem;
-}
-.goal-item input[type="checkbox"] { cursor: pointer; }
-.goal-item.completed { opacity: 0.5; text-decoration: line-through; }
-
-.add-goal {
-  display: flex;
-  gap: 0.3rem;
-  margin-top: 0.5rem;
-}
-.add-goal input {
-  flex: 1;
-  padding: 0.4rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 4px;
-  font-size: 0.75rem;
-}
-
-.history-chart {
-  height: 100px;
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  padding: 0.5rem 0;
-}
-.history-bar {
-  flex: 1;
-  background: var(--accent);
-  border-radius: 2px 2px 0 0;
-  min-width: 8px;
-  position: relative;
-}
-.history-bar:hover::after {
-  content: attr(data-value);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--card-bg);
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.6rem;
-  white-space: nowrap;
-}
-
-.modal-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.92);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  overflow-y: auto;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--card-bg);
-  border: 2px solid var(--accent);
-  border-radius: 10px;
-  width: 100%;
-  max-width: 500px;
-  max-height: 95vh;
-  overflow-y: auto;
-}
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0;
-  background: var(--card-bg);
-  z-index: 10;
-}
-.modal-header h3 { font-size: 1rem; }
-.modal-close {
-  background: none; border: none;
-  color: var(--text);
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-.modal-body { padding: 1rem; }
-.form-group { margin-bottom: 0.75rem; }
-.form-group label {
-  display: block;
-  margin-bottom: 0.2rem;
-  color: var(--accent);
-  font-size: 0.75rem;
-}
-.form-group textarea {
-  width: 100%;
-  padding: 0.5rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 5px;
-  font-size: 0.8rem;
-  min-height: 60px;
-  resize: vertical;
-}
-.range-group { margin-bottom: 1rem; }
-.range-group label {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.3rem;
-  font-size: 0.75rem;
-}
-.range-group input[type="range"] { width: 100%; }
-.range-value {
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--accent);
-  margin: 0.5rem 0;
-}
-.range-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.65rem;
-  opacity: 0.7;
-}
-
-.color-picker-row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-.color-picker-row input[type="color"] {
-  width: 40px; height: 30px;
-  padding: 0; border: none; cursor: pointer;
-}
-.special-btn {
-  padding: 0.3rem 0.6rem;
-  border: 2px solid;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.65rem;
-  font-weight: bold;
-  transition: all 0.2s;
-}
-.special-btn.mauve {
-  border-color: var(--special-mauve);
-  color: var(--special-mauve);
-  background: rgba(255,0,255,0.1);
-  animation: blinkMauve 1.2s infinite;
-}
-.special-btn.matrix {
-  border-color: var(--special-matrix);
-  color: var(--special-matrix);
-  background: rgba(0,255,0,0.1);
-  animation: blinkMatrix 0.8s infinite;
-}
-.special-btn.selected { transform: scale(1.1); }
-
-.sub-scores {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border);
-}
-.sub-score {
-  background: var(--bg);
-  padding: 0.5rem;
-  border-radius: 5px;
-}
-.sub-score label {
-  font-size: 0.65rem;
-  color: var(--accent);
-  display: block;
-  margin-bottom: 0.2rem;
-}
-.sub-score input[type="range"] { width: 100%; }
-.sub-score-val { text-align: center; font-weight: bold; font-size: 0.9rem; }
-
-.modal-actions {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  padding: 0.75rem 1rem;
-  border-top: 1px solid var(--border);
-  position: sticky; bottom: 0;
-  background: var(--card-bg);
-}
-.btn-primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-
-.import-zone {
-  border: 2px dashed var(--accent);
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  margin: 0.5rem 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.8rem;
-}
-.import-zone:hover { background: rgba(196, 181, 253, 0.1); }
-
-.stats-bar {
-  display: flex;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-.stat-item { display: flex; align-items: center; gap: 0.3rem; }
-.stat-dot { width: 10px; height: 10px; border-radius: 50%; }
+:root{--bg:#0a0a0f;--card:#12121a;--border:rgba(134,239,172,0.3);--text:#a7f3d0;--accent:#c4b5fd;--eye:#ef4444;--mauve:#ff00ff;--matrix:#00ff00}
+[data-theme="light"]{--bg:#f0fdf4;--card:#fff;--border:rgba(192,132,252,0.4);--text:#166534;--accent:#7c3aed}
+[data-theme="matrix"]{--bg:#000;--card:#001100;--border:#00ff00;--text:#00ff00;--accent:#00ff00;--eye:#00ff00}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+header{display:flex;align-items:center;justify-content:space-between;padding:0.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100}
+.logo{display:flex;align-items:center;gap:0.4rem;font-weight:bold;font-size:0.9rem}
+.eye{width:24px;height:12px;border:2px solid var(--eye);border-radius:50%;position:relative;animation:pulse 2s infinite}
+.eye::after{content:'';position:absolute;width:5px;height:5px;background:var(--eye);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+@keyframes pulse{50%{box-shadow:0 0 15px var(--eye)}}
+@keyframes blinkM{50%{box-shadow:0 0 25px var(--mauve);opacity:0.8}}
+@keyframes blinkG{33%{box-shadow:0 0 20px var(--matrix)}66%{opacity:0.85}}
+.ctrls{display:flex;gap:0.25rem;flex-wrap:wrap}
+.btn{padding:0.3rem 0.5rem;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:4px;font-size:0.65rem;cursor:pointer}
+.btn:hover,.btn.on{background:var(--accent);color:var(--bg)}
+.hint{text-align:center;padding:0.4rem;font-size:0.7rem;opacity:0.7;border-bottom:1px solid var(--border)}
+.wrap{position:relative;width:100%;height:75vw;max-height:380px;min-height:260px;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab}
+.wrap:active{cursor:grabbing}
+.wheel{position:relative;width:85vw;height:85vw;max-width:350px;max-height:350px}
+.center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:65px;height:65px;background:var(--card);border:3px solid var(--eye);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;box-shadow:0 0 20px rgba(239,68,68,0.4)}
+.center-score{font-size:1.5rem;font-weight:bold;color:var(--accent)}
+.center-lbl{font-size:0.45rem;opacity:0.7}
+.dom{position:absolute;width:62px;height:62px;background:var(--card);border:2px solid var(--border);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;text-align:center}
+.dom:hover{transform:scale(1.08)}
+.dom.act{transform:scale(1.15);box-shadow:0 0 15px var(--accent);border-color:var(--accent);z-index:20}
+.dom.sp-m{border-color:var(--mauve)!important;animation:blinkM 1.2s infinite}
+.dom.sp-g{border-color:var(--matrix)!important;animation:blinkG 0.8s infinite}
+.dom-i{font-size:1.2rem}
+.dom-s{font-size:0.65rem;font-weight:bold;margin-top:1px}
+.dom-n{font-size:0.4rem;opacity:0.8}
+.panel{padding:0.75rem;border-top:1px solid var(--border)}
+.panel-t{display:flex;align-items:center;gap:0.4rem;font-size:0.95rem;color:var(--accent);margin-bottom:0.5rem}
+.sc-ctrl{display:flex;align-items:center;gap:0.4rem;padding:0.4rem;background:var(--card);border-radius:5px;margin-bottom:0.5rem}
+.sc-ctrl input{flex:1}
+.sc-v{font-size:1.4rem;font-weight:bold;color:var(--accent);min-width:35px;text-align:center}
+.fields{display:grid;gap:0.4rem}
+.fld label{display:block;font-size:0.6rem;color:var(--accent);margin-bottom:0.15rem}
+.fld textarea{width:100%;padding:0.35rem;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:0.7rem;resize:none;min-height:42px}
+.clr-row{display:flex;gap:0.3rem;align-items:center;margin-top:0.4rem}
+.clr-row input[type="color"]{width:28px;height:28px;border:none;cursor:pointer}
+.sp{padding:0.2rem 0.4rem;border:2px solid;border-radius:3px;font-size:0.55rem;font-weight:bold;cursor:pointer}
+.sp.m{border-color:var(--mauve);color:var(--mauve);animation:blinkM 1.2s infinite}
+.sp.g{border-color:var(--matrix);color:var(--matrix);animation:blinkG 0.8s infinite}
+.sp.sel{transform:scale(1.1)}
+.acts{display:flex;gap:0.25rem;margin-top:0.5rem;flex-wrap:wrap}
+.btn-sv{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.ins{padding:0.5rem;border-top:1px solid var(--border)}
+.ins h3{font-size:0.75rem;color:var(--accent);margin-bottom:0.4rem}
+.ins-i{padding:0.35rem;background:var(--card);border-radius:3px;font-size:0.65rem;margin-bottom:0.25rem;border-left:3px solid}
+.ins-i.g{border-color:#22c55e}.ins-i.b{border-color:#ef4444}.ins-i.t{border-color:#eab308}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:1000;align-items:center;justify-content:center;padding:0.75rem}
+.modal.open{display:flex}
+.mbox{background:var(--card);border:2px solid var(--accent);border-radius:8px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto;padding:0.75rem}
+.mbox h3{color:var(--accent);margin-bottom:0.75rem;text-align:center;font-size:0.95rem}
+.preview{background:var(--bg);border-radius:5px;padding:0.4rem;font-size:0.55rem;max-height:120px;overflow-y:auto;margin-bottom:0.75rem;font-family:monospace;white-space:pre-wrap}
+.exp-tabs{display:flex;gap:0.25rem;margin-bottom:0.5rem}
+.tab{flex:1;padding:0.4rem;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:4px 4px 0 0;font-size:0.7rem;cursor:pointer}
+.tab.on{background:var(--accent);color:var(--bg);border-bottom-color:var(--accent)}
+.edit-area{width:100%;min-height:200px;padding:0.5rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:0 0 5px 5px;font-size:0.7rem;font-family:monospace;resize:vertical;margin-bottom:0.5rem}
+.exp-btns{display:flex;gap:0.3rem;flex-wrap:wrap}
+.exp-btns .btn{padding:0.5rem 0.75rem;font-size:0.7rem;flex:1}
+.btn-gh{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+@media(min-width:500px){.wrap{height:55vw;max-height:400px}.wheel{max-width:380px;max-height:380px}.dom{width:72px;height:72px}.dom-i{font-size:1.4rem}.center{width:75px;height:75px}.fields{grid-template-columns:1fr 1fr}}
+@media(min-width:800px){.main{display:flex;gap:1rem;padding:1rem}.wrap{flex:1;height:420px;max-height:none}.wheel{max-width:400px;max-height:400px}.side{width:320px}.panel,.ins{border:1px solid var(--border);border-radius:6px;margin-bottom:0.75rem}}
 </style>
 </head>
 <body data-theme="dark">
-
 <header>
-  <div class="logo">
-    <div class="eye-container"><div class="eye"><div class="pupil"></div></div></div>
-    <span>DIAGNOSTIC PERSONNEL 🧭</span>
-  </div>
-  <div class="controls">
-    <button class="btn active" onclick="setTheme('dark')">🌙</button>
-    <button class="btn" onclick="setTheme('light')">☀️</button>
-    <button class="btn" onclick="setTheme('matrix')">🟢</button>
-    <label class="btn btn-import">
-      📥 XLSX
-      <input type="file" id="xlsxInput" accept=".xlsx,.xls" style="display:none" onchange="handleXLSX(event)">
-    </label>
-    <button class="btn" onclick="exportData('json')">JSON</button>
-    <button class="btn" onclick="exportData('md')">MD</button>
-    <button class="btn" onclick="exportData('html')">HTML</button>
-    <button class="btn" onclick="saveSnapshot()">📸 Snapshot</button>
-    <button class="btn" onclick="importJSON()">📤</button>
-  </div>
+<div class="logo"><div class="eye"></div><span>ROUE DE VIE</span></div>
+<div class="ctrls">
+<button class="btn on" onclick="T('dark')">🌙</button>
+<button class="btn" onclick="T('light')">☀️</button>
+<button class="btn" onclick="T('matrix')">🟢</button>
+<button class="btn" onclick="openEx()">📤</button>
+</div>
 </header>
-
-<div class="intro">
-  <h2>🔮 Cartographie de Vie - Diagnostic Personnel</h2>
-  <p>Évaluez chaque domaine de votre vie de 0 à 10. Identifiez vos forces, faiblesses et opportunités de croissance. Cliquez sur un domaine pour l'évaluer en détail.</p>
+<div class="hint">👆 Glissez pour tourner • Tapez un domaine</div>
+<div class="main">
+<div class="wrap" id="W">
+<div class="wheel" id="R">
+<div class="center"><div class="center-score" id="tot">5.0</div><div class="center-lbl">GLOBAL</div></div>
 </div>
-
-<div class="stats-bar" id="statsBar"></div>
-
-<div class="wheel-container">
-  <div class="wheel" id="wheel">
-    <div class="wheel-center">
-      <div class="score-total" id="totalScore">0</div>
-      <div class="score-label">Score Global</div>
-    </div>
-  </div>
-  
-  <div class="side-panel">
-    <div class="panel-section">
-      <h3>💡 Analyse Automatique</h3>
-      <div id="insights"></div>
-    </div>
-    
-    <div class="panel-section">
-      <h3>🎯 Objectifs & Actions</h3>
-      <div class="goals-list" id="goalsList"></div>
-      <div class="add-goal">
-        <input type="text" id="newGoal" placeholder="Nouvel objectif..." onkeypress="if(event.key==='Enter')addGoal()">
-        <button class="btn" onclick="addGoal()">+</button>
-      </div>
-    </div>
-    
-    <div class="panel-section">
-      <h3>📈 Évolution (30 derniers jours)</h3>
-      <div class="history-chart" id="historyChart"></div>
-    </div>
-  </div>
 </div>
-
-<div class="import-zone" id="importZone" onclick="document.getElementById('xlsxInput').click()">
-  📊 Importer un diagnostic existant (XLSX/JSON)
+<div class="side">
+<div class="panel" id="P">
+<div class="panel-t"><span id="pI">🎯</span><span id="pN">Sélectionnez</span></div>
+<div class="sc-ctrl"><span>0</span><input type="range" id="sR" min="0" max="10" value="5" oninput="uS()"><span>10</span><div class="sc-v" id="sV">5</div></div>
+<div class="fields">
+<div class="fld"><label>📍 Situation</label><textarea id="f1" placeholder="Où en êtes-vous?"></textarea></div>
+<div class="fld"><label>🎯 Objectif</label><textarea id="f2" placeholder="Où aller?"></textarea></div>
+<div class="fld"><label>🚀 Action</label><textarea id="f3" placeholder="Prochain pas?"></textarea></div>
+<div class="fld"><label>🚧 Obstacles</label><textarea id="f4" placeholder="Freins?"></textarea></div>
 </div>
-
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header">
-      <h3 id="modalTitle">Domaine</h3>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <div class="range-group">
-        <label>
-          <span>Niveau de satisfaction</span>
-        </label>
-        <input type="range" id="fScore" min="0" max="10" value="5" oninput="updateModalScore()">
-        <div class="range-value" id="scoreDisplay">5</div>
-        <div class="range-labels">
-          <span>😰 Critique</span>
-          <span>😐 Moyen</span>
-          <span>🌟 Excellent</span>
-        </div>
-      </div>
-      
-      <div class="sub-scores" id="subScores"></div>
-      
-      <div class="form-group">
-        <label>📝 Situation actuelle</label>
-        <textarea id="fSituation" placeholder="Décrivez votre situation actuelle dans ce domaine..."></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label>🎯 Objectif souhaité</label>
-        <textarea id="fObjectif" placeholder="Où voulez-vous être dans 6 mois / 1 an ?"></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label>🚀 Prochaine action concrète</label>
-        <textarea id="fAction" placeholder="Quelle est la prochaine étape ?"></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label>🚧 Obstacles identifiés</label>
-        <textarea id="fObstacles" placeholder="Qu'est-ce qui vous freine ?"></textarea>
-      </div>
-      
-      <div class="form-group">
-        <label>🎨 Couleur personnalisée</label>
-        <div class="color-picker-row">
-          <input type="color" id="fColor" value="#86efac">
-          <button type="button" class="special-btn mauve" onclick="selectSpecial('mauve')">🟣 MAUVE</button>
-          <button type="button" class="special-btn matrix" onclick="selectSpecial('matrix')">🟢 MATRIX</button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-primary" onclick="saveDomain()">💾 Sauvegarder</button>
-      <button class="btn" onclick="resetDomain()">🔄 Réinitialiser</button>
-    </div>
-  </div>
+<div class="clr-row">
+<input type="color" id="fC" value="#86efac">
+<button class="sp m" onclick="pS('m')">🟣</button>
+<button class="sp g" onclick="pS('g')">🟢</button>
 </div>
-
-<input type="file" id="jsonInput" accept=".json" style="display:none" onchange="handleJSONImport(event)">
-
+<div class="acts">
+<button class="btn btn-sv" onclick="svD()">💾 Sauver</button>
+<button class="btn" onclick="rsD()">🔄</button>
+</div>
+</div>
+<div class="ins" id="I"></div>
+</div>
+</div>
+<div class="modal" id="M" onclick="clEx(event)">
+<div class="mbox" onclick="event.stopPropagation()">
+<h3>📤 Exporter</h3>
+<div class="exp-tabs">
+<button class="tab on" onclick="setTab('md')">📝 MD</button>
+<button class="tab" onclick="setTab('json')">💾 JSON</button>
+<button class="tab" onclick="setTab('html')">🌐 HTML</button>
+</div>
+<textarea class="edit-area" id="editArea" placeholder="Contenu à exporter..."></textarea>
+<div class="exp-btns">
+<button class="btn btn-gh" onclick="dlEdit()">⬇️ Télécharger</button>
+<button class="btn" onclick="copyEdit()">📋 Copier</button>
+<button class="btn" onclick="clEx()">✕ Fermer</button>
+</div>
+</div>
+</div>
 <script>
-const DOMAINS = [
-  { id: 'sante', name: 'Santé Physique', icon: '💪', color: '#22c55e', 
-    subs: ['Énergie', 'Sommeil', 'Alimentation', 'Exercice'] },
-  { id: 'mental', name: 'Santé Mentale', icon: '🧠', color: '#8b5cf6',
-    subs: ['Stress', 'Clarté', 'Motivation', 'Confiance'] },
-  { id: 'relations', name: 'Relations', icon: '❤️', color: '#ef4444',
-    subs: ['Famille', 'Amis', 'Couple', 'Réseau'] },
-  { id: 'carriere', name: 'Carrière', icon: '💼', color: '#3b82f6',
-    subs: ['Satisfaction', 'Compétences', 'Évolution', 'Impact'] },
-  { id: 'finances', name: 'Finances', icon: '💰', color: '#eab308',
-    subs: ['Revenus', 'Épargne', 'Investissements', 'Sécurité'] },
-  { id: 'croissance', name: 'Croissance Perso', icon: '📚', color: '#f97316',
-    subs: ['Apprentissage', 'Lectures', 'Formations', 'Habitudes'] },
-  { id: 'loisirs', name: 'Loisirs & Fun', icon: '🎮', color: '#ec4899',
-    subs: ['Hobbies', 'Créativité', 'Aventure', 'Repos'] },
-  { id: 'environnement', name: 'Environnement', icon: '🏠', color: '#06b6d4',
-    subs: ['Logement', 'Organisation', 'Confort', 'Nature'] },
-  { id: 'spiritualite', name: 'Sens & Valeurs', icon: '✨', color: '#a855f7',
-    subs: ['Purpose', 'Gratitude', 'Méditation', 'Alignement'] },
-  { id: 'contribution', name: 'Contribution', icon: '🌍', color: '#84cc16',
-    subs: ['Bénévolat', 'Mentorat', 'Communauté', 'Héritage'] }
+const D=[
+{id:'sante',n:'Santé',i:'💪',c:'#22c55e'},
+{id:'mental',n:'Mental',i:'🧠',c:'#8b5cf6'},
+{id:'relations',n:'Relations',i:'❤️',c:'#ef4444'},
+{id:'carriere',n:'Carrière',i:'💼',c:'#3b82f6'},
+{id:'finances',n:'Finances',i:'💰',c:'#eab308'},
+{id:'croissance',n:'Croissance',i:'📚',c:'#f97316'},
+{id:'loisirs',n:'Loisirs',i:'🎮',c:'#ec4899'},
+{id:'env',n:'Cadre',i:'🏠',c:'#06b6d4'},
+{id:'sens',n:'Sens',i:'✨',c:'#a855f7'},
+{id:'impact',n:'Impact',i:'🌍',c:'#84cc16'}
 ];
+let dt={d:{},u:null},cur=null,spc=null,rot=0,drag=false,sA=0,sR=0,curTab='md';
 
-const POSITIONS = [
-  { top: '0%', left: '35%' },
-  { top: '5%', left: '65%' },
-  { top: '25%', left: '85%' },
-  { top: '55%', left: '85%' },
-  { top: '75%', left: '65%' },
-  { top: '75%', left: '35%' },
-  { top: '55%', left: '5%' },
-  { top: '25%', left: '5%' },
-  { top: '5%', left: '20%' },
-  { top: '5%', left: '50%' }
-];
-
-let data = {
-  domains: {},
-  goals: [],
-  history: [],
-  updated: null
-};
-let currentDomain = null;
-let selectedSpecial = null;
-
-function init() {
-  loadData();
-  DOMAINS.forEach(d => {
-    if (!data.domains[d.id]) {
-      data.domains[d.id] = { score: 5, subs: {}, situation: '', objectif: '', action: '', obstacles: '', color: d.color, special: null };
-      d.subs.forEach(s => data.domains[d.id].subs[s] = 5);
-    }
-  });
-  renderWheel();
-  updateStats();
-  renderInsights();
-  renderGoals();
-  renderHistory();
+function init(){
+ld();
+D.forEach(x=>{if(!dt.d[x.id])dt.d[x.id]={s:5,f1:'',f2:'',f3:'',f4:'',c:x.c,sp:null}});
+rW();uT();rI();sel(D[0].id);sT();
 }
 
-function loadData() {
-  try {
-    const saved = localStorage.getItem('sauronDiagPerso');
-    if (saved) data = JSON.parse(saved);
-  } catch(e) { }
+function ld(){try{const s=localStorage.getItem('rv');if(s)dt=JSON.parse(s)}catch(e){}}
+function sv(){dt.u=new Date().toISOString();localStorage.setItem('rv',JSON.stringify(dt));uT();rI()}
+
+function rW(){
+const w=document.getElementById('R'),ctr=w.querySelector('.center');
+w.innerHTML='';w.appendChild(ctr);
+const r=Math.min(w.offsetWidth,w.offsetHeight)/2-38,cx=w.offsetWidth/2,cy=w.offsetHeight/2;
+D.forEach((x,i)=>{
+const a=(i/D.length)*Math.PI*2-Math.PI/2,px=cx+Math.cos(a)*r-31,py=cy+Math.sin(a)*r-31;
+const dd=dt.d[x.id]||{s:5},el=document.createElement('div');
+el.className='dom'+(dd.sp==='m'?' sp-m':'')+(dd.sp==='g'?' sp-g':'');
+el.id='d-'+x.id;
+el.style.left=px+'px';el.style.top=py+'px';
+if(!dd.sp)el.style.borderColor=dd.c||x.c;
+const sc=dd.s>=7?'#22c55e':dd.s>=4?'#eab308':'#ef4444';
+el.innerHTML='<div class="dom-i">'+x.i+'</div><div class="dom-s" style="color:'+sc+'">'+dd.s+'/10</div><div class="dom-n">'+x.n+'</div>';
+el.onclick=e=>{e.stopPropagation();sel(x.id)};
+w.appendChild(el);
+});
+w.style.transform='rotate('+rot+'deg)';
 }
 
-function saveData() {
-  data.updated = new Date().toISOString();
-  localStorage.setItem('sauronDiagPerso', JSON.stringify(data));
-  updateStats();
-  renderInsights();
+function sT(){
+const w=document.getElementById('W'),wh=document.getElementById('R');
+const gA=e=>{const r=w.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+const x=(e.touches?e.touches[0].clientX:e.clientX)-cx,y=(e.touches?e.touches[0].clientY:e.clientY)-cy;
+return Math.atan2(y,x)*180/Math.PI};
+const st=e=>{drag=true;sA=gA(e);sR=rot;wh.style.transition='none'};
+const mv=e=>{if(!drag)return;const a=gA(e);rot=sR+(a-sA);wh.style.transform='rotate('+rot+'deg)';
+document.querySelectorAll('.dom').forEach(el=>el.style.transform='rotate('+-rot+'deg)')};
+const en=()=>{drag=false;wh.style.transition='transform 0.1s'};
+w.addEventListener('mousedown',st);w.addEventListener('touchstart',st,{passive:true});
+window.addEventListener('mousemove',mv);window.addEventListener('touchmove',mv,{passive:true});
+window.addEventListener('mouseup',en);window.addEventListener('touchend',en);
 }
 
-function renderWheel() {
-  const wheel = document.getElementById('wheel');
-  const center = wheel.querySelector('.wheel-center');
-  wheel.innerHTML = '';
-  wheel.appendChild(center);
-  
-  DOMAINS.forEach((domain, i) => {
-    const d = data.domains[domain.id] || { score: 5 };
-    const pos = POSITIONS[i] || { top: '50%', left: '50%' };
-    
-    const slice = document.createElement('div');
-    slice.className = 'domain-slice';
-    if (d.special === 'mauve') slice.classList.add('special-mauve');
-    if (d.special === 'matrix') slice.classList.add('special-matrix');
-    
-    slice.style.top = pos.top;
-    slice.style.left = pos.left;
-    slice.style.borderColor = d.special ? '' : (d.color || domain.color);
-    
-    const scoreColor = d.score >= 7 ? '#22c55e' : d.score >= 4 ? '#eab308' : '#ef4444';
-    
-    slice.innerHTML = `
-      <div class="domain-icon">${domain.icon}</div>
-      <div class="domain-name">${domain.name}</div>
-      <div class="domain-score" style="color:${scoreColor}">${d.score}/10</div>
-      <div class="domain-bar">
-        <div class="domain-bar-fill" style="width:${d.score * 10}%;background:${scoreColor}"></div>
-      </div>
-    `;
-    
-    slice.onclick = () => openModal(domain.id);
-    wheel.appendChild(slice);
-  });
-  
-  updateTotalScore();
+function sel(id){
+cur=id;const x=D.find(z=>z.id===id),dd=dt.d[id]||{s:5};
+document.querySelectorAll('.dom').forEach(el=>el.classList.remove('act'));
+const el=document.getElementById('d-'+id);if(el){el.classList.add('act');el.style.transform='rotate('+-rot+'deg) scale(1.15)'}
+document.getElementById('pI').textContent=x.i;
+document.getElementById('pN').textContent=x.n;
+document.getElementById('sR').value=dd.s;
+document.getElementById('sV').textContent=dd.s;
+document.getElementById('f1').value=dd.f1||'';
+document.getElementById('f2').value=dd.f2||'';
+document.getElementById('f3').value=dd.f3||'';
+document.getElementById('f4').value=dd.f4||'';
+document.getElementById('fC').value=dd.c||x.c;
+spc=dd.sp||null;
+document.querySelectorAll('.sp').forEach(b=>{b.classList.toggle('sel',(b.classList.contains('m')&&spc==='m')||(b.classList.contains('g')&&spc==='g'))});
 }
 
-function updateTotalScore() {
-  const scores = DOMAINS.map(d => data.domains[d.id]?.score || 5);
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-  document.getElementById('totalScore').textContent = avg.toFixed(1);
-  document.getElementById('totalScore').style.color = 
-    avg >= 7 ? '#22c55e' : avg >= 4 ? '#eab308' : '#ef4444';
+function uS(){document.getElementById('sV').textContent=document.getElementById('sR').value}
+function pS(t){spc=spc===t?null:t;document.querySelectorAll('.sp').forEach(b=>{b.classList.toggle('sel',(b.classList.contains('m')&&spc==='m')||(b.classList.contains('g')&&spc==='g'))})}
+
+function svD(){
+if(!cur)return;
+dt.d[cur]={s:parseInt(document.getElementById('sR').value),f1:document.getElementById('f1').value,f2:document.getElementById('f2').value,f3:document.getElementById('f3').value,f4:document.getElementById('f4').value,c:document.getElementById('fC').value,sp:spc};
+sv();rW();sel(cur);
 }
 
-function updateStats() {
-  const scores = DOMAINS.map(d => ({ ...d, score: data.domains[d.id]?.score || 5 }));
-  const sorted = [...scores].sort((a, b) => b.score - a.score);
-  const best = sorted.slice(0, 3);
-  const worst = sorted.slice(-3).reverse();
-  
-  document.getElementById('statsBar').innerHTML = `
-    <span>🏆 Forces: ${best.map(d => `<span style="color:${d.color}">${d.icon}${d.score}</span>`).join(' ')}</span>
-    <span>⚠️ À travailler: ${worst.map(d => `<span style="color:${d.color}">${d.icon}${d.score}</span>`).join(' ')}</span>
-  `;
+function rsD(){
+if(!cur||!confirm('Reset?'))return;
+const x=D.find(z=>z.id===cur);
+dt.d[cur]={s:5,f1:'',f2:'',f3:'',f4:'',c:x.c,sp:null};
+sv();rW();sel(cur);
 }
 
-function renderInsights() {
-  const insights = document.getElementById('insights');
-  const scores = DOMAINS.map(d => ({ ...d, score: data.domains[d.id]?.score || 5, data: data.domains[d.id] }));
-  const sorted = [...scores].sort((a, b) => b.score - a.score);
-  
-  let html = '';
-  
-  // Forces
-  const strengths = sorted.filter(d => d.score >= 7);
-  if (strengths.length) {
-    html += `<div class="insight-item strength">
-      <strong>💪 Points forts:</strong> ${strengths.map(d => d.name).join(', ')}. 
-      Capitalisez sur ces domaines pour maintenir votre équilibre.
-    </div>`;
-  }
-  
-  // Faiblesses
-  const weaknesses = sorted.filter(d => d.score <= 4);
-  if (weaknesses.length) {
-    html += `<div class="insight-item weakness">
-      <strong>⚠️ Attention requise:</strong> ${weaknesses.map(d => d.name).join(', ')}.
-      Ces domaines nécessitent une action prioritaire.
-    </div>`;
-  }
-  
-  // Opportunité
-  const midRange = sorted.filter(d => d.score > 4 && d.score < 7);
-  if (midRange.length) {
-    html += `<div class="insight-item opportunity">
-      <strong>🎯 Potentiel de croissance:</strong> ${midRange.slice(0, 2).map(d => d.name).join(', ')}.
-      Un petit effort peut faire une grande différence.
-    </div>`;
-  }
-  
-  // Équilibre
-  const variance = scores.reduce((sum, d) => sum + Math.pow(d.score - 5, 2), 0) / scores.length;
-  if (variance > 4) {
-    html += `<div class="insight-item weakness">
-      <strong>⚖️ Déséquilibre détecté:</strong> Vos scores sont très inégaux. 
-      Cherchez plus d'harmonie entre les domaines.
-    </div>`;
-  }
-  
-  insights.innerHTML = html || '<div class="insight-item">Complétez votre diagnostic pour recevoir des analyses.</div>';
+function uT(){
+const sc=D.map(x=>dt.d[x.id]?.s||5),av=sc.reduce((a,b)=>a+b,0)/sc.length;
+const el=document.getElementById('tot');
+el.textContent=av.toFixed(1);
+el.style.color=av>=7?'#22c55e':av>=4?'#eab308':'#ef4444';
 }
 
-function renderGoals() {
-  const list = document.getElementById('goalsList');
-  list.innerHTML = data.goals.map((g, i) => `
-    <div class="goal-item ${g.completed ? 'completed' : ''}">
-      <input type="checkbox" ${g.completed ? 'checked' : ''} onchange="toggleGoal(${i})">
-      <span>${g.text}</span>
-      <button class="btn" style="padding:0.2rem 0.4rem;font-size:0.6rem" onclick="removeGoal(${i})">×</button>
-    </div>
-  `).join('');
+function rI(){
+const sc=D.map(x=>({...x,s:dt.d[x.id]?.s||5})),so=[...sc].sort((a,b)=>b.s-a.s);
+const gd=so.filter(x=>x.s>=7),bd=so.filter(x=>x.s<=4),lo=so[so.length-1];
+let h='<h3>💡 Analyse</h3>';
+if(gd.length)h+='<div class="ins-i g"><b>Forces:</b> '+gd.map(x=>x.i+' '+x.n).join(', ')+'</div>';
+if(bd.length)h+='<div class="ins-i b"><b>À améliorer:</b> '+bd.map(x=>x.i+' '+x.n).join(', ')+'</div>';
+h+='<div class="ins-i t"><b>Focus:</b> '+lo.i+' '+lo.n+' cette semaine</div>';
+document.getElementById('I').innerHTML=h;
 }
 
-function addGoal() {
-  const input = document.getElementById('newGoal');
-  if (input.value.trim()) {
-    data.goals.push({ text: input.value.trim(), completed: false, date: new Date().toISOString() });
-    input.value = '';
-    saveData();
-    renderGoals();
-  }
+function T(t){document.body.dataset.theme=t;document.querySelectorAll('.ctrls .btn').forEach((b,i)=>b.classList.toggle('on',i===['dark','light','matrix'].indexOf(t)))}
+
+function openEx(){
+curTab='md';
+document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===0));
+genContent();
+document.getElementById('M').classList.add('open');
 }
 
-function toggleGoal(i) {
-  data.goals[i].completed = !data.goals[i].completed;
-  saveData();
-  renderGoals();
+function setTab(t){
+curTab=t;
+document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',
+(t==='md'&&b.textContent.includes('MD'))||
+(t==='json'&&b.textContent.includes('JSON'))||
+(t==='html'&&b.textContent.includes('HTML'))
+));
+genContent();
 }
 
-function removeGoal(i) {
-  data.goals.splice(i, 1);
-  saveData();
-  renderGoals();
+function genContent(){
+const sc=D.map(x=>dt.d[x.id]?.s||5),av=sc.reduce((a,b)=>a+b,0)/sc.length,da=new Date().toLocaleDateString('fr-FR');
+let c='';
+if(curTab==='md'){
+c='# 🎯 Roue de Vie\n\n';
+c+='**Score Global: '+av.toFixed(1)+'/10** | '+da+'\n\n---\n\n';
+D.forEach(x=>{
+const dd=dt.d[x.id]||{s:5};
+const bar='█'.repeat(dd.s)+'░'.repeat(10-dd.s);
+c+='## '+x.i+' '+x.n+' ['+bar+'] '+dd.s+'/10\n\n';
+if(dd.f1)c+='**Situation:** '+dd.f1+'\n\n';
+if(dd.f2)c+='**Objectif:** '+dd.f2+'\n\n';
+if(dd.f3)c+='**Action:** '+dd.f3+'\n\n';
+if(dd.f4)c+='**Obstacles:** '+dd.f4+'\n\n';
+c+='---\n\n';
+});
+}else if(curTab==='json'){
+c=JSON.stringify(dt,null,2);
+}else if(curTab==='html'){
+c=`<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ma Roue de Vie</title>
+<meta name="description" content="Mon diagnostic personnel - Score: ${av.toFixed(1)}/10">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:linear-gradient(135deg,#0a0a0f,#1a1a2e);color:#a7f3d0;min-height:100vh;padding:1rem}
+.c{max-width:800px;margin:0 auto}
+header{text-align:center;padding:2rem 0}
+h1{font-size:1.8rem;color:#c4b5fd}
+.hero{text-align:center;padding:2rem;margin:1.5rem 0;background:rgba(18,18,26,0.8);border-radius:12px;border:2px solid #c4b5fd}
+.big{font-size:3.5rem;font-weight:bold;background:linear-gradient(135deg,#c4b5fd,#a7f3d0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:1.5rem 0}
+.card{background:rgba(18,18,26,0.9);border-radius:10px;padding:1rem;border-left:4px solid}
+.card-h{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem}
+.card-i{font-size:1.8rem}
+.card-n{font-size:1rem;font-weight:600}
+.card-s{margin-left:auto;font-size:1.3rem;font-weight:bold}
+.bar{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-bottom:0.75rem}
+.fill{height:100%;border-radius:3px}
+.card p{font-size:0.8rem;margin-bottom:0.4rem}
+.card b{color:#c4b5fd}
+.cta{text-align:center;padding:2.5rem 1rem;margin-top:2rem;background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(167,243,208,0.1));border-radius:12px}
+.cta h2{color:#c4b5fd;margin-bottom:0.75rem}
+.cta-btn{display:inline-block;padding:0.9rem 1.8rem;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;text-decoration:none;border-radius:6px;font-weight:bold}
+footer{text-align:center;padding:1.5rem;opacity:0.5;font-size:0.7rem}
+</style>
+</head>
+<body>
+<div class="c">
+<header><h1>🎯 Ma Roue de Vie</h1><p>${da}</p></header>
+<div class="hero"><div class="big">${av.toFixed(1)}/10</div><div>Score global</div></div>
+<div class="grid">
+${D.map(x=>{
+const dd=dt.d[x.id]||{s:5},s=dd.s,col=s>=7?'#22c55e':s>=4?'#eab308':'#ef4444';
+return `<div class="card" style="border-color:${dd.c||x.c}">
+<div class="card-h">
+<span class="card-i">${x.i}</span>
+<span class="card-n">${x.n}</span>
+<span class="card-s" style="color:${col}">${s}/10</span>
+</div>
+<div class="bar"><div class="fill" style="width:${s*10}%;background:${col}"></div></div>
+${dd.f1?'<p><b>Situation:</b> '+dd.f1+'</p>':''}
+${dd.f2?'<p><b>Objectif:</b> '+dd.f2+'</p>':''}
+${dd.f3?'<p><b>Action:</b> '+dd.f3+'</p>':''}
+</div>`;
+}).join('\n')}
+</div>
+<div class="cta">
+<h2>🚀 Créez votre diagnostic</h2>
+<p>Suivez votre évolution personnelle</p>
+<a href="#" class="cta-btn">Découvrir →</a>
+</div>
+<footer>Généré par Roue de Vie • ${da}</footer>
+</div>
+</body>
+</html>`;
+}
+document.getElementById('editArea').value=c;
 }
 
-function renderHistory() {
-  const chart = document.getElementById('historyChart');
-  const history = data.history.slice(-30);
-  
-  if (history.length < 2) {
-    chart.innerHTML = '<span style="font-size:0.7rem;opacity:0.5">Sauvegardez des snapshots pour voir votre évolution</span>';
-    return;
-  }
-  
-  const max = Math.max(...history.map(h => h.score));
-  chart.innerHTML = history.map(h => {
-    const height = (h.score / 10) * 100;
-    return `<div class="history-bar" style="height:${height}%" data-value="${h.score.toFixed(1)} - ${new Date(h.date).toLocaleDateString('fr-FR')}"></div>`;
-  }).join('');
+function clEx(e){if(e&&e.target!==e.currentTarget)return;document.getElementById('M').classList.remove('open')}
+
+function dlEdit(){
+const c=document.getElementById('editArea').value;
+const ext=curTab==='md'?'.md':curTab==='json'?'.json':'.html';
+const type=curTab==='md'?'text/markdown':curTab==='json'?'application/json':'text/html';
+dl(c,'roue-vie'+ext,type);
 }
 
-function saveSnapshot() {
-  const scores = DOMAINS.map(d => data.domains[d.id]?.score || 5);
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-  data.history.push({ date: new Date().toISOString(), score: avg });
-  saveData();
-  renderHistory();
-  alert('📸 Snapshot sauvegardé !');
+function copyEdit(){
+const area=document.getElementById('editArea');
+area.select();
+document.execCommand('copy');
+alert('📋 Copié!');
 }
 
-function openModal(domainId) {
-  currentDomain = domainId;
-  const domain = DOMAINS.find(d => d.id === domainId);
-  const d = data.domains[domainId] || { score: 5 };
-  
-  document.getElementById('modalTitle').textContent = `${domain.icon} ${domain.name}`;
-  document.getElementById('fScore').value = d.score;
-  document.getElementById('scoreDisplay').textContent = d.score;
-  document.getElementById('fSituation').value = d.situation || '';
-  document.getElementById('fObjectif').value = d.objectif || '';
-  document.getElementById('fAction').value = d.action || '';
-  document.getElementById('fObstacles').value = d.obstacles || '';
-  document.getElementById('fColor').value = d.color || domain.color;
-  
-  selectedSpecial = d.special || null;
-  document.querySelectorAll('.special-btn').forEach(b => {
-    b.classList.toggle('selected', 
-      (b.classList.contains('mauve') && selectedSpecial === 'mauve') ||
-      (b.classList.contains('matrix') && selectedSpecial === 'matrix')
-    );
-  });
-  
-  // Render sub-scores
-  const subScores = document.getElementById('subScores');
-  subScores.innerHTML = domain.subs.map(s => `
-    <div class="sub-score">
-      <label>${s}</label>
-      <input type="range" min="0" max="10" value="${d.subs?.[s] || 5}" data-sub="${s}" oninput="updateSubScore(this)">
-      <div class="sub-score-val">${d.subs?.[s] || 5}</div>
-    </div>
-  `).join('');
-  
-  document.getElementById('modalOverlay').classList.add('open');
-}
+function dl(c,n,t){const b=new Blob([c],{type:t}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();document.body.removeChild(a)}
 
-function updateModalScore() {
-  document.getElementById('scoreDisplay').textContent = document.getElementById('fScore').value;
-}
-
-function updateSubScore(el) {
-  el.nextElementSibling.textContent = el.value;
-}
-
-function selectSpecial(type) {
-  selectedSpecial = selectedSpecial === type ? null : type;
-  document.querySelectorAll('.special-btn').forEach(b => {
-    b.classList.toggle('selected', 
-      (b.classList.contains('mauve') && selectedSpecial === 'mauve') ||
-      (b.classList.contains('matrix') && selectedSpecial === 'matrix')
-    );
-  });
-}
-
-function saveDomain() {
-  const domain = DOMAINS.find(d => d.id === currentDomain);
-  const subs = {};
-  document.querySelectorAll('#subScores input[type="range"]').forEach(el => {
-    subs[el.dataset.sub] = parseInt(el.value);
-  });
-  
-  data.domains[currentDomain] = {
-    score: parseInt(document.getElementById('fScore').value),
-    subs,
-    situation: document.getElementById('fSituation').value,
-    objectif: document.getElementById('fObjectif').value,
-    action: document.getElementById('fAction').value,
-    obstacles: document.getElementById('fObstacles').value,
-    color: document.getElementById('fColor').value,
-    special: selectedSpecial
-  };
-  
-  saveData();
-  renderWheel();
-  closeModal();
-}
-
-function resetDomain() {
-  if (!confirm('Réinitialiser ce domaine ?')) return;
-  const domain = DOMAINS.find(d => d.id === currentDomain);
-  data.domains[currentDomain] = { score: 5, subs: {}, situation: '', objectif: '', action: '', obstacles: '', color: domain.color, special: null };
-  domain.subs.forEach(s => data.domains[currentDomain].subs[s] = 5);
-  saveData();
-  renderWheel();
-  closeModal();
-}
-
-function closeModal(e) {
-  if (e && e.target !== e.currentTarget) return;
-  document.getElementById('modalOverlay').classList.remove('open');
-  currentDomain = null;
-  selectedSpecial = null;
-}
-
-function setTheme(theme) {
-  document.body.dataset.theme = theme;
-  document.querySelectorAll('.controls .btn:not(.btn-import)').forEach((b, i) => {
-    b.classList.toggle('active', i === ['dark', 'light', 'matrix'].indexOf(theme));
-  });
-}
-
-function handleXLSX(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    try {
-      const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
-      const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
-      
-      json.forEach(row => {
-        const domainName = (row['Domaine'] || row['DOMAINE'] || row['Domain'] || '').toLowerCase();
-        const domain = DOMAINS.find(d => 
-          d.id === domainName || 
-          d.name.toLowerCase().includes(domainName) ||
-          domainName.includes(d.id)
-        );
-        if (domain) {
-          data.domains[domain.id] = {
-            ...data.domains[domain.id],
-            score: parseInt(row['Score'] || row['SCORE'] || row['Note'] || 5),
-            situation: row['Situation'] || row['Description'] || '',
-            objectif: row['Objectif'] || row['Goal'] || '',
-            action: row['Action'] || row['Next'] || '',
-            obstacles: row['Obstacles'] || row['Freins'] || ''
-          };
-        }
-      });
-      
-      saveData();
-      renderWheel();
-      alert('Import réussi !');
-    } catch(err) {
-      alert('Erreur: ' + err.message);
-    }
-  };
-  reader.readAsArrayBuffer(file);
-  e.target.value = '';
-}
-
-function exportData(format) {
-  const scores = DOMAINS.map(d => data.domains[d.id]?.score || 5);
-  const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-  let content, filename, type;
-  
-  if (format === 'json') {
-    content = JSON.stringify(data, null, 2);
-    filename = 'diagnostic-personnel.json';
-    type = 'application/json';
-  } else if (format === 'md') {
-    content = `# 🧭 Diagnostic Personnel\n\n`;
-    content += `> Généré le ${new Date().toLocaleString('fr-FR')}\n\n`;
-    content += `## Score Global: ${avg.toFixed(1)}/10\n\n---\n\n`;
-    
-    DOMAINS.forEach(domain => {
-      const d = data.domains[domain.id] || {};
-      const emoji = d.score >= 7 ? '✅' : d.score >= 4 ? '⚠️' : '❌';
-      content += `### ${domain.icon} ${domain.name} - ${emoji} ${d.score || 5}/10\n\n`;
-      if (d.situation) content += `**Situation:** ${d.situation}\n\n`;
-      if (d.objectif) content += `**Objectif:** ${d.objectif}\n\n`;
-      if (d.action) content += `**Prochaine action:** ${d.action}\n\n`;
-      if (d.obstacles) content += `**Obstacles:** ${d.obstacles}\n\n`;
-      content += `---\n\n`;
-    });
-    
-    if (data.goals.length) {
-      content += `## 🎯 Objectifs\n\n`;
-      data.goals.forEach(g => {
-        content += `- [${g.completed ? 'x' : ' '}] ${g.text}\n`;
-      });
-    }
-    
-    filename = 'diagnostic-personnel.md';
-    type = 'text/markdown';
-  } else if (format === 'html') {
-    content = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Diagnostic Personnel</title>
-<style>body{font-family:system-ui;background:#0a0a0f;color:#a7f3d0;padding:2rem;max-width:800px;margin:auto}
-h1,h2{color:#c4b5fd}h3{margin-top:1.5rem;padding:0.5rem;border-radius:4px;display:flex;align-items:center;gap:0.5rem}
-.domain{background:#12121a;border-radius:8px;padding:1rem;margin:1rem 0;border-left:4px solid}
-.score{font-size:1.5rem;font-weight:bold}.good{color:#22c55e}.mid{color:#eab308}.bad{color:#ef4444}
-p{margin:0.5rem 0;font-size:0.9rem}</style></head><body>
-<h1>🧭 Diagnostic Personnel</h1>
-<p>Score Global: <span class="score ${avg >= 7 ? 'good' : avg >= 4 ? 'mid' : 'bad'}">${avg.toFixed(1)}/10</span></p>`;
-    
-    DOMAINS.forEach(domain => {
-      const d = data.domains[domain.id] || {};
-      const scoreClass = d.score >= 7 ? 'good' : d.score >= 4 ? 'mid' : 'bad';
-      content += `<div class="domain" style="border-color:${d.color || domain.color}">
-        <h3>${domain.icon} ${domain.name} <span class="score ${scoreClass}">${d.score || 5}/10</span></h3>`;
-      if (d.situation) content += `<p><strong>Situation:</strong> ${d.situation}</p>`;
-      if (d.objectif) content += `<p><strong>Objectif:</strong> ${d.objectif}</p>`;
-      if (d.action) content += `<p><strong>Action:</strong> ${d.action}</p>`;
-      content += `</div>`;
-    });
-    
-    content += `</body></html>`;
-    filename = 'diagnostic-personnel.html';
-    type = 'text/html';
-  }
-  
-  downloadFile(content, filename, type);
-}
-
-function downloadFile(content, filename, type) {
-  const blob = new Blob([content], {type});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-function importJSON() { document.getElementById('jsonInput').click(); }
-
-function handleJSONImport(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    try {
-      data = JSON.parse(ev.target.result);
-      saveData();
-      renderWheel();
-      renderGoals();
-      renderHistory();
-      alert('Import réussi !');
-    } catch(err) { alert('Erreur JSON'); }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
+window.addEventListener('resize',()=>{rW();if(cur)sel(cur)});
 init();
 </script>
 </body>
