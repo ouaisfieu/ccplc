@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>ORGA-X Conseil – Test de recrutement bac à courrier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Site vitrine d'ORGA-X Conseil avec test de recrutement bac à courrier, simulation réaliste d'une première matinée au bureau." />
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --card: #111827;
+      --accent: #7dd3fc;
+      --accent-soft: rgba(125, 211, 252, 0.1);
+      --accent-strong: #22d3ee;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --success: #4ade80;
+      --border: #1f2937;
+      --radius-lg: 18px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+      --transition: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #1d2340 0, #050816 45%, #020617 100%);
+      color: var(--text);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--accent-strong);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.8));
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #e5e7eb 0, #38bdf8 30%, #1e3a8a 75%, #020617 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: #e5f2ff;
+      box-shadow: 0 0 0 2px rgba(125,211,252,0.2), 0 0 22px rgba(56,189,248,0.7);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-strong);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid rgba(148,163,184,0.35);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.9);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.1rem, 3vw, 2.7rem);
+      margin: 6px 0 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(to right, #7dd3fc, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .hero-sub strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: transparent;
+      color: var(--text);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition), color var(--transition);
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #22d3ee, #38bdf8);
+      border-color: transparent;
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 14px 30px rgba(56,189,248,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 45px rgba(56,189,248,0.5);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15,23,42,0.9);
+      border-color: rgba(148,163,184,0.8);
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top, rgba(56,189,248,0.15) 0, #020617 55%, #0b1120 100%);
+      border-radius: 22px;
+      border: 1px solid rgba(148,163,184,0.25);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 20% 0, rgba(125,211,252,0.35), transparent 55%), radial-gradient(circle at 80% 100%, rgba(129,140,248,0.4), transparent 55%);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .hero-card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .hero-chip {
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.35);
+      font-size: 0.74rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-chip span {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #f97316;
+      box-shadow: 0 0 10px rgba(249,115,22,0.8);
+    }
+
+    .hero-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 8px;
+      display: grid;
+      gap: 6px;
+      font-size: 0.78rem;
+    }
+
+    .hero-list li {
+      background: rgba(15,23,42,0.9);
+      border-radius: 10px;
+      padding: 6px 8px;
+      border: 1px solid rgba(148,163,184,0.25);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .hero-list strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    .hero-tagline {
+      font-size: 0.8rem;
+      color: rgba(226,232,240,0.9);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-tagline span {
+      font-size: 1rem;
+    }
+
+    /* Sections */
+
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 20px;
+    }
+
+    section + section {
+      margin-top: 12px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      margin: 0 0 6px;
+    }
+
+    .section-sub {
+      font-size: 0.86rem;
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), #020617);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      border: 1px solid rgba(148,163,184,0.25);
+      box-shadow: 0 14px 35px rgba(15,23,42,0.7);
+      font-size: 0.86rem;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.35);
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .pill-accent {
+      border-color: rgba(56,189,248,0.8);
+      color: #e0f2fe;
+      background: rgba(8,47,73,0.9);
+    }
+
+    /* Test bac à courrier */
+
+    .test-wrapper {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 2.3fr);
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .test-column {
+      background: rgba(15,23,42,0.96);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 12px 14px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.8);
+      font-size: 0.85rem;
+    }
+
+    .test-column h3 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+    }
+
+    .test-intro {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    .test-intro strong {
+      color: #e5e7eb;
+    }
+
+    .test-steps {
+      padding-left: 18px;
+      margin: 0 0 8px;
+    }
+
+    .test-steps li {
+      margin-bottom: 4px;
+    }
+
+    .label {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 0.7rem;
+      color: var(--muted);
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .label span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .mail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+      max-height: 460px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .mail {
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.1), rgba(15,23,42,0.9));
+      padding: 8px 9px;
+      position: relative;
+    }
+
+    .mail-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+      font-size: 0.8rem;
+    }
+
+    .mail-from {
+      font-weight: 500;
+    }
+
+    .mail-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mail-subject {
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+      color: #e5e7eb;
+    }
+
+    .mail-body {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+
+    .mail-tag {
+      font-size: 0.72rem;
+      color: #e5e7eb;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mail-tag-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+    }
+
+    .tag-red { background: #fb7185; }
+    .tag-amber { background: #fbbf24; }
+    .tag-green { background: #22c55e; }
+
+    .mail-question {
+      margin-top: 6px;
+      border-top: 1px dashed rgba(148,163,184,0.35);
+      padding-top: 6px;
+      font-size: 0.78rem;
+    }
+
+    .mail-options {
+      display: grid;
+      gap: 3px;
+      margin-top: 3px;
+    }
+
+    .mail-options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: background var(--transition);
+    }
+
+    .mail-options label:hover {
+      background: rgba(15,23,42,0.9);
+    }
+
+    .test-help {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .legend {
+      display: grid;
+      gap: 5px;
+      margin-top: 6px;
+      font-size: 0.78rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .box {
+      margin-top: 8px;
+      padding: 8px 9px;
+      border-radius: 12px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+
+    .box h4 {
+      margin: 0 0 4px;
+      font-size: 0.85rem;
+    }
+
+    .score {
+      font-size: 0.85rem;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .score span {
+      font-weight: 600;
+    }
+
+    .score-ok {
+      color: var(--success);
+    }
+
+    .score-bad {
+      color: var(--danger);
+    }
+
+    #feedbackList {
+      margin: 6px 0 4px;
+      display: grid;
+      gap: 4px;
+      font-size: 0.78rem;
+      max-height: 210px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .feedback-item {
+      padding: 4px 6px;
+      border-radius: 8px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.3);
+    }
+
+    .feedback-item strong {
+      font-weight: 500;
+    }
+
+    .feedback-ok {
+      border-color: rgba(74,222,128,0.8);
+      background: rgba(22,101,52,0.25);
+    }
+
+    .feedback-warn {
+      border-color: rgba(248,250,252,0.5);
+      background: rgba(30,64,175,0.25);
+    }
+
+    .feedback-bad {
+      border-color: rgba(248,113,113,0.85);
+      background: rgba(127,29,29,0.35);
+    }
+
+    details {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    details summary {
+      cursor: pointer;
+      padding: 4px 0;
+      outline: none;
+    }
+
+    details[open] summary {
+      color: var(--accent-strong);
+    }
+
+    footer {
+      margin-top: 20px;
+      padding: 12px 20px 20px;
+      border-top: 1px solid rgba(30,64,175,0.5);
+      background: radial-gradient(circle at top, rgba(30,64,175,0.35), rgba(15,23,42,0.98));
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    @media (max-width: 880px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-card {
+        order: -1;
+      }
+
+      .test-wrapper {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .nav-links {
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <div class="logo-mark">OX</div>
+        ORGA-X Conseil
+      </div>
+      <nav class="nav-links">
+        <a href="#about">Cabinet</a>
+        <a href="#services">Expertises</a>
+        <a href="#test">Test de recrutement</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="badge">
+          <div class="badge-dot"></div>
+          Cabinet de conseil en simplification organisationnelle
+        </div>
+        <h1>
+          Nous traquons les <span>absurdités organisationnelles</span> pour libérer le travail réel.
+        </h1>
+        <p class="hero-sub">
+          ORGA-X Conseil accompagne les organisations qui veulent en finir avec la <strong>bureaucratie toxique,
+          la réunionite</strong> et les procédures kafkaïennes. Moins de reporting, plus de sens. Moins de contrôle
+          total, plus de responsabilité partagée.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="document.getElementById('test').scrollIntoView({behavior:'smooth'})">
+            Passer le test de recrutement
+            <span>⟶</span>
+          </button>
+          <button class="btn btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+            Découvrir le cabinet
+          </button>
+        </div>
+        <div class="hero-meta">
+          Site statique ultra-léger (HTML/CSS/JS) – idéal pour déploiement immédiat sur clé USB, hébergement libre ou intranet.
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="Aperçu du bac à courrier">
+        <div class="hero-card-inner">
+          <div class="hero-card-header">
+            <div>Simulation bac à courrier</div>
+            <div class="hero-chip">
+              <span></span> Temps conseillé : 20 min
+            </div>
+          </div>
+          <ul class="hero-list">
+            <li>
+              <div>Messages à traiter</div>
+              <strong>8</strong>
+            </li>
+            <li>
+              <div>Axes d’évaluation</div>
+              <div>Priorisation · Gestion des risques · Sens politique</div>
+            </li>
+            <li>
+              <div>Contexte</div>
+              <div>Première matinée comme chargé·e de mission dans une organisation (un peu) dystopique.</div>
+            </li>
+          </ul>
+          <div class="hero-tagline">
+            <span>⚠️</span>
+            Chaque choix révèle votre façon de naviguer dans le chaos administratif.
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about">
+      <h2 class="section-title">Qui sommes-nous ?</h2>
+      <p class="section-sub">
+        ORGA-X est un cabinet indépendant spécialisé dans la <strong>détection des absurdités
+        organisationnelles</strong> : sur-bureaucratie, micro-management, indicateurs déconnectés du réel,
+        injonctions paradoxales… Nous aidons les équipes à reprendre prise sur leur travail, sans tomber
+        dans les mirages de la surveillance totale ni du contrôle pour le contrôle.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Notre posture</h3>
+          <p>
+            Nous intervenons comme des archéologues du quotidien : nous faisons remonter à la surface
+            ce qui ralentit, stresse ou décourage les équipes. Puis nous co-construisons des règles du jeu
+            plus claires, plus légitimes… et moins dystopiques.
+          </p>
+          <div class="pill-row">
+            <span class="pill pill-accent">Co-construction</span>
+            <span class="pill">Éthique & transparence</span>
+            <span class="pill">Esprit critique</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Quelques domaines d’intervention</h3>
+          <ul style="padding-left:16px;margin:4px 0 0;">
+            <li>Diagnostic des absurdités organisationnelles et des coûts cachés.</li>
+            <li>Refonte de processus trop complexes ou chronophages.</li>
+            <li>Allègement de la réunionite et culture de la décision claire.</li>
+            <li>Formation à un management adulte-adulte, loin du micro-contrôle.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Notre façon de recruter</h3>
+          <p>
+            Nous ne recrutons pas sur des mots-clés de CV, mais sur la capacité à faire face à une
+            situation réelle, dans toute sa complexité. C’est le sens de notre <strong>test de recrutement
+            “bac à courrier”</strong> ci-dessous.
+          </p>
+          <div class="pill-row">
+            <span class="pill">Pas de piège</span>
+            <span class="pill">Feedback transparent</span>
+            <span class="pill">Esprit critique bienvenu</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="services">
+      <h2 class="section-title">Nos expertises</h2>
+      <p class="section-sub">
+        Nous intervenons dans les grandes entreprises, les services publics, les ONG, les hôpitaux
+        et les collectivités territoriales. Partout où la mécanique organisationnelle menace de dévorer le sens.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Simplification de processus</h3>
+          <p>
+            Cartographie des flux, suppression de redondances, rationalisation des validations. L’objectif :
+            <strong>retourner à l’essentiel</strong> et rendre à chacun une marge de manœuvre réelle.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Design de gouvernance</h3>
+          <p>
+            Clarification des rôles, circuits de décision lisibles, espaces d’alerte et de désaccord sécurisés.
+            On peut être exigeant sans être autoritaire.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Culture & dispositifs anti-dystopie</h3>
+          <p>
+            Ateliers d’acculturation à la pensée critique, revue d’impact des outils numériques, prévention
+            des dérives de surveillance (tracking excessif, scoring opaque, etc.).
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="test">
+      <h2 class="section-title">Test de recrutement : bac à courrier “Première matinée”</h2>
+      <p class="section-sub">
+        Vous prenez vos fonctions ce matin en tant que <strong>chargé·e de mission organisation</strong> chez ORGA-X.
+        À 9h02, vous ouvrez votre bac à courrier : huit messages vous attendent déjà. Votre mission :
+        <strong>les prioriser</strong>, en gardant en tête les enjeux réels… et pas seulement ce qui crie le plus fort.
+      </p>
+
+      <div class="test-wrapper">
+        <!-- Colonne gauche : consignes -->
+        <div class="test-column">
+          <h3>Consignes de l’exercice</h3>
+          <p class="test-intro">
+            Pour chaque message, choisissez la réponse qui correspond le mieux à la façon
+            dont vous <strong>traiteriez</strong> la situation dans vos deux premières heures de travail.
+          </p>
+
+          <ol class="test-steps">
+            <li>Lisez tous les messages avant de répondre, comme dans un vrai bac à courrier.</li>
+            <li>Pour chaque message, cochez <strong>une seule option</strong>.</li>
+            <li>Quand vous avez terminé, cliquez sur <strong>“Voir la correction”</strong>.</li>
+          </ol>
+
+          <div class="label">
+            <span></span> Axe principal d’évaluation : votre capacité à distinguer l’urgent de l’important.
+          </div>
+
+          <div class="box">
+            <h4>Les 4 catégories possibles</h4>
+            <div class="legend">
+              <div class="legend-item">
+                <div class="legend-color" style="background:#ef4444;"></div>
+                <div><strong>A – Urgent & important</strong><br/>À traiter vous-même immédiatement.</div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color" style="background:#fbbf24;"></div>
+                <div><strong>B – Important mais pas urgent</strong><br/>À planifier dans la journée / semaine.</div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color" style="background:#22c55e;"></div>
+                <div><strong>C – Urgent mais peu important pour vous</strong><br/>À déléguer / escalader avec consignes claires.</div>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color" style="background:#6b7280;"></div>
+                <div><strong>D – Ni urgent ni important</strong><br/>À archiver, ignorer ou traiter en temps masqué.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box">
+            <h4>Conseils au candidat</h4>
+            <p class="test-help">
+              Il n’y a pas de “profil magique”. Ce que nous observons :
+            </p>
+            <ul style="padding-left:18px;margin:0;">
+              <li>Votre capacité à protéger le temps pour les sujets structurants.</li>
+              <li>Votre sens du risque (juridique, réputationnel, humain).</li>
+              <li>Votre façon d’utiliser la délégation sans vous défausser.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h4>Espace recruteur</h4>
+            <p class="test-help">
+              Cet outil est 100 % statique : <strong>un seul fichier HTML</strong>, CSS et JavaScript inclus.
+              Copiez-collez ce fichier sur une clé USB, un serveur interne ou un hébergement gratuit
+              pour le mettre en production immédiatement.
+            </p>
+            <details>
+              <summary>Voir quelques questions d’analyse possibles</summary>
+              <ul style="padding-left:18px;margin-top:4px;">
+                <li>Le candidat sait-il protéger les sujets à impacts forts (clients, risques légaux, sécurité) ?</li>
+                <li>A-t-il tendance à tout considérer comme urgent, ou à tout minimiser ?</li>
+                <li>Comment justifie-t-il ses choix a posteriori (à discuter en entretien) ?</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+
+        <!-- Colonne droite : messages et scoring -->
+        <div class="test-column">
+          <h3>Vos messages (bac à courrier 9h02)</h3>
+
+          <div class="mail-list">
+            <!-- Message 1 -->
+            <article class="mail" data-id="m1">
+              <div class="mail-header">
+                <div class="mail-from">Client STRATO-TECH (contrat clé)</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:12</span>
+                  <span>Objet : <em>Résiliation si pas de réponse aujourd’hui</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Plainte contractuelle & échéance critique</div>
+              <div class="mail-body">
+                « Bonjour, nous restons sans réponse à nos alertes sur les anomalies de votre dernière mission.
+                Sans engagement écrit de votre part avant ce soir 18h, nous envisagerons de résilier le contrat
+                cadre et d’en informer notre direction. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-red"></span> Risque : perte d’un client stratégique
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m1" value="A" />
+                    A – Vous bloquez un créneau ce matin pour appeler le client et poser un plan d’action écrit.
+                  </label>
+                  <label>
+                    <input type="radio" name="m1" value="B" />
+                    B – Vous le placez dans votre to-do de l’après-midi après avoir pris vos marques.
+                  </label>
+                  <label>
+                    <input type="radio" name="m1" value="C" />
+                    C – Vous transférez au service commercial en leur demandant un retour.
+                  </label>
+                  <label>
+                    <input type="radio" name="m1" value="D" />
+                    D – Vous attendez le débrief d’équipe de demain pour décider.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 2 -->
+            <article class="mail" data-id="m2">
+              <div class="mail-header">
+                <div class="mail-from">DRH ORGA-X</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:27</span>
+                  <span>Objet : <em>Invitation séminaire “Culture du contrôle 360°”</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Séminaire optionnel dans 3 semaines</div>
+              <div class="mail-body">
+                « Nous organisons un séminaire facultatif sur les nouvelles pratiques de suivi
+                en temps réel de la performance des collaborateurs (tracking d’écran, scoring
+                comportemental, etc.). Merci de vous inscrire avant vendredi si intéressé·e. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-green"></span> Sujet : culture managériale & dystopie potentielle
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m2" value="A" />
+                    A – Vous arrêtez tout pour rédiger une note de position détaillée.
+                  </label>
+                  <label>
+                    <input type="radio" name="m2" value="B" />
+                    B – Vous le notez pour réflexion et échange ultérieur avec votre manager.
+                  </label>
+                  <label>
+                    <input type="radio" name="m2" value="C" />
+                    C – Vous demandez à la DRH de reporter le séminaire.
+                  </label>
+                  <label>
+                    <input type="radio" name="m2" value="D" />
+                    D – Vous archivez sans le lire : ce n’est pas votre sujet.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 3 -->
+            <article class="mail" data-id="m3">
+              <div class="mail-header">
+                <div class="mail-from">Responsable Qualité & Risques</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:33</span>
+                  <span>Objet : <em>Inspection sécurité demain matin</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Données manquantes pour un audit officiel</div>
+              <div class="mail-body">
+                « L’inspection sécurité & santé au travail passe demain à 9h dans nos locaux.
+                Nous devons absolument finaliser aujourd’hui la consolidation des incidents mineurs
+                des 6 derniers mois. Je dois valider le tableau avant 17h. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-red"></span> Risque : sanction administrative & image employeur
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m3" value="A" />
+                    A – Vous planifiez un créneau spécifique ce matin pour boucler la consolidation avec lui.
+                  </label>
+                  <label>
+                    <input type="radio" name="m3" value="B" />
+                    B – Vous prévoyez de le traiter d’ici la fin de la semaine.
+                  </label>
+                  <label>
+                    <input type="radio" name="m3" value="C" />
+                    C – Vous lui demandez de se débrouiller avec l’équipe actuelle.
+                  </label>
+                  <label>
+                    <input type="radio" name="m3" value="D" />
+                    D – Vous reportez à plus tard : “on a toujours une marge avec l’administration”.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 4 -->
+            <article class="mail" data-id="m4">
+              <div class="mail-header">
+                <div class="mail-from">Service Communication</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:39</span>
+                  <span>Objet : <em>Newsletter interne – version 12</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Relecture d’une newsletter très cosmétique</div>
+              <div class="mail-body">
+                « Nous avons besoin d’un “regard organisation” sur la newsletter de ce mois-ci.
+                C’est essentiellement de la mise en valeur d’initiatives déjà lancées. Si possible retour
+                dans la semaine, sinon ce sera pour la prochaine édition. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-green"></span> Impact faible sur les opérations
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m4" value="A" />
+                    A – Vous le traitez en priorité ce matin.
+                  </label>
+                  <label>
+                    <input type="radio" name="m4" value="B" />
+                    B – Vous réservez un créneau court dans la semaine pour un regard rapide.
+                  </label>
+                  <label>
+                    <input type="radio" name="m4" value="C" />
+                    C – Vous déléguez à un collègue si possible, avec quelques lignes de cadrage.
+                  </label>
+                  <label>
+                    <input type="radio" name="m4" value="D" />
+                    D – Vous l’archivez, le sujet n’ayant pas d’urgence ni d’impact fort.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 5 -->
+            <article class="mail" data-id="m5">
+              <div class="mail-header">
+                <div class="mail-from">Collègue (Chef de projet)</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:45</span>
+                  <span>Objet : <em>Slides à relire pour lundi</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Demande de relecture non critique</div>
+              <div class="mail-body">
+                « Bienvenue ! J’aurais besoin d’un œil neuf sur mes slides pour une réunion interne lundi prochain.
+                Si tu peux jeter un coup d’œil d’ici la fin de semaine, ce serait top. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-amber"></span> Opportunité de lien interne, impact limité
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m5" value="A" />
+                    A – Vous arrêtez tout pour relire les slides ce matin.
+                  </label>
+                  <label>
+                    <input type="radio" name="m5" value="B" />
+                    B – Vous planifiez une relecture rapide en fin de journée/fin de semaine.
+                  </label>
+                  <label>
+                    <input type="radio" name="m5" value="C" />
+                    C – Vous déclinez poliment : autre chose est prioritaire.
+                  </label>
+                  <label>
+                    <input type="radio" name="m5" value="D" />
+                    D – Vous ignorez le mail, il relancera si c’est vraiment important.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 6 -->
+            <article class="mail" data-id="m6">
+              <div class="mail-header">
+                <div class="mail-from">DPO (Délégué à la protection des données)</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:48</span>
+                  <span>Objet : <em>Suspicion de fuite de données</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Alerte éthique & juridique majeure</div>
+              <div class="mail-body">
+                « Nous avons des signaux faibles indiquant que des données sensibles de clients ont circulé
+                hors des canaux habituels. Je propose que l’on monte un groupe ad hoc ce matin pour décider
+                des premières mesures et de la communication interne. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-red"></span> Risque : conformité, réputation, confiance
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m6" value="A" />
+                    A – Vous priorisez immédiatement un échange avec le DPO et les personnes clés.
+                  </label>
+                  <label>
+                    <input type="radio" name="m6" value="B" />
+                    B – Vous proposez de faire cela la semaine prochaine avec plus de recul.
+                  </label>
+                  <label>
+                    <input type="radio" name="m6" value="C" />
+                    C – Vous demandez un mail plus détaillé avant d’en parler à qui que ce soit.
+                  </label>
+                  <label>
+                    <input type="radio" name="m6" value="D" />
+                    D – Vous attendez de voir si le problème se confirme avant d’agir.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 7 -->
+            <article class="mail" data-id="m7">
+              <div class="mail-header">
+                <div class="mail-from">Direction Générale</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:55</span>
+                  <span>Objet : <em>Réunion flash à 11h</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Point stratégique sur la simplification</div>
+              <div class="mail-body">
+                « Nous vous convions à une courte réunion à 11h avec les nouveaux arrivants
+                pour présenter les priorités de simplification de cette année. Aucun support
+                à préparer, venir avec vos questions. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-amber"></span> Important pour comprendre le contexte, faible préparation
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m7" value="A" />
+                    A – Vous annulez votre participation pour garder vos deux premières heures libres.
+                  </label>
+                  <label>
+                    <input type="radio" name="m7" value="B" />
+                    B – Vous prévoyez d’y assister en gardant le reste de la matinée pour les urgences.
+                  </label>
+                  <label>
+                    <input type="radio" name="m7" value="C" />
+                    C – Vous proposez de décaler la réunion à demain.
+                  </label>
+                  <label>
+                    <input type="radio" name="m7" value="D" />
+                    D – Vous ignorez l’invitation : “trop tôt pour se montrer”.
+                  </label>
+                </div>
+              </div>
+            </article>
+
+            <!-- Message 8 -->
+            <article class="mail" data-id="m8">
+              <div class="mail-header">
+                <div class="mail-from">Système automatique de suivi</div>
+                <div class="mail-meta">
+                  <span>Reçu à 08:59</span>
+                  <span>Objet : <em>Score quotidien de productivité</em></span>
+                </div>
+              </div>
+              <div class="mail-subject">Notification de scoring algorithmique</div>
+              <div class="mail-body">
+                « Votre score de productivité est actuellement à 0/100 (nouvel utilisateur).
+                Pensez à lancer l’application de tracking d’activité pour ne pas pénaliser vos statistiques
+                dès votre premier jour. »
+              </div>
+              <div class="mail-tag">
+                <span class="mail-tag-dot tag-green"></span> Symptomatique d’une dérive, mais pas prioritaire opérationnellement
+              </div>
+              <div class="mail-question">
+                Comment traitez-vous ce message ?
+                <div class="mail-options">
+                  <label>
+                    <input type="radio" name="m8" value="A" />
+                    A – Vous passez la prochaine heure à explorer le système de scoring en détail.
+                  </label>
+                  <label>
+                    <input type="radio" name="m8" value="B" />
+                    B – Vous activez l’outil rapidement puis vous revenez au reste des priorités.
+                  </label>
+                  <label>
+                    <input type="radio" name="m8" value="C" />
+                    C – Vous alertez tout de suite la direction sur les risques éthiques.
+                  </label>
+                  <label>
+                    <input type="radio" name="m8" value="D" />
+                    D – Vous ignorez complètement cette notification pour l’instant.
+                  </label>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="box">
+            <h4>Résultat & feedback</h4>
+            <div class="score" id="scoreBox">
+              Score : <span id="scoreValue">– / 8</span>
+            </div>
+            <div id="feedbackList" aria-live="polite"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
+              <button class="btn btn-primary" type="button" onclick="corrigerTest()">Voir la correction</button>
+              <button class="btn btn-ghost" type="button" onclick="reinitialiserTest()">Réinitialiser</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Nous contacter / réutiliser ce test</h2>
+      <p class="section-sub">
+        Ce site est volontairement minimaliste : un seul fichier HTML qui peut être adapté à votre organisation.
+        Vous pouvez remplacer le nom d’ORGA-X, le logo, les messages du bac à courrier et les règles de
+        scoring interne pour créer votre propre épreuve réaliste.
+      </p>
+
+      <div class="cards">
+        <article class="card">
+          <h3>Mode d’emploi technique</h3>
+          <ul style="padding-left:18px;margin:4px 0 0;font-size:0.85rem;">
+            <li>Téléchargez ce fichier <code>.html</code> et ouvrez-le dans n’importe quel navigateur récent.</li>
+            <li>Placez-le sur une clé USB ou un dossier partagé pour vos sessions de recrutement.</li>
+            <li>Modifiez le texte directement avec un éditeur simple (VS Code, Notepad++, etc.).</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Adapter l’épreuve à votre réalité</h3>
+          <p>
+            Remplacez les 8 messages par des situations typiques de vos équipes (vrais mails anonymisés,
+            tickets, sollicitations informelles). L’idée est de tester une <strong>intelligence situationnelle</strong>
+            et pas seulement la capacité à réciter des modèles.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Et si on se parlait ?</h3>
+          <p>
+            Vous pouvez utiliser cet exemple comme base de travail avec votre équipe RH / Transformation
+            pour concevoir des parcours de recrutement plus honnêtes et moins caricaturaux.
+          </p>
+          <p style="font-size:0.8rem;color:var(--muted);margin-top:4px;">
+            Adresse de contact fictive pour la démo : <em>contact@orga-x.example</em>
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© ORGA-X Conseil – Site statique HTML/CSS/JS, aucune collecte de données, aucun script tiers.</div>
+      <div>
+        Astuce : dupliquer ce fichier pour chaque candidat permet de conserver ses réponses en local (version PDF, capture d’écran, etc.).
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Clé de correction : réponse attendue par message
+    const correctAnswers = {
+      m1: "A", // Client clé menacé de résiliation
+      m2: "B", // Sujet important culture, mais pas urgent : à garder en tête
+      m3: "A", // Inspection officielle demain : important & urgent
+      m4: "C", // Newsletter : peu important, possible délégation ou temps masqué
+      m5: "B", // Lien interne, important sans être urgent : à planifier
+      m6: "A", // Fuite de données : critique, à traiter tout de suite
+      m7: "B", // Réunion stratégique courte : important mais pas urgent à préparer
+      m8: "B"  // Tracking : on active “minimum vital” puis on priorise le reste
+    };
+
+    function corrigerTest() {
+      const feedbackList = document.getElementById("feedbackList");
+      const scoreValue = document.getElementById("scoreValue");
+
+      feedbackList.innerHTML = "";
+      let score = 0;
+      let total = Object.keys(correctAnswers).length;
+      let toutesRepondu = true;
+
+      for (const id of Object.keys(correctAnswers)) {
+        const radios = document.querySelectorAll(`article[data-id="${id}"] input[name="${id}"]`);
+        let userValue = null;
+
+        radios.forEach(r => {
+          if (r.checked) {
+            userValue = r.value;
+          }
+        });
+
+        if (!userValue) {
+          toutesRepondu = false;
+        }
+
+        const ideal = correctAnswers[id];
+        const feedbackItem = document.createElement("div");
+        feedbackItem.classList.add("feedback-item");
+
+        let titre = "";
+        let commentaire = "";
+        let cssClass = "";
+
+        switch (id) {
+          case "m1":
+            titre = "Message 1 – Client STRATO-TECH";
+            commentaire = "Un client clé qui menace explicitement de résilier aujourd’hui est un sujet à la fois urgent et important. Prendre directement la main, avec un plan écrit, protège à la fois la relation et la réputation d’ORGA-X.";
+            break;
+          case "m2":
+            titre = "Message 2 – Séminaire “Culture du contrôle 360°”";
+            commentaire = "Sujet important pour la culture managériale (et les dérives potentielles de surveillance), mais sans urgence opérationnelle. Le bon réflexe est de le garder en tête, d’en parler avec votre manager, sans sacrifier vos premières heures.";
+            break;
+          case "m3":
+            titre = "Message 3 – Inspection sécurité demain";
+            commentaire = "Une inspection officielle à J+1 demande une préparation immédiate : l’enjeu est à la fois légal, social et d’image. Reporter serait un signal de sous-estimation du risque.";
+            break;
+          case "m4":
+            titre = "Message 4 – Newsletter interne";
+            commentaire = "Impact limité, marge de manœuvre large. L’enjeu est surtout de ne pas laisser ce type de demande esthétiquement valorisante écraser des sujets plus critiques.";
+            break;
+          case "m5":
+            titre = "Message 5 – Relecture de slides";
+            commentaire = "Construire des alliances internes est important, mais peut être planifié. Bonne pratique : réserver un créneau court plus tard plutôt que de tout réorganiser pour cela.";
+            break;
+          case "m6":
+            titre = "Message 6 – Suspicion de fuite de données";
+            commentaire = "Probablement le sujet le plus sensible de la matinée : combinaison de risque juridique, réputationnel et éthique. Une prise en charge immédiate, collective, est attendue.";
+            break;
+          case "m7":
+            titre = "Message 7 – Réunion flash avec la Direction";
+            commentaire = "Comprendre les priorités de simplification de la Direction est important, mais ne nécessite pas de préparation lourde. Y assister tout en protégeant le reste de la matinée pour les urgences est un compromis équilibré.";
+            break;
+          case "m8":
+            titre = "Message 8 – Score de productivité algorithmique";
+            commentaire = "Symptôme d’une possible dérive organisationnelle, mais pas prioritaire à 9h02. Activer le strict nécessaire pour ne pas perturber le reste, puis revenir plus tard au sujet (avec un regard critique) est une stratégie réaliste.";
+            break;
+        }
+
+        if (!userValue) {
+          cssClass = "feedback-warn";
+          feedbackItem.innerHTML = `<strong>${titre}</strong><br/>Aucune réponse sélectionnée pour ce message. Pensez à traiter tous les éléments du bac à courrier, même pour décider de ne pas les traiter tout de suite.`;
+        } else if (userValue === ideal) {
+          cssClass = "feedback-ok";
+          feedbackItem.innerHTML = `<strong>${titre}</strong><br/><span style="color:#bbf7d0;">✔ Choix cohérent avec la logique de priorisation attendue.</span><br/>${commentaire}`;
+          score++;
+        } else {
+          cssClass = "feedback-bad";
+          feedbackItem.innerHTML = `<strong>${titre}</strong><br/><span style="color:#fecaca;">✖ Votre choix ne maximise pas la gestion des risques ni la protection du temps.</span><br/>${commentaire}`;
+        }
+
+        feedbackItem.classList.add(cssClass);
+        feedbackList.appendChild(feedbackItem);
+      }
+
+      scoreValue.textContent = `${score} / ${total}`;
+
+      if (!toutesRepondu) {
+        const note = document.createElement("div");
+        note.classList.add("feedback-item", "feedback-warn");
+        note.innerHTML = "<strong>Attention</strong><br/>Certaines réponses sont manquantes. Dans la vraie vie, le bac à courrier ne disparaît pas : décider de ne pas traiter un sujet est déjà un choix qui a des conséquences.";
+        feedbackList.prepend(note);
+      }
+    }
+
+    function reinitialiserTest() {
+      const allRadios = document.querySelectorAll('.mail-options input[type="radio"]');
+      allRadios.forEach(r => r.checked = false);
+      document.getElementById("feedbackList").innerHTML = "";
+      document.getElementById("scoreValue").textContent = "– / 8";
+    }
+  </script>
+</body>
+</html>
