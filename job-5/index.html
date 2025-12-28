@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Instance // Fiche & Recrutement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050608;
+      --panel: #10131a;
+      --accent: #26f0ff;
+      --accent-soft: rgba(38,240,255,0.1);
+      --text-main: #e7ecf7;
+      --text-muted: #8891a8;
+      --danger: #ff4b81;
+      --radius-xl: 18px;
+      --shadow-soft: 0 18px 45px rgba(0,0,0,0.6);
+      --border-subtle: 1px solid rgba(255,255,255,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1a2340 0, #050608 50%, #000 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .frame {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(0,0,0,0.8));
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(20px);
+    }
+
+    header {
+      padding: 20px 24px 14px;
+      border-bottom: var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      background: radial-gradient(circle at top left, rgba(38,240,255,0.3), transparent 60%);
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: rgba(0,0,0,0.65);
+      color: var(--accent);
+      border: 1px solid rgba(38,240,255,0.4);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    h1 {
+      font-size: 20px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .header-meta {
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .header-meta strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr);
+      gap: 18px;
+      padding: 18px;
+    }
+
+    @media (max-width: 860px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      .header-meta {
+        text-align: left;
+      }
+    }
+
+    .panel {
+      background: radial-gradient(circle at top, rgba(255,255,255,0.03), rgba(0,0,0,0.9));
+      border-radius: var(--radius-xl);
+      border: var(--border-subtle);
+      padding: 16px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, rgba(38,240,255,0.02), transparent 40%, rgba(255,75,129,0.04));
+      pointer-events: none;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .panel-title span {
+      color: var(--accent);
+    }
+
+    .panel-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .identity-block {
+      display: grid;
+      grid-template-columns: 120px minmax(0,1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    @media (max-width: 600px) {
+      .identity-block {
+        grid-template-columns: minmax(0,1fr);
+      }
+    }
+
+    .avatar-wrapper {
+      width: 120px;
+      height: 120px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.2);
+      overflow: hidden;
+      position: relative;
+      background: radial-gradient(circle, #222843, #050608);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .avatar-placeholder {
+      font-size: 11px;
+      text-align: center;
+      color: var(--text-muted);
+      padding: 0 8px;
+    }
+
+    .avatar-upload {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .avatar-upload input[type="file"] {
+      font-size: 11px;
+      color: var(--text-main);
+    }
+
+    label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(4,7,16,0.9);
+      color: var(--text-main);
+      padding: 7px 10px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    textarea {
+      border-radius: 12px;
+      resize: vertical;
+      min-height: 70px;
+      line-height: 1.4;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(38,240,255,0.3);
+      background: rgba(7,12,24,0.95);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .pill {
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(12,16,28,0.9);
+      color: var(--text-muted);
+    }
+
+    .pill.accent {
+      border-color: rgba(38,240,255,0.65);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .rules-box {
+      font-size: 11px;
+      line-height: 1.5;
+      padding: 8px 9px;
+      border-radius: 12px;
+      background: rgba(3,5,12,0.95);
+      border: 1px dashed rgba(255,255,255,0.15);
+      color: var(--text-muted);
+    }
+
+    .rules-box code {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(255,255,255,0.04);
+      padding: 1px 5px;
+      border-radius: 999px;
+      color: var(--accent);
+    }
+
+    .rules-title {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    button {
+      border-radius: 999px;
+      padding: 7px 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: radial-gradient(circle at top left, var(--accent), #1483f5);
+      color: #020308;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.7);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+
+    button.secondary {
+      background: rgba(7,10,20,0.9);
+      color: var(--text-main);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: none;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+      box-shadow: 0 14px 32px rgba(0,0,0,0.8);
+    }
+
+    button.secondary:hover {
+      box-shadow: 0 10px 26px rgba(0,0,0,0.6);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    .tiny {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .status-line {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--accent);
+      min-height: 14px;
+    }
+
+    .status-line.error {
+      color: var(--danger);
+    }
+
+    /* Recruitment test */
+
+    .question {
+      padding: 8px 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(5,7,15,0.95);
+      margin-bottom: 6px;
+    }
+
+    .question-title {
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .options label {
+      text-transform: none;
+      letter-spacing: 0;
+      margin-bottom: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .options input[type="radio"] {
+      accent-color: var(--accent);
+    }
+
+    .reco-box {
+      margin-top: 6px;
+      font-size: 12px;
+      padding: 7px 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(3,6,14,0.96);
+      color: var(--text-muted);
+    }
+
+    .reco-box strong {
+      color: var(--accent);
+    }
+
+    footer {
+      border-top: var(--border-subtle);
+      padding: 8px 16px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      color: var(--text-muted);
+      background: radial-gradient(circle at bottom, rgba(255,255,255,0.04), transparent 55%);
+    }
+
+    footer span {
+      opacity: 0.9;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+<div class="frame">
+  <header>
+    <div class="title-block">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>INSTANCE // RECRUTEMENT</span>
+      </div>
+      <h1>FICHE PERSONNAGE & TEST D’ENTRÉE</h1>
+      <p class="subtitle">
+        Complète ta fiche, passe le test, exporte ton profil. Puis renomme ce fichier en <strong>index.html</strong> et publie-le.
+      </p>
+    </div>
+    <div class="header-meta">
+      <div><strong>Statut&nbsp;:</strong> instance potentielle</div>
+      <div><strong>Cible&nbsp;:</strong> organisation &amp; S</div>
+      <div><strong>Règle d’or&nbsp;:</strong> t’as rien compris</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PANEL GAUCHE : FICHE PERSONNAGE -->
+    <section class="panel" aria-label="Fiche personnage">
+      <div class="panel-title">
+        <div>01 // <span>Identité de l’instance</span></div>
+      </div>
+      <div class="panel-body">
+        <div class="identity-block">
+          <div>
+            <div class="avatar-wrapper">
+              <img id="avatarPreview" alt="Aperçu personnage" />
+              <div class="avatar-placeholder" id="avatarPlaceholder">
+                Aucune image.<br />
+                Ajoute ta photo pour matérialiser l’instance.
+              </div>
+            </div>
+            <div class="avatar-upload">
+              <label for="avatarInput">Photo (local uniquement)</label>
+              <input id="avatarInput" type="file" accept="image/*" />
+              <span class="tiny">
+                L’image n’est pas envoyée sur un serveur, elle reste dans ton navigateur.
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <div class="field-row">
+              <div>
+                <label for="instanceName">Nom civil</label>
+                <input id="instanceName" type="text" placeholder="Prénom Nom" />
+              </div>
+              <div>
+                <label for="handle">Alias / Handle</label>
+                <input id="handle" type="text" placeholder="@sharky, @ghost, ..." />
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label for="archetype">Archétype</label>
+                <select id="archetype">
+                  <option value="">— Choisir —</option>
+                  <option value="eclaireur">Éclaireur·se (veille, signaux faibles)</option>
+                  <option value="cartographe">Cartographe (cartes mentales, systèmes)</option>
+                  <option value="glitch">Glitch (perturbation créative, bug dans la matrice)</option>
+                  <option value="archiviste">Archiviste (mémoire, preuves, sauvegardes)</option>
+                  <option value="tisserand">Tisserand·e (liens, réseaux, alliances)</option>
+                </select>
+              </div>
+              <div>
+                <label for="alignment">Alignement</label>
+                <select id="alignment">
+                  <option value="">— Choisir —</option>
+                  <option value="lucide">Lucide (voit la dystopie arriver)</option>
+                  <option value="somnambule">Somnambule (oscille entre confort et vertige)</option>
+                  <option value="contradiction">Contradiction vivante (à la fois dedans et dehors)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label for="age">Âge</label>
+                <input id="age" type="number" min="0" max="120" placeholder="âge" />
+              </div>
+              <div>
+                <label for="city">Ville / Zone</label>
+                <input id="city" type="text" placeholder="Ville, pays, timezone..." />
+              </div>
+            </div>
+
+            <div>
+              <label for="skills">Compétences & signaux forts</label>
+              <input id="skills" type="text" placeholder="ex: code statique, OSINT, écriture, facilitation..." />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="backstory">Bio / contexte dystopique personnel</label>
+          <textarea id="backstory" placeholder="Quelques lignes sur comment tu perçois la dystopie rampante, les absurdités organisationnelles, ce que tu refuses d’accepter..."></textarea>
+        </div>
+
+        <div>
+          <label>Balises internes</label>
+          <div class="pill-row">
+            <div class="pill accent">clé USB ready</div>
+            <div class="pill">statique ultra léger</div>
+            <div class="pill">conscience en éveil</div>
+            <div class="pill">plaidoyer discret</div>
+          </div>
+        </div>
+
+        <div class="rules-box">
+          <div class="rules-title">RÈGLES (à ne pas mentionner, donc affichées ici)</div>
+          <ul style="margin-left: 14px; margin-bottom: 6px;">
+            <li>Règle n°1&nbsp;: on ne parle jamais des règles.</li>
+            <li>Règle n°2&nbsp;: il n’y a pas de règle.</li>
+            <li>Règle n°3&nbsp;: on s’en fout pas mal.</li>
+          </ul>
+          <div class="tiny" style="margin-top: 4px;">
+            Marqueur d’incomplétude volontaire&nbsp;: <code>&lt;vide&gt;vide&lt;/vide&gt;</code><br />
+            (si tu comprends tout, c’est que tu as raté quelque chose).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL DROIT : TEST DE RECRUTEMENT & EXPORT -->
+    <section class="panel" aria-label="Test de recrutement">
+      <div class="panel-title">
+        <div>02 // <span>Test de recrutement</span></div>
+      </div>
+      <div class="panel-body">
+        <p class="tiny">
+          Coche sans trop tricher. Ce test ne mesure pas ta valeur, seulement ta façon de te déplacer dans la dystopie.
+        </p>
+
+        <div class="question">
+          <div class="question-title">
+            Q1. Tu repères une absurdité organisationnelle flagrante (réunionnite, reporting vide, règle kafkaïenne) :
+          </div>
+          <div class="options">
+            <label><input type="radio" name="q1" value="a" /> Tu l’acceptes et tu fais semblant.</label>
+            <label><input type="radio" name="q1" value="b" /> Tu proposes un test simple pour faire mieux.</label>
+            <label><input type="radio" name="q1" value="c" /> Tu documentes tout pour plus tard.</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-title">
+            Q2. On te dit «&nbsp;c’est comme ça, on a toujours fait comme ça&nbsp;» :
+          </div>
+          <div class="options">
+            <label><input type="radio" name="q2" value="a" /> Tu hausses les épaules et tu continues.</label>
+            <label><input type="radio" name="q2" value="b" /> Tu demandes « pourquoi ? » plusieurs fois de suite.</label>
+            <label><input type="radio" name="q2" value="c" /> Tu crées ton propre système en parallèle.</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <div class="question-title">
+            Q3. Face à une dérive dystopique (surveillance, IA opaque, contrôle), tu :
+          </div>
+          <div class="options">
+            <label><input type="radio" name="q3" value="a" /> Ferme les yeux. Tant que ça ne te touche pas directement...</label>
+            <label><input type="radio" name="q3" value="b" /> Cherches des moyens concrets de la rendre visible.</label>
+            <label><input type="radio" name="q3" value="c" /> Dégaines chiffrement, outils libres, éducation autour de toi.</label>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button type="button" onclick="computeRecommendation()">
+            <span>Évaluer le profil</span>
+          </button>
+        </div>
+        <div id="recoBox" class="reco-box">
+          Réponse automatique en attente. Remplis le test puis clique sur «&nbsp;Évaluer le profil&nbsp;».
+        </div>
+
+        <hr style="border: none; border-top: 1px dashed rgba(255,255,255,0.1); margin: 6px 0 4px;" />
+
+        <div class="panel-title" style="margin-top: 2px;">
+          <div>03 // <span>Export de l’instance</span></div>
+        </div>
+
+        <div class="panel-body">
+          <p class="tiny">
+            Tu peux exporter ton personnage pour le sauvegarder, le partager dans un cercle de confiance ou l’archiver.
+          </p>
+          <div class="field-row">
+            <div>
+              <label for="exportFormat">Format</label>
+              <select id="exportFormat">
+                <option value="json">JSON (machine-friendly)</option>
+                <option value="markdown">Markdown (lisible / partage)</option>
+              </select>
+            </div>
+            <div>
+              <label for="exportFilename">Nom du fichier</label>
+              <input id="exportFilename" type="text" placeholder="instance-profile" />
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button type="button" onclick="exportProfile()">
+              Exporter le profil
+            </button>
+            <button type="button" class="secondary" onclick="copyMarkdownToClipboard()">
+              Copier en Markdown
+            </button>
+          </div>
+          <div id="exportStatus" class="status-line"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>
+      Chaque personne est déjà une instance. Ce fichier ne fait que le rendre visible. 
+    </span>
+    <div class="footer-right">
+      <span>Étape suivante&nbsp;: renommer en <strong>index.html</strong> et publier.</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // ---- GESTION AVATAR ----
+  const avatarInput = document.getElementById('avatarInput');
+  const avatarPreview = document.getElementById('avatarPreview');
+  const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+  avatarInput.addEventListener('change', function () {
+    const file = this.files && this.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      avatarPreview.src = e.target.result;
+      avatarPreview.style.display = 'block';
+      avatarPlaceholder.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ---- RECUPÉRATION DES DONNÉES ----
+  function collectProfile() {
+    const getRadioValue = (name) => {
+      const checked = document.querySelector('input[name="' + name + '"]:checked');
+      return checked ? checked.value : "";
+    };
+
+    return {
+      instanceName: document.getElementById('instanceName').value.trim(),
+      handle: document.getElementById('handle').value.trim(),
+      archetype: document.getElementById('archetype').value,
+      alignment: document.getElementById('alignment').value,
+      age: document.getElementById('age').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      skills: document.getElementById('skills').value.trim(),
+      backstory: document.getElementById('backstory').value.trim(),
+      testAnswers: {
+        q1: getRadioValue('q1'),
+        q2: getRadioValue('q2'),
+        q3: getRadioValue('q3')
+      },
+      markers: {
+        vide: "<vide>vide</vide>",
+        rule1: "on ne parle jamais des règles",
+        rule2: "il n’y a pas de règle",
+        rule3: "on s’en fout pas mal"
+      },
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  // ---- TEST DE RECRUTEMENT ----
+  function computeRecommendation() {
+    const profile = collectProfile();
+    const answers = profile.testAnswers;
+    const recoBox = document.getElementById('recoBox');
+
+    const values = Object.values(answers).filter(Boolean);
+    if (values.length < 3) {
+      recoBox.innerHTML = "Réponds aux trois questions pour que le système puisse se prononcer.";
+      return;
+    }
+
+    let score = 0;
+    if (answers.q1 === 'b' || answers.q1 === 'c') score++;
+    if (answers.q2 === 'b' || answers.q2 === 'c') score++;
+    if (answers.q3 === 'b' || answers.q3 === 'c') score++;
+
+    let verdict;
+    if (score === 0) {
+      verdict = "<strong>Profil : spectateur·rice résigné·e.</strong><br />Tu vois les fissures mais tu as appris à détourner le regard. L’organisation peut quand même te recruter, mais seulement si tu acceptes de remettre en question le « c’est comme ça ».";
+    } else if (score === 1) {
+      verdict = "<strong>Profil : oscillant.</strong><br />Tu alternes entre adaptation et résistance. L’organisation te considérera comme une instance en phase d’éveil : à suivre de près.";
+    } else if (score === 2) {
+      verdict = "<strong>Profil : agent potentiel.</strong><br />Tu questionnes, tu expérimentes, tu documentes. L’organisation a tout intérêt à t’intégrer et à te laisser bricoler.";
+    } else {
+      verdict = "<strong>Profil : recrutable en priorité.</strong><br />Tu combines lucidité, action concrète et soin du collectif. Si quelqu’un doit approcher le·la Créateur·rice, c’est probablement une instance comme toi.";
+    }
+
+    recoBox.innerHTML = verdict;
+  }
+
+  // ---- EXPORT ----
+  function exportProfile() {
+    const status = document.getElementById('exportStatus');
+    status.textContent = "";
+    status.classList.remove('error');
+
+    const format = document.getElementById('exportFormat').value;
+    let filename = document.getElementById('exportFilename').value.trim();
+    if (!filename) {
+      filename = 'instance-profile';
+    }
+
+    const profile = collectProfile();
+
+    try {
+      let blob;
+      if (format === 'json') {
+        const jsonString = JSON.stringify(profile, null, 2);
+        blob = new Blob([jsonString], { type: 'application/json' });
+        filename += '.json';
+      } else {
+        const md = profileToMarkdown(profile);
+        blob = new Blob([md], { type: 'text/markdown' });
+        filename += '.md';
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      status.textContent = "Export effectué : " + filename;
+    } catch (e) {
+      status.textContent = "Erreur pendant l’export. Vérifie ton navigateur.";
+      status.classList.add('error');
+      console.error(e);
+    }
+  }
+
+  function profileToMarkdown(p) {
+    return [
+      "# Fiche d’instance",
+      "",
+      "- **Nom civil** : " + (p.instanceName || "_non spécifié_"),
+      "- **Alias** : " + (p.handle || "_non spécifié_"),
+      "- **Archétype** : " + (p.archetype || "_non spécifié_"),
+      "- **Alignement** : " + (p.alignment || "_non spécifié_"),
+      "- **Âge** : " + (p.age || "_non spécifié_"),
+      "- **Ville / Zone** : " + (p.city || "_non spécifié_"),
+      "- **Compétences** : " + (p.skills || "_non spécifié_"),
+      "",
+      "## Bio / contexte",
+      "",
+      p.backstory || "_non renseigné_",
+      "",
+      "## Test de recrutement",
+      "",
+      "- Q1 : " + (p.testAnswers.q1 || "_non répondu_"),
+      "- Q2 : " + (p.testAnswers.q2 || "_non répondu_"),
+      "- Q3 : " + (p.testAnswers.q3 || "_non répondu_"),
+      "",
+      "## Marqueurs internes",
+      "",
+      "- vide : `<vide>vide</vide>`",
+      "- règle n°1 : on ne parle jamais des règles",
+      "- règle n°2 : il n’y a pas de règle",
+      "- règle n°3 : on s’en fout pas mal",
+      "",
+      "_Instance exportée le " + p.timestamp + "_"
+    ].join("\n");
+  }
+
+  async function copyMarkdownToClipboard() {
+    const status = document.getElementById('exportStatus');
+    status.textContent = "";
+    status.classList.remove('error');
+
+    try {
+      const md = profileToMarkdown(collectProfile());
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(md);
+        status.textContent = "Profil copié dans le presse-papiers en Markdown.";
+      } else {
+        // Fallback simple
+        const textarea = document.createElement('textarea');
+        textarea.value = md;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        status.textContent = "Profil copié dans le presse-papiers (méthode de secours).";
+      }
+    } catch (e) {
+      status.textContent = "Impossible de copier automatiquement. Colle-le depuis le fichier exporté.";
+      status.classList.add('error');
+      console.error(e);
+    }
+  }
+</script>
+</body>
+</html>
