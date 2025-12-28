@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Architecture Vertueuse | 12.50€</title>
+    <style>
+        :root {
+            /* Palette Cyber-Nature */
+            --soft-green: #a7ff83;       /* Croissance / Vitalité */
+            --deep-green: #2ecc71;       /* Stabilité */
+            --lilas: #e0b0ff;            /* Spiritualité / Conscience */
+            --dark-lilas: #9b59b6;       
+            --bg-color: #0d0d0d;         /* Profondeur */
+            --card-bg: #141414;          /* Surface */
+            --text-main: #f0f0f0;
+            --text-dim: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        /* --- EFFETS VISUELS & GLITCH --- */
+        .glitch-text {
+            position: relative;
+            color: var(--soft-green);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+        }
+        
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 var(--lilas);
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(10px, 9999px, 30px, 0); }
+            50% { clip: rect(60px, 9999px, 10px, 0); }
+            100% { clip: rect(80px, 9999px, 100px, 0); }
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 50px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(167, 255, 131, 0.05);
+            background: radial-gradient(circle at top, rgba(167, 255, 131, 0.05) 0%, transparent 70%);
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+
+        .tagline {
+            color: var(--lilas);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto 15px auto;
+            font-style: italic;
+        }
+
+        .price-badge {
+            display: inline-block;
+            border: 1px solid var(--soft-green);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--soft-green);
+            box-shadow: 0 0 10px rgba(167, 255, 131, 0.2);
+        }
+
+        /* --- CONTAINER PRINCIPAL --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- SECTION 1 : LA PYRAMIDE DE REDISTRIBUTION --- */
+        .intro-text {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .pyramid-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .level-btn {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Forme visuelle pyramidale */
+        .lvl-5 { width: 50%; border-color: rgba(224, 176, 255, 0.4); } /* Sommet */
+        .lvl-4 { width: 62%; border-color: rgba(220, 208, 255, 0.4); }
+        .lvl-3 { width: 74%; border-color: rgba(193, 255, 193, 0.3); }
+        .lvl-2 { width: 86%; border-color: rgba(152, 251, 152, 0.3); }
+        .lvl-1 { width: 98%; border-color: var(--soft-green); border-bottom: 3px solid var(--soft-green); } /* Base */
+
+        .level-btn:hover {
+            transform: scale(1.02);
+            background: rgba(167, 255, 131, 0.05);
+        }
+
+        .level-btn.active {
+            background: rgba(224, 176, 255, 0.1);
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(224, 176, 255, 0.15);
+            transform: scale(1.03);
+            z-index: 10;
+        }
+
+        .percent {
+            font-size: 0.7rem;
+            color: #000;
+            background: var(--soft-green);
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+        
+        /* Ajustement couleur badge lilas pour le haut */
+        .lvl-5 .percent, .lvl-4 .percent { background: var(--lilas); }
+
+        /* --- PANNEAU DE DÉTAIL --- */
+        .detail-panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(167, 255, 131, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s, transform 0.4s;
+            display: none; /* Masqué par défaut */
+        }
+        
+        .detail-panel.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .detail-amount {
+            font-size: 2.2rem;
+            color: var(--soft-green);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(167, 255, 131, 0.4);
+            font-family: 'Courier New', monospace;
+        }
+
+        .detail-title {
+            color: var(--lilas);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        .detail-desc { font-size: 0.95rem; color: #ddd; margin-bottom: 15px; }
+
+        .concrete-example {
+            font-size: 0.85rem;
+            color: var(--soft-green);
+            background: rgba(167, 255, 131, 0.05);
+            padding: 12px;
+            border-left: 3px solid var(--soft-green);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- SECTION 2 : LE RÉSONATEUR (SIMULATEUR) --- */
+        .resonator-section {
+            margin-top: 80px;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(13,13,13,0) 0%, rgba(30,30,30,0.6) 100%);
+            border-top: 1px solid rgba(224, 176, 255, 0.1);
+            border-radius: 20px;
+        }
+
+        .res-title {
+            text-align: center;
+            color: var(--lilas);
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .res-subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 40px;
+        }
+
+        .slider-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+            text-align: center;
+        }
+
+        .conscious-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .conscious-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--lilas);
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--lilas);
+            border: 2px solid #fff;
+            transition: transform 0.2s;
+        }
+
+        .conscious-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        .slider-value {
+            margin-top: 20px;
+            font-size: 1.8rem;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .slider-label { font-size: 0.8rem; color: var(--soft-green); text-transform: uppercase; }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .impact-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(224, 176, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .impact-number { 
+            font-size: 1.4rem; 
+            color: var(--soft-green); 
+            font-weight: bold; 
+            font-family: 'Courier New', monospace;
+        }
+        .impact-txt { font-size: 0.75rem; color: #bbb; margin-top: 5px; }
+
+        .dynamic-msg {
+            text-align: center;
+            color: var(--lilas);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            min-height: 30px;
+            opacity: 0.9;
+        }
+
+        /* --- CTA FINAL --- */
+        .cta-box {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .main-cta {
+            background: transparent;
+            border: 1px solid var(--soft-green);
+            color: var(--soft-green);
+            padding: 18px 45px;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        .main-cta:hover {
+            background: var(--soft-green);
+            color: #000;
+            box-shadow: 0 0 40px rgba(167, 255, 131, 0.4);
+        }
+
+        footer {
+            margin-top: 80px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #555;
+            padding: 20px;
+            border-top: 1px solid #222;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="glitch-text" data-text="L'ARCHITECTURE">L'ARCHITECTURE</h1>
+        <p class="tagline">Le premier modèle de redistribution circulaire<br>basé sur les besoins vitaux.</p>
+        <div class="price-badge">DON UNIQUE : 12,50€ / AN</div>
+    </header>
+
+    <div class="container">
+        
+        <p class="intro-text">
+            <span style="color:var(--soft-green)">▼</span> Explorez les niveaux pour comprendre la redistribution <span style="color:var(--soft-green)">▼</span>
+        </p>
+
+        <div class="pyramid-wrapper">
+            <div class="level-btn lvl-5" onclick="showDetail(5)">
+                <span>ACCOMPLISSEMENT</span> <span class="percent">4%</span>
+            </div>
+            <div class="level-btn lvl-4" onclick="showDetail(4)">
+                <span>ESTIME</span> <span class="percent">6%</span>
+            </div>
+            <div class="level-btn lvl-3" onclick="showDetail(3)">
+                <span>APPARTENANCE</span> <span class="percent">10%</span>
+            </div>
+            <div class="level-btn lvl-2" onclick="showDetail(2)">
+                <span>SÉCURITÉ</span> <span class="percent">20%</span>
+            </div>
+            <div class="level-btn lvl-1 active" onclick="showDetail(1)">
+                <span>PHYSIOLOGIQUE</span> <span class="percent">60%</span>
+            </div>
+        </div>
+
+        <div class="detail-panel visible" id="info-panel">
+            <div class="detail-header">
+                <div>
+                    <div class="detail-title" id="d-title">NIVEAU 1 : SURVIE & DIGNITÉ</div>
+                    <div class="detail-amount" id="d-amount">7,50€</div>
+                </div>
+                <div style="font-size: 2.5rem; opacity: 0.8;" id="d-icon">💧</div>
+            </div>
+            <div class="detail-desc" id="d-desc">
+                C'est le socle. La majorité de votre don est immédiatement redirigée vers des fonds d'urgence : alimentation, eau potable, abris.
+            </div>
+            <div class="concrete-example" id="d-ex">
+                <strong>Impact Réel :</strong> Finance 3 repas complets ou 2 kits d'hygiène d'urgence.
+            </div>
+        </div>
+
+        <section class="resonator-section">
+            <h2 class="res-title">Résonance Collective</h2>
+            <p class="res-subtitle">Bougez le curseur. Voyez ce que nous construisons ensemble.</p>
+
+            <div class="slider-container">
+                <input type="range" min="1" max="5000" value="100" class="conscious-slider" id="peopleSlider" oninput="updateResonance()">
+                <div class="slider-value">
+                    <span id="peopleCount">100</span>
+                </div>
+                <span class="slider-label">Maillons de la chaîne</span>
+            </div>
+
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-number" id="res-meals">750</div>
+                    <div class="impact-txt">REPAS / KITS SURVIE<br>(Niveau 1)</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-number" id="res-connect">125</div>
+                    <div class="impact-txt">ACTIONS LOCALES<br>(Niveau 3)</div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-number" id="res-projects">50 €</div>
+                    <div class="impact-txt">FONDS CRÉATIF<br>(Niveau 5)</div>
+                </div>
+            </div>
+            
+            <div class="dynamic-msg" id="message-dynamic">
+                "Une étincelle dans la nuit..."
+            </div>
+        </section>
+
+        <div class="cta-box">
+            <button class="main-cta" onclick="alert('Merci de vouloir contribuer à ce futur vertueux.')">ACTIVER LE CYCLE</button>
+            <p style="margin-top: 20px; font-size: 0.7rem; color: #666;">
+                Blockchain Publique • Zéro frais de gestion • Open Source
+            </p>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2024 Architecture Vertueuse. Un système conçu pour l'Humain, par l'Humain.
+    </footer>
+
+    <script>
+        // DONNÉES DE LA PYRAMIDE
+        const data = {
+            1: {
+                title: "NIVEAU 1 : BESOINS PHYSIOLOGIQUES",
+                amount: "7,50 €",
+                desc: "Le fondement. 60% du don consolide la base. Ce fonds est intouchable pour autre chose que la survie immédiate : manger, boire, dormir au chaud.",
+                ex: "Impact Réel : Finance l'achat en gros de denrées non périssables locales.",
+                icon: "💧"
+            },
+            2: {
+                title: "NIVEAU 2 : SÉCURITÉ & SANTÉ",
+                amount: "2,50 €",
+                desc: "Une fois nourri, il faut soigner. Ce niveau finance une micro-mutuelle solidaire et une assistance juridique pour ceux qui risquent de tout perdre.",
+                ex: "Impact Réel : Achat de médicaments de première nécessité ou nuits d'hôtel d'urgence.",
+                icon: "🛡️"
+            },
+            3: {
+                title: "NIVEAU 3 : APPARTENANCE",
+                amount: "1,25 €",
+                desc: "L'humain ne vit pas que de pain. Ce budget soutient la logistique de la communauté, les outils de connexion et la lutte contre l'isolement.",
+                ex: "Impact Réel : Maintenance de la plateforme d'entraide et organisation de rencontres.",
+                icon: "🤝"
+            },
+            4: {
+                title: "NIVEAU 4 : ESTIME DE SOI",
+                amount: "0,75 €",
+                desc: "Redonner la capacité d'agir. Financement de la formation, de la reconnaissance des compétences et de la validation des acquis.",
+                ex: "Impact Réel : Micro-bourses pour du matériel professionnel ou des formations.",
+                icon: "⭐"
+            },
+            5: {
+                title: "NIVEAU 5 : ACCOMPLISSEMENT",
+                amount: "0,50 €",
+                desc: "Le sommet. Quand tout va bien, on peut créer. Ce fonds finance l'innovation sociale, l'art communautaire et les projets open-source.",
+                ex: "Impact Réel : Subventions pour des projets artistiques ou technologiques libres.",
+                icon: "💡"
+            }
+        };
+
+        // INTERACTION PYRAMIDE
+        function showDetail(level) {
+            // Reset active classes
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.lvl-${level}`).classList.add('active');
+
+            // Hide panel smoothly
+            const panel = document.getElementById('info-panel');
+            panel.classList.remove('visible');
+
+            // Update data after short delay
+            setTimeout(() => {
+                document.getElementById('d-title').innerText = data[level].title;
+                document.getElementById('d-amount').innerText = data[level].amount;
+                document.getElementById('d-desc').innerText = data[level].desc;
+                document.getElementById('d-ex').innerHTML = `<strong>${data[level].ex.split(':')[0]} :</strong>${data[level].ex.split(':')[1]}`;
+                document.getElementById('d-icon').innerText = data[level].icon;
+                
+                // Show panel smoothly
+                panel.style.display = 'block';
+                // Petit hack pour forcer le reflow css avant d'ajouter la classe visible
+                void panel.offsetWidth; 
+                panel.classList.add('visible');
+            }, 300);
+        }
+
+        // LOGIQUE DU RÉSONATEUR (CALCULATEUR)
+        function updateResonance() {
+            const count = document.getElementById('peopleSlider').value;
+            const donation = 12.50;
+            const total = count * donation;
+
+            // Update slider label
+            document.getElementById('peopleCount').innerText = parseInt(count).toLocaleString();
+
+            // Calculs d'impact (Estimations)
+            // L1 (60%) -> ~2.50€ le repas/kit
+            const meals = Math.floor((total * 0.60) / 2.50);
+            
+            // L3 (10%) -> ~10€ l'action sociale (logistique)
+            const actions = Math.floor((total * 0.10) / 10);
+
+            // L5 (4%) -> Valeur brute en euros pour projets
+            const projects = Math.floor(total * 0.04); 
+
+            // Update DOM
+            document.getElementById('res-meals').innerText = meals.toLocaleString();
+            document.getElementById('res-connect').innerText = actions.toLocaleString();
+            document.getElementById('res-projects').innerText = projects.toLocaleString() + " €";
+
+            // Message de conscience
+            const msgBox = document.getElementById('message-dynamic');
+            if (count < 50) {
+                msgBox.innerText = "\"Une étincelle dans la nuit...\"";
+                msgBox.style.color = "#888";
+            } else if (count < 500) {
+                msgBox.innerText = "\"Un village commence à s'organiser.\"";
+                msgBox.style.color = "var(--soft-green)";
+            } else if (count < 2000) {
+                msgBox.innerText = "\"L'onde de choc positive se propage.\"";
+                msgBox.style.color = "var(--lilas)";
+            } else {
+                msgBox.innerText = "\"Une nouvelle architecture sociale est née.\"";
+                msgBox.style.color = "#fff";
+                msgBox.style.textShadow = "0 0 10px var(--lilas)";
+            }
+        }
+
+        // Init
+        updateResonance();
+    </script>
+</body>
+</html>
