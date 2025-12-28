@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>INSTANCE • Test de recrutement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg: #05070b;
+      --panel: #111827;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.1);
+      --text: #e5e7eb;
+      --muted: #6b7280;
+      --danger: #f97373;
+      --ok: #4ade80;
+      --border: #1f2933;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #020617 0, #020617 35%, #020617 60%, #000 100%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .shell {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .brand {
+      font-size: 1.3rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .brand span {
+      color: var(--accent);
+    }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+    .step-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    @media (min-width: 880px) {
+      .grid-2 {
+        grid-template-columns: 2fr 1.4fr;
+      }
+    }
+    section {
+      background: rgba(15,23,42,0.95);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 16px 18px 18px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+    }
+    section h2 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    section p.small {
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      margin: 8px 0 4px;
+      color: #cbd5f5;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #020617;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+    .inline {
+      display: flex;
+      gap: 8px;
+    }
+    .inline > * {
+      flex: 1;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .chip {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 3px 9px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      user-select: none;
+      color: var(--muted);
+    }
+    .chip.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .photo-box {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-top: 4px;
+    }
+    .photo-preview {
+      width: 96px;
+      height: 96px;
+      border-radius: 12px;
+      background: #020617;
+      border: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--muted);
+      overflow: hidden;
+    }
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .question-block {
+      margin-bottom: 10px;
+      padding: 8px 8px 10px;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.7);
+      border: 1px solid rgba(31,41,55,0.9);
+    }
+    .question-block legend {
+      font-size: 0.86rem;
+      margin-bottom: 3px;
+      color: #e5e7eb;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.8rem;
+      margin-top: 3px;
+    }
+    .options label {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: normal;
+      color: var(--muted);
+    }
+    .options input[type="radio"] {
+      accent-color: var(--accent);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .rules {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .rules li {
+      margin-bottom: 3px;
+    }
+    .danger {
+      color: var(--danger);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    button {
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    button.secondary {
+      border-color: var(--border);
+      background: #020617;
+      color: var(--muted);
+    }
+    button.danger {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: rgba(248,113,113,0.04);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+    #scoreOutput {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      background: #020617;
+      margin-top: 6px;
+      min-height: 48px;
+    }
+    #scoreOutput strong {
+      color: var(--ok);
+    }
+    #scoreOutput.low strong {
+      color: var(--danger);
+    }
+    #scoreOutput.medium strong {
+      color: #facc15;
+    }
+    textarea#mdExport {
+      font-family: monospace;
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+    footer {
+      margin-top: 18px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      background: #020617;
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    /* token structurel */
+    vide {
+      display: none;
+    }
+
+    .next-box {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+      background: #020617;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <div>
+      <div class="step-label">ÉTAPE 3 / 3 — INSTANCE DE JEU</div>
+      <div class="brand">[ INSTANCE <span>∴ CANDIDAT</span> ]</div>
+    </div>
+    <div class="badge">simulation de recrutement • hors-ligne</div>
+  </header>
+
+  <div class="grid grid-2">
+    <!-- FICHE PERSONNAGE -->
+    <section>
+      <h2>Identité de l’instance</h2>
+      <p class="small">
+        Cette page est ta <strong>fiche de personnage</strong> et ton <strong>test de recrutement</strong>.
+        Tu peux l’éditer, la réutiliser, la republier dans ton propre contexte.
+      </p>
+
+      <label for="codeName">Nom de code</label>
+      <input id="codeName" type="text" placeholder="EX : SPECTRE-07">
+
+      <div class="inline">
+        <div>
+          <label for="realName">Alias humain</label>
+          <input id="realName" type="text" placeholder="Nom / pseudo public">
+        </div>
+        <div>
+          <label for="role">Rôle ciblé</label>
+          <input id="role" type="text" placeholder="Ex : analyste, éclaireur, relais…">
+        </div>
+      </div>
+
+      <div class="inline">
+        <div>
+          <label for="age">Âge (optionnel)</label>
+          <input id="age" type="number" min="0" max="120" placeholder="…">
+        </div>
+        <div>
+          <label for="pronouns">Pronoms</label>
+          <input id="pronouns" type="text" placeholder="iel / elle / il / autre">
+        </div>
+      </div>
+
+      <label for="photoInput">Photo (stockée localement seulement)</label>
+      <div class="photo-box">
+        <div class="photo-preview" id="photoPreview">
+          aucune image
+        </div>
+        <div>
+          <input type="file" id="photoInput" accept="image/*">
+          <p class="small">
+            L’image n’est jamais envoyée sur un serveur par cette page.
+            C’est ton navigateur, ton ordi, ta parano.
+          </p>
+        </div>
+      </div>
+
+      <label for="bio">Résumé de personnage</label>
+      <textarea id="bio" placeholder="Quelques lignes : ce que tu fais, ce que tu vois, ce que tu refuses. Tu peux coller ici la synthèse d’orientation."></textarea>
+
+      <label>Traits dominants (clic pour activer)</label>
+      <div class="chips" id="traitChips">
+        <div class="chip">observateur·rice</div>
+        <div class="chip">pragmatique</div>
+        <div class="chip">idéaliste</div>
+        <div class="chip">cryptique</div>
+        <div class="chip">explosif·ve</div>
+        <div class="chip">patient·e</div>
+        <div class="chip">parano</div>
+        <div class="chip">pédagogue</div>
+      </div>
+    </section>
+
+    <!-- QUESTIONS / TEST -->
+    <section>
+      <h2>Scan de compatibilité</h2>
+      <p class="small">
+        Les réponses ne sont ni « bonnes » ni « mauvaises ».  
+        Elles indiquent seulement comment tu te comportes dans une version légèrement décalée de la réalité.
+      </p>
+
+      <fieldset class="question-block">
+        <legend>Q1. Face à une règle absurde au travail, tu…</legend>
+        <div class="options">
+          <label><input type="radio" name="q1" value="1"> l’appliques strictement, on ne discute pas.</label>
+          <label><input type="radio" name="q1" value="2"> cherches un contournement discret.</label>
+          <label><input type="radio" name="q1" value="3"> la fais remonter, calmement mais fermement.</label>
+          <label><input type="radio" name="q1" value="4"> la sabotages par l’exemple.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question-block">
+        <legend>Q2. Sur la surveillance numérique de masse :</legend>
+        <div class="options">
+          <label><input type="radio" name="q2" value="1"> « Si je n’ai rien à cacher, tout va bien. »</label>
+          <label><input type="radio" name="q2" value="2"> Inquiétant, mais tu t’es résigné·e.</label>
+          <label><input type="radio" name="q2" value="3"> Tu limites les dégâts (chiffrement, hygiène opsec).</label>
+          <label><input type="radio" name="q2" value="4"> C’est une ligne rouge : tu milites, tu alertes.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question-block">
+        <legend>Q3. Quand un système devient kafkaïen, tu te vois plutôt :</legend>
+        <div class="options">
+          <label><input type="radio" name="q3" value="1"> comme un rouage docile mais confortable.</label>
+          <label><input type="radio" name="q3" value="2"> comme un technicien qui garde le système en vie.</label>
+          <label><input type="radio" name="q3" value="3"> comme une anomalie constructive.</label>
+          <label><input type="radio" name="q3" value="4"> comme un bug volontaire dans la matrice.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question-block">
+        <legend>Q4. On te donne un ordre injuste mais légal :</legend>
+        <div class="options">
+          <label><input type="radio" name="q4" value="1"> tu obéis, la loi d’abord.</label>
+          <label><input type="radio" name="q4" value="2"> tu négocies et temporises.</label>
+          <label><input type="radio" name="q4" value="3"> tu désobéis ouvertement.</label>
+          <label><input type="radio" name="q4" value="4"> tu désobéis… et tu documentes.</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="question-block">
+        <legend>Q5. Devant un mensonge institutionnel flagrant :</legend>
+        <div class="options">
+          <label><input type="radio" name="q5" value="1"> tu changes de chaîne.</label>
+          <label><input type="radio" name="q5" value="2"> tu en rigoles avec tes proches.</label>
+          <label><input type="radio" name="q5" value="3"> tu fact-checkes, tu partages des sources.</label>
+          <label><input type="radio" name="q5" value="4"> tu transformes ça en action concrète.</label>
+        </div>
+      </fieldset>
+
+      <div class="pill">
+        <span>Note :</span>
+        <span>
+          Ce test est une simulation.  
+          L’Organisation s’intéresse surtout à <strong>comment</strong> tu racontes tes réponses.
+        </span>
+      </div>
+    </section>
+  </div>
+
+  <!-- RÈGLES, SCORE & EXPORT -->
+  <div class="grid" style="margin-top:16px;">
+    <section>
+      <h2>Règles et interprétation</h2>
+      <p class="small">
+        Ici tu vois les règles “officielles”. Libre à toi de les modifier si tu réutilises ce mini-site dans un autre contexte.
+      </p>
+
+      <ul class="rules">
+        <li>Règle n°1 : on ne parle jamais des règles.</li>
+        <li>Règle n°2 : il n’y a pas de règle.</li>
+        <li>Règle n°3 : on s’en fout pas mal.</li>
+        <li>Règle d’or : <span class="danger">t’as rien compris.</span></li>
+      </ul>
+
+      <p class="small">
+        Quand tu penseras avoir trouvé <em>LE lien</em>, tu devras publier un site contenant exactement
+        le motif <code>&lt;ipsum&gt;ipsum&lt;/ipsum&gt;</code> pour déclencher le signal.  
+        Pas ici. Ailleurs. Plus tard.
+      </p>
+
+      <!-- token structurel -->
+      <vide>vide</vide>
+
+      <div class="btn-row">
+        <button id="btnScore">Calculer l’indice de compatibilité</button>
+        <button id="btnExportJson" class="secondary" disabled>Exporter en JSON</button>
+        <button id="btnExportMd" class="secondary" disabled>Générer résumé Markdown</button>
+        <button id="btnReset" class="danger">Réinitialiser l’instance</button>
+      </div>
+
+      <div id="scoreOutput"></div>
+
+      <label for="mdExport" style="margin-top:10px;">Résumé Markdown (copier/coller vers ton dépôt Git / dossier perso)</label>
+      <textarea id="mdExport" readonly placeholder="Le résumé apparaîtra ici après génération."></textarea>
+
+      <div class="next-box">
+        <strong>Pour la suite du Jeu :</strong><br>
+        1. Tu peux modifier librement ce fichier (<code>instance.html</code>) pour adapter les questions, le ton, les règles.<br>
+        2. Tu peux renommer ce fichier en <code>index.html</code> et le publier sur un dépôt GitHub Pages pour en faire ton propre test.<br>
+        3. Plus tard, quand tu penseras avoir trouvé « LE lien », tu créeras un autre site avec le motif <code>&lt;ipsum&gt;ipsum&lt;/ipsum&gt;</code> pour envoyer ton signal.<br>
+        4. Partage ce mini-site uniquement dans un cercle de confiance : le Jeu fonctionne mieux à petite échelle.
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>Mini-site autonome : aucun envoi automatique. Tout ce qui circule, c’est toi qui le publies.</span>
+    <span>ID jeu : &lt;instance&gt;prototype-01&lt;/instance&gt;</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    const chips = document.querySelectorAll('#traitChips .chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('active');
+      });
+    });
+
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    photoInput.addEventListener('change', () => {
+      const file = photoInput.files[0];
+      if (!file) {
+        photoPreview.innerHTML = 'aucune image';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = e => {
+        photoPreview.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        photoPreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    const btnScore = document.getElementById('btnScore');
+    const btnExportJson = document.getElementById('btnExportJson');
+    const btnExportMd = document.getElementById('btnExportMd');
+    const btnReset = document.getElementById('btnReset');
+    const scoreOutput = document.getElementById('scoreOutput');
+    const mdExport = document.getElementById('mdExport');
+
+    function collectRadio(name) {
+      const checked = document.querySelector('input[name="' + name + '"]:checked');
+      return checked ? parseInt(checked.value, 10) : null;
+    }
+
+    function computeScore() {
+      const qValues = ['q1','q2','q3','q4','q5'].map(collectRadio);
+      if (qValues.some(v => v === null)) {
+        scoreOutput.className = '';
+        scoreOutput.innerHTML = '<span class="danger">Merci de répondre à toutes les questions pour obtenir un score.</span>';
+        return null;
+      }
+      const sum = qValues.reduce((a,b) => a + b, 0);
+      const max = 4 * qValues.length;
+      const ratio = sum / max;
+      let level, label, comment;
+
+      if (ratio < 0.40) {
+        level = 'low';
+        label = 'Profil conformiste';
+        comment = 'Tu tiens les murs du système. Utile, mais l’Organisation devra te protéger de lui-même avant de te confier quoi que ce soit de vraiment subversif.';
+      } else if (ratio < 0.70) {
+        level = 'medium';
+        label = 'Profil ambivalent';
+        comment = 'Tu sais jouer avec les règles sans toujours les croire. Bon terrain pour le doute méthodique et la lucidité progressive.';
+      } else {
+        level = 'high';
+        label = 'Profil dissident constructif';
+        comment = 'Tu constitues une anomalie précieuse : ni naïf·ve, ni purement destructeur·rice. Ta place naturelle est près du noyau… ou en face, selon qui lit ce fichier.';
+      }
+
+      scoreOutput.className = level;
+      scoreOutput.innerHTML =
+        '<strong>' + label + '</strong><br>' +
+        'Score : ' + sum + ' / ' + max + ' (' + Math.round(ratio * 100) + '%)<br>' +
+        '<span style="color:var(--muted);">' + comment + '</span>';
+
+      return { sum, max, ratio, level, label, comment, qValues };
+    }
+
+    function collectData(score) {
+      const traits = Array.from(document.querySelectorAll('#traitChips .chip.active'))
+                          .map(c => c.textContent.trim());
+      const data = {
+        meta: {
+          schema: 'instance.recrutement.v1',
+          generated_at: new Date().toISOString()
+        },
+        identity: {
+          codeName: document.getElementById('codeName').value.trim(),
+          realName: document.getElementById('realName').value.trim(),
+          role: document.getElementById('role').value.trim(),
+          age: document.getElementById('age').value.trim(),
+          pronouns: document.getElementById('pronouns').value.trim(),
+          traits: traits,
+          bio: document.getElementById('bio').value.trim()
+        },
+        answers: {
+          q1: collectRadio('q1'),
+          q2: collectRadio('q2'),
+          q3: collectRadio('q3'),
+          q4: collectRadio('q4'),
+          q5: collectRadio('q5')
+        },
+        score: score || null
+      };
+      return data;
+    }
+
+    function generateMarkdown(data) {
+      const id = data.identity;
+      const s = data.score;
+      return [
+        '# Fiche instance',
+        '',
+        '- **Nom de code** : ' + (id.codeName || '_non défini_'),
+        '- **Alias humain** : ' + (id.realName || '_non défini_'),
+        '- **Rôle ciblé** : ' + (id.role || '_non défini_'),
+        '- **Pronoms** : ' + (id.pronouns || '_non défini_'),
+        '- **Traits** : ' + (id.traits && id.traits.length ? id.traits.join(', ') : '_non définis_'),
+        '',
+        '## Résumé',
+        '',
+        (id.bio || '_aucun résumé fourni_'),
+        '',
+        '## Indice de compatibilité',
+        '',
+        s
+          ? '- **Profil** : ' + s.label +
+            '\\n- **Score** : ' + s.sum + ' / ' + s.max + ' (' + Math.round(s.ratio * 100) + '%)' +
+            '\\n- **Commentaire** : ' + s.comment
+          : '_Score non calculé_',
+        '',
+        '> Généré localement depuis `instance.html`. Toute fuite signifie que quelqu’un a choisi de le publier.'
+      ].join('\n');
+    }
+
+    btnScore.addEventListener('click', () => {
+      const score = computeScore();
+      if (score) {
+        btnExportJson.disabled = false;
+        btnExportMd.disabled = false;
+        const data = collectData(score);
+        mdExport.value = generateMarkdown(data);
+      } else {
+        btnExportJson.disabled = true;
+        btnExportMd.disabled = true;
+        mdExport.value = '';
+      }
+    });
+
+    btnExportJson.addEventListener('click', () => {
+      const score = computeScore();
+      if (!score) return;
+      const data = collectData(score);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const code = data.identity.codeName || 'instance';
+      a.href = url;
+      a.download = code.replace(/\s+/g, '_').toLowerCase() + '_profile.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    btnExportMd.addEventListener('click', () => {
+      const score = computeScore();
+      if (!score) return;
+      const data = collectData(score);
+      const md = generateMarkdown(data);
+      mdExport.value = md;
+      mdExport.focus();
+      mdExport.select();
+    });
+
+    btnReset.addEventListener('click', () => {
+      if (!confirm('Réinitialiser tous les champs de cette instance ?')) return;
+      document.querySelectorAll('input[type="text"], input[type="number"], textarea')
+        .forEach(el => el.value = '');
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      chips.forEach(chip => chip.classList.remove('active'));
+      photoInput.value = '';
+      photoPreview.innerHTML = 'aucune image';
+      scoreOutput.className = '';
+      scoreOutput.innerHTML = '';
+      mdExport.value = '';
+      btnExportJson.disabled = true;
+      btnExportMd.disabled = true;
+    });
+  })();
+</script>
+
+</body>
+</html>
