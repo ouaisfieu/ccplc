@@ -1,4 +1,4 @@
-# Business Plan et Modèle Opérationnel 
+# Business Plan (et+ si affinités) 
 
 ## Collectif Citoyen pour la Participation Libre & Consciente (CCPLC)
 
@@ -12,10 +12,19 @@ La vision à long terme du CCPLC est de contribuer à l'avènement d'une « dém
 
 Le CCPLC ancre son action dans un socle de valeurs intangibles, qui garantissent l'intégrité et la cohérence de sa démarche.
 
-Valeur	Description
-Liberté et autonomie	Chaque individu et chaque groupe est libre de définir ses priorités et ses modes d’action, sans subir de pression ou d’influence extérieure.
-Empouvoirement citoyen	Nos actions visent à renforcer les capacités des individus et des collectifs à agir de manière autonome et consciente dans leur environnement.
-Démocratie participative	Nous encourageons la prise de décision collective et le dialogue constructif pour favoriser des solutions inclusives et durables.
+#### Valeurs
+
+##### Liberté et autonomie	
+
+Chaque individu et chaque groupe est libre de définir ses priorités et ses modes d’action, sans subir de pression ou d’influence extérieure.
+
+##### Empouvoirement citoyen
+
+Nos actions visent à renforcer les capacités des individus et des collectifs à agir de manière autonome et consciente dans leur environnement.
+
+##### Démocratie participative	
+
+Nous encourageons la prise de décision collective et le dialogue constructif pour favoriser des solutions inclusives et durables.
 Transparence et intégrité	Les activités et les ressources du collectif sont accessibles, traçables et exempts de toute manipulation ou intention cachée.
 
 Cette mission ambitieuse, portée par une vision exigeante et des valeurs claires, n'émerge pas ex nihilo. Elle répond à des dysfonctionnements précis et documentés au sein du contexte politique belge et international, qui justifient la nécessité d'un contre-pouvoir citoyen organisé et outillé.
@@ -24,11 +33,11 @@ Cette mission ambitieuse, portée par une vision exigeante et des valeurs claire
 
 La pertinence et l'efficacité du CCPLC reposent sur une analyse rigoureuse du contexte dans lequel il s'inscrit. Loin d'être une initiative désincarnée, le projet puise sa justification dans un diagnostic précis des fractures démocratiques, des asymétries informationnelles et des blocages institutionnels qui entravent une participation citoyenne pleine et entière. C'est en adressant ces problèmes concrets que le collectif trouve sa raison d'être.
 
-La Crise de la Représentation et l'Opacité du Pouvoir en Belgique
+#### La Crise de la Représentation et l'Opacité du Pouvoir en Belgique
 
 Le système politique belge est marqué par une crise de la représentation, largement structurée par la « particratie » : un modèle où le pouvoir réel est concentré au sein des appareils de partis plutôt que dans les assemblées parlementaires. Cette réalité se matérialise dans des instances informelles comme le « Kern », ou Comité ministériel restreint. Bien que cette instance n'ait aucune existence constitutionnelle ou légale, c'est, selon les analyses du CRISP (Centre de recherche et d'information socio-politiques), « en son sein que sont prises la plupart des décisions majeures qui concernent la Belgique ». Cette opacité du processus décisionnel nourrit les soupçons de compromis occultes et affaiblit drastiquement la reddition de comptes (accountability) des gouvernants envers les citoyens.
 
-La "Taxe B bureaucratique" et l'Absurdité Organisationnelle
+#### La "Taxe B bureaucratique" et l'Absurdité Organisationnelle
 
 Au-delà de la sphère politique, les dysfonctionnements organisationnels génèrent un coût économique et social colossal. Des études récentes ont mis en évidence l'existence d'une véritable « taxe bureaucratique » invisible qui pèse sur la productivité mondiale.
 
@@ -37,17 +46,17 @@ Au-delà de la sphère politique, les dysfonctionnements organisationnels génè
 
 Ces chiffres vertigineux démontrent que l'absurdité organisationnelle n'est pas une fatalité, mais le résultat d'une culture du contrôle, de la méfiance et de la dilution des responsabilités. Ces dysfonctionnements, qu'ils soient publics ou privés, légitiment une surveillance citoyenne non seulement pour des raisons démocratiques, mais aussi pour des impératifs d'efficience et de bonne gestion des ressources collectives.
 
-Menaces sur l'Information : Désinformation et Asymétries
+#### Menaces sur l'Information : Désinformation et Asymétries
 
 L'ère numérique a fait de l'information un enjeu de pouvoir central, mais aussi un terrain de conflits. Le risque d'une « vérité d'État », où les gouvernements exploitent la lutte contre la désinformation pour censurer les voix critiques, est de plus en plus tangible. Ce phénomène est aggravé par la concentration des médias entre les mains de quelques grands groupes et par des campagnes de désinformation à grande échelle, souvent orchestrées pour polariser le débat public. L'affaire Cambridge Analytica a illustré de manière spectaculaire l'intersection toxique entre l'asymétrie informationnelle (l'exploitation de données personnelles à l'insu des utilisateurs) et la désinformation (la diffusion de messages politiques ciblés et biaisés).
 
 C'est pour répondre à ce contexte de défiance, d'opacité et de manipulation que le CCPLC a développé un modèle d'action structuré, visant à outiller les citoyens pour qu'ils puissent exercer leur vigilance de manière éclairée et efficace.
 
-3. Le Modèle d'Action : Axes Stratégiques et Méthodologies
+### 3. Le Modèle d'Action : Axes Stratégiques et Méthodologies
 
 Le modèle d'action du CCPLC est la traduction opérationnelle de sa mission. Il ne s'agit pas d'agir à la place des citoyens, mais de leur fournir les moyens d'agir par eux-mêmes. Ce modèle repose sur un cycle de renseignement citoyen complet et rigoureux, qui va de la collecte d'informations brutes à l'évaluation de l'impact des actions menées. Il s'inspire des meilleures pratiques de la veille stratégique, tout en étant profondément ancré dans les principes d'émancipation de l'éducation populaire.
 
-Les Six Missions Stratégiques du Collectif
+#### Les Six Missions Stratégiques du Collectif
 
 Le plan d'action 2025-2026 s'articule autour de six axes stratégiques interdépendants, chacun associé à des objectifs concrets et des livrables reproductibles.
 
@@ -71,7 +80,7 @@ Le plan d'action 2025-2026 s'articule autour de six axes stratégiques interdép
   * Objectif : Mesurer de manière transparente l’impact social et démocratique des actions menées par le collectif et ses partenaires.
   * Livrables : Mise en place d'un tableau de bord public (via Matomo) et publication de rapports d’évaluation semestriels basés sur des indicateurs ouverts et des retours d’expérience qualitatifs.
 
-Méthodologie Fondamentale : Le Cycle de la Veille Citoyenne
+#### Méthodologie Fondamentale : Le Cycle de la Veille Citoyenne
 
 La veille citoyenne est l'activité continue et organisée de collecte, d'analyse et de diffusion d'informations pertinentes pour permettre aux citoyens d'anticiper, de comprendre et d'influencer leur environnement social et politique. Le CCPLC structure cette démarche en cinq étapes clés :
 
@@ -81,7 +90,7 @@ La veille citoyenne est l'activité continue et organisée de collecte, d'analys
 4. Diffusion : Publication des résultats sous une forme accessible, interpellation des autorités et mobilisation citoyenne.
 5. Suivi : Monitoring des réactions institutionnelles et médiatiques, évaluation de l'impact et ajustement de la stratégie.
 
-Ancrage Philosophique : Les Principes de l'Éducation Permanente
+####  Ancrage Philosophique : Les Principes de l'Éducation Populaire
 
 L'axe « Former » est directement irrigué par les principes de l'Éducation Permanente (EP). L'EP vise à transmettre au plus grand nombre les clés de compréhension et d'action sur le monde, afin que chacun puisse développer un regard critique et des savoirs pour transformer la société. Le CCPLC met en œuvre cet idéal par des pratiques concrètes de réappropriation citoyenne de l'information, telles que :
 
@@ -95,11 +104,13 @@ Pour mettre en œuvre ce modèle d'action de manière durable, responsable et cr
 
 Le choix du cadre juridique et la définition des principes de gouvernance sont des décisions d'une importance cruciale pour un collectif citoyen. La structure doit non seulement être conforme à la loi, mais aussi incarner les valeurs de transparence, de décentralisation et d'autonomie que le projet promeut. La crédibilité du CCPLC dépend de sa capacité à appliquer à lui-même les exigences qu'il formule pour les autres.
 
-Statut Juridique
+#### Statut Juridique
 
-Après analyse des différentes options, le collectif a décidé d'opter pour le statut d'Association Internationale Sans But Lucratif (AISBL). Ce statut offre un cadre juridique robuste et reconnu, adapté à la portée et aux ambitions du projet. Des modèles de statuts et de règlement d'ordre intérieur ont déjà été préparés pour formaliser cette structure.
+Après analyse des différentes options, le collectif a décidé d'opter pour le statut d'Association Internationale Sans But Lucratif par le Fait (FAISBL). 
 
-Principes d'Action et de Gouvernance
+Ce statut offre un cadre juridique robuste et reconnu, adapté à la portée et aux ambitions du projet. Des modèles de statuts et de règlement d'ordre intérieur ont déjà été préparés pour formaliser cette structure.
+
+#### Principes d'Action et de Gouvernance
 
 La gouvernance du CCPLC est guidée par trois principes d'action fondamentaux, inscrits dans sa charte :
 
@@ -107,7 +118,7 @@ La gouvernance du CCPLC est guidée par trois principes d'action fondamentaux, i
 2. Neutralité et non-ingérence : Le rôle du collectif est d'outiller et de renforcer les capacités, pas de diriger ou d'imposer une ligne politique. Il s'interdit toute forme d'influence directive ou de prosélytisme, garantissant ainsi l'autonomie des acteurs qu'il accompagne.
 3. Évaluation continue : Les pratiques, méthodologies et outils proposés sont régulièrement évalués par leurs utilisateurs. Ce processus itératif garantit leur pertinence, leur efficacité et leur adaptation constante aux besoins du terrain.
 
-Licence des Productions
+#### Licence des Productions
 
 Afin d'assurer la plus large diffusion et réutilisation de ses travaux tout en protégeant son modèle non marchand, toutes les productions du collectif sont diffusées sous la licence CC BY-NC 4.0 (Pas d’Usage Commercial). Cette licence permet à quiconque de :
 
@@ -118,13 +129,13 @@ La seule restriction majeure est l'interdiction de vendre, louer ou intégrer le
 
 Ce cadre de gouvernance, fondé sur la confiance et l'autonomie, fournit la structure nécessaire pour déployer les actions concrètes et mesurables que le collectif s'engage à réaliser dans sa feuille de route.
 
-5. Feuille de Route et Objectifs Opérationnels (2025-2026)
+### 5. Feuille de Route et Objectifs Opérationnels (2025-2026)
 
 La feuille de route traduit le plan stratégique en un programme d'action concret et temporellement défini. Elle permet de mesurer les progrès, d'allouer les ressources de manière efficiente et de rendre compte de l'action du collectif à ses membres, ses soutiens et ses partenaires. Elle constitue un engagement de transparence et d'efficacité.
 
 L'objectif principal de la feuille de route 2025-2026 est de cartographier les initiatives de participation citoyenne, de produire 4 dossiers de veille thématiques par an et de former 100 citoyen·ne·s aux techniques de veille d'ici la fin de l'année 2026.
 
-Détail des Livrables par Axe Stratégique
+#### Détail des Livrables par Axe Stratégique
 
 Le tableau suivant détaille les objectifs et les livrables concrets associés à chaque mission stratégique pour la période 2025-2026.
 
@@ -136,7 +147,7 @@ Former	Renforcer les compétences citoyennes : recherche d’info, analyse criti
 Connecter	Fédérer associations, individus et institutions autour de projets participatifs.	Annuaire inter-collectifs (YAML + JSON), rencontres mensuelles documentées
 Évaluer	Mesurer l’impact social et démocratique des actions menées (indicateurs ouverts, retours d’expérience).	Tableau de bord Matomo public, rapports d’évaluation semestriels
 
-Mise à Disposition d'Outils Technologiques
+#### Mise à Disposition d'Outils Technologiques
 
 La mission "Outiller" se concrétisera notamment par la mise à disposition d'un dépôt GitHub public intitulé "kits". Ce dépôt contiendra des ressources techniques prêtes à l'emploi pour faciliter la création de projets de veille citoyenne :
 
@@ -146,11 +157,11 @@ La mission "Outiller" se concrétisera notamment par la mise à disposition d'un
 
 La mise en œuvre de cette feuille de route ambitieuse requiert des ressources financières et humaines. Le modèle de financement du collectif doit donc être à la hauteur de ses objectifs, tout en garantissant son indépendance.
 
-6. Modèle de Ressources et Budget Prévisionnel
+### 6. Modèle de Ressources et Budget Prévisionnel
 
 La pérennité d'une organisation à but non lucratif comme le CCPLC dépend de sa capacité à construire une stratégie de financement diversifiée, robuste et parfaitement alignée avec ses valeurs d'indépendance et d'intégrité. Le modèle de ressources vise à assurer la stabilité financière du projet sans jamais compromettre sa mission.
 
-Sources de Financement Envisagées
+#### Sources de Financement Envisagées
 
 Le collectif prévoit de s'appuyer sur un mix de plusieurs sources de financement pour minimiser les risques de dépendance et garantir son autonomie.
 
@@ -163,7 +174,7 @@ Le collectif prévoit de s'appuyer sur un mix de plusieurs sources de financemen
   * Prestations de service : Proposition de formations ou de missions de conseil à d'autres organisations (associations, institutions publiques) sur les méthodologies de veille et de participation.
   * Vente de publications spécialisées : Édition et vente de rapports approfondis ou de guides méthodologiques.
 
-Budget Prévisionnel de Démarrage (Année 1)
+#### Budget Prévisionnel de Démarrage (Année 1)
 
 Un budget minimal a été établi pour la première année d'activité, couvrant les frais essentiels pour lancer la feuille de route et structurer le collectif.
 
@@ -177,11 +188,11 @@ Un budget minimal a été établi pour la première année d'activité, couvrant
 
 La gestion rigoureuse de ces ressources et la conduite des missions doivent impérativement respecter un cadre éthique strict, condition sine qua non pour maintenir la confiance et la crédibilité du collectif sur le long terme.
 
-7. Cadre Éthique et Gestion des Risques
+### 7. Cadre Éthique et Gestion des Risques
 
 Pour une organisation de veille citoyenne, l'éthique n'est pas une option, mais un impératif absolu. Sa légitimité, sa crédibilité et son impact reposent entièrement sur sa rigueur méthodologique, son impartialité et son respect scrupuleux des règles déontologiques. La gestion des informations sensibles, notamment celles touchant à la vie privée, et la responsabilité des publications sont au cœur de ses préoccupations.
 
-Respect de la Vie Privée et des Données Personnelles
+#### Respect de la Vie Privée et des Données Personnelles
 
 Le CCPLC s'engage à suivre des règles strictes pour garantir la protection des données personnelles et le respect de la vie privée.
 
@@ -190,7 +201,7 @@ Le CCPLC s'engage à suivre des règles strictes pour garantir la protection des
 * Respect du droit à l’oubli : Le collectif s'engage à respecter les demandes légitimes de suppression d'informations personnelles.
 * Consentement éclairé : Aucun témoignage ne sera utilisé sans le consentement libre et éclairé de la personne concernée.
 
-Principe de Proportionnalité et de Responsabilité
+#### Principe de Proportionnalité et de Responsabilité
 
 Chaque action de veille et de publication soulève des dilemmes éthiques que le collectif doit aborder avec la plus grande prudence. La réflexion s'articulera autour de questions fondamentales :
 
@@ -199,7 +210,7 @@ Chaque action de veille et de publication soulève des dilemmes éthiques que le
 * Quelle est la responsabilité du collectif en cas de conséquences imprévues ou négatives suite à une publication ?
 * Comment identifier et gérer les potentiels conflits d'intérêts au sein du collectif ?
 
-Mécanismes de Régulation
+#### Mécanismes de Régulation
 
 Pour garantir le respect constant de ce cadre éthique, le CCPLC envisage la mise en place de plusieurs mécanismes de régulation interne et externe :
 
@@ -209,15 +220,15 @@ Pour garantir le respect constant de ce cadre éthique, le CCPLC envisage la mis
 
 Fondé sur ce cadre éthique intransigeant, le CCPLC peut désormais déployer sa vision d'avenir : non plus seulement agir, mais transformer en profondeur le paysage démocratique.
 
-8. Vision d'Avenir et Impact Démocratique
+### 8. Vision d'Avenir et Impact Démocratique
 
 Le CCPLC ne se conçoit pas comme une fin en soi, mais comme un catalyseur pour une transformation démocratique plus profonde et systémique. Son succès ultime ne se mesurera pas au nombre de rapports publiés, mais à sa capacité à renforcer durablement le pouvoir d'agir des citoyens et à fonctionner comme un contre-pouvoir constructif, légitime et permanent.
 
-Le CCPLC comme Contre-Pouvoir Citoyen
+#### Le CCPLC comme Contre-Pouvoir Citoyen
 
 Le collectif s'inscrit dans la théorie de la « contre-démocratie » développée par l'historien et sociologue Pierre Rosanvallon. Dans une "politique à l'âge de la défiance", la société civile doit s'organiser pour exercer des fonctions de surveillance, de contrôle et d'interpellation du pouvoir. La veille citoyenne est l'un des instruments privilégiés de cette contre-démocratie, car elle permet de réduire l'asymétrie d'information entre gouvernants et gouvernés et de fonder la critique sur des faits documentés.
 
-Un Modèle de Contre-Pouvoir pour le XXIe Siècle
+#### Un Modèle de Contre-Pouvoir pour le XXIe Siècle
 
 Le CCPLC aspire à incarner un modèle de contre-pouvoir adapté aux défis contemporains. Ce modèle se veut :
 
