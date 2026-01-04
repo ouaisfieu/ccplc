@@ -1,0 +1,934 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve SCP 329.02 - Plateforme Collaborative Professionnelle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --dark-lighter: #334155;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --border: #475569;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        section h2 {
+            font-size: 36px;
+            margin-bottom: 16px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--text), var(--text-dim));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        section > p {
+            text-align: center;
+            color: var(--text-dim);
+            max-width: 800px;
+            margin: 0 auto 50px;
+            font-size: 18px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .card p {
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        .card ul {
+            margin-top: 16px;
+            margin-left: 20px;
+        }
+
+        .card li {
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 12px;
+            margin-right: 8px;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            color: white;
+        }
+
+        .badge-pro {
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            color: white;
+        }
+
+        .badge-beta {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin-top: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--dark);
+        }
+
+        .timeline-item h4 {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .timeline-item p {
+            color: var(--text-dim);
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .contact-box h3 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .contact-box p {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+
+        footer {
+            background: var(--dark);
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-dim);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .module-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .module-icon {
+            font-size: 24px;
+        }
+
+        .module-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .module-desc {
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            section h2 {
+                font-size: 28px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <div class="logo">Reserve SCP 329.02</div>
+                    <div class="tagline">Plateforme collaborative professionnelle</div>
+                </div>
+                <nav>
+                    <a href="#vision">Vision</a>
+                    <a href="#modules">Modules</a>
+                    <a href="#technique">Technique</a>
+                    <a href="#partenariat">Partenariat</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Une plateforme complete pour connecter et valoriser</h1>
+            <p>Reserve SCP 329.02 est une suite d'outils professionnels integres conçue pour optimiser la collaboration, la gestion de projets et l'analyse de donnees dans un ecosysteme securise et scalable.</p>
+            <div class="cta-buttons">
+                <a href="#modules" class="btn btn-primary">Decouvrir les modules</a>
+                <a href="#contact" class="btn btn-secondary">Nous contacter</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="vision">
+        <div class="container">
+            <h2>Notre Vision</h2>
+            <p>Creer un ecosysteme professionnel complet ou chaque outil communique avec les autres pour une experience utilisateur fluide et une productivite maximale.</p>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Modules Integres</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Open Data Compatible</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Possibilites de Synergie</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support & Updates</div>
+                </div>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>Philosophie de conception</h3>
+                <p>Chaque module est conçu pour fonctionner de maniere autonome tout en s'integrant parfaitement avec les autres. Les donnees circulent librement entre les modules, offrant des insights croises et une vue d'ensemble unique de votre activite professionnelle.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="modules">
+        <div class="container">
+            <h2>Nos Modules</h2>
+            <p>Une suite complete d'outils professionnels pour tous les besoins</p>
+
+            <h3 style="margin-top: 60px; margin-bottom: 30px; font-size: 24px; color: var(--primary);">🎯 Modules Principaux</h3>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">👥</span>
+                        <span class="module-title">Reseau</span>
+                    </div>
+                    <p class="module-desc">Gestion complete de votre reseau professionnel avec visualisation graphique des connexions et des relations entre contacts.</p>
+                    <span class="badge badge-new">CORE</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">📊</span>
+                        <span class="module-title">Stats</span>
+                    </div>
+                    <p class="module-desc">Tableaux de bord analytiques avec metriques en temps reel et visualisations interactives de vos donnees.</p>
+                    <span class="badge badge-new">CORE</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">📢</span>
+                        <span class="module-title">EP329</span>
+                    </div>
+                    <p class="module-desc">Vitrine publique pour mettre en valeur votre organisation et vos projets avec un design moderne et attractif.</p>
+                    <span class="badge badge-new">PUBLIC</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 60px; margin-bottom: 30px; font-size: 24px; color: var(--accent);">💼 Suite Professionnelle</h3>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🎯</span>
+                        <span class="module-title">HUNT</span>
+                    </div>
+                    <p class="module-desc">Plateforme de recrutement et headhunting avec gestion complete des candidats, pipeline de recrutement et facturation.</p>
+                    <span class="badge badge-pro">PRO</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🕸️</span>
+                        <span class="module-title">SPOT</span>
+                    </div>
+                    <p class="module-desc">Cartographie strategique de l'ecosysteme politique et associatif avec analyse des relations et strategies de plaidoyer.</p>
+                    <span class="badge badge-pro">PRO</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">👁️</span>
+                        <span class="module-title">CRM Sauron</span>
+                    </div>
+                    <p class="module-desc">CRM complet avec pipeline Kanban, gestion des contacts, taches, activites et analytics avances.</p>
+                    <span class="badge badge-pro">PRO</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🔍</span>
+                        <span class="module-title">OSINT</span>
+                    </div>
+                    <p class="module-desc">Plateforme de renseignement open source pour mener des investigations approfondies avec visualisation des entites.</p>
+                    <span class="badge badge-beta">BETA</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">📈</span>
+                        <span class="module-title">DataViz</span>
+                    </div>
+                    <p class="module-desc">Visualisation avancee de donnees avec import CSV/JSON/Excel et graphiques interactifs personnalisables.</p>
+                    <span class="badge badge-beta">BETA</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 60px; margin-bottom: 30px; font-size: 24px; color: #06b6d4;">🎨 Suite Creative</h3>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🎨</span>
+                        <span class="module-title">Atelier</span>
+                    </div>
+                    <p class="module-desc">Espace de travail personnalisable avec widgets dynamiques pour creer votre environnement de productivite ideal.</p>
+                    <span class="badge badge-new">NEW</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🖼️</span>
+                        <span class="module-title">Vitrine</span>
+                    </div>
+                    <p class="module-desc">Portfolio professionnel pour presenter vos projets avec medias riches, descriptions detaillees et tags.</p>
+                    <span class="badge badge-new">NEW</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">📚</span>
+                        <span class="module-title">Wiki</span>
+                    </div>
+                    <p class="module-desc">Base de connaissances collaborative avec editeur Markdown et systeme de gestion documentaire complet.</p>
+                    <span class="badge badge-new">NEW</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🚀</span>
+                        <span class="module-title">Deploy</span>
+                    </div>
+                    <p class="module-desc">Guide de deploiement avec instructions detaillees pour mettre en production votre instance de la plateforme.</p>
+                    <span class="badge badge-new">NEW</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 60px; margin-bottom: 30px; font-size: 24px; color: #10b981;">⚡ Modules Speciaux</h3>
+            <div class="module-grid">
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🛡️</span>
+                        <span class="module-title">ARG</span>
+                    </div>
+                    <p class="module-desc">Experience de jeu immersive avec missions, badges, classements et communication cryptee pour l'engagement utilisateur.</p>
+                    <span class="badge badge-beta">BETA</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">⚡</span>
+                        <span class="module-title">@egis Assistant</span>
+                    </div>
+                    <p class="module-desc">Assistant virtuel intelligent pour guider les utilisateurs et repondre aux questions sur la plateforme.</p>
+                    <span class="badge badge-new">AI</span>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🎮</span>
+                        <span class="module-title">Playground</span>
+                    </div>
+                    <p class="module-desc">Zone de test et d'experimentation pour explorer les fonctionnalites sans risque.</p>
+                </div>
+
+                <div class="module-card">
+                    <div class="module-header">
+                        <span class="module-icon">🔗</span>
+                        <span class="module-title">Liens Externes</span>
+                    </div>
+                    <p class="module-desc">Bibliotheque de ressources externes et integrations avec des services tiers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="technique" style="background: rgba(30, 41, 59, 0.3);">
+        <div class="container">
+            <h2>Architecture Technique</h2>
+            <p>Une stack moderne, performante et scalable</p>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #61dafb, #3b82f6);">⚛️</div>
+                    <h3>Frontend Moderne</h3>
+                    <p>Interface reactive et performante construite avec les dernieres technologies web.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">React 19</span>
+                        <span class="tech-item">Vite</span>
+                        <span class="tech-item">Tailwind CSS</span>
+                        <span class="tech-item">Framer Motion</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">🔥</div>
+                    <h3>Backend Robuste</h3>
+                    <p>Infrastructure serverless avec base de donnees PostgreSQL et authentification securisee.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Supabase</span>
+                        <span class="tech-item">PostgreSQL</span>
+                        <span class="tech-item">Edge Functions</span>
+                        <span class="tech-item">RLS Policies</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">🤖</div>
+                    <h3>Intelligence Artificielle</h3>
+                    <p>Integration d'IA pour l'assistance utilisateur et l'analyse de donnees.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">OpenAI API</span>
+                        <span class="tech-item">RAG System</span>
+                        <span class="tech-item">Vector Search</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📊</div>
+                    <h3>Visualisation de Donnees</h3>
+                    <p>Graphiques interactifs et tableaux de bord dynamiques pour vos analyses.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">D3.js</span>
+                        <span class="tech-item">Chart.js</span>
+                        <span class="tech-item">Canvas API</span>
+                        <span class="tech-item">XLSX</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">🔒</div>
+                    <h3>Securite Avancee</h3>
+                    <p>Protection multi-niveaux avec authentification, autorisation et chiffrement.</p>
+                    <ul>
+                        <li>Authentification email/mot de passe</li>
+                        <li>Row Level Security (RLS)</li>
+                        <li>Politiques d'acces granulaires</li>
+                        <li>Chiffrement des donnees sensibles</li>
+                        <li>Validation cote serveur</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">🔄</div>
+                    <h3>Interoperabilite</h3>
+                    <p>Communication fluide entre tous les modules avec partage de donnees.</p>
+                    <ul>
+                        <li>API unifiee inter-modules</li>
+                        <li>Export/Import multi-formats</li>
+                        <li>Synchronisation temps reel</li>
+                        <li>Webhooks et notifications</li>
+                        <li>Integration Open Data</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-highlight" style="margin-top: 50px;">
+                <h3>Points Forts Techniques</h3>
+                <ul style="margin-left: 20px; margin-top: 16px;">
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Architecture modulaire et scalable permettant l'ajout facile de nouveaux modules</li>
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Base de donnees relationnelle avec schemas optimises et indexes performants</li>
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Systeme de gestion des utilisateurs avec roles et permissions</li>
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Systeme de workspaces pour isoler les donnees par projet/organisation</li>
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Systeme de monetisation integre avec gestion des abonnements</li>
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Stockage de fichiers avec gestion des quotas et limitations</li>
+                    <li style="margin-bottom: 12px; color: var(--text-dim);">✅ Console developpeur avec Easter eggs et commandes avancees</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="partenariat">
+        <div class="container">
+            <h2>Opportunites de Partenariat</h2>
+            <p>Rejoignez l'ecosysteme Reserve SCP 329.02</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>1. Integration Technique</h4>
+                    <p>Integrez vos services et API avec notre plateforme pour creer des synergies uniques. Notre architecture modulaire facilite l'ajout de nouvelles fonctionnalites.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>2. Partenariat Commercial</h4>
+                    <p>Proposez la plateforme a vos clients comme solution white-label ou co-brandee. Systeme de commission et revenue sharing disponible.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>3. Collaboration R&D</h4>
+                    <p>Participez au developpement de nouveaux modules et fonctionnalites. Apportez votre expertise metier pour creer des outils vraiment utiles.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>4. Reseau de Distribution</h4>
+                    <p>Devenez distributeur de la plateforme dans votre region ou secteur. Formation, support technique et materiel marketing fournis.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>5. Investissement Strategique</h4>
+                    <p>Investissez dans le projet et participez a son evolution strategique. ROI attractif avec une plateforme en croissance rapide.</p>
+                </div>
+            </div>
+
+            <div class="grid" style="margin-top: 60px;">
+                <div class="card">
+                    <h3>Pour les Entreprises</h3>
+                    <p>Deployez la plateforme en interne pour optimiser la collaboration de vos equipes. Personnalisation complete possible selon vos besoins.</p>
+                    <ul>
+                        <li>Installation on-premise ou cloud</li>
+                        <li>Personnalisation du branding</li>
+                        <li>Formation des equipes</li>
+                        <li>Support dedie</li>
+                        <li>SLA garantis</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Pour les Developpeurs</h3>
+                    <p>Contribuez au code source, developpez des modules personnalises ou integrez vos propres outils avec notre API.</p>
+                    <ul>
+                        <li>Documentation API complete</li>
+                        <li>SDK et bibliotheques</li>
+                        <li>Sandbox de developpement</li>
+                        <li>Support technique</li>
+                        <li>Communaute active</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Pour les Consultants</h3>
+                    <p>Proposez la plateforme a vos clients et beneficiez de commissions attractives sur chaque vente.</p>
+                    <ul>
+                        <li>Programme d'affiliation</li>
+                        <li>Materiel marketing</li>
+                        <li>Demos personnalisees</li>
+                        <li>Support avant-vente</li>
+                        <li>Commission recurrente</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" style="background: rgba(30, 41, 59, 0.3);">
+        <div class="container">
+            <h2>Contactez-nous</h2>
+            <p>Discutons de votre projet et des opportunites de collaboration</p>
+
+            <div class="contact-box">
+                <h3>Prenons rendez-vous</h3>
+                <p>Notre equipe est disponible pour repondre a toutes vos questions et vous presenter la plateforme en detail.</p>
+                <div class="cta-buttons">
+                    <a href="mailto:contact@reserve-scp329.fr" class="btn btn-primary">Envoyer un email</a>
+                    <a href="tel:+33000000000" class="btn btn-secondary">Appeler</a>
+                </div>
+            </div>
+
+            <div class="grid" style="margin-top: 50px;">
+                <div class="card">
+                    <h3>Siege Social</h3>
+                    <p style="margin-top: 12px;">
+                        Reserve SCP 329.02<br>
+                        [Adresse a completer]<br>
+                        [Code Postal] [Ville]<br>
+                        France
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Contact Commercial</h3>
+                    <p style="margin-top: 12px;">
+                        Email: commercial@reserve-scp329.fr<br>
+                        Tel: +33 X XX XX XX XX<br>
+                        Horaires: Lun-Ven 9h-18h
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3>Support Technique</h3>
+                    <p style="margin-top: 12px;">
+                        Email: support@reserve-scp329.fr<br>
+                        Tel: +33 X XX XX XX XX<br>
+                        Assistance 24/7
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Reserve SCP 329.02. Tous droits reserves.</p>
+            <p style="margin-top: 12px; font-size: 14px;">Plateforme collaborative professionnelle - Version 1.0</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        const cards = document.querySelectorAll('.card, .module-card');
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '0';
+                    entry.target.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        entry.target.style.transition = 'all 0.6s ease-out';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>
