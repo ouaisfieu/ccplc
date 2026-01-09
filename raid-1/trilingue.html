@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>SIGNAL_273</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#0f8;font:16px/1.6 monospace;padding:2em;max-width:600px;margin:0 auto}
+h1{font-size:2em;margin-bottom:.5em}
+h1 span{color:#f44}
+.dim{opacity:.5}
+.red{color:#f44}
+hr{border:0;border-top:1px solid #222;margin:1.5em 0}
+input{background:#111;border:1px solid #333;color:#0f8;padding:.5em;font:inherit;width:6em}
+button{background:#0f8;color:#000;border:0;padding:.5em 1em;font:inherit;cursor:pointer;margin-left:.5em}
+a{color:#0f8}
+.hide{display:none}
+.msg{margin-top:1em;padding:1em;border-left:3px solid #f44;background:#110505}
+#lang{margin-bottom:1em}
+#lang button{background:#222;color:#0f8;margin:0 .2em}
+#lang button.on{background:#0f8;color:#000}
+</style>
+</head>
+<body>
+
+<div id="lang">
+<button class="on" onclick="L('fr')">FR</button>
+<button onclick="L('en')">EN</button>
+<button onclick="L('nl')">NL</button>
+</div>
+
+<h1>SIGNAL_<span>273</span></h1>
+
+<p class="red" data-fr="TRANSMISSION INTERCEPTÉE" data-en="TRANSMISSION INTERCEPTED" data-nl="TRANSMISSIE ONDERSCHEPT"></p>
+
+<p data-fr="Belgique. €50M+/an. 273 organisations financées pour critiquer le système." data-en="Belgium. €50M+/year. 273 organizations funded to criticize the system." data-nl="België. €50M+/jaar. 273 organisaties gefinancierd om het systeem te bekritiseren."></p>
+
+<p data-fr="Éducation permanente. Décret du 17 juillet..." data-en="Permanent Education. Decree of July 17..." data-nl="Permanente Educatie. Decreet van 17 juli..."></p>
+
+<hr>
+
+<p><strong data-fr="🔐 NIVEAU 00" data-en="🔐 LEVEL 00" data-nl="🔐 NIVEAU 00"></strong></p>
+
+<p data-fr="Trouve l'année du décret." data-en="Find the year of the decree." data-nl="Vind het jaar van het decreet."></p>
+
+<p class="dim" data-fr="Indice : 17 juillet 200?" data-en="Hint: July 17, 200?" data-nl="Hint: 17 juli 200?"></p>
+
+<p>
+<input type="text" id="r" maxlength="4" placeholder="2003">
+<button onclick="check()">→</button>
+</p>
+
+<div class="msg hide" id="ok">
+<p data-fr="✓ Décret du 17 juillet 2003" data-en="✓ Decree of July 17, 2003" data-nl="✓ Decreet van 17 juli 2003"></p>
+<p data-fr="273 organisations pour la citoyenneté critique." data-en="273 organizations for critical citizenship." data-nl="273 organisaties voor kritisch burgerschap."></p>
+<p><a href="https://www.gallilex.cfwb.be/document/pdf/27695_001.pdf" target="_blank" data-fr="→ Lire le décret" data-en="→ Read the decree" data-nl="→ Lees het decreet"></a></p>
+<hr>
+<p class="red" data-fr="RAID : 22 janvier 2025 · Bruxelles" data-en="RAID: January 22, 2025 · Brussels" data-nl="RAID: 22 januari 2025 · Brussel"></p>
+<p><strong>#BelgiumPaysCritics</strong></p>
+</div>
+
+<script>
+var lang='fr';
+function L(l){
+lang=l;
+document.querySelectorAll('#lang button').forEach(b=>b.classList.remove('on'));
+document.querySelector('#lang button:nth-child('+(l=='fr'?1:l=='en'?2:3)+')').classList.add('on');
+document.querySelectorAll('[data-'+l+']').forEach(e=>e.textContent=e.getAttribute('data-'+l));
+}
+L('fr');
+function check(){if(document.getElementById('r').value==='2003')document.getElementById('ok').classList.remove('hide')}
+document.getElementById('r').onkeyup=e=>{if(e.key==='Enter')check()};
+</script>
+
+</body>
+</html>
