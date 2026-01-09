@@ -11,13 +11,21 @@
 **C'est LE fichier à utiliser.** Tout est dedans :
 
 ✅ **Mobile-first** — Design optimisé touch, bottom nav, scroll fluide
+
 ✅ **5 langues** — EN/FR/ES/DE/TR avec switch fonctionnel
+
 ✅ **Countdown live** — Jusqu'au 22 janvier 18h CET
+
 ✅ **Base de données 273 orgs** — Recherche + filtres intégrés
+
 ✅ **Guides complets en accordéon** — Décret, Arpentage, ECP, Réplication
+
 ✅ **Kit de partage** — Boutons sociaux + messages à copier
+
 ✅ **Zéro lien mort** — Tout est embarqué
+
 ✅ **Offline-ready** — Fonctionne même sans connexion
+
 
 **→ Héberger sur GitHub Pages et c'est parti !**
 
