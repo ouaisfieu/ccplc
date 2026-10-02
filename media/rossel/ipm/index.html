@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Metadonnées SEO Standard -->
+    <title>Le Quatrième Pouvoir en Belgique Francophone : Fusion Rossel-IPM & Radiographie Médias 2026</title>
+    <meta name="description" content="Analyse interactive du contre-pouvoir journalistique en Belgique francophone : impacts de la fusion Rossel-IPM (94% de la presse), baromètre MPM 2026, précarité, bouclier anti-SLAPP et résistance des médias indépendants.">
+    <meta name="keywords" content="Quatrième pouvoir, Belgique francophone, Rossel, IPM, Médias, Journalisme d'investigation, Pluralisme, MPM 2026, SLAPP, AJP, RTBF, Médor, Publifin">
+    <meta name="author" content="Gemini AI - Architecte d'Information (CCPLC)">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ouaisfieu.github.io/ccplc/media/rossel/ipm/">
+
+    <!-- Open Graph / Facebook & LinkedIn -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Le 4ème Pouvoir en Belgique Francophone : Un contre-pouvoir qui ne contre plus rien ?">
+    <meta property="og:description" content="Radiographie interactive de la concentration médiatique (94% presse quotidienne Rossel-IPM), du baromètre MPM 2026 et de la résilience du journalisme d'investigation.">
+    <meta property="og:url" content="https://ouaisfieu.github.io/ccplc/media/rossel/ipm/">
+    <meta property="og:site_name" content="CCPLC Médiathèque & Analyse Sémantique">
+    <meta property="og:locale" content="fr_BE">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Le 4ème Pouvoir en Belgique Francophone : Radiographie Interactive 2026">
+    <meta name="twitter:description" content="Enquête interactive sur la concentration Rossel-IPM, la précarité des journalistes et les victoires du journalisme d'investigation en FWB.">
+
+    <!-- Données Structurées JSON-LD (Schema.org) pour le référencement sémantique -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": "https://ouaisfieu.github.io/ccplc/media/rossel/ipm/#article",
+          "isPartOf": { "@id": "https://ouaisfieu.github.io/ccplc/media/rossel/ipm/" },
+          "headline": "Le 4ème Pouvoir en Belgique Francophone : Un contre-pouvoir qui ne contre plus rien ?",
+          "description": "Analyse interactive de la concentration médiatique en Belgique francophone après la fusion Rossel-IPM, l'état du pluralisme (MPM 2026) et la résilience du journalisme d'investigation.",
+          "inLanguage": "fr-BE",
+          "mainEntityOfPage": "https://ouaisfieu.github.io/ccplc/media/rossel/ipm/",
+          "datePublished": "2026-10-02T10:00:00+02:00",
+          "dateModified": "2026-10-02T10:00:00+02:00",
+          "author": {
+            "@type": "Person",
+            "name": "Gemini AI",
+            "jobTitle": "Information Architect & Data Analyst",
+            "worksFor": {
+              "@type": "Organization",
+              "name": "CCPLC Media Lab",
+              "url": "https://ouaisfieu.github.io/ccplc/"
+            }
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "CCPLC",
+            "url": "https://ouaisfieu.github.io/ccplc/"
+          },
+          "about": [
+            { "@type": "Thing", "name": "Concentration des médias" },
+            { "@type": "Thing", "name": "Pluralisme de la presse" },
+            { "@type": "Thing", "name": "Groupe Rossel" },
+            { "@type": "Thing", "name": "IPM Group" },
+            { "@type": "Thing", "name": "Fédération Wallonie-Bruxelles" },
+            { "@type": "Thing", "name": "Procédures-bâillons (SLAPP)" }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://ouaisfieu.github.io/ccplc/media/rossel/ipm/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Accueil CCPLC",
+              "item": "https://ouaisfieu.github.io/ccplc/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Médias",
+              "item": "https://ouaisfieu.github.io/ccplc/media/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Rossel",
+              "item": "https://ouaisfieu.github.io/ccplc/media/rossel/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Analyse Fusion IPM",
+              "item": "https://ouaisfieu.github.io/ccplc/media/rossel/ipm/"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            200: '#e5d0cb',
+                            700: '#8c2d19',
+                            800: '#732514',
+                            900: '#5c1d10',
+                        },
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            800: '#262626',
+                            900: '#1c1917',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Georgia', 'Cambria', 'serif'],
+                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+    </style>
+</head>
+<body class="bg-[#FBF9F5] text-stone-800 font-sans antialiased selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- Chosen Palette: Warm Editorial & Neutral Harmony -->
+    <!-- Application Structure Plan:
+        The SPA is designed as an interactive analytical dashboard transforming a dense expert report into 6 thematic, user-driven views:
+        1. Executive Dashboard (Key metric counters, Media Pluralism Monitor 2026 scorecard visualization with risk filtering).
+        2. Market Oligopoly & Concentration (Interactive Rossel-IPM market share pie/bar charts, Flanders Mediahuis comparative analysis).
+        3. Work Precariousness & Financing Models (Freelance reality metrics, Public Subsidies Paradox vs. Independent "Fonds pour le Journalisme").
+        4. Sociological Blindspots & Judicial Threats (Gender/Ethnic diversity gaps chart, SLAPP lawsuit interactive case studies & Anti-SLAPP Law 2026 shield).
+        5. Resilience, Cooperatives & Watchdog Victories (Interactive directory of independent media like Médor/Wilfried, interactive timeline of major scandal revelations like Publifin & Qatargate).
+        6. Interactive Search & Concept Diagnostic Tool (Real-time keyword search across key insights and quotes).
+    -->
+    <!-- Visualization & Content Choices:
+        1. MPM 2026 Risk Indicators -> Interactive Horizontal Bar Chart (Chart.js) -> Filterable by Risk Level -> Demonstrates structural market risk vs low state interference -> Chart.js Canvas.
+        2. Media Ownership Post-July 2026 Fusion -> Doughnut Chart (Chart.js) -> Toggle between Print (94% monopoly) and Online platforms -> Visualizes oligopoly -> Chart.js Canvas.
+        3. Diversity & Gender Gap -> Grouped Bar Chart (Chart.js) -> Compares journalism graduates vs newsroom experts -> Chart.js Canvas.
+        4. Major Scandals & SLAPP Cases -> Interactive Expandable Accordion & Cards -> User clicks to explore details -> Highlights investigative impact -> Vanilla JS + HTML/Tailwind.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Navigation Header Sémantique -->
+    <header class="sticky top-0 z-50 bg-[#FBF9F5]/90 backdrop-blur-md border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-2xl" aria-hidden="true">📰</span>
+                    <a href="https://ouaisfieu.github.io/ccplc/media/rossel/ipm/" class="font-serif font-bold text-lg sm:text-xl text-stone-900 tracking-tight">
+                        Le 4<sup>ème</sup> Pouvoir <span class="text-brand-700 font-sans text-xs sm:text-sm uppercase tracking-wider font-semibold ml-2 px-2 py-0.5 bg-brand-50 rounded border border-brand-200">Belgique Francophone</span>
+                    </a>
+                </div>
+                <nav aria-label="Navigation Principale" class="hidden md:flex space-x-1 text-sm font-medium text-stone-600">
+                    <a href="#dashboard" class="px-3 py-2 rounded-md hover:text-brand-800 hover:bg-stone-100 transition">Diagnostic MPM</a>
+                    <a href="#oligopoly" class="px-3 py-2 rounded-md hover:text-brand-800 hover:bg-stone-100 transition">Concentration</a>
+                    <a href="#funding" class="px-3 py-2 rounded-md hover:text-brand-800 hover:bg-stone-100 transition">Précarité & Aides</a>
+                    <a href="#diversity-slapp" class="px-3 py-2 rounded-md hover:text-brand-800 hover:bg-stone-100 transition">Diversité & SLAPP</a>
+                    <a href="#resilience" class="px-3 py-2 rounded-md hover:text-brand-800 hover:bg-stone-100 transition">Résilience & Enquêtes</a>
+                </nav>
+                <div class="flex items-center space-x-2">
+                    <label for="globalSearch" class="sr-only">Rechercher dans le rapport</label>
+                    <input type="search" id="globalSearch" placeholder="Rechercher (ex: SLAPP, Rossel)..." class="text-xs sm:text-sm px-3 py-1.5 border border-stone-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-brand-700 w-36 sm:w-56">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Fil d'Ariane Sémantique (SEO) -->
+        <nav aria-label="Fil d'Ariane" class="text-xs text-stone-500 font-medium">
+            <ol class="flex items-center space-x-2 flex-wrap">
+                <li><a href="https://ouaisfieu.github.io/ccplc/" class="hover:text-brand-800 transition">Accueil CCPLC</a></li>
+                <li><span>/</span></li>
+                <li><a href="https://ouaisfieu.github.io/ccplc/media/" class="hover:text-brand-800 transition">Médias</a></li>
+                <li><span>/</span></li>
+                <li><a href="https://ouaisfieu.github.io/ccplc/media/rossel/" class="hover:text-brand-800 transition">Rossel</a></li>
+                <li><span>/</span></li>
+                <li class="text-stone-900 font-semibold" aria-current="page">Fusion IPM & Diagnostic 2026</li>
+            </ol>
+        </nav>
+
+        <!-- Hero Section / Contextual Introduction -->
+        <article class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-10 shadow-sm relative overflow-hidden">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 bg-stone-100 border border-stone-200 rounded-full text-xs font-semibold text-stone-700 mb-4">
+                    <span>⚡ Rapport d'Expertise Médias 2026</span>
+                    <span aria-hidden="true">•</span>
+                    <span class="text-brand-700">Fédération Wallonie-Bruxelles</span>
+                </div>
+                <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-900 leading-tight mb-4">
+                    Un contre-pouvoir qui ne contre plus rien ?
+                </h1>
+                <p class="text-stone-600 text-base sm:text-lg leading-relaxed mb-6">
+                    Même si la Belgique conserve des institutions démocratiques solides et une absence d'ingérence directe de l'État, la presse francophone traverse une crise systémique. L'hyper-concentration capitalistique (fusion Rossel-IPM), la précarisation des journalistes et l'émergence des procédures-bâillons menacent le pluralisme. Pourtant, la résilience d'un journalisme d'investigation alternatif prouve que la fonction de contre-pouvoir reste vivante.
+                </p>
+                <div class="flex flex-wrap gap-4 text-xs sm:text-sm text-stone-500 font-medium">
+                    <div class="flex items-center space-x-1.5">
+                        <span class="text-emerald-600 font-bold" aria-hidden="true">✓</span>
+                        <span>Absence de censure d'État</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <span class="text-rose-600 font-bold" aria-hidden="true">⚠️️</span>
+                        <span>Risque de concentration : 95%</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <span class="text-amber-600 font-bold" aria-hidden="true">🛡️</span>
+                        <span>Loi anti-SLAPP (Juin 2026)</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Dynamic Key Metrics Grid -->
+        <section aria-label="Chiffres Clés du Rapport" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <article class="bg-white border border-stone-200 p-5 rounded-xl shadow-sm hover:border-brand-200 transition">
+                <h2 class="text-xs uppercase font-semibold text-stone-500 tracking-wider mb-1">Monopole Presse Écrite</h2>
+                <div class="text-3xl sm:text-4xl font-extrabold text-brand-800">94%</div>
+                <p class="text-xs text-stone-600 mt-1">Part de la presse quotidienne tenue par le nouveau groupe Rossel-IPM (Post-Fusion 2026)</p>
+            </article>
+            <article class="bg-white border border-stone-200 p-5 rounded-xl shadow-sm hover:border-brand-200 transition">
+                <h2 class="text-xs uppercase font-semibold text-stone-500 tracking-wider mb-1">Risque de Concentration</h2>
+                <div class="text-3xl sm:text-4xl font-extrabold text-rose-700">95%</div>
+                <p class="text-xs text-stone-600 mt-1">Évaluation critique selon le rapport Media Pluralism Monitor 2026</p>
+            </article>
+            <article class="bg-white border border-stone-200 p-5 rounded-xl shadow-sm hover:border-brand-200 transition">
+                <h2 class="text-xs uppercase font-semibold text-stone-500 tracking-wider mb-1">Bourses d'Investigation</h2>
+                <div class="text-3xl sm:text-4xl font-extrabold text-emerald-700">519+</div>
+                <p class="text-xs text-stone-600 mt-1">Projets financés de manière autonome par le Fonds pour le Journalisme depuis 2009</p>
+            </article>
+            <article class="bg-white border border-stone-200 p-5 rounded-xl shadow-sm hover:border-brand-200 transition">
+                <h2 class="text-xs uppercase font-semibold text-stone-500 tracking-wider mb-1">Aides aux Médias Locaux</h2>
+                <div class="text-3xl sm:text-4xl font-extrabold text-stone-800">17.5M€</div>
+                <p class="text-xs text-stone-600 mt-1">Subsides annuels octroyés par la FWB pour les médias de proximité</p>
+            </article>
+        </section>
+
+        <!-- SECTION 1: Media Pluralism Monitor 2026 Dashboard -->
+        <section id="dashboard" class="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <header class="border-b border-stone-100 pb-4">
+                <div class="flex items-center space-x-2 text-brand-800 font-semibold text-sm uppercase tracking-wide">
+                    <span>📊 Radiographie Démocratique</span>
+                </div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                    Media Pluralism Monitor 2026 : Le Diagnostic Belge
+                </h2>
+                <p class="text-stone-600 text-sm sm:text-base mt-2">
+                    Cette section évalue la santé démocratique de la presse en Belgique francophone selon les 10 indicateurs clés de l'Institut universitaire européen. L'analyse met en évidence un contraste saisissant : la protection contre l'ingérence politique est exemplaire, mais la concentration économique et le manque de transparence financière atteignent des seuils critiques.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="flex flex-wrap gap-2 mb-2" role="group" aria-label="Filtres du graphique MPM">
+                        <button onclick="filterMPM('all')" id="btn-mpm-all" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-300 bg-stone-900 text-white transition">Tous les indicateurs</button>
+                        <button onclick="filterMPM('critical')" id="btn-mpm-critical" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 transition">Risque Critique (&gt;60%)</button>
+                        <button onclick="filterMPM('moderate')" id="btn-mpm-moderate" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 transition">Risque Moyen (30-60%)</button>
+                        <button onclick="filterMPM('low')" id="btn-mpm-low" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 transition">Risque Faible (&lt;30%)</button>
+                    </div>
+                    
+                    <figure class="chart-container bg-stone-50 p-4 rounded-xl border border-stone-200">
+                        <canvas id="mpmChart" aria-label="Graphique présentant le niveau de risque des 10 indicateurs du Media Pluralism Monitor 2026" role="img"></canvas>
+                        <figcaption class="sr-only">Graphique interactif illustrant le niveau de risque du pluralisme des médias en Belgique. La concentration atteint 95% de risque, tandis que l'autonomie éditoriale est préservée à 12% de risque.</figcaption>
+                    </figure>
+                </div>
+
+                <aside class="lg:col-span-5 space-y-4">
+                    <div class="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-3">
+                        <h3 class="font-serif font-bold text-lg text-stone-900">Enseignements majeurs du MPM 2026</h3>
+                        <div class="space-y-3 text-xs sm:text-sm text-stone-600">
+                            <article class="p-3 bg-white rounded-lg border border-stone-200 shadow-2xs">
+                                <strong class="font-bold text-rose-700 block mb-0.5">🚨 Zone Rouge : La Concentration du Marché (95%)</strong>
+                                La réunification des actifs de Rossel et IPM sous une structure commune élimine pratiquement la concurrence historique dans la presse écrite quotidienne.
+                            </article>
+                            <article class="p-3 bg-white rounded-lg border border-stone-200 shadow-2xs">
+                                <strong class="font-bold text-amber-700 block mb-0.5">⚠️ Zone d'Ombre : Parité & Sexisme (60%)</strong>
+                                En dépit de masters universitaires féminisés, les femmes quittent massivement la profession en raison d'un climat de rédaction hostile et d'une sous-représentation parmi les experts.
+                            </article>
+                            <article class="p-3 bg-white rounded-lg border border-stone-200 shadow-2xs">
+                                <strong class="font-bold text-emerald-700 block mb-0.5">🛡️ Point Fort : Autonomie Éditoriale (12%)</strong>
+                                L'État belge s'abstient de toute censure ou ingérence directe dans la ligne éditoriale des rédactions.
+                            </article>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Oligopoly & Hyper-Concentration -->
+        <section id="oligopoly" class="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <header class="border-b border-stone-100 pb-4">
+                <div class="flex items-center space-x-2 text-brand-800 font-semibold text-sm uppercase tracking-wide">
+                    <span>🏢 Oligopole & Consolidation</span>
+                </div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                    La Fusion Rossel-IPM : L'Émergence d'un Géant
+                </h2>
+                <p class="text-stone-600 text-sm sm:text-base mt-2">
+                    L'approbation conditionnelle par l'Autorité belge de la Concurrence (ABC) le 3 juillet 2026 marque le basculement vers un quasi-monopole de fait. Cette section détaille la répartition des médias francophones et les risques de « pluralisme de façade » entraînés par la mutualisation des rédactions.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-serif font-bold text-stone-900 text-base">Part de marché dans la presse quotidienne (2026)</h3>
+                        <span class="text-xs bg-brand-50 text-brand-800 px-2.5 py-1 rounded-full font-semibold border border-brand-200">Monopole privé 94%</span>
+                    </div>
+                    <figure class="chart-container bg-stone-50 p-4 rounded-xl border border-stone-200">
+                        <canvas id="marketChart" aria-label="Diagramme en anneau montrant la part de marché de 94% contrôlée par Rossel-IPM" role="img"></canvas>
+                        <figcaption class="sr-only">Part de marché dans la presse quotidienne : Groupe Rossel-IPM à 94%, RTBF à 5%, Médias indépendants à 1%.</figcaption>
+                    </figure>
+                </div>
+
+                <div class="space-y-4">
+                    <aside class="bg-amber-50/60 border border-amber-200 rounded-xl p-5 space-y-3">
+                        <h3 class="font-bold text-amber-900 text-sm uppercase tracking-wide">Le précédent flamand : La leçon de Mediahuis</h3>
+                        <p class="text-xs sm:text-sm text-amber-950 leading-relaxed">
+                            L'analyse comparée avec la Flandre (fusion Corelio-Concentra) montre qu'en dépit des promesses de maintien de lignes éditoriales distinctes, le partage quotidien d'articles entre titres d'un même groupe a bondi de <strong>36% à 51%</strong> en quelques années.
+                        </p>
+                        <p class="text-xs text-amber-900 italic">
+                            Résultat : un « pluralisme de façade » où le même contenu est republié sous des logos différents (*Le Soir*, *Sudinfo*, *La Libre*, *L'Avenir*).
+                        </p>
+                    </aside>
+
+                    <!-- Interactive Ecosystem Accordion -->
+                    <div class="border border-stone-200 rounded-xl divide-y divide-stone-200 overflow-hidden">
+                        <button onclick="toggleAccordion('eco-rossel')" aria-expanded="false" aria-controls="eco-rossel" class="w-full text-left p-4 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition font-semibold text-stone-800 text-sm">
+                            <span>🏛️ Emprise du Groupe Rossel-IPM</span>
+                            <span id="icon-eco-rossel" aria-hidden="true">▼</span>
+                        </button>
+                        <div id="eco-rossel" class="p-4 bg-white space-y-2 text-xs sm:text-sm text-stone-600 hidden">
+                            <p><strong>Presse Écrite & Digital :</strong> Le Soir, Sudinfo (La Meuse, La Province), La Libre Belgique, La DH, L'Avenir, L'Écho (50%), Ciné-Télé-Revue, Paris Match Belgique.</p>
+                            <p><strong>Audiovisuel :</strong> RTL Belgium, LN24, Fun Radio.</p>
+                            <p><strong>Chiffre d'Affaires cumulé :</strong> Plus de 810 Millions d'Euros.</p>
+                        </div>
+
+                        <button onclick="toggleAccordion('eco-public')" aria-expanded="false" aria-controls="eco-public" class="w-full text-left p-4 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition font-semibold text-stone-800 text-sm">
+                            <span>📻 Le Pôle Public (RTBF)</span>
+                            <span id="icon-eco-public" aria-hidden="true">▼</span>
+                        </button>
+                        <div id="eco-public" class="p-4 bg-white space-y-2 text-xs sm:text-sm text-stone-600 hidden">
+                            <p><strong>Marques :</strong> La Première, Tipik, Vivacité, La Une, Plateforme Auvio.</p>
+                            <p><strong>Enjeu :</strong> Acteur public prédominant, soumis à la révision de son contrat de gestion prévue pour 2027 et accusé par les éditeurs privés d'hégémonie sur le web.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Working Conditions & Financing Models -->
+        <section id="funding" class="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <header class="border-b border-stone-100 pb-4">
+                <div class="flex items-center space-x-2 text-brand-800 font-semibold text-sm uppercase tracking-wide">
+                    <span>💼 Précarité & Modèles de Financement</span>
+                </div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                    La Docilité par la Vulnérabilité & Le Paradoxe Subventionnel
+                </h2>
+                <p class="text-stone-600 text-sm sm:text-base mt-2">
+                    L'exercice du contre-pouvoir exige une sécurité financière. Or, la précarisation des pigistes et l'optimisation fiscale par les droits d'auteur affaiblissent la résistance des rédactions. Parallèlement, le système d'aides publiques est confronté à une impasse juridique majeure.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <article class="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-3">
+                    <div class="text-2xl" aria-hidden="true">⚡</div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">La Prolétarisation des Freelances</h3>
+                    <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                        Selon les données de la VVJ/AJP, <strong>59% des journalistes indépendants</strong> estiment ne pas être rémunérés équitablement. Payé au forfait dérisoire, le pigiste n'a plus le temps ni les ressources d'enquêter : il est contraint au <em>churnalism</em> (réécriture de communiqués de presse).
+                    </p>
+                </article>
+
+                <article class="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-3">
+                    <div class="text-2xl" aria-hidden="true">📉</div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Optimisation & Droits d'Auteur</h3>
+                    <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                        Des groupes de presse convertissent jusqu'à <strong>22,5% du salaire</strong> en droits d'auteur à faible taxation. Ce mécanisme allège les charges patronales mais ampute la sécurité sociale et la pension des journalistes, accroissant leur vulnérabilité à long terme.
+                    </p>
+                </article>
+
+                <article class="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-3">
+                    <div class="text-2xl" aria-hidden="true">🤖</div>
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Automatisation par l'IA</h3>
+                    <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                        L'intégration de l'IA générative menace les postes rédactionnels. L'exemple de magazines publiant sous de faux pseudonymes d'IA illustre la volonté de remplacer l'analyse humaine par une automatisation à bas coût.
+                    </p>
+                </article>
+            </div>
+
+            <!-- Deep Dive: Subsidies vs Fonds pour le Journalisme -->
+            <div class="bg-stone-900 text-stone-100 rounded-xl p-6 sm:p-8 space-y-6">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-800 pb-4">
+                    <div>
+                        <h3 class="font-serif font-bold text-xl text-white">Le Paradoxe des Subventions Publiques</h3>
+                        <p class="text-stone-400 text-xs sm:text-sm">Aides directes traditionnelles vs Modèle autonome du Fonds pour le Journalisme</p>
+                    </div>
+                    <span class="inline-block px-3 py-1 bg-brand-900 text-brand-100 text-xs font-semibold rounded-full border border-brand-700">Audit FWB 2026</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs sm:text-sm">
+                    <article class="bg-stone-800/80 p-5 rounded-lg border border-stone-700 space-y-2">
+                        <h4 class="font-bold text-rose-400 text-base">⚠️ L'Impasse Juridique des Aides Directes</h4>
+                        <p class="text-stone-300 leading-relaxed">
+                            Historiquement conçues pour préserver la concurrence entre éditeurs, les subventions d'État (aides à la distribution via Bpost, etc.) bénéficient désormais à plus de 90% à un seul géant privé (Rossel-IPM). Ce schéma s'expose à une requalification européenne en « aides d'État illégales » faussant le marché intérieur.
+                        </p>
+                    </article>
+
+                    <article class="bg-stone-800/80 p-5 rounded-lg border border-stone-700 space-y-2">
+                        <h4 class="font-bold text-emerald-400 text-base">🌱 Le Modèle Vertueux : Le Fonds pour le Journalisme</h4>
+                        <p class="text-stone-300 leading-relaxed">
+                            Financé par la FWB (~496 000€/an) mais géré de façon 100% indépendante par l'AJP, ce fonds octroie des bourses directement aux journalistes (salariés ou freelances) après sélection par un jury autonome. Plus de <strong>519 enquêtes indépendantes</strong> ont ainsi été rendues possibles depuis 2009.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Diversity Gaps & SLAPP Threat -->
+        <section id="diversity-slapp" class="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <header class="border-b border-stone-100 pb-4">
+                <div class="flex items-center space-x-2 text-brand-800 font-semibold text-sm uppercase tracking-wide">
+                    <span>👁️ Angles Morts & Intimidations</span>
+                </div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                    Biais Sociologiques, Sexisme et Procédures-Bâillons (SLAPP)
+                </h2>
+                <p class="text-stone-600 text-sm sm:text-base mt-2">
+                    Le contre-pouvoir s'affaiblit lorsque les rédactions souffrent d'homogénéité sociologique ou d'intimidations juridiques systématiques. Cette section analyse la représentativité à l'écran et la riposte législative belge contre les SLAPP.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-6 space-y-4">
+                    <h3 class="font-serif font-bold text-stone-900 text-base">Représentativité & Fait Rédactionnel (Baromètre CSA / AJP)</h3>
+                    <figure class="chart-container bg-stone-50 p-4 rounded-xl border border-stone-200">
+                        <canvas id="diversityChart" aria-label="Histogramme comparatif de la parité et de la diversité entre diplômés, journalistes et experts à l'écran" role="img"></canvas>
+                        <figcaption class="sr-only">Comparaison : les femmes représentent 55% des diplômés mais seulement 18% des experts invités à l'antenne.</figcaption>
+                    </figure>
+                </div>
+
+                <div class="lg:col-span-6 space-y-4">
+                    <article class="bg-stone-50 border border-stone-200 rounded-xl p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-serif font-bold text-stone-900 text-base">La Censure par le Droit : Les SLAPP</h3>
+                            <span class="text-xs bg-rose-100 text-rose-800 font-bold px-2.5 py-1 rounded-md">Harcèlement judiciaire</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                            Les <em>Strategic Lawsuits Against Public Participation</em> vise non pas à réparer un préjudice, mais à épuiser financièrement et mentalement les rédactions indépendantes.
+                        </p>
+                        
+                        <div class="space-y-2 text-xs">
+                            <div class="p-2.5 bg-white rounded border border-stone-200">
+                                <strong>Cas Socfin / Bolloré vs Médor :</strong> Poursuites pénales intentées dès 2019 suite à des enquêtes sur l'huile de palme. Non-lieu prononcé par la justice belge en avril 2025 après des années d'usure.
+                            </div>
+                            <div class="p-2.5 bg-white rounded border border-stone-200">
+                                <strong>David Leloup :</strong> Cible de plus de 7 procédures-bâillons successives depuis 2017 pour ses enquêtes financières.
+                            </div>
+                        </div>
+                    </article>
+
+                    <aside class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 space-y-2">
+                        <div class="flex items-center space-x-2 text-emerald-900 font-bold text-sm">
+                            <span>🛡️ Le Bouclier Fédéral Anti-SLAPP (22 Juin 2026)</span>
+                        </div>
+                        <p class="text-xs text-emerald-950 leading-relaxed">
+                            La Belgique a promulgué une loi pionnière instaurant un <strong>rejet anticipé</strong> des requêtes abusives, une exigence de <strong>garantie financière</strong> imposée aux plaignants corporatistes, et confiant à l'Institut Fédéral des Droits Humains (IFDH) le rôle de point de contact central.
+                        </p>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Resilience, Cooperatives & Watchdog Successes -->
+        <section id="resilience" class="bg-white border border-stone-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <header class="border-b border-stone-100 pb-4">
+                <div class="flex items-center space-x-2 text-brand-800 font-semibold text-sm uppercase tracking-wide">
+                    <span>🛡️ Résilience & Détonateurs Démocratiques</span>
+                </div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+                    La Presse Indépendante & Les Grands Séismes d'Investigation
+                </h2>
+                <p class="text-stone-600 text-sm sm:text-base mt-2">
+                    Loin du renoncement, le quatrième pouvoir se régénère à travers des structures coopératives indépendantes et des investigations au long cours qui ont fait trembler la classe politique belge.
+                </p>
+            </header>
+
+            <!-- Alternative Media Tabs & Cards -->
+            <div class="space-y-4">
+                <h3 class="font-serif font-bold text-stone-900 text-lg">L'Écosystème des Médias Indépendants</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <article class="bg-stone-50 border border-stone-200 rounded-xl p-4 hover:shadow-md transition space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-stone-900 text-base">Médor</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded">Coopérative</span>
+                        </div>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Trimestriel d'investigation. Symbole de la presse d'enquête indépendante en FWB, recourant au datajournalisme et à l'actionnariat citoyen.
+                        </p>
+                    </article>
+
+                    <article class="bg-stone-50 border border-stone-200 rounded-xl p-4 hover:shadow-md transition space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-stone-900 text-base">Wilfried</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 bg-blue-100 text-blue-800 rounded">Récit Politique</span>
+                        </div>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Revue trimestrielle consacrée à la politique belge par le grand reportage et le journalisme narratif, s'appuyant sur des réseaux de pigistes spécialisés.
+                        </p>
+                    </article>
+
+                    <article class="bg-stone-50 border border-stone-200 rounded-xl p-4 hover:shadow-md transition space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-stone-900 text-base">Tchak!</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 bg-amber-100 text-amber-800 rounded">Thématique</span>
+                        </div>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Revue spécialisée sur les questions paysannes, l'agroécologie et la souveraineté alimentaire, comblant un angle mort majeur de la grande presse.
+                        </p>
+                    </article>
+
+                    <article class="bg-stone-50 border border-stone-200 rounded-xl p-4 hover:shadow-md transition space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-stone-900 text-base">LPost & Pure-players</h4>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 bg-purple-100 text-purple-800 rounded">Digital</span>
+                        </div>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Initiatives numériques ciblant l'actualité économique d'entreprise ou l'information alternative, apportant un contre-regard sectoriel.
+                        </p>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Major Scandals Timeline -->
+            <div class="space-y-4 pt-4 border-t border-stone-100">
+                <h3 class="font-serif font-bold text-stone-900 text-lg">Trois Détonateurs Récents du Chien de Garde (Watchdog)</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <article class="p-5 bg-white border border-stone-200 rounded-xl relative hover:border-brand-300 transition">
+                        <span class="text-xs font-bold text-brand-700 mb-1 block">2016 • Scandale Publifin</span>
+                        <h4 class="font-serif font-bold text-stone-900 text-base mb-2">Comités de Secteur Fictifs</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Révélation de la rémunération illégitime de mandataires publics au sein d'une intercommunale liégeoise. Entraîne des démissions ministérielles et une commission d'enquête parlementaire.
+                        </p>
+                    </article>
+
+                    <article class="p-5 bg-white border border-stone-200 rounded-xl relative hover:border-brand-300 transition">
+                        <span class="text-xs font-bold text-brand-700 mb-1 block">2017 • Affaire Samusocial</span>
+                        <h4 class="font-serif font-bold text-stone-900 text-base mb-2">Jetons de Présence Bruxellois</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Mise en lumière du détournement d'allocations de jetons de présence au détriment de l'aide aux sans-abris, provoquant la démission du bourgmestre de Bruxelles.
+                        </p>
+                    </article>
+
+                    <article class="p-5 bg-white border border-stone-200 rounded-xl relative hover:border-brand-300 transition">
+                        <span class="text-xs font-bold text-brand-700 mb-1 block">2022 • Le Qatargate</span>
+                        <h4 class="font-serif font-bold text-stone-900 text-base mb-2">Corruption au Parlement Européen</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">
+                            Investigation menée conjointement par <em>Le Soir</em> et <em>Knack</em> révélant un vaste réseau de corruption internationale au cœur de la capitale européenne.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: Interactive Search Results & Synthesis -->
+        <article class="bg-stone-900 text-stone-100 rounded-2xl p-6 sm:p-10 space-y-6">
+            <div class="max-w-3xl space-y-3">
+                <span class="text-xs uppercase font-bold text-brand-400 tracking-wider">Conclusion & Perspectives Synthétiques</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-white">
+                    Un contre-pouvoir en mutation, à protéger d'urgence
+                </h2>
+                <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+                    Affirmer que le quatrième pouvoir en Belgique francophone « ne contre plus rien » est une provocation réductrice. Le journalisme d'enquête conserve une force de frappe réelle lors des grands scandales. En revanche, le suivi quotidien des institutions est menacé par l'oligopole Rossel-IPM et la précarité structurelle. Sauvegarder le contre-pouvoir exige une refonte des aides publiques au profit de bourses d'investigation autonomes et la défense du travailleur de l'information.
+                </p>
+            </div>
+
+            <div id="searchResults" class="hidden bg-stone-800 p-4 rounded-xl border border-stone-700 space-y-2 text-xs sm:text-sm" aria-live="polite">
+                <!-- Zone de rendu dynamique du moteur de recherche -->
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Footer Sémantique -->
+    <footer class="bg-stone-900 text-stone-400 border-t border-stone-800 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs space-y-2">
+            <p><strong>Radiographie Interactive du Quatrième Pouvoir en Belgique Francophone</strong> • Édition 2026</p>
+            <p>Auteur & Information Architecture : <a href="https://ouaisfieu.github.io/ccplc/" class="underline hover:text-white">Gemini AI / CCPLC Lab</a> • Source : AJP, Media Pluralism Monitor (MPM 2026), CSA & ABC.</p>
+        </div>
+    </footer>
+
+    <!-- Logic JavaScript -->
+    <script>
+        const mpmData = [
+            { label: "Concentration Structurelle", score: 95, category: "critical" },
+            { label: "Transparence Propriété", score: 85, category: "critical" },
+            { label: "Pluralité du Marché", score: 68, category: "critical" },
+            { label: "Égalité des Genres", score: 60, category: "moderate" },
+            { label: "Conditions de Travail", score: 34, category: "moderate" },
+            { label: "Viabilité Économique", score: 33, category: "moderate" },
+            { label: "Droit à l'Information", score: 25, category: "low" },
+            { label: "Indépendance Politique", score: 22, category: "low" },
+            { label: "Autonomie Éditoriale", score: 12, category: "low" },
+            { label: "Régulateurs (ex: CSA)", score: 8, category: "low" }
+        ];
+
+        let mpmChartInstance = null;
+        let marketChartInstance = null;
+        let diversityChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMPMChart('all');
+            initMarketChart();
+            initDiversityChart();
+            setupSearch();
+        });
+
+        function initMPMChart(filterCategory) {
+            const ctx = document.getElementById('mpmChart').getContext('2d');
+            
+            const filteredData = filterCategory === 'all' 
+                ? mpmData 
+                : mpmData.filter(d => d.category === filterCategory);
+
+            const labels = filteredData.map(d => d.label);
+            const values = filteredData.map(d => d.score);
+            const bgColors = values.map(v => v >= 60 ? '#b91c1c' : (v >= 30 ? '#d97706' : '#059669'));
+
+            if (mpmChartInstance) {
+                mpmChartInstance.destroy();
+            }
+
+            mpmChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Niveau de Risque (%)',
+                        data: values,
+                        backgroundColor: bgColors,
+                        borderRadius: 6,
+                        barThickness: 18
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => ` Niveau de Risque : ${context.parsed.x}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                callback: (val) => val + '%'
+                            },
+                            grid: { color: '#e7e5e4' }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function filterMPM(category) {
+            ['all', 'critical', 'moderate', 'low'].forEach(cat => {
+                const btn = document.getElementById(`btn-mpm-${cat}`);
+                if (cat === category) {
+                    btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-300 bg-stone-900 text-white transition";
+                } else {
+                    btn.className = "px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-300 bg-white text-stone-700 hover:bg-stone-100 transition";
+                }
+            });
+            initMPMChart(category);
+        }
+
+        function initMarketChart() {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            marketChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Groupe Rossel-IPM (Presse Quotidienne)', 'Pôle Public (RTBF)', 'Médias Indépendants / Autres'],
+                    datasets: [{
+                        data: [94, 5, 1],
+                        backgroundColor: ['#8c2d19', '#1e3a8a', '#64748b'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%`
+                            }
+                        }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function initDiversityChart() {
+            const ctx = document.getElementById('diversityChart').getContext('2d');
+            diversityChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Diplômés Masters', 'Journalistes Actifs', 'Experts à l\'Écran', 'Diversité Perçue'],
+                    datasets: [
+                        {
+                            label: 'Femmes / Minorités (%)',
+                            data: [55, 42, 18, 3.78],
+                            backgroundColor: '#8c2d19',
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Hommes / Majorité (%)',
+                            data: [45, 58, 82, 96.22],
+                            backgroundColor: '#e5d0cb',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 11 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            max: 100,
+                            ticks: { callback: (val) => val + '%' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleAccordion(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+            const btn = el.previousElementSibling;
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.textContent = '▲';
+                if(btn) btn.setAttribute('aria-expanded', 'true');
+            } else {
+                el.classList.add('hidden');
+                icon.textContent = '▼';
+                if(btn) btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function setupSearch() {
+            const input = document.getElementById('globalSearch');
+            const resultsBox = document.getElementById('searchResults');
+
+            const contentIndex = [
+                { keyword: 'rossel', text: "La fusion Rossel-IPM octroie 94% de la presse quotidienne imprimée au nouveau géant (post-juillet 2026)." },
+                { keyword: 'ipm', text: "IPM apporte La Libre, La DH, L'Avenir et LN24 dans la corbeille fusionnée avec Rossel." },
+                { keyword: 'slapp', text: "Les SLAPP (procédures-bâillons) sont contrées par la loi fédérale du 22 juin 2026 instaurant le rejet anticipé." },
+                { keyword: 'médor', text: "Médor est une coopérative d'investigation trimestrielle, symbole du renouveau indépendant face à Socfin/Bolloré." },
+                { keyword: 'publifin', text: "Le scandale Publifin (2016) a révélé des comités de secteur fictifs grâce à l'investigation locale." },
+                { keyword: 'fonds', text: "Le Fonds pour le Journalisme (AJP) alloue ~496.000€/an directement aux journalistes indépendants." },
+                { keyword: 'qatargate', text: "Le Qatargate (2022) a été révélé par Le Soir et Knack, démontrant la puissance du journalisme d'enquête." },
+                { keyword: 'freelance', text: "59% des freelances estiment ne pas être rémunérés équitablement (VVJ/AJP)." }
+            ];
+
+            input.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (query.length < 2) {
+                    resultsBox.classList.add('hidden');
+                    resultsBox.innerHTML = '';
+                    return;
+                }
+
+                const matches = contentIndex.filter(item => item.keyword.includes(query) || item.text.toLowerCase().includes(query));
+                
+                if (matches.length > 0) {
+                    resultsBox.classList.remove('hidden');
+                    resultsBox.innerHTML = `
+                        <div class="font-bold text-brand-300 mb-1">🔍 Résultats de recherche (${matches.length}) :</div>
+                        ${matches.map(m => `<div class="p-2 bg-stone-900 rounded border border-stone-700 text-stone-200">${m.text}</div>`).join('')}
+                    `;
+                } else {
+                    resultsBox.classList.remove('hidden');
+                    resultsBox.innerHTML = `<div class="text-stone-400 italic">Aucun résultat spécifique trouvé pour "${query}". Essayez : Rossel, SLAPP, Médor, Publifin, Fonds.</div>`;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
