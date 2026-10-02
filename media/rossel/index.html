@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="fr-BE" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Metadonnées SEO de base -->
+    <title>Observatoire du Paysage Médiatique Francophone Belge (2026) | Analyse Rossel-IPM</title>
+    <meta name="description" content="Analyse systémique, économique et sociologique du paysage médiatique en Fédération Wallonie-Bruxelles : fusion Rossel-IPM, concentration à 95%, duopole télévisuel, aides publiques et égalité des genres (GMMP 2025).">
+    <meta name="keywords" content="Médias belges, Rossel, IPM, Le Soir, La Libre, RTBF, RTL, FWB, paysage médiatique, concentration des médias, AJP, CSA, GMMP 2025, pluralisme, pigistes">
+    <meta name="author" content="Gemini (Google DeepMind) pour CCPLC">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ouaisfieu.github.io/ccplc/media/rossel/">
+
+    <!-- Metadonnées Open Graph (Facebook, LinkedIn) -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Observatoire du Paysage Médiatique Francophone Belge (2026)">
+    <meta property="og:description" content="Étude complète de la concentration de la presse (95% Rossel-IPM), des asymétries économiques et des enjeux sociologiques du journalisme en Belgique francophone.">
+    <meta property="og:url" content="https://ouaisfieu.github.io/ccplc/media/rossel/">
+    <meta property="og:site_name" content="CCPLC - Observatoire des Médias">
+    <meta property="og:locale" content="fr_BE">
+
+    <!-- Metadonnées Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Observatoire du Paysage Médiatique Francophone Belge (2026)">
+    <meta name="twitter:description" content="Focus sur la fusion Rossel-IPM, la précarité des pigistes et les chiffres clés de la télévision et de la radio en FWB.">
+
+    <!-- Données Structurées JSON-LD (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Report",
+      "name": "Observatoire du Paysage Médiatique Francophone Belge (2026)",
+      "headline": "Analyse systémique, économique et sociologique du champ médiatique en Fédération Wallonie-Bruxelles",
+      "description": "Analyse interactive du paysage médiatique francophone belge en 2026 : la fusion Rossel-IPM, la concentration de la presse à 95%, l'asymétrie publicitaire, la sociologie des journalistes et l'étude GMMP.",
+      "url": "https://ouaisfieu.github.io/ccplc/media/rossel/",
+      "inLanguage": "fr-BE",
+      "datePublished": "2026-10-02",
+      "author": {
+        "@type": "Organization",
+        "name": "Gemini",
+        "url": "https://deepmind.google/technologies/gemini/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "CCPLC",
+        "url": "https://ouaisfieu.github.io/ccplc/"
+      },
+      "about": [
+        { "@type": "Thing", "name": "Presse écrite" },
+        { "@type": "Thing", "name": "Pluralisme des médias" },
+        { "@type": "Thing", "name": "Groupe Rossel" },
+        { "@type": "Thing", "name": "IPM Group" },
+        { "@type": "Thing", "name": "RTBF" }
+      ]
+    }
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Embedded minimal CSS for Chart Containers as required */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 620px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 310px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 340px;
+            }
+        }
+        /* Custom scrollbar and subtle transitions */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+        .tab-active {
+            border-bottom: 3px solid #C2410C;
+            color: #C2410C;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-[#FAF8F5] text-[#1E293B] font-sans antialiased selection:bg-amber-100 selection:text-amber-900 min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Warm Neutral Harmony (Background: #FAF8F5, Text: #1E293B, Primary Accent: #C2410C / Terracotta, Secondary: #0D9488 / Teal, Navy Accent: #1E3A8A) -->
+    
+    <!-- Application Structure Plan:
+        1. En-tête & Métriques Clés : Vision synthétique immédiate du paysage (4.5M locuteurs, 95% concentration presse, 62% captation GAFAM, 24.3% pigistes).
+        2. Navigation Principale par Onglets Thématiques avec rôles ARIA :
+           - Tab 1: Vue Synthétique & Indice MPM (Analyse des risques de pluralisme et garde-fous institutionnels).
+           - Tab 2: Hyper-Concentration (La fusion historique Rossel-IPM, carte des titres, engagements du régulateur).
+           - Tab 3: Paysage Audiovisuel & Décrochage (Duopole RTBF/RTL, radios, l'offensive publicitaire de TF1 et France Télévisions).
+           - Tab 4: Économie & Subsides (Double asymétrie Nord/Sud & GAFAM, aides directes/indirectes, Décret presse & Fonds Journalisme).
+           - Tab 5: Sociologie & Précarité (Profil des journalistes, statut de pigiste, barèmes, réforme des droits d'auteur, sécurité).
+           - Tab 6: Genre & Diversité (Rapport GMMP 2025, présence féminine par média, succès d'Expertalia, angle mort intersectionnel).
+        3. Outils Interactifs Intégrés : Simulateur de piges/tarifs, Moteur de recherche et filtre de titres de presse, Comparateur d'audiences et de parts de marché.
+    -->
+
+    <!-- Visualization & Content Choices:
+        - MPM Risk Profile -> Goal: Compare -> Horizontal Bar Chart (Chart.js) -> Contextual dynamic text panel -> Chart.js
+        - TV Market Shares -> Goal: Proportion -> Donut Chart (Chart.js) -> Filter by publisher -> Chart.js
+        - Radio Audiences -> Goal: Compare -> Bar Chart (Chart.js) -> Detail cards -> Chart.js
+        - Rossel-IPM Title Map -> Goal: Organize -> Filterable Cards Layout + Interactive Title Inspector -> Vanilla JS
+        - Political Tropism -> Goal: Proportion -> Pie Chart (Chart.js) -> Detail view -> Chart.js
+        - Gender by Media & Experts Progression -> Goal: Compare/Change -> Dual Bar Charts (Chart.js) -> Vanilla JS
+        - Tariff Simulator -> Goal: Engagement/Teach -> Interactive Calculator -> Vanilla JS
+        CONFIRMATION: NO SVG used. NO Mermaid JS used.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header & App Title Bar -->
+    <header class="bg-[#1E293B] text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <span class="bg-[#C2410C] text-white font-black text-xs px-2.5 py-1 rounded tracking-wider uppercase">Édition 2026</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-amber-50">Observatoire des Médias Francophones Belges</h1>
+                    <p class="text-xs text-slate-300">Analyse systémique, économique et sociologique par <strong>Gemini</strong> pour <strong>CCPLC</strong></p>
+                </div>
+            </div>
+            <!-- Quick Stat Badges -->
+            <div class="flex flex-wrap gap-2 text-xs" aria-label="Indicateurs clés du marché">
+                <div class="bg-slate-800 border border-slate-700 px-3 py-1 rounded-md text-slate-200">
+                    <span class="text-amber-400 font-bold">95%</span> Presse Écrite (Rossel-IPM)
+                </div>
+                <div class="bg-slate-800 border border-slate-700 px-3 py-1 rounded-md text-slate-200">
+                    <span class="text-teal-400 font-bold">62%</span> Pub Web aux GAFAM
+                </div>
+                <div class="bg-slate-800 border border-slate-700 px-3 py-1 rounded-md text-slate-200">
+                    <span class="text-orange-400 font-bold">24,3%</span> Journalistes Pigistes
+                </div>
+            </div>
+        </div>
+        
+        <!-- Semantic & ARIA Accessible Navigation Tabs -->
+        <nav class="bg-slate-900 border-t border-slate-800 text-slate-300 text-sm overflow-x-auto" aria-label="Navigation principale de l'observatoire">
+            <div class="max-w-7xl mx-auto px-4 flex whitespace-nowrap space-x-1 sm:space-x-6" role="tablist">
+                <button onclick="switchTab('tab-overview')" id="btn-tab-overview" role="tab" aria-selected="true" aria-controls="tab-overview" class="py-3 px-3 font-medium transition-colors hover:text-white tab-active">
+                    📊 Vue Synthétique & Risques
+                </button>
+                <button onclick="switchTab('tab-concentration')" id="btn-tab-concentration" role="tab" aria-selected="false" aria-controls="tab-concentration" class="py-3 px-3 font-medium transition-colors hover:text-white">
+                    📰 Fusion Rossel-IPM (95%)
+                </button>
+                <button onclick="switchTab('tab-audiovisuel')" id="btn-tab-audiovisuel" role="tab" aria-selected="false" aria-controls="tab-audiovisuel" class="py-3 px-3 font-medium transition-colors hover:text-white">
+                    📺 TV, Radios & Décrochage
+                </button>
+                <button onclick="switchTab('tab-economie')" id="btn-tab-economie" role="tab" aria-selected="false" aria-controls="tab-economie" class="py-3 px-3 font-medium transition-colors hover:text-white">
+                    💰 Asymétries & Aides Publiques
+                </button>
+                <button onclick="switchTab('tab-sociologie')" id="btn-tab-sociologie" role="tab" aria-selected="false" aria-controls="tab-sociologie" class="py-3 px-3 font-medium transition-colors hover:text-white">
+                    👥 Condition Journalistique & Pige
+                </button>
+                <button onclick="switchTab('tab-diversite')" id="btn-tab-diversite" role="tab" aria-selected="false" aria-controls="tab-diversite" class="py-3 px-3 font-medium transition-colors hover:text-white">
+                    ⚖️️ Genre & Diversité (GMMP)
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ==================== TAB 1: VUE SYNTHÉTIQUE & RISQUES ==================== -->
+        <section id="tab-overview" role="tabpanel" aria-labelledby="btn-tab-overview" class="tab-content block space-y-8" tabindex="0">
+            <!-- Introductory Context Paragraph -->
+            <article class="bg-white border-l-4 border-[#C2410C] p-6 rounded-r-xl shadow-sm space-y-2">
+                <h2 class="text-xl font-bold text-slate-900">Synthèse du Paysage et Diagnostic de Risque (MPM 2026)</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Le paysage médiatique de la Fédération Wallonie-Bruxelles (~4,5 millions de locuteurs) traverse en 2026 une mutation historique. Alors que la Belgique bénéficie d'une excellente protection institutionnelle de l'État (indépendance politique préservée, régulateurs performants), son marché est frappé d'une <strong>vulnérabilité structurelle critique (68% de risque)</strong> due à une concentration capitalistique sans précédent et à l'assèchement des revenus publicitaires traditionnels.
+                </p>
+            </article>
+
+            <!-- Dashboard Metric KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <article class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-xs uppercase tracking-wider font-semibold text-slate-500">Marché Presse Écrite</h3>
+                    <div class="text-3xl font-extrabold text-[#C2410C] mt-2">95 %</div>
+                    <p class="text-xs text-slate-600 mt-1">Part contrôlée par le groupe <strong>Rossel-IPM</strong> unifié.</p>
+                </article>
+                <article class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-xs uppercase tracking-wider font-semibold text-slate-500">Rang Européen Liberté Presse</h3>
+                    <div class="text-3xl font-extrabold text-teal-700 mt-2">8ᵉ / 27</div>
+                    <p class="text-xs text-slate-600 mt-1">Score global MPM de 41% (Risque Moyen-Faible).</p>
+                </article>
+                <article class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-xs uppercase tracking-wider font-semibold text-slate-500">Déséquilibre Publicitaire Nord/Sud</h3>
+                    <div class="text-3xl font-extrabold text-indigo-900 mt-2">65% vs 35%</div>
+                    <p class="text-xs text-slate-600 mt-1">La Flandre capte 65% de la publicité nationale (35% FWB).</p>
+                </article>
+                <article class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 class="text-xs uppercase tracking-wider font-semibold text-slate-500">Part des Femmes Expertes</h3>
+                    <div class="text-3xl font-extrabold text-amber-600 mt-2">31 %</div>
+                    <p class="text-xs text-slate-600 mt-1">En nette hausse par rapport aux 5% mesurés en 2020.</p>
+                </article>
+            </div>
+
+            <!-- Interactive Chart & Indicator Details Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Visual Chart Column -->
+                <figure class="lg:col-span-7 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b pb-3">
+                        <figcaption class="font-bold text-slate-900 text-lg">Évaluation des Risques du Pluralisme (MPM 2026)</figcaption>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded font-mono">Source: EUI / MPM 2026</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Cliquez sur une catégorie dans le graphique pour afficher l'analyse détaillée du régulateur.</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="mpmChart" aria-label="Graphique des niveaux de risques pour le pluralisme des médias en Belgique" role="img"></canvas>
+                    </div>
+                </figure>
+
+                <!-- Contextual Analysis Text Column -->
+                <article class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 text-lg border-b pb-3" id="mpm-detail-title">Focus : Paradoxe du Pluralisme Belge</h3>
+                    <div id="mpm-detail-body" class="text-sm text-slate-600 space-y-3 leading-relaxed">
+                        <p>
+                            Le rapport <em>Media Pluralism Monitor 2026</em> met en exergue un paradoxe fondamental : la Belgique protège remarquablement bien ses journalistes contre les ingérences étatiques directs (risque d'indépendance politique très bas à 22%), mais laisse les pures forces du marché détruire la pluralité de l'offre (risque de concentration à 95%).
+                        </p>
+                        <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900">
+                            <strong>Conclusion du régulateur :</strong> L'absence de censure d'État est une condition nécessaire mais insuffisante pour garantir le débat démocratique quand un seul groupe privé possède la quasi-totalité des quotidiens.
+                        </div>
+                        <ul class="text-xs space-y-1.5 list-disc pl-4 text-slate-700">
+                            <li><strong>Transparence de la propriété :</strong> Risque élevé (85%) compliquant le suivi des actionnaires.</li>
+                            <li><strong>Conditions de travail :</strong> Risque à 34% sous la pression de la précarité des pigistes.</li>
+                            <li><strong>Régulation CSA/VRM :</strong> Risque exceptionnellement bas (8%), salué au niveau européen.</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: CONCENTRATION ROSSEL-IPM ==================== -->
+        <section id="tab-concentration" role="tabpanel" aria-labelledby="btn-tab-concentration" class="tab-content hidden space-y-8" tabindex="0">
+            <!-- Introductory Context Paragraph -->
+            <article class="bg-white border-l-4 border-[#C2410C] p-6 rounded-r-xl shadow-sm space-y-2">
+                <h2 class="text-xl font-bold text-slate-900">L'Onde de Choc du 3 Juillet 2026 : Le Quasi-Monopole Rossel-IPM</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    L'Autorité belge de la Concurrence (ABC) a donné son feu vert définitif à la fusion entre le Groupe Rossel et IPM. Cette opération d'ingénierie financière sans précédent transfère 100 % de la presse écrite d'IPM chez Rossel, conférant au groupe un contrôle de <strong>95 % de la presse quotidienne francophone</strong>. L'ABC a préféré autoriser la création d'un géant local capable de résister aux GAFAM plutôt que de risquer la faillite industrielle des éditeurs.
+                </p>
+            </article>
+
+            <!-- Structure Pillars Breakdown -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pole 1 -->
+                <article class="bg-white p-5 rounded-xl border-t-4 border-blue-700 shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 text-base">Pôle 1 : Le Soir</h3>
+                        <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded">Généraliste / Référence</span>
+                    </div>
+                    <p class="text-xs text-slate-600">Sanctuarisé sous une rédaction autonome. Maintien d'un rédacteur en chef propre et de budgets éditoriaux distincts.</p>
+                    <h4 class="text-xs font-semibold text-slate-700 pt-2 border-t">Titres clés :</h4>
+                    <div class="flex flex-wrap gap-1 text-xs">
+                        <span class="bg-slate-100 px-2 py-1 rounded">Le Soir</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">Soir Mag</span>
+                    </div>
+                </article>
+
+                <!-- Pole 2 -->
+                <article class="bg-white p-5 rounded-xl border-t-4 border-amber-600 shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 text-base">Pôle 2 : IPM Historique</h3>
+                        <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">Conservateur / Populaire</span>
+                    </div>
+                    <p class="text-xs text-slate-600">Regroupe les anciens actifs de la famille le Hodey (qui détient 8% à 10% du groupe unifié).</p>
+                    <h4 class="text-xs font-semibold text-slate-700 pt-2 border-t">Titres clés :</h4>
+                    <div class="flex flex-wrap gap-1 text-xs">
+                        <span class="bg-slate-100 px-2 py-1 rounded">La Libre Belgique</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">La DH / Les Sports</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">Moustique</span>
+                    </div>
+                </article>
+
+                <!-- Pole 3 -->
+                <article class="bg-white p-5 rounded-xl border-t-4 border-teal-600 shadow-sm space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 text-base">Pôle 3 : Régional Wallon</h3>
+                        <span class="text-xs bg-teal-100 text-teal-800 font-bold px-2 py-0.5 rounded">Proximité / Populaire</span>
+                    </div>
+                    <p class="text-xs text-slate-600">Unification des réseaux régionaux. Rationalisation lourde subie : suppression estimée de 40 à 50 postes.</p>
+                    <h4 class="text-xs font-semibold text-slate-700 pt-2 border-t">Titres clés :</h4>
+                    <div class="flex flex-wrap gap-1 text-xs">
+                        <span class="bg-slate-100 px-2 py-1 rounded">Sudinfo</span>
+                        <span class="bg-slate-100 px-2 py-1 rounded">L'Avenir</span>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Safeguards & Social Impacts Box -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Safeguards Card -->
+                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 text-lg border-b pb-3">Garde-Fous Régulatoires Imposés par l'ABC</h3>
+                    <p class="text-xs text-slate-600">Pour éviter l'uniformisation des lignes éditoriales, le régulateur a imposé des "murs de Chine" comportementaux :</p>
+                    <ul class="space-y-2 text-xs text-slate-700">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-amber-600 font-bold" aria-hidden="true">▪</span>
+                            <span><strong>Étanchéité rédactions & serveurs :</strong> Salles de rédaction physiquement séparées, serveurs informatiques et sites web indépendants.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-amber-600 font-bold" aria-hidden="true">▪</span>
+                            <span><strong>Rédacteurs en chef propres :</strong> Interdiction de mutualiser la direction des rédactions quotidiennes majeures.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-amber-600 font-bold" aria-hidden="true">▪</span>
+                            <span><strong>Mandataire Indépendant :</strong> Contrôle externe régulier assuré en concertation avec l'AADJ pour veiller aux chartes déontologiques.</span>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- Social & Postal Impact Card -->
+                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 text-lg border-b pb-3">Rationalisation Sociale & Crise Postale Bpost</h3>
+                    <p class="text-xs text-slate-600">La consolidation s'accompagne de tensions budgétaires violentes, exacerbées par l'effondrement des aides à la distribution postale :</p>
+                    <div class="bg-slate-50 p-3 rounded-lg border text-xs space-y-2">
+                        <div class="flex justify-between font-semibold text-slate-800">
+                            <span>Aides fédérales Bpost (Historique vs 2026) :</span>
+                            <span class="text-red-600">&gt;175M€ ➔ ~48M€</span>
+                        </div>
+                        <p class="text-slate-600 text-[11px]">
+                            La suppression massive des subventions postales force les éditeurs vers le tout-numérique et fragilise l'accès physique à la presse en zones rurales.
+                        </p>
+                    </div>
+                    <div class="text-xs text-slate-700 space-y-1">
+                        <div>⚠️ <strong>Chômage économique :</strong> Imposé dès septembre 2026 aux <em>Éditions de l'Avenir</em>.</div>
+                        <div>⚠️ <strong>Éditions régionales :</strong> Seules 4 des 8 éditions de <em>L'Avenir</em> garanties à long terme.</div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Interactive Title Inspector / Search Engine -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4" aria-label="Moteur de recherche des titres de presse">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg">Explorateur Interactif des Titres de Presse Francophones</h3>
+                        <p class="text-xs text-slate-500">Filtrer les publications pour examiner l'actionnariat et le pôle de rattachement.</p>
+                    </div>
+                    <!-- Filter Buttons -->
+                    <div class="flex flex-wrap gap-2 text-xs" role="group" aria-label="Filtres de catégories de journaux">
+                        <button onclick="filterTitles('all')" class="bg-slate-800 text-white px-3 py-1.5 rounded hover:bg-slate-700">Tous</button>
+                        <button onclick="filterTitles('Generaliste')" class="bg-slate-200 text-slate-800 px-3 py-1.5 rounded hover:bg-slate-300">Généraliste</button>
+                        <button onclick="filterTitles('Regional')" class="bg-slate-200 text-slate-800 px-3 py-1.5 rounded hover:bg-slate-300">Régional</button>
+                        <button onclick="filterTitles('Populaire')" class="bg-slate-200 text-slate-800 px-3 py-1.5 rounded hover:bg-slate-300">Populaire/Sport</button>
+                        <button onclick="filterTitles('Economique')" class="bg-slate-200 text-slate-800 px-3 py-1.5 rounded hover:bg-slate-300">Économique</button>
+                    </div>
+                </div>
+
+                <!-- Grid of Titles -->
+                <div id="titles-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-2">
+                    <!-- Populated dynamically via Vanilla JS -->
+                </div>
+            </section>
+        </section>
+
+        <!-- ==================== TAB 3: AUDIOVISUEL & DÉCROCHAGE ==================== -->
+        <section id="tab-audiovisuel" role="tabpanel" aria-labelledby="btn-tab-audiovisuel" class="tab-content hidden space-y-8" tabindex="0">
+            <!-- Introductory Context Paragraph -->
+            <article class="bg-white border-l-4 border-[#C2410C] p-6 rounded-r-xl shadow-sm space-y-2">
+                <h2 class="text-xl font-bold text-slate-900">Le Paysage Audiovisuel : Duopole Local et Pression Transfrontalière</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Si la presse écrite est sous contrôle unifié, le secteur audiovisuel conserve un duopole historique entre le service public (<strong>RTBF</strong>) et l'opérateur privé (<strong>RTL Belgium</strong>, co-détenu à 50/50 par Rossel et DPG Media). Ce paysage est toutefois déstabilisé par le <strong>"décrochage publicitaire"</strong> des chaînes françaises (TF1, et désormais France Télévisions) qui captent les budgets belges sans assumer les coûts complets de production locale.
+                </p>
+            </article>
+
+            <!-- Charts Row: TV vs Radio -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- TV Chart Box -->
+                <figure class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <figcaption class="font-bold text-slate-900 text-lg">Parts de Marché Télévision (Année 2025)</figcaption>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-mono">Source: CIM / CSA</span>
+                    </div>
+                    <p class="text-xs text-slate-500">75,5% du visionnage télévisuel reste consommé en direct linéaire.</p>
+                    <div class="chart-container">
+                        <canvas id="tvChart" aria-label="Parts de marché de la télévision en Belgique francophone" role="img"></canvas>
+                    </div>
+                </figure>
+
+                <!-- Radio Chart Box -->
+                <figure class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <figcaption class="font-bold text-slate-900 text-lg">Audiences Radiophoniques : Le "Big 3"</figcaption>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-mono">Source: CIM RAM 2025</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Guerre de positionnement permanente entre le réseau RTBF, NGroup et RTL.</p>
+                    <div class="chart-container">
+                        <canvas id="radioChart" aria-label="Audiences de la radio en Belgique francophone" role="img"></canvas>
+                    </div>
+                </figure>
+            </div>
+
+            <!-- Focus Box: Le Décrochage Publicitaire Français & Médias de Proximité -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Décrochage Publicitaire Column -->
+                <article class="lg:col-span-7 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center space-x-2 border-b pb-3">
+                        <span class="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded">ÉVÉNEMENT 2026</span>
+                        <h3 class="font-bold text-slate-900 text-lg">L'Offensive de France Télévisions et TF1</h3>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Le <strong>"décrochage publicitaire"</strong> permet aux chaînes françaises de remplacer leurs spots nationaux par des publicités ciblées pour les consommateurs belges. Après TF1 (commercialisé par DPG/Rossel), <strong>France Télévisions (France 2, France 3, France 5)</strong> a ouvert ses fenêtres publicitaires belges le 1ᵉʳ février 2026, régies par RMB (la régie de la RTBF).
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-lg border text-xs space-y-2">
+                        <h4 class="font-semibold text-slate-800">Inquiétudes Industrielles et Régulation CSA :</h4>
+                        <ul class="list-disc pl-4 space-y-1 text-slate-600">
+                            <li><strong>Saturations des écrans :</strong> Risque d'effondrement des tarifs publicitaires pour les acteurs belges.</li>
+                            <li><strong>Violation d'un accord tacite :</strong> Rupture du "Gentlemen Agreement" de l'UER entre télévisions publiques.</li>
+                            <li><strong>Garde-fou légal :</strong> Le décret FWB impose aux chaînes étrangères pratiquant le décrochage (TF1, France.tv, Netflix) de réinvestir <strong>2 % de leur chiffre d'affaires belge</strong> dans la production audiovisuelle locale.</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Médias de Proximité Column -->
+                <article class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 text-lg border-b pb-3">Réseau des Médias de Proximité</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Les <strong>12 télévisions locales</strong> (BX1, Boukè, Notélé, Télésambre, RTC, TV Lux, etc.) ont opéré leur mutation vers un modèle omnicanal. 
+                    </p>
+                    <div class="bg-amber-50 p-3.5 rounded-lg border border-amber-200 text-xs space-y-2">
+                        <h4 class="font-bold text-amber-900">Avertissement du CRISP & du CSA (2026) :</h4>
+                        <p class="text-amber-800 leading-relaxed">
+                            Bien que remplissant parfaitement leurs missions de service public de proximité, leur santé financière demeure extrêmement précaire, ultra-dépendante des dotations publiques communales et régionales face à la concurrence numérique.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: ÉCONOMIE & SUBSIDES ==================== -->
+        <section id="tab-economie" role="tabpanel" aria-labelledby="btn-tab-economie" class="tab-content hidden space-y-8" tabindex="0">
+            <!-- Introductory Context Paragraph -->
+            <article class="bg-white border-l-4 border-[#C2410C] p-6 rounded-r-xl shadow-sm space-y-2">
+                <h2 class="text-xl font-bold text-slate-900">Économie des Médias, Asymétries et Ingénierie des Aides Publiques</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    L'écosystème d'information belge francophone fait face à une double asymétrie financière destructrice : d'une part, la captation de <strong>62 % de la publicité numérique par les GAFAM</strong> ; d'autre part, le fossé géographique interne où la Flandre attire <strong>65 % des budgets publicitaires nationaux</strong>. Pour préserver le secteur, les autorités régionales et communautaires déploient un arsenal d'aides directes et d'investissements publics.
+                </p>
+            </article>
+
+            <!-- Asymmetry Infographic Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Asymétrie Technologique</span>
+                    <h3 class="text-lg font-bold text-slate-900">Captation des Revenus Web par les GAFAM</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Google, Meta, Amazon et Microsoft siphonnent environ 62 % des recettes publicitaires numériques en Belgique, tout en ne supportant aucun des coûts fixes de production de l'information locale d'intérêt public.
+                    </p>
+                    <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden flex" aria-label="Répartition 62% GAFAM contre 38% Éditeurs locaux">
+                        <div class="bg-red-500 h-full text-[10px] text-white flex items-center justify-center font-bold" style="width: 62%">GAFAM 62%</div>
+                        <div class="bg-slate-400 h-full text-[10px] text-white flex items-center justify-center font-bold" style="width: 38%">Éditeurs Locaux 38%</div>
+                    </div>
+                </article>
+
+                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Asymétrie Nord / Sud</span>
+                    <h3 class="text-lg font-bold text-slate-900">Déséquilibre des Investissements Pubs Nationaux</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Bien que la population belge compte 57% de néerlandophones et 43% de francophones, le marché publicitaire national est alloué à 65% en Flandre et seulement à 35% en Fédération Wallonie-Bruxelles.
+                    </p>
+                    <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden flex" aria-label="Répartition 65% Flandre contre 35% FWB">
+                        <div class="bg-indigo-600 h-full text-[10px] text-white flex items-center justify-center font-bold" style="width: 65%">Flandre 65%</div>
+                        <div class="bg-amber-600 h-full text-[10px] text-white flex items-center justify-center font-bold" style="width: 35%">FWB 35%</div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Public Subsidies Breakdown Grid -->
+            <section class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6" aria-label="Piliers du soutien public">
+                <h3 class="font-bold text-slate-900 text-lg border-b pb-3">Les Piliers du Soutien Public à l'Information</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Subsidy 1 -->
+                    <article class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-slate-900 text-sm">Décret Aide à la Presse</h4>
+                            <span class="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-0.5 rounded">6,2 M€ / an</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Subvention directe conditionnée : publication 6j/7, diffusion payante minimale de 22 500 ex/jour, et calculée sur le prorata de journalistes professionnels salariés engagés.
+                        </p>
+                    </article>
+
+                    <!-- Subsidy 2 -->
+                    <article class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-slate-900 text-sm">Fonds pour le Journalisme</h4>
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded">500 K€ / an</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Géré de manière autonome par l'AJP. Finance des enquêtes et grands reportages en accès libre. Plus de <strong>519 projets d'investigation</strong> soutenus depuis sa création.
+                        </p>
+                    </article>
+
+                    <!-- Subsidy 3 -->
+                    <article class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-slate-900 text-sm">Fonds Public St'art</h4>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">40 M€ d'horizon 2029</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Prêts à risque et prises de participation publiques pour accompagner les entreprises culturelles et les producteurs de contenus médiatiques.
+                        </p>
+                    </article>
+                </div>
+
+                <!-- EMFA Transparency Highlight -->
+                <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 text-xs text-amber-900 space-y-1">
+                    <strong>Régulation Européenne (EMFA) :</strong> L'entrée en vigueur de l'<em>European Media Freedom Act</em> confie au CSA la mission de construire une base de données publique rendant obligatoires la transparence des actionnaires et le détail des financements étatiques.
+                </div>
+            </section>
+        </section>
+
+        <!-- ==================== TAB 5: SOCIOLOGIE & PRÉCARITÉ ==================== -->
+        <section id="tab-sociologie" role="tabpanel" aria-labelledby="btn-tab-sociologie" class="tab-content hidden space-y-8" tabindex="0">
+            <!-- Introductory Context Paragraph -->
+            <article class="bg-white border-l-4 border-[#C2410C] p-6 rounded-r-xl shadow-sm space-y-2">
+                <h2 class="text-xl font-bold text-slate-900">Sociologie de la Profession et Précarité Systémique</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Derrière les structures industrielles, la profession journalistique en Belgique francophone souffre d'une paupérisation accélérée : <strong>24,3 % des journalistes travaillent désormais comme indépendants (pigistes)</strong>, confrontés à des tarifs obsolètes et à une réforme fiscale brutale sur les droits d'auteur. Sociologiquement, le métier demeure très homogène (homme, 45-50 ans, origine aisée) et confronté à une dégradation des conditions de sécurité sur le terrain.
+                </p>
+            </article>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Political Tropism Chart Box -->
+                <figure class="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <figcaption class="font-bold text-slate-900 text-lg">Profil Politique des Journalistes (AJP 2023)</figcaption>
+                        <p class="text-xs text-slate-500">Intention de vote théorique déclarée par les professionnels.</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="politicalChart" aria-label="Orientation politique déclarée des journalistes" role="img"></canvas>
+                    </div>
+                    <div class="text-xs text-slate-600 bg-slate-50 p-3 rounded border">
+                        💡 <strong>Sécularisation :</strong> 41,7 % se déclarent sans conviction philosophique.
+                        <br>❌ <strong>Extrême-droite :</strong> 0 % d'intention de vote déclarée.
+                    </div>
+                </figure>
+
+                <!-- Interactive Tariff Calculator & Precarity Inspector -->
+                <article class="lg:col-span-7 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">Simulateur Interactif de Rémunération des Pigistes</h3>
+                        <p class="text-xs text-slate-500">Comparez les tarifs officiels théoriques avec la réalité brute du marché.</p>
+                    </div>
+
+                    <!-- Simulator Controls -->
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-lg border">
+                        <div>
+                            <label for="char-slider" class="block text-xs font-bold text-slate-700 mb-1">Longueur de l'article (Signes / Caractères) : <span id="char-count-display" class="text-[#C2410C]">3 000 signes</span></label>
+                            <input type="range" id="char-slider" min="500" max="10000" step="500" value="3000" oninput="calculateTariffs()" class="w-full accent-[#C2410C]">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center pt-2">
+                            <div class="bg-white p-3 rounded border shadow-sm">
+                                <div class="text-[10px] text-slate-500 font-semibold uppercase">Barème Convention 1987</div>
+                                <div id="tariff-1987" class="text-lg font-bold text-slate-800">77,00 €</div>
+                                <div class="text-[10px] text-slate-400">1,54 € / 60 signes</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border shadow-sm border-teal-200">
+                                <div class="text-[10px] text-teal-600 font-semibold uppercase">Recommandation AJP</div>
+                                <div id="tariff-ajp" class="text-lg font-bold text-teal-700">240,00 €</div>
+                                <div class="text-[10px] text-teal-500">Tarif plancher décent</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border shadow-sm border-red-200">
+                                <div class="text-[10px] text-red-600 font-semibold uppercase">Pratique Ligne Web sauvage</div>
+                                <div id="tariff-wild" class="text-lg font-bold text-red-600">5,00 à 15,00 €</div>
+                                <div class="text-[10px] text-red-400">Paupérisation extrême</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Copyright Reform & Safety Highlights -->
+                    <div class="space-y-3 text-xs text-slate-700">
+                        <div class="bg-amber-50 p-3 rounded border border-amber-200">
+                            <strong>Double Peine Fiscale (Droits d'Auteur) :</strong> La réforme fiscale restreignant la conversion en droits d'auteur (passée de 50% à 30% max) a poussé des éditeurs (Mediahuis, DPG) à baisser de ~10% le salaire brut de leurs employés pour maintenir le net immédiat, amputant lourdement leurs droits de retraite futurs.
+                        </div>
+                        <div class="bg-slate-100 p-3 rounded border space-y-1">
+                            <div>🔒 <strong>Accès aux sources :</strong> 35,5 % des communes belges ignorent les demandes d'accès aux documents publics (FOIA).</div>
+                            <div>⚠️ <strong>Violences & Cyberharcèlement :</strong> Entrée inédite en 2023 des mesures de violences physiques et verbales subies par les journalistes sur le terrain.</div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: GENRE & DIVERSITÉ ==================== -->
+        <section id="tab-diversite" role="tabpanel" aria-labelledby="btn-tab-diversite" class="tab-content hidden space-y-8" tabindex="0">
+            <!-- Introductory Context Paragraph -->
+            <article class="bg-white border-l-4 border-[#C2410C] p-6 rounded-r-xl shadow-sm space-y-2">
+                <h2 class="text-xl font-bold text-slate-900">Genre, Représentativité et Angle Mort Intersectionnel (GMMP 2025)</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Les données du <em>Global Media Monitoring Project (GMMP) 2025</em> décortiquées par l'ULB (LaPIJ) dressent un bilan sévère : la féminisation de la profession piétine (seulement <strong>~33 % de femmes journalistes</strong>), et les femmes n'occupent que <strong>27 % de la présence globale dans l'actualité</strong>. Seule avancée majeure : leur part parmi les experts sollicités est passée de 5 % en 2020 à 31 % en 2025 grâce au dispositif <em>Expertalia</em>. La représentativité des personnes racisées reste quant à elle un angle mort quasi absolu.
+                </p>
+            </article>
+
+            <!-- Charts Row: Gender Distribution by Media & Experts Progression -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Media Type Chart -->
+                <figure class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <figcaption class="font-bold text-slate-900 text-lg">Présence Féminine selon le Support Média</figcaption>
+                        <p class="text-xs text-slate-500">Pourcentage de sujets/sources féminins dans les contenus (GMMP 2025).</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="genderMediaChart" aria-label="Répartition de la présence féminine par support média" role="img"></canvas>
+                    </div>
+                </figure>
+
+                <!-- Expert Progress Chart -->
+                <figure class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <figcaption class="font-bold text-slate-900 text-lg">Progression des Femmes Expertes (2020 vs 2025)</figcaption>
+                        <p class="text-xs text-slate-500">Impact des politiques volontaristes du CSA et de l'AJP (Expertalia).</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="expertProgressionChart" aria-label="Progression de la part d'expertes entre 2020 et 2025" role="img"></canvas>
+                    </div>
+                </figure>
+            </div>
+
+            <!-- Detailed Analysis Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Hard vs Soft News Box -->
+                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <h3 class="font-bold text-slate-900 text-base border-b pb-2">Ségrégation Thématique : Hard vs Soft News</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Le rapport GMMP démontre que les femmes restent largement reléguées aux sujets d'actualité de société ("soft news") et exclues des domaines régaliens ou techniques :
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+                        <div class="bg-slate-50 p-2.5 rounded border">
+                            <span class="text-slate-500 block text-[10px]">Politique & Économie</span>
+                            <span class="font-bold text-slate-800 text-sm">25 % de femmes</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded border">
+                            <span class="text-slate-500 block text-[10px]">Sciences & Tech</span>
+                            <span class="font-bold text-slate-800 text-sm">11 % de femmes</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded border">
+                            <span class="text-slate-500 block text-[10px]">Criminalité / Justice</span>
+                            <span class="font-bold text-slate-800 text-sm">11 % de femmes</span>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded border">
+                            <span class="text-slate-500 block text-[10px]">Actualité Sportive</span>
+                            <span class="font-bold text-red-600 text-sm">0 % de femmes</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Intersectionality & Minority Blindspot Box -->
+                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
+                    <h3 class="font-bold text-slate-900 text-base border-b pb-2">L'Intersectionnalité : Grand Angle Mort</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        La présence des minorités ethno-culturelles et racisées reste infinitésimale dans les médias d'information francophones belges :
+                    </p>
+                    <div class="bg-amber-50 p-3.5 rounded border border-amber-200 text-xs text-amber-900 space-y-2">
+                        <p>
+                            <strong>Constat empirique :</strong> À la télévision, sur l'ensemble de l'échantillon monitoré, seules 8 femmes et 10 hommes issus de minorités ont pou être comptabilisés.
+                        </p>
+                        <p class="text-[11px] text-amber-800">
+                            Lorsqu'elles apparaissent, ces personnes ne sont quasiment jamais sollicitées pour leur expertise intellectuelle, mais reléguées au statut de victimes ou de sujets dans des faits divers ou polémiques migratoires.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs border-t border-slate-800 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p><strong>Observatoire Interactif du Paysage Médiatique Francophone Belge (FWB)</strong> — Généré par Gemini pour <a href="https://ouaisfieu.github.io/ccplc/" class="underline text-amber-400 hover:text-amber-300">CCPLC</a></p>
+            <p class="text-slate-500 text-[11px]">Sources synthétisées : CSA, CIM, AJP, EUI Media Pluralism Monitor 2026, CRISP (Bernard Cools), GMMP 2025 / LaPIJ ULB.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data Stores
+        const titlesData = [
+            { name: "Le Soir", publisher: "Rossel-IPM (Pôle Le Soir)", type: "Generaliste", format: "Quotidien", note: "Maintien d'une rédaction indépendante séparée" },
+            { name: "La Libre Belgique", publisher: "Rossel-IPM (Pôle IPM)", type: "Generaliste", format: "Quotidien", note: "Ancien titre phare de la famille le Hodey" },
+            { name: "La DH / Les Sports", publisher: "Rossel-IPM (Pôle IPM)", type: "Populaire", format: "Quotidien", note: "Presse populaire et sportive" },
+            { name: "Sudinfo (La Meuse, etc.)", publisher: "Rossel-IPM (Pôle Régional)", type: "Regional", format: "Quotidien / Web", note: "Réseau régional wallon unifié" },
+            { name: "L'Avenir", publisher: "Rossel-IPM (Pôle Régional)", type: "Regional", format: "Quotidien", note: "Chômage économique subi fin 2026" },
+            { name: "L'Echo", publisher: "Mediafin (50% Rossel / 50% Roularta)", type: "Economique", format: "Quotidien", note: "Journal économique de référence" },
+            { name: "Moustique", publisher: "Rossel-IPM (Pôle IPM)", type: "Generaliste", format: "Magazine", note: "Hebdomadaire d'actualité et société" },
+            { name: "Soir Mag", publisher: "Rossel-IPM (Pôle Le Soir)", type: "Generaliste", format: "Magazine", note: "Magazine d'information du Soir" },
+            { name: "Ciné Télé Revue", publisher: "Rossel / IPM", type: "Populaire", format: "Magazine", note: "Leader de la presse télévisée" }
+        ];
+
+        let mpmChartInstance = null;
+        let tvChartInstance = null;
+        let radioChartInstance = null;
+        let politicalChartInstance = null;
+        let genderMediaChartInstance = null;
+        let expertProgressionChartInstance = null;
+
+        // Tab Switching Logic with ARIA updating
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Reset ARIA states for tabs
+            document.querySelectorAll('nav button').forEach(el => {
+                el.classList.remove('tab-active');
+                el.setAttribute('aria-selected', 'false');
+            });
+            
+            // Show active tab
+            const targetContent = document.getElementById(tabId);
+            const targetBtn = document.getElementById('btn-' + tabId);
+
+            if (targetContent && targetBtn) {
+                targetContent.classList.remove('hidden');
+                targetBtn.classList.add('tab-active');
+                targetBtn.setAttribute('aria-selected', 'true');
+            }
+
+            // Render/Resize Charts depending on visible tab
+            if (tabId === 'tab-overview' && !mpmChartInstance) initMPMChart();
+            if (tabId === 'tab-audiovisuel' && !tvChartInstance) initAudiovisuelCharts();
+            if (tabId === 'tab-sociologie' && !politicalChartInstance) initPoliticalChart();
+            if (tabId === 'tab-diversite' && !genderMediaChartInstance) initDiversityCharts();
+        }
+
+        // Title Filter Logic
+        function filterTitles(category) {
+            const container = document.getElementById('titles-grid');
+            container.innerHTML = '';
+
+            const filtered = category === 'all' ? titlesData : titlesData.filter(t => t.type === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('article');
+                card.className = "bg-slate-50 p-3.5 rounded-lg border border-slate-200 hover:border-amber-400 transition-colors space-y-1.5";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold text-slate-900 text-sm">${item.name}</h4>
+                        <span class="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-semibold">${item.format}</span>
+                    </div>
+                    <div class="text-xs text-[#C2410C] font-medium">${item.publisher}</div>
+                    <p class="text-[11px] text-slate-500">${item.note}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Tariff Calculator Logic
+        function calculateTariffs() {
+            const chars = parseInt(document.getElementById('char-slider').value);
+            document.getElementById('char-count-display').innerText = chars.toLocaleString('fr-FR') + ' signes';
+
+            // 1987 convention: 1.54 € per 60 chars
+            const t1987 = (chars / 60) * 1.54;
+            document.getElementById('tariff-1987').innerText = t1987.toFixed(2).replace('.', ',') + ' €';
+
+            // AJP recommendation approximation: 280 € / day (~3000 chars)
+            const tAjp = (chars / 3000) * 240;
+            document.getElementById('tariff-ajp').innerText = tAjp.toFixed(2).replace('.', ',') + ' €';
+
+            // Wild web rate: 5€ to 15€ flat
+            if (chars <= 2000) {
+                document.getElementById('tariff-wild').innerText = '5,00 à 10,00 €';
+            } else if (chars <= 5000) {
+                document.getElementById('tariff-wild').innerText = '15,00 à 35,00 €';
+            } else {
+                document.getElementById('tariff-wild').innerText = '40,00 à 60,00 €';
+            }
+        }
+
+        // Chart 1: MPM Chart
+        function initMPMChart() {
+            const ctx = document.getElementById('mpmChart').getContext('2d');
+            mpmChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Concentration Structurelle (95%)',
+                        'Transparence Propriété (85%)',
+                        'Pluralité globale du Marché',
+                        'Risque Global Belgique',
+                        'Conditions de Travail (34%)',
+                        'Indépendance Politique',
+                        'Autonomie Éditoriale',
+                        'Protection Régulateur (CSA)'
+                    ],
+                    datasets: [{
+                        label: 'Niveau de Risque (%)',
+                        data: [95, 85, 68, 41, 34, 22, 12, 8],
+                        backgroundColor: [
+                            '#DC2626', '#EF4444', '#F97316', '#FBBF24',
+                            '#3B82F6', '#10B981', '#059669', '#047857'
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Score de risque : ' + context.raw + ' %';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { min: 0, max: 100, ticks: { callback: v => v + '%' } }
+                    },
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const idx = elements[0].index;
+                            updateMPMDetail(idx);
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateMPMDetail(idx) {
+            const titles = [
+                "Focus : Concentration Structurelle (95% Risque)",
+                "Focus : Transparence de la Propriété (85% Risque)",
+                "Focus : Pluralité globale du Marché (68% Risque)",
+                "Focus : Score Global Belgique (41% Risque)",
+                "Focus : Conditions de Travail des Journalistes (34% Risque)",
+                "Focus : Indépendance Politique (22% Risque)",
+                "Focus : Autonomie Éditoriale (12% Risque)",
+                "Focus : Organes de Régulation CSA/VRM (8% Risque)"
+            ];
+            const descriptions = [
+                "L'acquisition d'IPM par Rossel octroie un monopole de fait (95%) sur la presse quotidienne francophone, menaçant la diversité des sources.",
+                "Manque de lisibilité des structures financières et des actionnaires ultimes derrière les groupes de presse privés.",
+                "La petite taille du marché FWB (4,5M locuteurs) rend la subsistance de multiples éditeurs indépendants extrêmement précaire.",
+                "Le score global classe la Belgique 8e en Europe (Risque Moyen-Faible), sauvé par ses institutions publiques indépendantes.",
+                "L'explosion du travail indépendant précaire (pigistes) et les baisses de tarifs pèsent lourdement sur l'exercice serein du métier.",
+                "L'ingérence directe des partis politiques dans les lignes éditoriales est virtuellement inexistante en Belgique.",
+                "Les rédactions belges conservent une autonomie de ton saluée, malgré les pressions managériales internes.",
+                "Le Conseil Supérieur de l'Audiovisuel (CSA) opère avec une transparence et une efficacité exemplaires au niveau européen."
+            ];
+
+            document.getElementById('mpm-detail-title').innerText = titles[idx];
+            document.getElementById('mpm-detail-body').innerHTML = `<p>${descriptions[idx]}</p>`;
+        }
+
+        // Charts Tab 3: TV & Radio
+        function initAudiovisuelCharts() {
+            // TV Chart
+            const ctxTv = document.getElementById('tvChart').getContext('2d');
+            tvChartInstance = new Chart(ctxTv, {
+                type: 'doughnut',
+                data: {
+                    labels: ['La Une (RTBF)', 'RTL-TVI', 'TF1 (France)', 'France 2 (FR)', 'France 3 (FR)', 'Tipik (RTBF)', 'RTL Club', 'AB3', 'Autres'],
+                    datasets: [{
+                        data: [20.53, 16.33, 12.59, 6.59, 4.77, 4.37, 3.81, 2.87, 28.14],
+                        backgroundColor: [
+                            '#1E3A8A', '#C2410C', '#DC2626', '#2563EB', '#60A5FA',
+                            '#3B82F6', '#EA580C', '#0D9488', '#94A3B8'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label} : ${ctx.raw} %` } }
+                    }
+                }
+            });
+
+            // Radio Chart
+            const ctxRadio = document.getElementById('radioChart').getContext('2d');
+            radioChartInstance = new Chart(ctxRadio, {
+                type: 'bar',
+                data: {
+                    labels: ['Nostalgie', 'Radio Contact', 'VivaCité', 'Classic 21', 'Bel RTL', 'La Première', 'NRJ', 'Tipik'],
+                    datasets: [{
+                        label: 'Part d\'audience (%)',
+                        data: [16.1, 14.6, 12.7, 10.7, 9.6, 6.3, 4.9, 4.1],
+                        backgroundColor: '#0D9488',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => ` Part d'audience : ${ctx.raw} %` } }
+                    },
+                    scales: { y: { ticks: { callback: v => v + '%' } } }
+                }
+            });
+        }
+
+        // Chart Tab 5: Political Tropism
+        function initPoliticalChart() {
+            const ctxPol = document.getElementById('politicalChart').getContext('2d');
+            politicalChartInstance = new Chart(ctxPol, {
+                type: 'pie',
+                data: {
+                    labels: ['Écologiste (Ecolo/Groen)', 'Libéral (MR/OpenVLD)', 'Socialiste (PS/Vooruit)', 'Indécis / Sans réponse', 'Autre / Neutre'],
+                    datasets: [{
+                        data: [32.0, 13.3, 7.4, 22.0, 25.3],
+                        backgroundColor: ['#10B981', '#3B82F6', '#EF4444', '#94A3B8', '#F59E0B']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: { callbacks: { label: ctx => ` ${ctx.label} : ${ctx.raw} %` } }
+                    }
+                }
+            });
+        }
+
+        // Charts Tab 6: Diversity & Experts
+        function initDiversityCharts() {
+            // Gender by Media Chart
+            const ctxGender = document.getElementById('genderMediaChart').getContext('2d');
+            genderMediaChartInstance = new Chart(ctxGender, {
+                type: 'bar',
+                data: {
+                    labels: ['Télévision', 'Radio', 'Presse Web', 'Presse Écrite'],
+                    datasets: [{
+                        label: 'Présence Féminine dans les Contenus (%)',
+                        data: [38, 30, 30, 15],
+                        backgroundColor: ['#8B5CF6', '#EC4899', '#F43F5E', '#E11D48'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => ` Présence : ${ctx.raw} %` } }
+                    },
+                    scales: { y: { min: 0, max: 50, ticks: { callback: v => v + '%' } } }
+                }
+            });
+
+            // Expert Progression Chart
+            const ctxExpert = document.getElementById('expertProgressionChart').getContext('2d');
+            expertProgressionChartInstance = new Chart(ctxExpert, {
+                type: 'bar',
+                data: {
+                    labels: ['Année 2020 (Avant Expertalia)', 'Année 2025 (Après Politiques CSA/AJP)'],
+                    datasets: [{
+                        label: 'Part des Femmes Expertes (%)',
+                        data: [5, 31],
+                        backgroundColor: ['#94A3B8', '#10B981'],
+                        borderRadius: 6,
+                        barThickness: 45
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: ctx => ` Taux d'expertes : ${ctx.raw} %` } }
+                    },
+                    scales: { y: { min: 0, max: 40, ticks: { callback: v => v + '%' } } }
+                }
+            });
+        }
+
+        // DOM Ready Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            filterTitles('all');
+            calculateTariffs();
+            initMPMChart();
+        });
+    </script>
+</body>
+</html>
